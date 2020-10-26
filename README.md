@@ -1,5 +1,5 @@
 # Sample_docker-compose_project
-#### A sample project using docker-compose with Node, and React.JS containers.
+#### A sample project using docker-compose with Node and React.JS containers.
 #### This project is meant to give you an understanding of how to formulate your docker development environment for developing web apps using React.JS, Node.JS, and a cloud SQL DBaaS like AWS RDS.
 
 - Express Server
