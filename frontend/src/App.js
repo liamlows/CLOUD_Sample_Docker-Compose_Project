@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import axios from 'axios';
 
+// React functional component
 function App () {
   // state for storage of the information on the webpage of forms and list, uses hooks
   const [number, setNumber] = useState("")

@@ -2,7 +2,9 @@ version: "3.3"
 
 services:
   backend-api:
-    build: ./backend/node
+    # location of docker file for node container
+    build: ./backend
+    # restart on crashes
     restart: always
     # working directory in container to place files
     working_dir: /usr/src/app
@@ -10,10 +12,7 @@ services:
     command: bash -c "yarn run dev"
     # map code volumes from local to inside working directory, changes made locally will update into the container
     volumes:
-      - ./backend/node:/usr/src/app
-    # specify dependency on mysql db
-    depends_on:
-      - backend-db
+      - ./backend:/usr/src/app
     # ports to map, YOU CANNOT RUN ANYTHING ELSE ON PORT 8000
     ports:
       - 8000:8000
@@ -22,8 +21,11 @@ services:
       - api
 
   frontend-app:
+    # option to allow Create React App run with tty requirement
     stdin_open: true
+    # location of docker file for node container
     build: ./frontend
+    # restart on crashes
     restart: always
     # working directory in container to place files
     working_dir: /usr/src/app

@@ -1,5 +1,5 @@
-# Here we set up the build for the NODE container, we simply set the working directory within docker
-# We also expose the port to our API, 8000
+# Here we set up the build for the NODE container
+# We simply set the working directory within docker and also expose the port to our API, 8000
 # Docker compose handles all the cross platform persistence via volumes so we don't need to worry about
 #   copying over any of the actual code files for the backend.
 
