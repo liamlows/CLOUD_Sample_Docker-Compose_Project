@@ -13,6 +13,12 @@ function App () {
     setNumber(e.target.value);
   }
 
+  const fetchBase = () => {
+    axios.get('http://localhost:8000/').then((res)=>{
+      console.log(res);
+    })
+  }
+
   // fetches vals of db via GET request
   const fetchVals = () => {
     axios.get('http://localhost:8000/values').then(
@@ -50,6 +56,7 @@ function App () {
   return (
     <div className="App">
       <header className="App-header">
+        <button onClick={fetchBase} style={{marginBottom: '1rem'}}> Sample base URL request </button>
         <button onClick={reset}> Reset DB </button>
         <form onSubmit={handleSubmit}>
           <input type="text" value={number} onChange={handleChange}/>
