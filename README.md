@@ -25,6 +25,9 @@ If you want to run a terminal in detached mode (so you can close the window and 
 ## Stopping the project
 As always make sure to type `docker-compose down` to shut the containers down and close everything up.
 
+## [Running the project on an EC2 server](CloudDeploy.md)
+[Click here](CloudDeploy.md) to read the directions on how to deploy the project to the cloud on an EC2 instance for all to visit!
+___
 Hope this helps!
 
 Liam
