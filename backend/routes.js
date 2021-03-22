@@ -1,4 +1,5 @@
 const pool = require('./db')
+var crypto = require('crypto');
 
 module.exports = function routes(app, logger) {
   // GET /
@@ -95,4 +96,38 @@ module.exports = function routes(app, logger) {
       }
     });
   });
+
+
+  // Users POST /users
+  app.post('/users', (req, res) => {
+    // obtain a connection with server
+    pool.getConnection(function (err, connection) {
+      if(err) // if there is an error obtaining a connection
+      {
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection');
+      }
+      else // if there is no error obtaining a connection
+      {
+        const username = req.body.username
+        const password = req.body.password
+        const is_construction_firm = JSON.parse(req.body.is_construction_firm)
+        const salt = crypto.randomBytes(16).toString('hex');
+        const hashedPassword = crypto.createHash('sha256').update(salt + password).digest('hex');
+        connection.query('INSERT INTO db.users (username, pass, salt, is_construction_firm) VALUES(\'' + username + '\', \'' + hashedPassword + '\', \'' + salt + '\', \'' + is_construction_firm + '\')', function(err, rows, fields) {
+          connection.release();
+          if(err)
+          {
+            logger.error("Error adding new user: \n", err);
+            res.status(400).send("Username is taken.")
+          }
+          else
+          {
+            res.status(200).send();
+          }
+        });
+      }
+    })
+  });
+
 }
