@@ -1,5 +1,5 @@
-const pool = require('./db')
-var crypto = require('crypto');
+const pool = require('./db');
+const bcrypt = require('bcryptjs');
 
 module.exports = function routes(app, logger) {
   // GET /
@@ -112,22 +112,79 @@ module.exports = function routes(app, logger) {
         const username = req.body.username
         const password = req.body.password
         const is_construction_firm = JSON.parse(req.body.is_construction_firm)
-        const salt = crypto.randomBytes(16).toString('hex');
-        const hashedPassword = crypto.createHash('sha256').update(salt + password).digest('hex');
-        connection.query('INSERT INTO db.users (username, pass, salt, is_construction_firm) VALUES(\'' + username + '\', \'' + hashedPassword + '\', \'' + salt + '\', \'' + is_construction_firm + '\')', function(err, rows, fields) {
-          connection.release();
-          if(err)
-          {
-            logger.error("Error adding new user: \n", err);
-            res.status(400).send("Username is taken.")
-          }
-          else
-          {
-            res.status(200).send();
-          }
+        const saltRounds = 10;
+        
+        bcrypt.genSalt(saltRounds, function(err, salt) {
+          bcrypt.hash(password, salt, function(err, hash) {
+            connection.query('INSERT INTO db.users (username, pass, salt, is_construction_firm) VALUES(\'' + username + '\', \'' + hash + '\', \'' + salt + '\', \'' + is_construction_firm + '\')', function(err, rows, fields) {
+              connection.release();
+              if(err)
+              {
+                logger.error("Error adding new user: \n", err);
+                res.status(400).send("Username is taken.")
+              }
+              else
+              {
+                res.status(200).send();
+              }
+            });
+           });
         });
       }
     })
   });
 
+  // Users GET /login
+  app.get('/login', (req, res) => {
+    pool.getConnection(function (err, connection)
+    {
+      if(err)
+      {
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection',err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      }
+      else
+      {
+        // if there is no issue obtaining a connection, execute query and release connection
+        const username = req.body.username
+        connection.query('SELECT * FROM db.users WHERE username = \'' + username + '\'', function (err, rows, fields) {
+          if (err) {
+            logger.error("Error while username salt: \n", err);
+            res.status(400).send("Invalid username.")
+          } 
+          else 
+          {
+            const salt = rows[0]["salt"]
+            const hash = rows[0]["pass"]
+            const password = req.body.password
+            
+            bcrypt.compare(password, hash, function(err, result)
+            {
+              if(result)
+              {
+                connection.query('SELECT username, is_construction_firm FROM db.users WHERE username = \'' + username + '\'', function(err, rows, fields)
+                {
+                  if(err)
+                  {
+                    logger.error("Error retrieving information: \n", err);
+                    res.status(400).send("Error retrieving login information from database.")
+                  }
+                  else
+                  {
+                    res.status(200).end(JSON.stringify(rows));
+                  }
+                });
+              }
+              else
+              {
+                logger.error("Error no matching password: \n", err);
+                res.status(400).send("Incorrect username or password");
+              }
+            });
+          }
+        });
+      }
+    });
+  });
 }
