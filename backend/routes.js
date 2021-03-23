@@ -109,7 +109,7 @@ module.exports = function routes(app, logger) {
       else { // if there is no error obtaining a connection
         const username = req.body.username
         const password = req.body.password
-        const is_construction_firm = JSON.parse(req.body.is_construction_firm)
+        const is_construction_firm = req.body.is_construction_firm
         const saltRounds = 10;
         
         bcrypt.genSalt(saltRounds, function(err, salt) {
@@ -119,7 +119,7 @@ module.exports = function routes(app, logger) {
               connection.release();
               if(err) {
                 logger.error("Error adding new user: \n", err);
-                res.status(400).send("Username is taken.")
+                res.status(400).send(JSON.stringify("{success: false, msg: 'Username is taken.'}"))
               } else {
                 res.status(200).send();
               }
@@ -144,7 +144,7 @@ module.exports = function routes(app, logger) {
         connection.query(sql, [username], function (err, rows, fields) {
           if (err) {
             logger.error("Error while username salt: \n", err);
-            res.status(400).send("Invalid username.")
+            res.status(400).send(JSON.stringify("{success: false, msg: 'Invalid username'}"))
           } else {
             const hash = rows[0]["pass"]
             const password = req.body.password
@@ -157,12 +157,12 @@ module.exports = function routes(app, logger) {
                     logger.error("Error retrieving information: \n", err);
                     res.status(400).send("Error retrieving login information from database.")
                   } else {
-                    res.status(200).end(JSON.stringify(rows));
+                    res.status(200).send(JSON.stringify("{success: true, msg: " + JSON.stringify(rows[0])));
                   }
                 });
               } else {
                 logger.error("Error no matching password: \n", err);
-                res.status(400).send("Incorrect username or password");
+                res.status(400).send(JSON.stringify("{success: false, msg: 'Incorrect username or password'}"));
               }
             });
           }
