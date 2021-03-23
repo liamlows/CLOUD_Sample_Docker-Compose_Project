@@ -119,7 +119,7 @@ module.exports = function routes(app, logger) {
               connection.release();
               if(err) {
                 logger.error("Error adding new user: \n", err);
-                res.status(400).send(JSON.stringify("{success: false, msg: 'Username is taken.'}"))
+                res.status(400).send({success: false, msg: 'Username is taken.'})
               } else {
                 res.status(200).send();
               }
@@ -144,7 +144,7 @@ module.exports = function routes(app, logger) {
         connection.query(sql, [username], function (err, rows, fields) {
           if (err) {
             logger.error("Error while username salt: \n", err);
-            res.status(400).send(JSON.stringify("{success: false, msg: 'Invalid username'}"))
+            res.status(400).send({success: false, msg: 'Invalid username'})
           } else {
             const hash = rows[0]["pass"]
             const password = req.body.password
@@ -157,12 +157,12 @@ module.exports = function routes(app, logger) {
                     logger.error("Error retrieving information: \n", err);
                     res.status(400).send("Error retrieving login information from database.")
                   } else {
-                    res.status(200).send(JSON.stringify("{success: true, msg: " + JSON.stringify(rows[0])));
+                    res.status(200).send({success: true, msg: rows[0] });
                   }
                 });
               } else {
                 logger.error("Error no matching password: \n", err);
-                res.status(400).send(JSON.stringify("{success: false, msg: 'Incorrect username or password'}"));
+                res.status(400).send({success: false, msg: 'Incorrect username or password'});
               }
             });
           }
