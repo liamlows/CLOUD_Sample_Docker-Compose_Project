@@ -19,7 +19,7 @@ module.exports = function routes(app, logger) {
         // if there is no error obtaining a connection
         const username = req.body.username;
         const password = req.body.password;
-        const is_construction_firm = req.body.is_construction_firm;
+        const type = req.body.user_type;
         const saltRounds = 10;
 
         const error = (err) => {
@@ -41,10 +41,10 @@ module.exports = function routes(app, logger) {
               return;
             }
             const sql =
-              "INSERT INTO db.users (username, pass, is_construction_firm) VALUES(?, ?, ?)";
+              "INSERT INTO db.users (username, pass, user_type) VALUES(?, ?, ?)";
             connection.query(
               sql,
-              [username, hash, is_construction_firm],
+              [username, hash, type],
               (err) => {
                 connection.release();
                 if (err) {
@@ -83,7 +83,7 @@ module.exports = function routes(app, logger) {
             bcrypt.compare(password, hash, (err, result) => {
               if (result && !err) {
                 sql =
-                  "SELECT username, is_construction_firm FROM db.users WHERE username = ?";
+                  "SELECT username, user_type FROM db.users WHERE username = ?";
                 connection.query(sql, [username], (err, rows) => {
                   if (err) {
                     logger.error("Error retrieving information: \n", err);
