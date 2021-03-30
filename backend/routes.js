@@ -109,4 +109,53 @@ module.exports = function routes(app, logger) {
       }
     });
   });
+
+  // Products GET returns all prodcuts
+  app.get("/products", (req, res) => {
+    pool.getConnection(function(err, connection) {
+      if (err) {
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error("Problem obtaining MySQL connection", err);
+        res.status(400).send("Problem obtaining MySQL connection");
+      } else {
+        // if there is no issue obtaining a connection, execute query and release connection
+        const sql = "SELECT * FROM products"
+        connection.query(sql, (err, rows) => {
+          if(err) {
+            logger.error("Error retrieving products: \n", err);
+            res.status(400).send({
+              success: false,
+              msg: "Error retrieving products"
+            })
+          } else {
+            res.status(200).send({success: true, data: rows});
+          }
+        })
+      }
+    })
+  })
+
+  // Products POST create new product
+  app.post("/product", (req, res) => {
+    pool.getConnection(function(err, connection) {
+      if(err) {
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error("Problem obtaining MySQL connection", err);
+        res.status(400).send("Problem obtaining MySQL connection");
+      } else {
+        // if there is no issue obtaining a connection, execute query and release connection
+        const name = req.body.name;
+        const sql = "INSERT INTO products (name) VALUES(?)";
+
+        connection.query(sql, [name], (err, result) => {
+          if(err) {
+            logger.error("Error adding product: \n", err);
+            res.status(400).send({success: false, msg: "Error adding product"})
+          } else {
+            res.status(200).send({success: true, msg: "Product successfully added"})
+          }
+        })
+      }
+    })
+  })
 };
