@@ -96,3 +96,49 @@ module.exports = function routes(app, logger) {
     });
   });
 }
+
+app.post('/users', (req, res) => {
+  var username = req.param('username');
+  var password = req.param('password');
+
+  con.query("INSERT into users VALUES ()")
+
+}
+)
+
+
+  // 
+  app.post('/users', (req, res) => {
+    var firstName = req.body.firstName;
+    var lastName = req.body.lastName;
+    var phoneNumber = req.body.phoneNumber;
+    var email = req.body.email;
+    var username = req.param('username');
+    var password = req.param('password');
+    var private = req.body.private;
+    let joinDate = new Date();
+
+
+    console.log(req.body.product);
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+      if(err){
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection',err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+        // if there is no issue obtaining a connection, execute query and release connection
+        connection.query('INSERT INTO users VALUES (firstName, lastName, phoneNumber, email, username, password, private, joinDate)', [firstName, lastName, phoneNumber, email, username, password, private, joinDate], function (err, rows, fields) {
+          connection.release();
+          if (err) {
+            // if there is an error with the query, log the error
+            logger.error("Problem inserting into test table: \n", err);
+            res.status(400).send('Problem inserting into table'); 
+          } else {
+            res.status(200).send(`added ${req.body.product} to the table!`);
+          }
+        });
+      }
+    });
+  });
+
