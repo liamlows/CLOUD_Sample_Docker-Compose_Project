@@ -17,6 +17,9 @@ const config = {
 // create the express.js object
 const app = express();
 
+app.get('/', (req, res) => {
+  res.send('dead');
+  });
 // create a logger object.  Using logger is preferable to simply writing to the console.
 const logger = log({ console: true, file: false, label: config.name });
 
@@ -26,6 +29,7 @@ app.use(cors({
   origin: '*'
 }));
 app.use(ExpressAPILogMiddleware(logger, { request: true }));
+
 
 //include routes
 routes(app, logger);

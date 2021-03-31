@@ -1,6 +1,8 @@
 const pool = require('./db')
 
 module.exports = function routes(app, logger) {
+
+  
   // GET /
   app.get('/', (req, res) => {
     res.status(200).send('Go to 0.0.0.0:3000.');
@@ -95,20 +97,9 @@ module.exports = function routes(app, logger) {
       }
     });
   });
-}
 
-app.post('/users', (req, res) => {
-  var username = req.param('username');
-  var password = req.param('password');
-
-  con.query("INSERT into users VALUES ()")
-
-}
-)
-
-
-  // 
-  app.post('/users', (req, res) => {
+   // 
+   app.post('/api/users', (req, res) => {
     var firstName = req.body.firstName;
     var lastName = req.body.lastName;
     var phoneNumber = req.body.phoneNumber;
@@ -118,8 +109,7 @@ app.post('/users', (req, res) => {
     var private = req.body.private;
     let joinDate = new Date();
 
-
-    console.log(req.body.product);
+    console.log(req.body);
     // obtain a connection from our pool of connections
     pool.getConnection(function (err, connection){
       if(err){
@@ -128,17 +118,28 @@ app.post('/users', (req, res) => {
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query('INSERT INTO users VALUES (firstName, lastName, phoneNumber, email, username, password, private, joinDate)', [firstName, lastName, phoneNumber, email, username, password, private, joinDate], function (err, rows, fields) {
+        connection.query('INSERT INTO users(firstName, lastName, phoneNumber, email, username, password, private, joinDate) VALUES(?,?,?,?,?,?,?,?) ', [firstName, lastName, phoneNumber, email, username, password, private, joinDate], function (err, rows, fields) {
           connection.release();
           if (err) {
             // if there is an error with the query, log the error
             logger.error("Problem inserting into test table: \n", err);
             res.status(400).send('Problem inserting into table'); 
           } else {
-            res.status(200).send(`added ${req.body.product} to the table!`);
+            res.status(200).send(`added ${req.body} to the table!`);
           }
         });
       }
     });
   });
 
+
+
+
+
+
+
+
+
+
+
+};
