@@ -30,13 +30,27 @@ Test with...
 
 - `docker --version`
 
-## 3) Install Git on EC2
+## 3) Install Docker-Compose on EC2
+
+Copy the appropriate docker-compose binary from GitHub:
+
+- `sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose`
+
+Fix permissions after download:
+
+`sudo chmod +x /usr/local/bin/docker-compose`
+
+Verify success:
+
+`docker-compose version`
+
+## 4) Install Git on EC2
 
 Install with...
 
 - `sudo yum install -y git`
 
-## 4) Install Node on EC2
+## 5) Install Node on EC2
 
 Install with...
 
@@ -50,7 +64,7 @@ Test with...
 
 - `node -e "console.log('Running Node.js ' + process.version)"`
 
-## 4) Install Yarn on EC2 (optional, otherwise use npm)
+## 5) Install Yarn on EC2 (OPTIONAL, otherwise use npm)
 
 Install with...
 
@@ -60,7 +74,7 @@ Then either disconnect and reconnect, or enter the following command to add yarn
 
 - `export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"`
 
-## 5) Clone your git repo & installing packages
+## 6) Clone your git repo & installing packages
 
 Once you have installed Docker, Git, Node and Yarn (optional) you can then clone your git repo onto the server. To do this simple head to your home directory `cd ~` and type `git clone [url]`. This will generate a folder which will contain your project.
 
