@@ -67,7 +67,31 @@ module.exports = function routes(app, logger) {
       }
     });
   });
-
+    // put /updatebio
+    app.put('/updatebio', (req, res) => {
+        console.log(req.body.userid);
+        console.log(req.body.bio);
+        // obtain a connection from our pool of connections
+        pool.getConnection(function (err, connection) {
+            if (err) {
+                // if there is an issue obtaining a connection, release the connection instance and log the error
+                logger.error('Problem obtaining MySQL connection', err)
+                res.status(400).send('Problem obtaining MySQL connection');
+            } else {
+                // if there is no issue obtaining a connection, execute query and release connection
+                connection.query('UPDATE `db`.`users` SET `bio` = \'' + req.body.bio + '\' WHERE `user_id` = \'' + req.body.userid + '\' ', function (err, rows, fields) {
+                    connection.release();
+                    if (err) {
+                        // if there is an error with the query, log the error
+                        logger.error("Problem updating user info: \n", err);
+                        res.status(400).send('Problem updating info');
+                    } else {
+                        res.status(200).send(`changed user info for user id:${req.body.userid} to ${req.body.bio}`);
+                    }
+                });
+            }
+        });
+    });
   // GET /checkdb
   app.get('/values', (req, res) => {
     // obtain a connection from our pool of connections
