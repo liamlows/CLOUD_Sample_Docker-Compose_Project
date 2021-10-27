@@ -62,8 +62,10 @@ function App () {
   }
 
   // tell app to fetch values from db on first load (if initialized)
+  // the comment below silences an error that doesn't matter.=
   useEffect(() => {
     fetchVals();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
