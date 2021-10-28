@@ -1,0 +1,11 @@
+
+.conversations{
+    background-color: #282c34;
+}
+
+.card {
+    background-color: white !important;
+    border-style:solid;
+    border-radius: 1em;
+    max-width: 33%;
+}
