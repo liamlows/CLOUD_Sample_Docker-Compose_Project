@@ -67,6 +67,113 @@ module.exports = function routes(app, logger) {
       }
     });
   });
+    // put /updatebio
+    app.put('/updatebio', (req, res) => {
+        console.log(req.body.userid);
+        console.log(req.body.bio);
+        // obtain a connection from our pool of connections
+        pool.getConnection(function (err, connection) {
+            if (err) {
+                // if there is an issue obtaining a connection, release the connection instance and log the error
+                logger.error('Problem obtaining MySQL connection', err)
+                res.status(400).send('Problem obtaining MySQL connection');
+            } else {
+                // if there is no issue obtaining a connection, execute query and release connection
+                connection.query('UPDATE `db`.`users` SET `bio` = \'' + req.body.bio + '\' WHERE `user_id` = \'' + req.body.userid + '\' ', function (err, rows, fields) {
+                    connection.release();
+                    if (err) {
+                        // if there is an error with the query, log the error
+                        logger.error("Problem updating user info: \n", err);
+                        res.status(400).send('Problem updating info');
+                    } else {
+                        res.status(200).send(`changed user info for user id:${req.body.userid} to ${req.body.bio}`);
+                    }
+                });
+            }
+        });
+    });
+    app.get('/favoriteTrainer', (req, res) => {
+        var user_id = req.body.user_id
+        // obtain a connection from our pool of connections
+        pool.getConnection(function (err, connection) {
+            if (err) {
+                // if there is an issue obtaining a connection, release the connection instance and log the error
+                logger.error('Problem obtaining MySQL connection', err)
+                res.status(400).send('Problem obtaining MySQL connection');
+            } else {
+                // if there is no issue obtaining a connection, execute query and release connection
+                connection.query("SELECT trainer_id from favorite_trainer WHERE user_id = ?;", [user_id], function (err, rows, fields) {
+                    connection.release();
+                    if (err) {
+                        // if there is an error with the query, log the error
+                        logger.error("Problem getting favorite trainers: \n", err);
+                        res.status(400).json({
+                            "data": [],
+                            "error": "Error obtaining values"
+                        })
+                    } else {
+                        res.status(200).json({
+                            "data": rows
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+    app.post('/favoriteTrainer', (req, res) => {
+        var user_id = req.body.user_id
+        var trainer_id = req.body.trainer_id
+        // obtain a connection from our pool of connections
+        pool.getConnection(function (err, connection) {
+            if (err) {
+                // if there is an issue obtaining a connection, release the connection instance and log the error
+                logger.error('Problem obtaining MySQL connection', err)
+                res.status(400).send('Problem obtaining MySQL connection');
+            } else {
+                // if there is no issue obtaining a connection, execute query and release connection
+                connection.query("INSERT INTO favorite_trainer (user_id, trainer_id) VALUES (?,?);", [user_id, trainer_id], function (err, rows, fields) {
+                    connection.release();
+                    if (err) {
+                        // if there is an error with the query, log the error
+                        logger.error("Problem favoriting trainer: \n", err);
+                        res.status(400).send('Problem favoriting that trainer');
+                    } else {
+                        res.status(200).send("favorited trainer successfully");
+                    }
+                });
+
+            }
+        });
+    });
+
+    app.delete('/favoriteTrainer', (req, res) => {
+        var user_id = req.body.user_id
+        var trainer_id = req.body.trainer_id
+        // obtain a connection from our pool of connections
+        pool.getConnection(function (err, connection) {
+            if (err) {
+                // if there is an issue obtaining a connection, release the connection instance and log the error
+                logger.error('Problem obtaining MySQL connection', err)
+                res.status(400).send('Problem obtaining MySQL connection');
+            } else {
+                // if there is no issue obtaining a connection, execute query and release connection
+                connection.query("DELETE FROM favorite_trainer WHERE user_id = ? && trainer_id = ?;", [user_id, trainer_id], function (err, rows, fields) {
+                    connection.release();
+                    if (err) {
+                        // if there is an error with the query, log the error
+                        logger.error("Problem removing trainer from favorites: \n", err);
+                        res.status(400).send('Problem removing trainer from favorites');
+                    } else {
+                        res.status(200).send("Removed trainer from favorites successfully");
+                    }
+                });
+
+            }
+        });
+    });
+
+   
 
   // GET /checkdb
   app.get('/values', (req, res) => {
