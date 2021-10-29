@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
+import Dashboard from './Dashboard/Dashboard';
 import axios from 'axios';
 
 // React functional component
@@ -80,6 +81,9 @@ function App () {
           { values.map((value, i) => <li key={i}>{value.value}</li>) }
         </ul>
       </header>
+      <div>
+        <Dashboard />
+      </div>
     </div>
   );
 }
