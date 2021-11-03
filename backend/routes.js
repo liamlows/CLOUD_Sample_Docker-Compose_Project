@@ -6,6 +6,36 @@ module.exports = function routes(app, logger) {
     res.status(200).send('Go to 0.0.0.0:3000.');
   });
 
+
+  // update a specific player's position
+  // /player/position?playerID=123&playerPos=Quarterback
+  app.put('/player/position', async (req, res) => {
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+      if (err){
+        console.log(connection);
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      }  else {
+			var playerID = req.body.playerID;
+			var playerPos = req.body.playerPos;
+            connection.query("UPDATE Players SET Position = ? WHERE PlayerID = ?",[playerPos,playerID], function (err, result, fields) {
+              if (err) { 
+                // if there is an error with the query, release the connection instance and log the error
+                connection.release()
+                logger.error("Problem updating player position: ", err);
+                res.status(400).send('Problem updating player position'); 
+              } else { 
+                // if there is no error with the query, release the connection instance
+				res.send(result);
+                connection.release()
+                
+              }
+            });
+          }
+        });
+      });
   // get players ppg, just specify player first and last name using body
   app.get('/player/ppg', async (req, res) => {
     // obtain a connection from our pool of connections
