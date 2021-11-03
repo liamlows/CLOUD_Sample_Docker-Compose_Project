@@ -36,6 +36,35 @@ module.exports = function routes(app, logger) {
       });
 	  
 	  
+	  // get list of players so that you can vote for mvp (assume it should be filtered by the league but they did not say that)
+  app.get('/players', async (req, res) => {
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+      if (err){
+        console.log(connection);
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      }  else {
+			var league = req.body.league;
+            connection.query("select FirstName,LastName,TeamName from Players join Teams T on T.TeamID = Players.TeamID where League = ?",[league], function (err, result, fields) {
+              if (err) { 
+                // if there is an error with the query, release the connection instance and log the error
+                connection.release()
+                logger.error("Problem getting ppg: ", err);
+                res.status(400).send('Problem getting ppg'); 
+              } else { 
+                // if there is no error with the query, release the connection instance
+				res.send(result);
+                connection.release()
+                
+              }
+            });
+          }
+        });
+      });
+	  
+	  
 	//gets list of games a player has played in, just specify first and last name, returns the players name, and the game ids
 	app.get('/player/games', async (req, res) => {
     // obtain a connection from our pool of connections
@@ -111,23 +140,6 @@ module.exports = function routes(app, logger) {
         }
       });
   });
-  
-//GET PPG using body with specified player first and last name
-//app.get('/players/ppg', async (req, res) => {
- // pool.getConnection(function(err,connection){
-//  var firstName = req.body.firstName;
-//  var lastName = req.body.lastName;
-
-
-//	connection.query("select PPG from Players where FirstName = ? and LastName = ?",[firstName,lastName],function(err,result,fields){
-//		res.send(result);
-//		if (err) throw err;
-//		res.end(JSON.stringify(result)); // Result in JSON format
-//	})
-//  connection.release()
-//  })
-//});
-
 
 
 
