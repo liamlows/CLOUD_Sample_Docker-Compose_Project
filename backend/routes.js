@@ -6,8 +6,8 @@ module.exports = function routes(app, logger) {
     res.status(200).send('Go to 0.0.0.0:3000.');
   });
 
-  // POST /reset
-  app.post('/reset', (req, res) => {
+  // get players ppg, just specify player first and last name using body
+  app.get('/player/ppg', async (req, res) => {
     // obtain a connection from our pool of connections
     pool.getConnection(function (err, connection){
       if (err){
@@ -15,33 +15,121 @@ module.exports = function routes(app, logger) {
         // if there is an issue obtaining a connection, release the connection instance and log the error
         logger.error('Problem obtaining MySQL connection', err)
         res.status(400).send('Problem obtaining MySQL connection'); 
-      } else {
-        // if there is no issue obtaining a connection, execute query
-        connection.query('drop table if exists test_table', function (err, rows, fields) {
-          if (err) { 
-            // if there is an error with the query, release the connection instance and log the error
-            connection.release()
-            logger.error("Problem dropping the table test_table: ", err); 
-            res.status(400).send('Problem dropping the table'); 
-          } else {
-            // if there is no error with the query, execute the next query and do not release the connection yet
-            connection.query('CREATE TABLE `db`.`test_table` (`id` INT NOT NULL AUTO_INCREMENT, `value` VARCHAR(45), PRIMARY KEY (`id`), UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE);', function (err, rows, fields) {
+      }  else {
+			var firstName = req.body.firstName;
+			var lastName = req.body.lastName;
+            connection.query("select PPG from Players where FirstName = ? and LastName = ?",[firstName,lastName], function (err, result, fields) {
               if (err) { 
                 // if there is an error with the query, release the connection instance and log the error
                 connection.release()
-                logger.error("Problem creating the table test_table: ", err);
-                res.status(400).send('Problem creating the table'); 
+                logger.error("Problem getting ppg: ", err);
+                res.status(400).send('Problem getting ppg'); 
               } else { 
                 // if there is no error with the query, release the connection instance
+				res.send(result);
                 connection.release()
-                res.status(200).send('created the table'); 
+                
               }
             });
           }
         });
-      }
-    });
+      });
+	  
+	  
+	//gets list of games a player has played in, just specify first and last name, returns the players name, and the game ids
+	app.get('/player/games', async (req, res) => {
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+      if (err){
+        console.log(connection);
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      }  else {
+			var firstName = req.body.firstName;
+			var lastName = req.body.lastName;
+            connection.query("select FirstName,LastName,GameID from Players P join Teams T on P.TeamID = T.TeamID join Games G on T.TeamID = G.Team1ID or T.TeamID=G.Team2ID where P.FirstName=? and P.LastName=?",[firstName,lastName], function (err, result, fields) {
+              if (err) { 
+                // if there is an error with the query, release the connection instance and log the error
+                connection.release()
+                logger.error("Problem getting ppg: ", err);
+                res.status(400).send('Problem getting ppg'); 
+              } else { 
+                // if there is no error with the query, release the connection instance
+				res.send(result);
+                connection.release()
+                
+              }
+            });
+          }
+        });
+      });
+	  
+	//update a games score, must specify which team, which game and the score you want to update
+  app.put('/games/score', async (req, res) => {
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+      if (err){
+        console.log(connection);
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      }  else {
+			var GameID = req.body.GameID;
+			var score = req.body.score;
+			var teamNum=req.body.teamNum;
+			if(teamNum=1){
+				connection.query("update Games set Team1Score = ? where GameID = ?;",[score,GameID], function (err, result, fields){
+				if (err)  {
+                // if there is an error with the query, release the connection instance and log the error
+                connection.release()
+                logger.error("Problem getting ppg: ", err);
+                res.status(400).send('Problem getting ppg'); 
+				} 
+				else { 
+                // if there is no error with the query, release the connection instance
+				res.send(result);
+                connection.release()
+                }
+				});
+			}
+			else{
+				connection.query("update Games set Team2Score = ? where GameID = ?;",[score,GameID], function (err, result, fields){
+				if (err){
+                // if there is an error with the query, release the connection instance and log the error
+                connection.release()
+                logger.error("Problem getting ppg: ", err);
+                res.status(400).send('Problem getting ppg'); 
+				} 
+				else { 
+                // if there is no error with the query, release the connection instance
+				res.send(result);
+                connection.release()
+                }
+				});
+			}
+        }
+      });
   });
+  
+//GET PPG using body with specified player first and last name
+//app.get('/players/ppg', async (req, res) => {
+ // pool.getConnection(function(err,connection){
+//  var firstName = req.body.firstName;
+//  var lastName = req.body.lastName;
+
+
+//	connection.query("select PPG from Players where FirstName = ? and LastName = ?",[firstName,lastName],function(err,result,fields){
+//		res.send(result);
+//		if (err) throw err;
+//		res.end(JSON.stringify(result)); // Result in JSON format
+//	})
+//  connection.release()
+//  })
+//});
+
+
+
 
   // POST /multplynumber
   app.post('/multplynumber', (req, res) => {
