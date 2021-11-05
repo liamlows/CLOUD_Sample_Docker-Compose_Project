@@ -1,4 +1,5 @@
 import React from 'react';
+import './Registration.css';
 
 export class AccountEditor extends React.Component {
 
@@ -8,6 +9,9 @@ export class AccountEditor extends React.Component {
         password: ''
     };
 
+    regiDone(){
+        alert('registration done');
+    }
     
 
     render() {
@@ -36,7 +40,11 @@ export class AccountEditor extends React.Component {
                         className="form-control" />
                 </div>
 
-            </form>
+        </form>
+
+        <button onClick={regiDone}>
+            Login
+        </button>
         </>;
     }
 }
