@@ -24,16 +24,6 @@ export class AccountEditor extends React.Component {
                         className="form-control" />
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="email">Email</label>
-                    <input type="text"
-                        id="email"
-                        name="email"
-                        value={this.state.email}
-                        onChange={ event => this.setState({ email: event.target.value }) }
-                        className="form-control" />
-                </div>
-
 
                 <div className="form-group">
                     <label htmlFor="password">Password (8 characters minimum): </label>
