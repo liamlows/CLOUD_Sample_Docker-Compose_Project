@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import axios from 'axios';
+import { Login } from './Login'
+import { Register } from './Register';
 
 // React functional component
 function App () {
@@ -66,21 +68,11 @@ function App () {
     fetchVals();
   }, [])
 
+  // We don't yet know how to navigate between pages.
+  // For now I'm just keeping the main component I'm working on in the App render so I can see it easily.
   return (
     <div className="App">
-      <header className="App-header">
-        <button onClick={fetchBase} style={{marginBottom: '1rem'}}> {`GET: http://${url}:8000/`} </button>
-        <button onClick={reset}> Reset DB </button>
-        <p>Yo.</p>
-        <form onSubmit={handleSubmit}>
-          <input type="text" value={number} onChange={handleChange}/>
-          <br/>
-          <input type="submit" value="Submit" />
-        </form>
-        <ul>
-          { values.map((value, i) => <li key={i}>{value.value}</li>) }
-        </ul>
-      </header>
+      <Register></Register>
     </div>
   );
 }
