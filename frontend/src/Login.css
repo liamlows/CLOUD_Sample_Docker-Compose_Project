@@ -39,7 +39,7 @@ input[type=text], select {
     margin: 0 auto;
     margin-bottom: 15px;
     display: flex;
-//border: 1px solid #993232;
+    border: 1px solid #993232;
     border-width: 0px;
     border-radius: 4px;
     box-sizing: border-box;
