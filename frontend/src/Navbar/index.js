@@ -16,6 +16,9 @@ const Navbar = () => {
         </NavLink>
         <Bars />
         <NavMenu>
+          <NavLink to='/Dashboard' activeStyle>
+            Dashboard
+          </NavLink>
           <NavLink to='/Trainers' activeStyle>
             Trainers
           </NavLink>

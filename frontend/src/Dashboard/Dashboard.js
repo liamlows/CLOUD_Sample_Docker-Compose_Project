@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import Calendar from './Calendar';
 import './Dashboard.css';
-import axios from 'axios';
 
-function Dashboard () {
+const Dashboard = () => {
+
     return (
-        <div>
-            HELLO
+        <div className="Dashboard">
+            <header>
+                head
+            </header>
+            <div>
+                This Week's Schedule
+            </div>
+            <Calendar />
         </div>
     )
 }
