@@ -38,7 +38,7 @@ class Calendar extends Component {
                   id: 2,
                   text: "Event 3",
                   start: "2021-11-12T12:00:00",
-                  end: "2021-11-12T15:00:00",
+                  end: "2021-11-13T15:00:00",
                   backColor: "#cc4125"
                 },
               ]
