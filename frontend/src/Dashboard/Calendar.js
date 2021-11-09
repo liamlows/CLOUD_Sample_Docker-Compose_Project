@@ -19,7 +19,29 @@ class Calendar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            viewType: "Week"
+            viewType: "Week",
+            events: [
+                {
+                  id: 1,
+                  text: "Event 1",
+                  start: "2021-11-11T10:30:00",
+                  end: "2021-10-11T13:00:00"
+                },
+                {
+                  id: 2,
+                  text: "Event 2",
+                  start: "2021-11-12T09:30:00",
+                  end: "2021-11-12T11:30:00",
+                  backColor: "#38761d"
+                },
+                {
+                  id: 2,
+                  text: "Event 3",
+                  start: "2021-11-12T12:00:00",
+                  end: "2021-11-12T15:00:00",
+                  backColor: "#cc4125"
+                },
+              ]
         };
     }
 
