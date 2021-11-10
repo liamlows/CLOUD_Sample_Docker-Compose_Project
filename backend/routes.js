@@ -1,4 +1,7 @@
 const pool = require('./db')
+const bcrypt =  require("bcryptjs");
+const jwt = require('jsonwebtoken');
+const checkAuth = require('./middleware/check-auth');
 
 module.exports = function routes(app, logger) {
   // GET /
@@ -6,6 +9,109 @@ module.exports = function routes(app, logger) {
     res.status(200).send('Go to 0.0.0.0:3000.');
   });
 
+
+  //register user
+   app.post('/users/register', async (req, res) => {
+	   var firstName = req.body.firstName;
+			var lastName = req.body.lastName;
+			var username = req.body.username;
+			var passwd = await bcrypt.hash(req.body.passwd,10);
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+      if (err){
+        console.log(connection);
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        return logger.error('Problem obtaining MySQL connection', err)
+      }  
+      connection.query('select * from Users where username = ?',username,function (err, result, fields) {
+        if (err) { 
+          // if there is an error with the query, release the connection instance and log the error
+          connection.release()
+          return logger.error("Problem checking if username exists ", err);
+        } else { 
+          // if there is no error with the query, release the connection instance
+          res.send(result);
+          if(result.length>0){
+              connection.release()
+              return logger.error("Username already exists ",err);
+          }
+          else{
+            connection.query('insert into Users (firstName, lastName, username, password) values (?,?,?,?)',[firstName,lastName,username,passwd],function (err, result, fields) { });
+          }
+          connection.release()
+          
+        }
+      });
+        
+        
+    })
+  });
+  
+  app.post('/users/login',async (req,res)=>{
+    var username = req.body.username;
+    var passwd = req.body.passwd;
+    pool.getConnection(function (err, connection){
+      if (err){
+        console.log(connection);
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        connection.release();
+        return logger.error('Problem obtaining MySQL connection', err)
+      }  
+      
+      connection.query('select * from Users where username = ?',username,function (err, result, fields){
+        if (err) { 
+          // if there is an error with the query, release the connection instance and log the error
+          connection.release()
+          return logger.error("Problem checking if username exists ", err);
+        } 
+        if(result.length===0){
+          connection.release()
+          return res.status(401).json({
+            message :'Authentication Failed'
+          });
+        }
+        else{
+          connection.query('select password from Users where username = ?',username,function(err,result,fields){
+            if (err) { 
+              // if there is an error with the query, release the connection instance and log the error
+              connection.release()
+              return logger.error("Problem getting password ", err);
+            } 
+            else{
+              var hash = result[0].password;
+              bcrypt.compare(passwd,hash,(err,result2)=>{
+                if(err){
+                  connection.release();
+                  return res.status(401).json({
+                    message :'Authentication Failed'
+                  });
+                }
+                if(result2){
+                  const token = jwt.sign({username:req.body.username},'secret',{
+                    expiresIn: "1h"
+                  });
+
+                  connection.release();
+                  return res.status(200).json({
+                    message :'Authentication Successful',
+                    token : token
+                  });
+                }
+                if(!result2){
+                  connection.release();
+                  return res.status(401).json({
+                    message :'Authentication Failed'
+                  });
+                }
+                
+              });
+            }
+          })
+        }
+      });
+
+    })
+  })
 
   // edit a player's picture
   // /player/picture
@@ -78,6 +184,7 @@ module.exports = function routes(app, logger) {
         });
       });
 
+
   // update a specific player's position
   // /player/position?playerID=123&playerPos=Quarterback
   app.put('/player/position', async (req, res) => {
@@ -108,7 +215,7 @@ module.exports = function routes(app, logger) {
         });
       });
   // get players ppg, just specify player first and last name using body
-  app.get('/player/ppg', async (req, res) => {
+  app.get('/player/ppg',checkAuth, async (req, res) => {
     // obtain a connection from our pool of connections
     pool.getConnection(function (err, connection){
       if (err){
@@ -297,3 +404,4 @@ module.exports = function routes(app, logger) {
     });
   });
 }
+
