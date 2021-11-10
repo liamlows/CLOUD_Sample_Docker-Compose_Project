@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 
-function Homepage(){
+export class Homepage extends React.Component{
+    render(){
     return (
         <>
         <h1>Sports League</h1>
         <h2>What league do you want to explore?</h2>
+        <button>Login</button>
         <div>
             <img src="https://upload.wikimedia.org/wikipedia/en/0/03/National_Basketball_Association_logo.svg"></img>
         </div>
@@ -16,6 +18,5 @@ function Homepage(){
         </div>
       </>
     )
+    }
 }
-
-export default Homepage;

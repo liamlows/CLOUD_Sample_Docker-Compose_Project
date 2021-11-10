@@ -1,7 +1,7 @@
 import React from 'react'
 import './App.css'
-import { BrowserRouter, Routes, Route} from 'react-router-dom'
-import Homepage from './components/Homepage'
+import { BrowserRouter, Route, Routes} from 'react-router-dom';
+import { Homepage } from './components/Homepage';
 
 
 const App = props => {
@@ -9,8 +9,8 @@ const App = props => {
     <div className="App">
     <BrowserRouter>
     <Routes>
-      <Route path="/" element={<Homepage />} />
-    </Routes>
+        <Route path = "/" element = {<Homepage />}/>
+      </Routes>
     </BrowserRouter>
     </div>
   )
