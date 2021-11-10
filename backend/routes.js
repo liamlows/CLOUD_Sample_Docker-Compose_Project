@@ -6,6 +6,39 @@ module.exports = function routes(app, logger) {
     res.status(200).send('Go to 0.0.0.0:3000.');
   });
 
+
+  // edit a player's picture
+  // /player/picture
+  // example body: {"playerID":"2", "playerPicture":"https://phantom-marca.unidadeditorial.es/4089255addf9328ce86c33c9213519ab/resize/1320/f/jpg/assets/multimedia/imagenes/2021/11/09/16364610626277.jpg"}
+  app.put('/player/picture', async (req, res) => {
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+      if (err){
+        console.log(connection);
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      }  else {
+            // does NOT take in playerID
+            var playerID = req.body.playerID;
+            var playerPicture = req.body.playerPicture;
+            connection.query("UPDATE Players SET Picture = ? WHERE PlayerID = ?",[playerPicture, playerID], function (err, result, fields) {
+              if (err) { 
+                // if there is an error with the query, release the connection instance and log the error
+                connection.release()
+                logger.error("Problem changing a player picture: ", err);
+                res.status(400).send('Problem changing a player picture'); 
+              } else { 
+                // if there is no error with the query, release the connection instance
+			          res.send(result);
+                connection.release()
+                
+              }
+            });
+          }
+        });
+      });
+
   // add a new player to a team's roster
   // /player
   // example body: {"playerLastName":"Astley","playerFirstName":"Rick","playerNumber":"123","teamID":"1","playerPPG":"2","playerPos":"X","playerTimePlayed":"30","coachID":"1","playerPicture":"https://variety.com/wp-content/uploads/2021/07/Rick-Astley-Never-Gonna-Give-You-Up.png?w=1024"}
