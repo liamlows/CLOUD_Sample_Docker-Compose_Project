@@ -6,6 +6,7 @@ module.exports = function routes(app, logger) {
     res.status(200).send('Go to 0.0.0.0:3000.');
   });
 
+
   // edit a player's picture
   // /player/picture
   // example body: {"playerID":"2", "playerPicture":"https://phantom-marca.unidadeditorial.es/4089255addf9328ce86c33c9213519ab/resize/1320/f/jpg/assets/multimedia/imagenes/2021/11/09/16364610626277.jpg"}
@@ -37,8 +38,6 @@ module.exports = function routes(app, logger) {
           }
         });
       });
-
-
 
   // add a new player to a team's roster
   // /player
