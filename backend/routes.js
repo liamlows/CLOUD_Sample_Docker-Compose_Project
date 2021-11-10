@@ -6,6 +6,44 @@ module.exports = function routes(app, logger) {
     res.status(200).send('Go to 0.0.0.0:3000.');
   });
 
+  // add a new player to a team's roster
+  // /player
+  // example body: {"playerLastName":"Astley","playerFirstName":"Rick","playerNumber":"123","teamID":"1","playerPPG":"2","playerPos":"X","playerTimePlayed":"30","coachID":"1","playerPicture":"https://variety.com/wp-content/uploads/2021/07/Rick-Astley-Never-Gonna-Give-You-Up.png?w=1024"}
+  app.post('/player', async (req, res) => {
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+      if (err){
+        console.log(connection);
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      }  else {
+            // does NOT take in playerID
+            var playerLastName = req.body.playerLastName;
+            var playerFirstName = req.body.playerFirstName;
+            var playerNumber = req.body.playerNumber;
+            var teamID = req.body.teamID;
+            var playerPPG = req.body.playerPPG;
+            var playerPos = req.body.playerPos;
+            var playerTimePlayed = req.body.playerTimePlayed;
+            var coachID = req.body.coachID;
+            var playerPicture = req.body.playerPicture;
+            connection.query("INSERT INTO Players (LastName, FirstName, PlayerNumber, TeamID, PPG, Position, TimePlayed, CoachID, Picture) VALUES (?,?,?,?,?,?,?,?,?)",[playerLastName,playerFirstName,playerNumber,teamID,playerPPG,playerPos,playerTimePlayed,coachID,playerPicture], function (err, result, fields) {
+              if (err) { 
+                // if there is an error with the query, release the connection instance and log the error
+                connection.release()
+                logger.error("Problem adding a player: ", err);
+                res.status(400).send('Problem adding a player'); 
+              } else { 
+                // if there is no error with the query, release the connection instance
+			          res.send(result);
+                connection.release()
+                
+              }
+            });
+          }
+        });
+      });
 
   // update a specific player's position
   // /player/position?playerID=123&playerPos=Quarterback
