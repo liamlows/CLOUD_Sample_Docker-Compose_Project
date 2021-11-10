@@ -10,7 +10,7 @@ const App = props => {
     <BrowserRouter>
     <Routes>
         <Route path = "/" element = {<Homepage />}/>
-      </Routes>
+    </Routes>
     </BrowserRouter>
     </div>
   )

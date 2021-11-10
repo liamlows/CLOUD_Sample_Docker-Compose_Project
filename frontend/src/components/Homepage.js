@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export class Homepage extends React.Component{
     render(){
@@ -6,7 +7,7 @@ export class Homepage extends React.Component{
         <>
         <h1>Sports League</h1>
         <h2>What league do you want to explore?</h2>
-        <button>Login</button>
+        
         <div>
             <img src="https://upload.wikimedia.org/wikipedia/en/0/03/National_Basketball_Association_logo.svg"></img>
         </div>
@@ -20,3 +21,5 @@ export class Homepage extends React.Component{
     )
     }
 }
+
+export default Homepage;
