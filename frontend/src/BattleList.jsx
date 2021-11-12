@@ -11,17 +11,17 @@ export const BattleList = props => <>
             No active battles
         </div>
     }
-    <ul className="list-group">
+    <div className="list-group">
         {props.battles.map(x =>
-            <li className="list-group-item" key={x.id}>
+            <div className="list-group-item" key={x.id}>
                 <div className="card">
                     <div className="card-body">
                         <h5 className="card-title">{x.title}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">{x.userID1}</h6>
-                        <p class="card-text">{x.description}</p>
+                        <h6 className="card-subtitle mb-2 text-muted">{x.userID1}</h6>
+                        <p className="card-text">{x.description}</p>
                     </div>
                 </div>
-            </li>
+            </div>
         )}
-    </ul>
+    </div>
 </>;
