@@ -1,7 +1,7 @@
 import React from 'react';
 import './Registration.css';
 
-export class AccountEditor extends React.Component {
+export class Registration extends React.Component {
 
     state = {
         name: '',
@@ -42,7 +42,7 @@ export class AccountEditor extends React.Component {
 
         </form>
 
-        <button onClick={regiDone}>
+        <button onClick={e => this.regiDone()}>
             Login
         </button>
         </>;
