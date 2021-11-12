@@ -6,10 +6,13 @@ import { BattleCreator } from './BattleCreator';
 
 export class BattlePage extends React.Component {
     state = {
+        currentUserID: "",
         battles: []
     };
 
     addBattle(battle){
+        //TODO: AXIOS CALL TO DB TO STORE BATTLE
+        //TODO: AXSIOS CALL TO DB FOR ALL BATTLES
         this.setState(prevState => {
             let battles = prevState.battles;
             console.log(battles);
