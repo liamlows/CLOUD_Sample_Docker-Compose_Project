@@ -6,7 +6,8 @@ import { BattleCreator } from './BattleCreator';
 
 export class BattlePage extends React.Component {
     state = {
-        battles: []
+        battles: [],
+        loggedIn: true
     };
 
     addBattle(battle){
@@ -19,10 +20,20 @@ export class BattlePage extends React.Component {
     }
     render() {
         return <div>
-            <Login/>
-            <Registration/>
-            <BattleList battles={this.state.battles}/>
-            <BattleCreator onBattleAdded={ battle => this.addBattle(battle) }/>
-        </div>
+            {!this.state.loggedIn && (
+                <Login/>,
+                <Registration/>
+            )}
+            {this.state.loggedIn && (
+                <div className="d-flex flex-row">
+                    <div className="p-2">
+                        <BattleList battles={this.state.battles}/>
+                    </div>
+                    <div className="p-2">
+                        <BattleCreator onBattleAdded={ battle => this.addBattle(battle) }/>
+                    </div>
+                    
+                </div>)}
+            </div>
     }
 }
