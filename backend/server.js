@@ -6,6 +6,7 @@ const cors = require('cors');
 const { log, ExpressAPILogMiddleware } = require('@rama41222/node-logger');
 // const mysqlConnect = require('./db');
 const routes = require('./routes');
+const pool = require('./db');
 
 // set up some configs for express.
 const config = {
@@ -36,4 +37,13 @@ app.listen(config.port, config.host, (e) => {
     throw new Error('Internal Server Error');
   }
   logger.info(`${config.name} running on ${config.host}:${config.port}`);
+});
+
+//GET all users
+// /api/getit/users
+app.get('/getit/users', function (req, res) {
+	pool.query("SELECT * FROM users", function (err, result, fields) {
+		if (err) throw err;
+		res.end(JSON.stringify(result)); // Result in JSON format
+	});
 });
