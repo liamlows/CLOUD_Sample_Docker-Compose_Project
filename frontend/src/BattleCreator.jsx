@@ -1,20 +1,16 @@
 import React from "react";
 import { Battle } from "./models/Battle";
-import { v1 as uuidv1 } from 'uuid';
-
 export class BattleCreator extends React.Component {
     state = {
-        id: "",
         title: "",
-        description: "",
-        userID1: "",
-        userID2: ""
+        description: ""
     }
 
     addBattle(){
         //uuidv() makes a unique ID
         //need to somehow get current user ID
-        this.props.onBattleAdded(new Battle(uuidv1(), this.state.title, this.state.description, this.state.userID1, this.state.userID2));
+        var uniqueID = (new Date()).getTime().toString(36);
+        this.props.onBattleAdded(new Battle(uniqueID, this.state.title, this.state.description, this.props.userID, undefined));
     }
 
     render() {

@@ -1,4 +1,4 @@
-import './Login.css';
+import './styles/Login.css';
 import React from 'react';
 import { v1 as uuidv1 } from 'uuid';
 
