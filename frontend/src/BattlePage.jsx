@@ -6,11 +6,13 @@ import { BattleCreator } from './BattleCreator';
 
 export class BattlePage extends React.Component {
     state = {
-        battles: [],
-        loggedIn: true
+        currentUserID: "",
+        battles: []
     };
 
     addBattle(battle){
+        //TODO: AXIOS CALL TO DB TO STORE BATTLE
+        //TODO: AXSIOS CALL TO DB FOR ALL BATTLES
         this.setState(prevState => {
             let battles = prevState.battles;
             console.log(battles);
@@ -20,20 +22,10 @@ export class BattlePage extends React.Component {
     }
     render() {
         return <div>
-            {!this.state.loggedIn && (
-                <Login/>,
-                <Registration/>
-            )}
-            {this.state.loggedIn && (
-                <div className="d-flex flex-row">
-                    <div className="p-2">
-                        <BattleList battles={this.state.battles}/>
-                    </div>
-                    <div className="p-2">
-                        <BattleCreator onBattleAdded={ battle => this.addBattle(battle) }/>
-                    </div>
-                    
-                </div>)}
-            </div>
+            <Login/>
+            <Registration/>
+            <BattleList battles={this.state.battles}/>
+            <BattleCreator onBattleAdded={ battle => this.addBattle(battle) }/>
+        </div>
     }
 }
