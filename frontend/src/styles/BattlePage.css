@@ -1,8 +1,11 @@
-.flexPage {
-    display: flex;
-    flex-direction: row;
+.sidebar {
+    width: 33%;
+    float: left;
+    position:relative;
 }
 
-.leftBar {
-    width: 33%;
+.battleLog {
+    width: 66%;
+    float: right;
+    position:relative;
 }

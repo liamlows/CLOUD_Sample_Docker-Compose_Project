@@ -1,5 +1,5 @@
 import React from 'react';
-import './Registration.css';
+import './styles/Registration.css';
 
 export class Registration extends React.Component {
 
