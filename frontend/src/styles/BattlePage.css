@@ -1,0 +1,8 @@
+.flexPage {
+    display: flex;
+    flex-direction: row;
+}
+
+.leftBar {
+    width: 33%;
+}
