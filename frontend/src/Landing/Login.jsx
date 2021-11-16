@@ -33,10 +33,12 @@ export class Login extends React.Component {
                         />
                     </div>
                 </form>
-                <button className="btn btn-primary">Log In</button>
+                <button type="button" className="btn btn-primary mt-2">Log In</button>
                 <p className="my-3"> Don't have an account yet? Register <a href="#">here.</a> </p> {/*TODO: update href link*/}
             </div>
         );
     }
 
 }
+
+export default Login;

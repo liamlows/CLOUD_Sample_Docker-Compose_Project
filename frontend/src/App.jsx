@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import axios from 'axios';
-import { Login } from './Login'
-import { Register } from './Register';
+import { Login } from './Landing/Login'
+import { Register } from './Landing/Register';
+import {Profile } from './Profile/Profile'
+import { ProfileEditForm } from './Profile/ProfileEditForm';
 
 // React functional component
 function App () {
@@ -72,7 +74,10 @@ function App () {
   // For now I'm just keeping the main component I'm working on in the App render so I can see it easily.
   return (
     <div className="App">
-      <Register></Register>
+      <Login></Login>
+      {/* <Register></Register> */}
+      {/* <Profile></Profile> */}
+      {/* <ProfileEditForm></ProfileEditForm> */}
     </div>
   );
 }
