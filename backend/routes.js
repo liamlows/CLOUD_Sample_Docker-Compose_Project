@@ -96,6 +96,7 @@ module.exports = function routes(app, logger) {
     });
   });
 
+  //SYDNEY'S ROUTES
   //GET all users
   // /api/users
   app.get('/users', function (req, res) {
@@ -104,4 +105,28 @@ module.exports = function routes(app, logger) {
       res.end(JSON.stringify(result)); // Result in JSON format
     });
   });
+
+
+
+
+
+
+
+
+
+
+  //BRIGETTA'S ROUTES
+
+
+
+
+
+
+
+
+
+
+
+
+  //BLAKE'S ROUTES
 }
