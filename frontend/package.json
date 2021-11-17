@@ -4,11 +4,14 @@
   "private": true,
   "dependencies": {
     "axios": "^0.21.1",
+    "bootstrap": "^5.1.3",
     "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
     "node-modules": "^1.0.1",
     "react": "^17.0.2",
+    "react-bootstrap": "^2.0.2",
     "react-dom": "^17.0.2",
+    "react-router-dom": "^6.0.2",
     "react-scripts": "^4.0.3"
   },
   "scripts": {
