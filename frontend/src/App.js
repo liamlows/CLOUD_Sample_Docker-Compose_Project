@@ -3,6 +3,7 @@ import './App.css'
 import { BrowserRouter, Route, Routes} from 'react-router-dom';
 import { Homepage } from './components/Homepage';
 import Login from './components/Login';
+import NBA from './components/NBA';
 
 
 const App = props => {
@@ -11,7 +12,9 @@ const App = props => {
     <BrowserRouter>
     <Routes>
         <Route path = "/" element = {<Homepage />}/>
+        <Route path = "/home" element = {<Homepage />}/>
         <Route path = "/login" element = {<Login />}/>
+        <Route path = "/NBA" element = {<NBA />} />
     </Routes>
     </BrowserRouter>
     </div>
