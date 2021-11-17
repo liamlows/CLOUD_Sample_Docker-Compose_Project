@@ -33,7 +33,7 @@ export class Login extends React.Component {
                 </button>
 
                 {/* Add a link for a sign up option */}
-                <p>New user? <a href={""}>SIGN UP</a></p>
+                <p>New user? <a href={"#/Registration"}>SIGN UP</a></p>
             </section>
         </div>
     }

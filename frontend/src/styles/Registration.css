@@ -1,3 +1,55 @@
+@media (min-width: 320px) {
+    #Registration {
+        margin-top: 20%;
+        margin-bottom: 20%;
+        padding: 30% 10%;
+    }
+}
+@media (min-width: 1025px) {
+    #Registration {
+        margin-top: 5%;
+        margin-bottom: 5%;
+        padding: 8% 30%;
+    }
+}
+
+body {
+    background-color: #7d7d7d;
+}
+
+#Registration {
+    /* screen sizing */
+    max-width: 100vw;
+    overflow:hidden;
+
+    /* background-color: #2e2e2e; */
+    background-image: url(./images/flame_background.jpg); 
+    text-align: center;
+}
+
+image {
+    align-content: center;
+}
+
+h1 {
+    color: white;
+    margin: 5%;
+}
+input[type=info], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 0 auto;
+    margin-bottom: 15px;
+    display: flex;
+    border: 1px solid #993232;
+    border-width: 0px;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+input[type=info]:hover {
+    background-color: #ffc7c7;
+    border-color: #d42626;
+}
 button {
     width: 100%;
     padding: 2%;

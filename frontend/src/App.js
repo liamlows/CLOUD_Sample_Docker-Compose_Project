@@ -1,16 +1,33 @@
 import React from 'react';
 import './styles/App.css';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-//import axios from 'axios';
+import axios from 'axios';
 
 import { BattlePage } from './BattlePage';
+import { Login } from './Login'; 
+import { Registration } from "./Registration";
 
-function App() {
-  return<div className="App">
-    <BattlePage/>
-  </div>
-
+function App(){
+  return(
+    <Router>
+      <Switch>
+        <Route exact path="/login" component={Login}/>
+        <Route exact path="/registration" component={Registration}/>
+        <Route exact path="/battlepage" component={BattlePage}/>
+      </Switch>
+    </Router>
+  );
 }
+// export function App() {
+
+  
+//   // return<div className="App">
+    
+//   //   <BattlePage/>
+//   // </div>
+
+// }
 
 export default App;
 
