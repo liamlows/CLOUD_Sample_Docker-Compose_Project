@@ -95,6 +95,8 @@ module.exports = function routes(app, logger) {
       }
     });
   });
+}
+//first commit
 
   //GET all users
   // /api/users
