@@ -1,4 +1,7 @@
 const pool = require('./db')
+const bcrypt =  require("bcryptjs");
+const jwt = require('jsonwebtoken');
+const checkAuth = require('./middleware/check-auth');
 
 module.exports = function routes(app, logger) {
   // GET /
@@ -6,8 +9,114 @@ module.exports = function routes(app, logger) {
     res.status(200).send('Go to 0.0.0.0:3000.');
   });
 
-  // POST /reset
-  app.post('/reset', (req, res) => {
+
+  //register user
+   app.post('/users/register', async (req, res) => {
+	   var firstName = req.body.firstName;
+			var lastName = req.body.lastName;
+			var username = req.body.username;
+			var passwd = await bcrypt.hash(req.body.passwd,10);
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+      if (err){
+        console.log(connection);
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        return logger.error('Problem obtaining MySQL connection', err)
+      }  
+      connection.query('select * from Users where username = ?',username,function (err, result, fields) {
+        if (err) { 
+          // if there is an error with the query, release the connection instance and log the error
+          connection.release()
+          return logger.error("Problem checking if username exists ", err);
+        } else { 
+          // if there is no error with the query, release the connection instance
+          res.send(result);
+          if(result.length>0){
+              connection.release()
+              return logger.error("Username already exists ",err);
+          }
+          else{
+            connection.query('insert into Users (firstName, lastName, username, password) values (?,?,?,?)',[firstName,lastName,username,passwd],function (err, result, fields) { });
+          }
+          connection.release()
+          
+        }
+      });
+        
+        
+    })
+  });
+  
+  app.post('/users/login',async (req,res)=>{
+    var username = req.body.username;
+    var passwd = req.body.passwd;
+    pool.getConnection(function (err, connection){
+      if (err){
+        console.log(connection);
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        connection.release();
+        return logger.error('Problem obtaining MySQL connection', err)
+      }  
+      
+      connection.query('select * from Users where username = ?',username,function (err, result, fields){
+        if (err) { 
+          // if there is an error with the query, release the connection instance and log the error
+          connection.release()
+          return logger.error("Problem checking if username exists ", err);
+        } 
+        if(result.length===0){
+          connection.release()
+          return res.status(401).json({
+            message :'Authentication Failed'
+          });
+        }
+        else{
+          connection.query('select password from Users where username = ?',username,function(err,result,fields){
+            if (err) { 
+              // if there is an error with the query, release the connection instance and log the error
+              connection.release()
+              return logger.error("Problem getting password ", err);
+            } 
+            else{
+              var hash = result[0].password;
+              bcrypt.compare(passwd,hash,(err,result2)=>{
+                if(err){
+                  connection.release();
+                  return res.status(401).json({
+                    message :'Authentication Failed'
+                  });
+                }
+                if(result2){
+                  const token = jwt.sign({username:req.body.username},'secret',{
+                    expiresIn: "1h"
+                  });
+
+                  connection.release();
+                  return res.status(200).json({
+                    message :'Authentication Successful',
+                    token : token
+                  });
+                }
+                if(!result2){
+                  connection.release();
+                  return res.status(401).json({
+                    message :'Authentication Failed'
+                  });
+                }
+                
+              });
+            }
+          })
+        }
+      });
+
+    })
+  })
+
+  // edit a player's picture
+  // /player/picture
+  // example body: {"playerID":"2", "playerPicture":"https://phantom-marca.unidadeditorial.es/4089255addf9328ce86c33c9213519ab/resize/1320/f/jpg/assets/multimedia/imagenes/2021/11/09/16364610626277.jpg"}
+  app.put('/player/picture', async (req, res) => {
     // obtain a connection from our pool of connections
     pool.getConnection(function (err, connection){
       if (err){
@@ -15,33 +124,232 @@ module.exports = function routes(app, logger) {
         // if there is an issue obtaining a connection, release the connection instance and log the error
         logger.error('Problem obtaining MySQL connection', err)
         res.status(400).send('Problem obtaining MySQL connection'); 
-      } else {
-        // if there is no issue obtaining a connection, execute query
-        connection.query('drop table if exists test_table', function (err, rows, fields) {
-          if (err) { 
-            // if there is an error with the query, release the connection instance and log the error
-            connection.release()
-            logger.error("Problem dropping the table test_table: ", err); 
-            res.status(400).send('Problem dropping the table'); 
-          } else {
-            // if there is no error with the query, execute the next query and do not release the connection yet
-            connection.query('CREATE TABLE `db`.`test_table` (`id` INT NOT NULL AUTO_INCREMENT, `value` VARCHAR(45), PRIMARY KEY (`id`), UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE);', function (err, rows, fields) {
+      }  else {
+            // does NOT take in playerID
+            var playerID = req.body.playerID;
+            var playerPicture = req.body.playerPicture;
+            connection.query("UPDATE Players SET Picture = ? WHERE PlayerID = ?",[playerPicture, playerID], function (err, result, fields) {
               if (err) { 
                 // if there is an error with the query, release the connection instance and log the error
                 connection.release()
-                logger.error("Problem creating the table test_table: ", err);
-                res.status(400).send('Problem creating the table'); 
+                logger.error("Problem changing a player picture: ", err);
+                res.status(400).send('Problem changing a player picture'); 
               } else { 
                 // if there is no error with the query, release the connection instance
+			          res.send(result);
                 connection.release()
-                res.status(200).send('created the table'); 
+                
               }
             });
           }
         });
-      }
-    });
+      });
+
+  // add a new player to a team's roster
+  // /player
+  // example body: {"playerLastName":"Astley","playerFirstName":"Rick","playerNumber":"123","teamID":"1","playerPPG":"2","playerPos":"X","playerTimePlayed":"30","coachID":"1","playerPicture":"https://variety.com/wp-content/uploads/2021/07/Rick-Astley-Never-Gonna-Give-You-Up.png?w=1024"}
+  app.post('/player', async (req, res) => {
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+      if (err){
+        console.log(connection);
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      }  else {
+            // does NOT take in playerID
+            var playerLastName = req.body.playerLastName;
+            var playerFirstName = req.body.playerFirstName;
+            var playerNumber = req.body.playerNumber;
+            var teamID = req.body.teamID;
+            var playerPPG = req.body.playerPPG;
+            var playerPos = req.body.playerPos;
+            var playerTimePlayed = req.body.playerTimePlayed;
+            var coachID = req.body.coachID;
+            var playerPicture = req.body.playerPicture;
+            connection.query("INSERT INTO Players (LastName, FirstName, PlayerNumber, TeamID, PPG, Position, TimePlayed, CoachID, Picture) VALUES (?,?,?,?,?,?,?,?,?)",[playerLastName,playerFirstName,playerNumber,teamID,playerPPG,playerPos,playerTimePlayed,coachID,playerPicture], function (err, result, fields) {
+              if (err) { 
+                // if there is an error with the query, release the connection instance and log the error
+                connection.release()
+                logger.error("Problem adding a player: ", err);
+                res.status(400).send('Problem adding a player'); 
+              } else { 
+                // if there is no error with the query, release the connection instance
+			          res.send(result);
+                connection.release()
+                
+              }
+            });
+          }
+        });
+      });
+
+
+  // update a specific player's position
+  // /player/position?playerID=123&playerPos=Quarterback
+  app.put('/player/position', async (req, res) => {
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+      if (err){
+        console.log(connection);
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      }  else {
+			var playerID = req.body.playerID;
+			var playerPos = req.body.playerPos;
+            connection.query("UPDATE Players SET Position = ? WHERE PlayerID = ?",[playerPos,playerID], function (err, result, fields) {
+              if (err) { 
+                // if there is an error with the query, release the connection instance and log the error
+                connection.release()
+                logger.error("Problem updating player position: ", err);
+                res.status(400).send('Problem updating player position'); 
+              } else { 
+                // if there is no error with the query, release the connection instance
+				res.send(result);
+                connection.release()
+                
+              }
+            });
+          }
+        });
+      });
+  // get players ppg, just specify player first and last name using body
+  app.get('/player/ppg',checkAuth, async (req, res) => {
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+      if (err){
+        console.log(connection);
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      }  else {
+			var firstName = req.body.firstName;
+			var lastName = req.body.lastName;
+            connection.query("select PPG from Players where FirstName = ? and LastName = ?",[firstName,lastName], function (err, result, fields) {
+              if (err) { 
+                // if there is an error with the query, release the connection instance and log the error
+                connection.release()
+                logger.error("Problem getting ppg: ", err);
+                res.status(400).send('Problem getting ppg'); 
+              } else { 
+                // if there is no error with the query, release the connection instance
+				res.send(result);
+                connection.release()
+                
+              }
+            });
+          }
+        });
+      });
+	  
+	  
+	  // get list of players so that you can vote for mvp (assume it should be filtered by the league but they did not say that)
+  app.get('/players', async (req, res) => {
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+      if (err){
+        console.log(connection);
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      }  else {
+			var league = req.body.league;
+            connection.query("select FirstName,LastName,TeamName from Players join Teams T on T.TeamID = Players.TeamID where League = ?",[league], function (err, result, fields) {
+              if (err) { 
+                // if there is an error with the query, release the connection instance and log the error
+                connection.release()
+                logger.error("Problem getting ppg: ", err);
+                res.status(400).send('Problem getting ppg'); 
+              } else { 
+                // if there is no error with the query, release the connection instance
+				res.send(result);
+                connection.release()
+                
+              }
+            });
+          }
+        });
+      });
+	  
+	  
+	//gets list of games a player has played in, just specify first and last name, returns the players name, and the game ids
+	app.get('/player/games', async (req, res) => {
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+      if (err){
+        console.log(connection);
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      }  else {
+			var firstName = req.body.firstName;
+			var lastName = req.body.lastName;
+            connection.query("select FirstName,LastName,GameID from Players P join Teams T on P.TeamID = T.TeamID join Games G on T.TeamID = G.Team1ID or T.TeamID=G.Team2ID where P.FirstName=? and P.LastName=?",[firstName,lastName], function (err, result, fields) {
+              if (err) { 
+                // if there is an error with the query, release the connection instance and log the error
+                connection.release()
+                logger.error("Problem getting ppg: ", err);
+                res.status(400).send('Problem getting ppg'); 
+              } else { 
+                // if there is no error with the query, release the connection instance
+				res.send(result);
+                connection.release()
+                
+              }
+            });
+          }
+        });
+      });
+	  
+	//update a games score, must specify which team, which game and the score you want to update
+  app.put('/games/score', async (req, res) => {
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+      if (err){
+        console.log(connection);
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      }  else {
+			var GameID = req.body.GameID;
+			var score = req.body.score;
+			var teamNum=req.body.teamNum;
+			if(teamNum=1){
+				connection.query("update Games set Team1Score = ? where GameID = ?;",[score,GameID], function (err, result, fields){
+				if (err)  {
+                // if there is an error with the query, release the connection instance and log the error
+                connection.release()
+                logger.error("Problem getting ppg: ", err);
+                res.status(400).send('Problem getting ppg'); 
+				} 
+				else { 
+                // if there is no error with the query, release the connection instance
+				res.send(result);
+                connection.release()
+                }
+				});
+			}
+			else{
+				connection.query("update Games set Team2Score = ? where GameID = ?;",[score,GameID], function (err, result, fields){
+				if (err){
+                // if there is an error with the query, release the connection instance and log the error
+                connection.release()
+                logger.error("Problem getting ppg: ", err);
+                res.status(400).send('Problem getting ppg'); 
+				} 
+				else { 
+                // if there is no error with the query, release the connection instance
+				res.send(result);
+                connection.release()
+                }
+				});
+			}
+        }
+      });
   });
+
+
 
   // POST /multplynumber
   app.post('/multplynumber', (req, res) => {
@@ -96,3 +404,4 @@ module.exports = function routes(app, logger) {
     });
   });
 }
+
