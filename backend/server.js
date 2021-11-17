@@ -40,8 +40,8 @@ app.listen(config.port, config.host, (e) => {
 });
 
 //GET all users
-// /api/getit/users
-app.get('/getit/users', function (req, res) {
+// /api/users
+app.get('/users', function (req, res) {
 	pool.query("SELECT * FROM users", function (err, result, fields) {
 		if (err) throw err;
 		res.end(JSON.stringify(result)); // Result in JSON format
