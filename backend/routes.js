@@ -6,14 +6,8 @@ module.exports = function routes(app, logger) {
     res.status(200).send('Go to 0.0.0.0:3000.');
   });
 
-  // GET /
-  app.get('/users', (req, res) => {
-    connection.query('SELECT * FROM users'), function (err, result, fields) {
-      if(err) throw error;
-    }
-    res.status(200).send('Go to 0.0.0.0:3000.');
-  });
 
+//get all users
   app.get('/users', (req, res) => {
     // obtain a connection from our pool of connections
     pool.getConnection(function (err, connection){
@@ -79,7 +73,7 @@ module.exports = function routes(app, logger) {
   });
 
   // POST /multplynumber
-  app.post('/multplynumber', (req, res) => {
+  app.post('/postuser', (req, res) => {
     console.log(req.body.product);
     // obtain a connection from our pool of connections
     pool.getConnection(function (err, connection){
@@ -89,7 +83,7 @@ module.exports = function routes(app, logger) {
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query('INSERT INTO `db`.`test_table` (`value`) VALUES(\'' + req.body.product + '\')', function (err, rows, fields) {
+        connection.query('INSERT INTO `db`.`users` (`username, password`) VALUES(\'' + req.body.product + '\')', function (err, rows, fields) {
           connection.release();
           if (err) {
             // if there is an error with the query, log the error
