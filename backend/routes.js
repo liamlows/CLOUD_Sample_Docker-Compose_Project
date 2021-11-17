@@ -95,6 +95,8 @@ module.exports = function routes(app, logger) {
       }
     });
   });
+}
+//first commit
 
   //SYDNEY'S ROUTES
   //GET all users
@@ -129,4 +131,3 @@ module.exports = function routes(app, logger) {
 
 
   //BLAKE'S ROUTES
-}
