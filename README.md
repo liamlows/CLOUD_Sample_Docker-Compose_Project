@@ -12,6 +12,29 @@
 ## Initial setup
 First make sure to open a terminal window to `./backend` and `./frontend` and from there run `yarn` or `npm install` in both directories to install the necessary packages. 
 
+Create a file in the `./frontend` folder called `.env` and add the the following to it (if it is not already there):
+```
+CHOKIDAR_USEPOLLING=true
+```
+
+Create a file in the `./backend` folder called `.env` and add the the following to it:
+
+NOTE: You will need to share the values in this `.env` file in the backend folder with your team members, it is not recommended you push this file to your GitHub repo as it may expose your secrets to the world!
+```
+# POPULATE WITH YOUR OWN VALUES SPECIFIED IN DATABASE CREATION!
+# mysql database name
+MYSQL_DB=
+# mysql port (usually 3306)
+MYSQL_PORT=
+# mysql cloud database login user
+MYSQL_CLOUD_USER=
+# mysql cloud database login password
+MYSQL_CLOUD_PASS=
+# mysql cloud database host URL
+MYSQL_CLOUD_HOST=
+
+```
+
 ## MySQL setup
 Once you have set up you mysql database on a DBaaS provider like AWS RDS or GCloud CloudSQL, ensure that the database is publicly accessible on the port you used in setup (usually 3306). Then access the database and run the commands provided in `./backend/mysql_setup.sql`. 
 
