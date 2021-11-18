@@ -413,4 +413,27 @@ module.exports = function routes(app, logger) {
       res.end(JSON.stringify(result)); 
       });
   });
+
+  //BRIGETTA'S ROUTES
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  //BLAKES'S ROUTES
 }
