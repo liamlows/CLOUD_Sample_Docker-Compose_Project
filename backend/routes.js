@@ -72,9 +72,10 @@ module.exports = function routes(app, logger) {
     });
   });
 
-  // POST /multplynumber
-  app.post('/postuser', (req, res) => {
-    console.log(req.body.product);
+  // post username and password
+  app.post('/signup', (req, res) => {
+    //console.log(req.body.username);
+    console.log('hello' + req.body);
     // obtain a connection from our pool of connections
     pool.getConnection(function (err, connection){
       if(err){
@@ -83,19 +84,45 @@ module.exports = function routes(app, logger) {
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query('INSERT INTO `db`.`users` (`username, password`) VALUES(\'' + req.body.product + '\')', function (err, rows, fields) {
+        connection.query('INSERT INTO `db`.`users` (`username`, `password`) VALUES(\'' + req.body.username + '\', \'' + req.body.password + '\')', function (err, rows, fields) {
           connection.release();
           if (err) {
             // if there is an error with the query, log the error
             logger.error("Problem inserting into test table: \n", err);
             res.status(400).send('Problem inserting into table'); 
           } else {
-            res.status(200).send(`added ${req.body.product} to the table!`);
+            res.status(200).send(`added ${req.body.username} to the table!`);
           }
         });
       }
     });
   });
+
+    // post username and password
+    app.get('/getuserbyid', (req, res) => {
+      //console.log(req.body.username);
+      console.log(req.body);
+      // obtain a connection from our pool of connections
+      pool.getConnection(function (err, connection){
+        if(err){
+          // if there is an issue obtaining a connection, release the connection instance and log the error
+          logger.error('Problem obtaining MySQL connection',err)
+          res.status(400).send('Problem obtaining MySQL connection'); 
+        } else {
+          // if there is no issue obtaining a connection, execute query and release connection
+          connection.query('SELECT * FROM `db`.`users` WHERE `userID`= ' + req.body.userID, function (err, rows, fields) {
+            connection.release();
+            if (err) {
+              // if there is an error with the query, log the error
+              logger.error("Problem inserting into test table: \n", err);
+              res.status(400).send('Problem inserting into table'); 
+            } else {
+              res.status(200).send(`added ${req.body.userID} to the table!`);
+            }
+          });
+        }
+      });
+    });
 
   // GET /checkdb
   app.get('/values', (req, res) => {
