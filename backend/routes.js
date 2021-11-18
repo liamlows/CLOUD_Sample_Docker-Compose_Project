@@ -95,11 +95,7 @@ module.exports = function routes(app, logger) {
       }
     });
   });
-<<<<<<< Updated upstream
-
-=======
   //SYDNEY'S ROUTES
->>>>>>> Stashed changes
   //GET all users
   // /api/users
   app.get('/users', function (req, res) {
@@ -108,9 +104,6 @@ module.exports = function routes(app, logger) {
       res.end(JSON.stringify(result)); // Result in JSON format
     });
   });
-<<<<<<< Updated upstream
-}
-=======
 
   //GET all drivers
   // /api/drivers
@@ -120,29 +113,4 @@ module.exports = function routes(app, logger) {
       res.end(JSON.stringify(result)); // Result in JSON format
     });
   });
-
 }
-//first commit
-
-
-
-
-
-
-
-
-  //BRIGETTA'S ROUTES
-
-
-
-
-
-
-
-
-
-
-
-
-  //BLAKE'S ROUTES
->>>>>>> Stashed changes
