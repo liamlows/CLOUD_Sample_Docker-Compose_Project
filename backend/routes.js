@@ -95,10 +95,17 @@ module.exports = function routes(app, logger) {
       }
     });
   });
-}
-//first commit
+  const bodyParser = require('body-parser');
+  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(bodyParser.json());
+  app.use(bodyParser.raw());
 
   //SYDNEY'S ROUTES
+
+  /*
+  * DRIVERS
+  */
+  
   //GET all users
   // /api/users
   app.get('/users', function (req, res) {
@@ -108,26 +115,302 @@ module.exports = function routes(app, logger) {
     });
   });
 
+  //GET all drivers
+  // /api/drivers
+  app.get('/drivers', function (req, res) {
+    pool.query("SELECT * FROM drivers", function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
 
+  //GET a paritcular driver
+  //	/api/driver
+  app.get('/driver', function (req, res) {
+    var driverID = req.param('driverID');
+    pool.query("SELECT * FROM drivers WHERE driverID = ?", driverID, function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
 
+  //POST a new driver
+  // /api/drivers
+  app.post('/drivers', async (req, res) => {
+    var userID = req.param("userID");
+    var foodDonationID = req.param("foodDonationID");
+    var licensePlate = req.param("licensePlate");
+    var carMake = req.param('carMake');
+    var carModel = req.param('carModel');
+    var carYear = req.param('carYear');
+    var carColor = req.param('carColor');
+    
+    pool.query("INSERT INTO drivers (userID, foodDonationID, licensePlate, carMake, carModel, carYear, carColor) VALUES (?,?,?,?,?,?,?)", 
+    [userID, foodDonationID, licensePlate, carMake, carModel, carYear, carColor],function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
 
+  //PUT a foodDonationID (give the driver a new donation to deliver)
+  // /api/driver/updateFoodDonationID
+  app.put('/driver/updateFoodDonationID', async (req, res) => {
+    var driverID = req.param("driverID");
+    var foodDonationID = req.param("foodDonationID");
 
+    pool.query("UPDATE drivers SET foodDonationID = ? WHERE driverID = ?", 
+    [foodDonationID, driverID],function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
 
+  //PUT a new license plate
+  // /api/driver/updateLicensePlate
+  app.put('/driver/updateLicensePlate', async (req, res) => {
+    var driverID = req.param("driverID");
+    var licensePlate = req.param("licensePlate");
 
+    pool.query("UPDATE drivers SET licensePlate = ? WHERE driverID = ?", 
+    [licensePlate, driverID],function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
 
+  //PUT a new car make
+  // /api/driver/updateCarMake
+  app.put('/driver/updateCarMake', async (req, res) => {
+    var driverID = req.param("driverID");
+    var carMake = req.param("carMake");
 
+    pool.query("UPDATE drivers SET carMake = ? WHERE driverID = ?", 
+    [carMake, driverID],function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
 
-  //BRIGETTA'S ROUTES
+  //PUT a new car model
+  // /api/driver/updateCarModel
+  app.put('/driver/updateCarModel', async (req, res) => {
+    var driverID = req.param("driverID");
+    var carModel = req.param("carModel");
 
+    pool.query("UPDATE drivers SET carModel = ? WHERE driverID = ?", 
+    [carModel, driverID],function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
 
+  //PUT a new car year
+  // /api/driver/updateCarYear
+  app.put('/driver/updateCarYear', async (req, res) => {
+    var driverID = req.param("driverID");
+    var carYear = req.param("carYear");
 
+    pool.query("UPDATE drivers SET carYear = ? WHERE driverID = ?", 
+    [carYear, driverID],function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
 
+  //PUT a new car color
+  // /api/driver/updateCarColor
+  app.put('/driver/updateCarColor', async (req, res) => {
+    var driverID = req.param("driverID");
+    var carColor = req.param("carColor");
 
+    pool.query("UPDATE drivers SET carColor = ? WHERE driverID = ?", 
+    [carColor, driverID],function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
 
+  //DELETE a particular driver
+  //  /api/driver
+  app.delete('/driver', async (req, res) => {
+  	var driverID = req.param("driverID");
+  
+    pool.query("DELETE FROM drivers WHERE driverID = ?", driverID, function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); 
+      });
+    });
 
+  /*
+  * AVAILABILITIES
+  */
 
+  //GET all availabilites
+  // /api/availabilities
+  app.get('/availabilities', function (req, res) {
+    pool.query("SELECT * FROM availabilities", function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
 
+  //GET a list of availabilities by driverID
+  //	/api/availability
+  app.get('/availability', function (req, res) {
+    var driverID = req.param('driverID');
+    pool.query("SELECT * FROM availabilities WHERE driverID = ?", driverID, function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
 
+  //POST a new availability for a given driver
+  // /api/availabilities
+  app.post('/availabilities', async (req, res) => {
+    var driverID = req.param("driverID");
+    var startAvailability = req.param("startAvailability");
+    var endAvailability = req.param("endAvailability");
 
+    pool.query("INSERT INTO availabilities (driverID, startAvailability, endAvailability) VALUES (?,?,?)", 
+    [driverID, startAvailability, endAvailability],function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
 
-  //BLAKE'S ROUTES
+  //PUT a new availability start time
+  // /api/availability/updateStartTime
+  app.put('/availability/updateStartTime', async (req, res) => {
+    var availabilityID = req.param("availabilityID");
+    var startAvailability = req.param("startAvailability");
+
+    pool.query("UPDATE availabilities SET startAvailability = ? WHERE availabilityID = ?", 
+    [startAvailability, availabilityID],function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
+
+  //PUT a new availability end time
+  // /api/availability/updateEndTime
+  app.put('/availability/updateEndTime', async (req, res) => {
+    var availabilityID = req.param("availabilityID");
+    var endAvailability = req.param("endAvailability");
+
+    pool.query("UPDATE availabilities SET endAvailability = ? WHERE availabilityID = ?", 
+    [endAvailability, availabilityID],function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+});
+
+  //DELETE a particular availability
+  //  /api/availabilities
+  app.delete('/availability', async (req, res) => {
+    var availabilityID = req.param("availabilityID");
+
+    pool.query("DELETE FROM availabilities WHERE availabilityID = ?", availabilityID, function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); 
+      });
+  });
+
+  /*
+  * RATINGS
+  */
+
+  // /api/ratings
+  app.get('/ratings', function (req, res) {
+    pool.query("SELECT * FROM ratings", function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
+
+  //GET a list of ratings by driverID
+  //	/api/rating
+  app.get('/rating', function (req, res) {
+    var driverID = req.param('driverID');
+    pool.query("SELECT * FROM ratings WHERE driverID = ?", driverID, function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
+
+  //POST a new rating for a given driver
+  // /api/ratings
+  app.post('/ratings', async (req, res) => {
+    var driverID = req.param("driverID");
+    var stars = req.param("stars");
+    var rating = req.param("rating");
+    var datePosted = req.param("datePosted");
+
+    pool.query("INSERT INTO ratings (driverID, stars, rating, datePosted) VALUES (?,?,?,?)", 
+    [driverID, stars, rating, datePosted],function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
+
+  //PUT a new rating driverID
+  // /api/rating/updateDriverID
+  app.put('/rating/updateDriverID', async (req, res) => {
+    var ratingID = req.param("ratingID");
+    var driverID = req.param("driverID");
+
+    pool.query("UPDATE ratings SET driverID = ? WHERE ratingID = ?", 
+    [driverID, ratingID],function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
+
+  //PUT a new rating stars value
+  // /api/rating/updateStars
+  app.put('/rating/updateStars', async (req, res) => {
+    var ratingID = req.param("ratingID");
+    var stars = req.param("stars");
+
+    pool.query("UPDATE ratings SET stars = ? WHERE ratingID = ?", 
+    [stars, ratingID],function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
+
+  //PUT a new rating rating value
+  // /api/rating/updateRating
+  app.put('/rating/updateRating', async (req, res) => {
+    var ratingID = req.param("ratingID");
+    var rating = req.param("rating");
+
+    pool.query("UPDATE ratings SET rating = ? WHERE ratingID = ?", 
+    [rating, ratingID],function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
+
+  //PUT a new rating datePosted value
+  // /api/rating/updateDatePosted
+  app.put('/rating/updateDatePosted', async (req, res) => {
+    var ratingID = req.param("ratingID");
+    var datePosted = req.param("datePosted");
+
+    pool.query("UPDATE ratings SET datePosted = ? WHERE ratingID = ?", 
+    [datePosted, ratingID],function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
+
+  //DELETE a particular rating
+  //  /api/rating
+  app.delete('/rating', async (req, res) => {
+    var ratingID = req.param("ratingID");
+    pool.query("DELETE FROM ratings WHERE ratingID = ?", ratingID, function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); 
+      });
+  });
+}
