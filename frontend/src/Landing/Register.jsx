@@ -2,8 +2,13 @@ import React from 'react';
 
 export class Register extends React.Component {
 
-    userTypes = [1, 2, 3, 4] // Double check with DB team on what int IDs correspond to what user type
-                            // Will have to map ints to strings probably
+    userTypes = [
+        "General User", 
+        "Driver",
+        "Soup Kitchen Owner",
+        "RDH Owner",
+        "Admin"
+    ];
 
     state = {
         userType: "",
