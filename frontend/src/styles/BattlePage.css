@@ -1,0 +1,11 @@
+.sidebar {
+    width: 33%;
+    float: left;
+    position:relative;
+}
+
+.battleLog {
+    width: 66%;
+    float: right;
+    position:relative;
+}
