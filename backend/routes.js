@@ -138,7 +138,7 @@ module.exports = function routes(app, logger) {
           res.status(400).send('Problem obtaining MySQL connection'); 
         } else {
           // if there is no issue obtaining a connection, execute query and release connection
-          connection.query('INSERT INTO `db`.`battles` (`battleTopic`, `user1`, `user2`, `timeCreated`, `timeClosed`) VALUES(\'' + req.body.battleTopic + '\', \'' + req.body.user1 + '\', \'' + req.body.user2 + '\', \'' + req.body.timeCreated + '\', \'' + req.body.timeClosed + '\')', function (err, rows, fields) {
+          connection.query('INSERT INTO `db`.`battles` (`battleTopic`, `battleDescription`, `user1`, `user2`, `timeCreated`, `timeClosed`) VALUES(\'' + req.body.battleTopic + '\', \''  + req.body.battleDescription + '\', \''+ req.body.user1 + '\', \'' + req.body.user2 + '\', \'' + req.body.timeCreated + '\', \'' + req.body.timeClosed + '\')', function (err, rows, fields) {
             connection.release();
             if (err) {
               // if there is an error with the query, log the error
@@ -153,7 +153,7 @@ module.exports = function routes(app, logger) {
     });
 
 
-   // post a battle
+   // post a message
    app.post('/postmessage', (req, res) => {
     //console.log(req.body.username);
     console.log('hello' + req.body);
@@ -165,7 +165,7 @@ module.exports = function routes(app, logger) {
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query('INSERT INTO `db`.`messages` (`battleID`, `message`, `senderName`, `senderID`, `timestamp`) VALUES(\'' + req.body.battleID + '\', \'' + req.body.message + '\', \'' + req.body.senderName + '\', \'' + req.body.senderID + '\', \'' + req.body.timestamp + '\')', function (err, rows, fields) {
+        connection.query('INSERT INTO `db`.`messages` (`battleID`, `message`, `senderName`, `senderID`, `timestamp`) VALUES(\'' + req.body.battleID + '\', \''  + req.body.message + '\', \'' + req.body.senderName + '\', \'' + req.body.senderID + '\', \'' + req.body.timestamp + '\')', function (err, rows, fields) {
           connection.release();
           if (err) {
             // if there is an error with the query, log the error

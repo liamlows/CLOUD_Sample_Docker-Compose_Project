@@ -17,6 +17,7 @@ CREATE TABLE friends (
 CREATE TABLE battles (
 	battleID int(11) AUTO_INCREMENT PRIMARY KEY,
 	battleTopic varchar(255),
+    battleDescription varchar(1024),
 	user1 varchar(255),
 	user2 varchar(255),
 	timeCreated datetime,
