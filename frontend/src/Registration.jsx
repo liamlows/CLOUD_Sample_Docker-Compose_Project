@@ -1,5 +1,6 @@
 import React from 'react';
 import './styles/Registration.css';
+import { Link, Redirect } from 'react-router-dom';
 
 export class Registration extends React.Component {
 
@@ -16,35 +17,39 @@ export class Registration extends React.Component {
 
     render() {
         return <>
-        <form className="container">
-                <h1>Account Registration</h1>
-                <div className="form-group">
-                    <label htmlFor="name">Name</label>
-                    <input type="text"
-                        id="name"
-                        name="name"
-                        value={this.state.name}
-                        onChange={ event => this.setState({ name: event.target.value }) }
-                        className="form-control" />
-                </div>
+        <section id="Registration">
+            <h1>SETUP YOUR FLAME WAR ACCOUNT</h1>
+            <form className="container">
+                    <div className="form-group">
+                        <input type="info"
+                            id="name"
+                            name="name"
+                            value={this.state.name}
+                            placeholder={"Username"}
+                            onChange={ event => this.setState({ name: event.target.value }) }
+                            className="form-control" />
+                    </div>
 
 
-                <div className="form-group">
-                    <label htmlFor="password">Password (8 characters minimum): </label>
-                    <input type="password"
-                        id="pass"
-                        name="password"
-                        minlength="8" required
-                        value={this.state.password}
-                        onChange={ event => this.setState({ password: event.target.value }) }
-                        className="form-control" />
-                </div>
+                    <div className="form-group">
+                        <input type="info"
+                            id="pass"
+                            name="password"
+                            minlength="8" required
+                            value={this.state.password}
+                            placeholder={"Password (8 characters minimum"}
+                            onChange={ event => this.setState({ password: event.target.value }) }
+                            className="form-control" />
+                    </div>
 
-        </form>
+            </form>
 
-        <button onClick={e => this.regiDone()}>
-            Login
-        </button>
+            <button onClick={e => this.regiDone()}>
+                Login
+            </button>
+            <p>nevermind, take me to <Link to={"/"}>LOGIN</Link></p>
+        </section>
+        
         </>;
     }
 }

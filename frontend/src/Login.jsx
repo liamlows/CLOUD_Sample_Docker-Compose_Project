@@ -1,6 +1,8 @@
 import './styles/Login.css';
 import React from 'react';
 import { v1 as uuidv1 } from 'uuid';
+import { Link } from 'react-router-dom';
+
 
 export class Login extends React.Component {
     validateLogin(){
@@ -33,7 +35,7 @@ export class Login extends React.Component {
                 </button>
 
                 {/* Add a link for a sign up option */}
-                <p>New user? <a href={""}>SIGN UP</a></p>
+                <p>New user? <Link to={"/registration"}>SIGN UP</Link></p>
             </section>
         </div>
     }
