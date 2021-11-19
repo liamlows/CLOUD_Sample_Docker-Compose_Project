@@ -68,9 +68,9 @@ export class BattlePage extends React.Component {
             <div className="battleLog">
                 {this.state.loggedIn && this.state.activeBattle !== "" && (
                     <div>
-                        <BattleLog battle={this.state.activeBattle} />
+                        <BattleLog battleID={this.state.activeBattle.id} />
                         {this.state.activeBattle.userID1 === this.state.currentUserID && (
-                            <MessageBox onMessageSent={text => this.sendMessage(text)}/>
+                            <MessageBox activeBattleID={this.state.activeBattle.id} userID={this.state.currentUserID} onMessageSent={text => this.sendMessage(text)}/>
                         )}
                     </div>
                 )}

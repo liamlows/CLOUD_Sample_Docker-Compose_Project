@@ -1,24 +1,26 @@
 import React from "react";
-
+import axios from "axios";
 export class BattleLog extends React.Component{
-
+    state = {
+        messages: []
+    };
+    getMessages(){
+        var url = 'localhost'
+        axios.get(`http://${url}:8000/getmessagesbyid`, 
+        {
+            battleID: this.props.battleID
+        }).then(res => {
+            console.log("posted message");
+            console.log(res);
+        }).catch(err => {
+            console.log(err)
+        });
+    }
     render() {
+        this.getMessages();
         return <div>
             <h2>Battle Log</h2>
-            TODO: GET A BATTLE MESSAGES BY USING AXIOS CALL ON BATTLE ID
-            <div >Showing log for{this.props.battle.id}</div>
+            <div >Showing log for{this.props.battle}</div>
         </div>
     }
-    /* {props.battle.messages.length === 0 &&
-        <div>
-            No messages
-        </div>
-    }
-    <div className="list-group">
-        {props.battle.messages.map(message =>
-            <div className="list-group-item">
-
-            </div>
-        )}
-    </div> */
 }
