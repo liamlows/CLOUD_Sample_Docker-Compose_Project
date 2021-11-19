@@ -12,9 +12,9 @@ function App(){
   return(
     <Router>
       <Switch>
+        <Route exact path="/" component={BattlePage}/>
         <Route exact path="/login" component={Login}/>
         <Route exact path="/registration" component={Registration}/>
-        <Route exact path="/battlepage" component={BattlePage}/>
       </Switch>
     </Router>
   );

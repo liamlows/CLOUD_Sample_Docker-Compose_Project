@@ -47,6 +47,7 @@ export class Registration extends React.Component {
             <button onClick={e => this.regiDone()}>
                 Login
             </button>
+            <p>nevermind, take me to <Link to={"/"}>LOGIN</Link></p>
         </section>
         
         </>;
