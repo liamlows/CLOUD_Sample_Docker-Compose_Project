@@ -44,7 +44,9 @@ export class BattlePage extends React.Component {
         this.setState({loggedIn: true})
     }
     sendMessage(text) {
-        let message = new Message(uuidv1(), this.state.currentUserID, this.state.activeBattle.id, text, new Date())
+        let message = new Message(uuidv1(), this.state.currentUserID, this.state.activeBattle.id, text, new Date());
+        //axios call here
+        
     }
 
     render() {
