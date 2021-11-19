@@ -6,14 +6,8 @@ module.exports = function routes(app, logger) {
     res.status(200).send('Go to 0.0.0.0:3000.');
   });
 
-  // GET /
-  app.get('/users', (req, res) => {
-    connection.query('SELECT * FROM users'), function (err, result, fields) {
-      if(err) throw error;
-    }
-    res.status(200).send('Go to 0.0.0.0:3000.');
-  });
 
+//get all users
   app.get('/users', (req, res) => {
     // obtain a connection from our pool of connections
     pool.getConnection(function (err, connection){
@@ -24,6 +18,34 @@ module.exports = function routes(app, logger) {
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
         connection.query('SELECT * FROM users', function (err, rows, fields) {
+          connection.release();
+          if (err) {
+            logger.error("Error while fetching values: \n", err);
+            res.status(400).json({
+              "data": [],
+              "error": "Error obtaining values"
+            })
+          } else {
+            res.status(200).json({
+              "data": rows
+            });
+          }
+        });
+      }
+    });
+  });
+
+  //get all battles
+  app.get('/getbattles', (req, res) => {
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+      if(err){
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection',err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+        // if there is no issue obtaining a connection, execute query and release connection
+        connection.query('SELECT * FROM battles', function (err, rows, fields) {
           connection.release();
           if (err) {
             logger.error("Error while fetching values: \n", err);
@@ -78,9 +100,10 @@ module.exports = function routes(app, logger) {
     });
   });
 
-  // POST /multplynumber
-  app.post('/multplynumber', (req, res) => {
-    console.log(req.body.product);
+  // post username and password
+  app.post('/signup', (req, res) => {
+    //console.log(req.body.username);
+    console.log('hello' + req.body);
     // obtain a connection from our pool of connections
     pool.getConnection(function (err, connection){
       if(err){
@@ -89,19 +112,166 @@ module.exports = function routes(app, logger) {
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
         // if there is no issue obtaining a connection, execute query and release connection
-        connection.query('INSERT INTO `db`.`test_table` (`value`) VALUES(\'' + req.body.product + '\')', function (err, rows, fields) {
+        connection.query('INSERT INTO `db`.`users` (`username`, `password`) VALUES(\'' + req.body.username + '\', \'' + req.body.password + '\')', function (err, rows, fields) {
           connection.release();
           if (err) {
             // if there is an error with the query, log the error
             logger.error("Problem inserting into test table: \n", err);
             res.status(400).send('Problem inserting into table'); 
           } else {
-            res.status(200).send(`added ${req.body.product} to the table!`);
+            res.status(200).send(`added ${req.body.username} to the table!`);
           }
         });
       }
     });
   });
+
+    // post a battle
+    app.post('/makebattle', (req, res) => {
+      //console.log(req.body.username);
+      console.log('hello' + req.body);
+      // obtain a connection from our pool of connections
+      pool.getConnection(function (err, connection){
+        if(err){
+          // if there is an issue obtaining a connection, release the connection instance and log the error
+          logger.error('Problem obtaining MySQL connection',err)
+          res.status(400).send('Problem obtaining MySQL connection'); 
+        } else {
+          // if there is no issue obtaining a connection, execute query and release connection
+          connection.query('INSERT INTO `db`.`battles` (`battleTopic`, `battleDescription`, `user1`, `user2`) VALUES(\'' + req.body.battleTopic + '\', \''  + req.body.battleDescription + '\', \''+ req.body.user1 + '\', \'' + req.body.user2 + '\')', function (err, rows, fields) {
+            connection.release();
+            if (err) {
+              // if there is an error with the query, log the error
+              logger.error("Problem inserting into test table: \n", err);
+              res.status(400).send('Problem inserting into table'); 
+            } else {
+              res.status(200).send(`added ${req.body.battleTopic} to the table!`);
+            }
+          });
+        }
+      });
+    });
+
+
+   // post a message
+   app.post('/postmessage', (req, res) => {
+    //console.log(req.body.username);
+    console.log('hello' + req.body);
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection){
+      if(err){
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection',err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+        // if there is no issue obtaining a connection, execute query and release connection
+        connection.query('INSERT INTO `db`.`messages` (`battleID`, `message`, `senderName`, `senderID`, `timestamp`) VALUES(\'' + req.body.battleID + '\', \''  + req.body.message + '\', \'' + req.body.senderName + '\', \'' + req.body.senderID + '\', \'' + req.body.timestamp + '\')', function (err, rows, fields) {
+          connection.release();
+          if (err) {
+            // if there is an error with the query, log the error
+            logger.error("Problem inserting into test table: \n", err);
+            res.status(400).send('Problem inserting into table'); 
+          } else {
+            res.status(200).send(`added ${req.body.message} to the table!`);
+          }
+        });
+      }
+    });
+  });
+
+    // get user by id
+    app.get('/getuserbyid', (req, res) => {
+      //console.log(req.body.username);
+      console.log(req.body);
+      // obtain a connection from our pool of connections
+      pool.getConnection(function (err, connection){
+        if(err){
+          // if there is an issue obtaining a connection, release the connection instance and log the error
+          logger.error('Problem obtaining MySQL connection',err)
+          res.status(400).send('Problem obtaining MySQL connection'); 
+        } else {
+          // if there is no issue obtaining a connection, execute query and release connection
+          connection.query('SELECT * FROM `db`.`users` WHERE `userID`= ' + req.body.userID, function (err, rows, fields) {
+            connection.release();
+            if (err) {
+              logger.error("Error while fetching values: \n", err);
+              res.status(400).json({
+                "data": [],
+                "error": "Error obtaining values"
+              })
+            } else {
+              res.status(200).json({
+                "data": rows
+              });
+            }
+          });
+        }
+      });
+    });
+
+    // get user by id
+    app.get('/getmessagesbyid', (req, res) => {
+      //console.log(req.body.username);
+      console.log(req.body);
+      // obtain a connection from our pool of connections
+      pool.getConnection(function (err, connection){
+        if(err){
+          // if there is an issue obtaining a connection, release the connection instance and log the error
+          logger.error('Problem obtaining MySQL connection',err)
+          res.status(400).send('Problem obtaining MySQL connection'); 
+        } else {
+          // if there is no issue obtaining a connection, execute query and release connection
+          connection.query('SELECT message FROM `db`.`messages` WHERE `battleID`= ' + req.body.battleID, function (err, rows, fields) {
+            connection.release();
+            if (err) {
+              logger.error("Error while fetching values: \n", err);
+              res.status(400).json({
+                "data": [],
+                "error": "Error obtaining values"
+              })
+            } else {
+              res.status(200).json({
+                "data": rows
+              });
+            }
+          });
+        }
+      });
+    });
+
+
+    // get battle by id
+    app.get('/getbattlebyid', (req, res) => {
+      //console.log(req.body.username);
+      console.log(req.body);
+      // obtain a connection from our pool of connections
+      pool.getConnection(function (err, connection){
+        if(err){
+          // if there is an issue obtaining a connection, release the connection instance and log the error
+          logger.error('Problem obtaining MySQL connection',err)
+          res.status(400).send('Problem obtaining MySQL connection'); 
+        } else {
+          // if there is no issue obtaining a connection, execute query and release connection
+          connection.query('SELECT * FROM `db`.`battles` WHERE `battleID`= ' + req.body.battleID, function (err, rows, fields) {
+            connection.release();
+            if (err) {
+              logger.error("Error while fetching values: \n", err);
+              res.status(400).json({
+                "data": [],
+                "error": "Error obtaining values"
+              })
+            } else {
+              res.status(200).json({
+                "data": rows
+              });
+            }
+          });
+        }
+      });
+    });
+
+
+
 
   // GET /checkdb
   app.get('/values', (req, res) => {
