@@ -2,6 +2,7 @@ import React from 'react';
 import { ProfileTable } from './ProfileTable';
 import { ProfileEditForm } from './ProfileEditForm';
 import { BsXLg, BsCheckLg } from 'react-icons/bs'
+import { Link } from 'react-router-dom';
 
 export class Profile extends React.Component {
 
@@ -15,6 +16,7 @@ export class Profile extends React.Component {
     ];
 
     state = {
+        userId: 0,
         userName: "Landon Wood",
         userType: 4,
         phoneNumber: "2146016524",
@@ -97,13 +99,11 @@ export class Profile extends React.Component {
                     }
                 </div>
 
+                <Link className="btn btn-primary w-10 mb-4" to={`/profiles/edit`}>Edit Profile</Link>
 
-                {/*Make this navigate to edit profile form*/}
-                <button type="button" className="btn btn-primary w-10 mb-4">Edit Profile</button>
-
-
-                <ProfileTable></ProfileTable>
                 {/* Table of each donations where this user is involved */}
+                <ProfileTable></ProfileTable>
+
             </div>
 
         )

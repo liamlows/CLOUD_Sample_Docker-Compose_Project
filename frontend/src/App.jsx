@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import axios from 'axios';
-import { Login } from './Landing/Login'
-import { Register } from './Landing/Register';
-import {Profile } from './Profile/Profile'
-import { ProfileEditForm } from './Profile/ProfileEditForm';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { ROUTES } from './routes.js';
 
 // React functional component
 function App () {
@@ -70,14 +68,16 @@ function App () {
     fetchVals();
   }, [])
 
-  // We don't yet know how to navigate between pages.
-  // For now I'm just keeping the main component I'm working on in the App render so I can see it easily.
   return (
     <div className="App">
-      {/* <Login></Login> */}
-      {/* <Register></Register> */}
-      <Profile></Profile>
-      {/* <ProfileEditForm></ProfileEditForm> */}
+
+      <Router>
+        <Switch>
+          {
+            ROUTES.map((route, index) => <Route key={index} {...route }/>)
+          }
+        </Switch>
+      </Router>
     </div>
   );
 }

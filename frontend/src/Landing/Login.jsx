@@ -1,6 +1,11 @@
+import axios from 'axios';
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { AccountsRepository } from '../api/AccountsRepository';
 
 export class Login extends React.Component {
+
+    accountsRepository = new AccountsRepository();
 
     state = {
         userName: "",
@@ -9,9 +14,9 @@ export class Login extends React.Component {
 
     }
 
-    // Axios submit credentials method
-    // if else - if fail, attempts++
-
+    login() {
+        this.accountsRepository.getUsers().then(console.log("yes"));
+    }
 
     render() {
         return ( 
@@ -33,8 +38,12 @@ export class Login extends React.Component {
                         />
                     </div>
                 </form>
-                <button type="button" className="btn btn-primary mt-2">Log In</button>
-                <p className="my-3"> Don't have an account yet? Register <a href="#">here.</a> </p> {/*TODO: update href link*/}
+                <button type="button" className="btn btn-primary mt-2"
+                    onClick={ () => this.login()}
+                >
+                    Log In
+                </button>
+                <p className="my-3"> Don't have an account yet? Register <Link to={`/register`}>here.</Link> </p>
             </div>
         );
     }

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link, Redirect } from 'react-router-dom';
 
 export class ProfileEditForm extends React.Component {
 
@@ -11,6 +12,7 @@ export class ProfileEditForm extends React.Component {
     ];
 
     state = {
+        userId: 0,
         userName: 'Landon Wood',
         userPassword: 'test_pass',
         userType: 3,
@@ -90,10 +92,10 @@ export class ProfileEditForm extends React.Component {
                     <div className="container w-50">
                         <div className="row mt-4">
                             <div className="col">
-                                <button type="button" className="btn btn-danger">Cancel</button> {/*Return to profile with no changes*/}
+                                <Link className="btn btn-danger" to={`/profiles/1`}> Cancel </Link> {/* Need sessionstorage here!*/}
                             </div>
                             <div className="col">
-                                <button type="button" className="btn btn-primary">Confirm Changes</button> {/*Return to profile with changes*/}
+                                <button type="button" className="btn btn-primary">Confirm Changes</button> {/*Return to profile with changes*/} {/*Need sessionstorage to call route*/}
                             </div>
                         </div>
                     </div>

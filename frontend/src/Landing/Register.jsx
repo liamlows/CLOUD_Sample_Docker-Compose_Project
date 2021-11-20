@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export class Register extends React.Component {
 
@@ -72,7 +73,7 @@ export class Register extends React.Component {
                     </div>
                 </form>
                 <button className="btn btn-primary">Create Account</button>
-                <p className="my-3"> Already have an account? Log in <a href="#">here.</a> </p> {/*TODO: update href link*/}
+                <p className="my-3"> Already have an account? Log in <Link to={`/`}>here.</Link></p> {/*TODO: update href link*/}
             </div>
         );
     }
