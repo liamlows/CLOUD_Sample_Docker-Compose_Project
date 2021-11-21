@@ -431,6 +431,62 @@ module.exports = function routes(app, logger) {
         });
       });
 
-
+      //get name of first team from specific game
+      app.get('/games/team1', async (req, res) => {
+        // obtain a connection from our pool of connections
+        pool.getConnection(function (err, connection){
+          if (err){
+            console.log(connection);
+            // if there is an issue obtaining a connection, release the connection instance and log the error
+            logger.error('Problem obtaining MySQL connection', err)
+            res.status(400).send('Problem obtaining MySQL connection'); 
+          }  else {
+                var GameID = req.body.GameID;
+                connection.query("select TeamName from Teams join Games G on Teams.TeamID = G.Team1ID where GameID=?",GameID, function (err, result, fields) {
+                  if (err) { 
+                    // if there is an error with the query, release the connection instance and log the error
+                    connection.release()
+                    logger.error("Problem getting games from league: ", err);
+                    res.status(400).send('Problem getting games from league'); 
+                  } else { 
+                    // if there is no error with the query, release the connection instance
+            res.send(result);
+                    connection.release()
+                    
+                  }
+                });
+                
+              }
+            });
+          });
+          
+          //get name of second team from specified game
+          app.get('/games/team2', async (req, res) => {
+            // obtain a connection from our pool of connections
+            pool.getConnection(function (err, connection){
+              if (err){
+                console.log(connection);
+                // if there is an issue obtaining a connection, release the connection instance and log the error
+                logger.error('Problem obtaining MySQL connection', err)
+                res.status(400).send('Problem obtaining MySQL connection'); 
+              }  else {
+                    var GameID = req.body.GameID;
+                    connection.query("select TeamName from Teams join Games G on Teams.TeamID = G.Team2ID where GameID=?",GameID, function (err, result, fields) {
+                      if (err) { 
+                        // if there is an error with the query, release the connection instance and log the error
+                        connection.release()
+                        logger.error("Problem getting games from league: ", err);
+                        res.status(400).send('Problem getting games from league'); 
+                      } else { 
+                        // if there is no error with the query, release the connection instance
+                res.send(result);
+                        connection.release()
+                        
+                      }
+                    });
+                    
+                  }
+                });
+              });
 }
 
