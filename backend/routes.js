@@ -436,4 +436,90 @@ module.exports = function routes(app, logger) {
 
 
   //BLAKES'S ROUTES
+
+  /*
+  * DELIVERY ROUTES
+  */
+
+  //GET a list of all deliveries
+  // /api/deliveries
+  app.get('/deliveries', function (req, res) {
+    pool.query("SELECT * FROM deliveries", function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
+
+  //GET a specific delivery based on deliveryID
+  //	/api/delivery
+  app.get('/delivery', function (req, res) {
+    var deliveryID = req.param('deliveryID');
+    pool.query("SELECT * FROM deliveries WHERE deliveryID = ?", deliveryID, function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
+
+  //POST a new rating for a given driver
+  // /api/deliveries
+  app.post('/deliveries', async (req, res) => {
+    var driverID = req.param("driverID");
+    var foodDonationID = req.param("foodDonationID");
+    var deliveryStatus = req.param("deliveryStatus");
+
+    pool.query("INSERT INTO deliveries (driverID, foodDonationID, deliveryStatus) VALUES (?,?,?)", 
+    [driverID, foodDonationID, deliveryStatus],function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
+
+  //PUT a new delivery driverID
+  // /api/delivery/updateDriverID
+  app.put('/delivery/updateDriverID', async (req, res) => {
+    var deliveryID = req.param("deliveryID");
+    var driverID = req.param("driverID");
+
+    pool.query("UPDATE deliveries SET driverID = ? WHERE deliveryID = ?", 
+    [driverID, deliveryID],function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
+
+  //PUT a new delivery foodDonationID
+  // /api/delivery/updateFoodDonationID
+  app.put('/delivery/updateFoodDonationID', async (req, res) => {
+    var deliveryID = req.param("deliveryID");
+    var foodDonationID = req.param("foodDonationID");
+
+    pool.query("UPDATE deliveries SET foodDonationID = ? WHERE deliveryID = ?", 
+    [foodDonationID, deliveryID],function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
+
+  //PUT a new delivery deliveryStatus
+  // /api/delivery/updateDeliveryStatus
+  app.put('/delivery/updateDeliveryStatus', async (req, res) => {
+    var deliveryID = req.param("deliveryID");
+    var deliveryStatus = req.param("deliveryStatus");
+
+    pool.query("UPDATE deliveries SET deliveryStatus = ? WHERE deliveryID = ?", 
+    [deliveryStatus, deliveryID],function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
+
+  //DELETE a particular delivery
+  //  /api/delivery
+  app.delete('/delivery', async (req, res) => {
+    var deliveryID = req.param("deliveryID");
+    pool.query("DELETE FROM deliveries WHERE deliveryID = ?", deliveryID, function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); 
+      });
+  });
 }
