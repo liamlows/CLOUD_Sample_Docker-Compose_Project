@@ -234,7 +234,7 @@ module.exports = function routes(app, logger) {
                 res.status(400).send('Problem getting ppg'); 
               } else { 
                 // if there is no error with the query, release the connection instance
-				res.send(result);
+				        res.send(result);
                 connection.release()
                 
               }
