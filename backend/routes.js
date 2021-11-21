@@ -459,7 +459,7 @@ module.exports = function routes(app, logger) {
               }
             });
           });
-          
+
           //get name of second team from specified game
           app.get('/games/team2', async (req, res) => {
             // obtain a connection from our pool of connections
@@ -472,6 +472,35 @@ module.exports = function routes(app, logger) {
               }  else {
                     var GameID = req.body.GameID;
                     connection.query("select TeamName from Teams join Games G on Teams.TeamID = G.Team2ID where GameID=?",GameID, function (err, result, fields) {
+                      if (err) { 
+                        // if there is an error with the query, release the connection instance and log the error
+                        connection.release()
+                        logger.error("Problem getting games from league: ", err);
+                        res.status(400).send('Problem getting games from league'); 
+                      } else { 
+                        // if there is no error with the query, release the connection instance
+                res.send(result);
+                        connection.release()
+                        
+                      }
+                    });
+                    
+                  }
+                });
+              });
+
+              //get name of second team from specified game
+          app.get('/team/players', async (req, res) => {
+            // obtain a connection from our pool of connections
+            pool.getConnection(function (err, connection){
+              if (err){
+                console.log(connection);
+                // if there is an issue obtaining a connection, release the connection instance and log the error
+                logger.error('Problem obtaining MySQL connection', err)
+                res.status(400).send('Problem obtaining MySQL connection'); 
+              }  else {
+                    var TeamID = req.body.TeamID;
+                    connection.query("select FirstName,LastName from Players join Teams T on T.TeamID = Players.TeamID where T.TeamID = ? order by FirstName",TeamID, function (err, result, fields) {
                       if (err) { 
                         // if there is an error with the query, release the connection instance and log the error
                         connection.release()
