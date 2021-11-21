@@ -501,46 +501,78 @@ module.exports = function routes(app, logger) {
   });
 
 
-//BRIGETTA'S ROUTES
+//BRIGITTA'S ROUTES
 
-//given a userID, return a user
-app.get('/user/:userID', (req, res) => {
-  pool.getConnection(function (err, connection){
-    if(err){
-      logger.error('Problem obtaining MySQL connection',err)
-      res.status(400).send('Problem obtaining MySQL connection'); 
-    } else {
-      var userID = req.param('userID');
-      connection.query("SELECT * FROM users WHERE userID = ?", userID, function (err, result, fields) {
-        connection.release();
-        if (err) {
-          logger.error("Error while fetching values: \n", err);
-          res.status(400).json({
-            "data": [],
-            "error": "Error obtaining values"
-          })
-        } else {
-          res.end(JSON.stringify(result));
-        }
-      });
-    }
+//GET a paritcular user, given a userID
+//	/api/user
+//tested
+app.get('/user', function (req, res) {
+  var userID = req.param('userID');
+  pool.query("SELECT * FROM users WHERE userID = ?", userID, function (err, result, fields) {
+    if (err) throw err;
+    res.end(JSON.stringify(result)); 
   });
 });
 
+//POST a new user - registering 
+//  /api/user
+//tested
+app.post('/register', async (req, res) => {
+  var userType = req.param("userType");
+  var username = req.param("username");
+  var userPassword = req.param("userPassword");
+  var imgURL = req.param("imgURL");
+  var phoneNumber = req.param("phoneNumber");
+  var email = req.param("email");
+  pool.query("INSERT INTO users (userType, username, userPassword, imgURL, phoneNumber, email, validated) VALUES (?,?,?,?,?,?,1)", 
+  [userType, username, userPassword, imgURL, phoneNumber, email],function (err, result, fields) {
+    if (err) throw err;
+    res.end(JSON.stringify(result)); // Result in JSON format
+  });
+});
 
+//GET a paritcular user, given username and userPassword - login
+//  /api/user
+//tested
+app.get('/login', function (req, res) {
+  var username = req.param('username');
+  var userPassword = req.param('userPassword');
+  pool.query("SELECT * FROM users WHERE username = ? && userPassword = ?", [username, userPassword], function (err, result, fields) {
+    if (err) throw err;
+    res.end(JSON.stringify(result)); 
+  });
+});
 
+//PUT to update users profile informationn
+// /api/user/updateProfileInformation
+//tested
+app.put('/user/updateProfileInformation', async (req, res) => {
+  var userID = req.param('userID');
+  var userType = req.param('userType');
+  var username = req.param("username");
+  var userPassword = req.param("userPassword");
+  var imgURL = req.param("imgURL");
+  var phoneNumber = req.param("phoneNumber");
+  var email = req.param("email");
+  pool.query("UPDATE users SET userType = ?, username = ?, userPassword = ?, imgURL = ?, phoneNumber = ?, email = ? WHERE userID = ?", 
+  [userType, username, userPassword, imgURL, phoneNumber, email, userID],function (err, result, fields) {
+    if (err) throw err;
+    res.end(JSON.stringify(result)); 
+  });
+});
 
-
-
-
-
-
-
-
-
-  
-
-
+//PUT to update users validation 
+// /api/user/updateValidated
+//tested
+app.put('/user/updateValidated', async (req, res) => {
+  var userID = req.param('userID');
+  var validated = req.param("validated");
+  pool.query("UPDATE users SET validated = ? WHERE userID = ?", 
+  [validated, userID],function (err, result, fields) {
+    if (err) throw err;
+    res.end(JSON.stringify(result)); 
+  });
+});
 
 
   //BLAKES'S ROUTES
