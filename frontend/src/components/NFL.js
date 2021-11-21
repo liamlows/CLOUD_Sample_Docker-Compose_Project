@@ -3,10 +3,8 @@ import { Routes, Link } from 'react-router-dom';
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Container from "react-bootstrap/Container"
-export class NBA extends React.Component {
-    state = {
-        
-    }
+export class NFL extends React.Component {
+
 
     render() {
         return (
@@ -31,4 +29,4 @@ export class NBA extends React.Component {
     }
 }
 
-export default NBA;
+export default NFL;
