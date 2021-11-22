@@ -106,14 +106,14 @@ module.exports = function routes(app, logger) {
   * DRIVERS
   */
   
-  //GET all users
-  // /api/users
-  app.get('/users', function (req, res) {
-    pool.query("SELECT * FROM users", function (err, result, fields) {
-      if (err) throw err;
-      res.end(JSON.stringify(result)); // Result in JSON format
-    });
-  });
+  // //GET all users
+  // // /api/users
+  // app.get('/users', function (req, res) {
+  //   pool.query("SELECT * FROM users", function (err, result, fields) {
+  //     if (err) throw err;
+  //     res.end(JSON.stringify(result)); // Result in JSON format
+  //   });
+  // });
 
   //GET all drivers
   // /api/drivers
