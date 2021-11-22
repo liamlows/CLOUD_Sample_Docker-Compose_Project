@@ -511,8 +511,8 @@ app.get('/user/:userID', (req, res) => {
       res.status(400).send('Problem obtaining MySQL connection'); 
     } else {
       var userID = req.param('userID');
-      connection.query("SELECT * FROM users WHERE userID = ?", userID, function (err, result, fields) {
-        connection.release();
+      pool.query("SELECT * FROM users WHERE userID = ?", userID, function (err, result, fields) {
+        pool.release();
         if (err) {
           logger.error("Error while fetching values: \n", err);
           res.status(400).json({
