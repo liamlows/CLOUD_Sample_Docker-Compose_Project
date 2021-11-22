@@ -74,9 +74,9 @@ function App () {
   // For now I'm just keeping the main component I'm working on in the App render so I can see it easily.
   return (
     <div className="App">
-      <Login></Login>
+      {/* <Login></Login> */}
       {/* <Register></Register> */}
-      {/* <Profile></Profile> */}
+      <Profile></Profile>
       {/* <ProfileEditForm></ProfileEditForm> */}
     </div>
   );
