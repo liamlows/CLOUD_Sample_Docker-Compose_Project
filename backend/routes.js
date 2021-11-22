@@ -504,28 +504,39 @@ module.exports = function routes(app, logger) {
 //BRIGETTA'S ROUTES
 
 //given a userID, return a user
-app.get('/user/:userID', (req, res) => {
-  pool.getConnection(function (err, connection){
-    if(err){
-      logger.error('Problem obtaining MySQL connection',err)
-      res.status(400).send('Problem obtaining MySQL connection'); 
-    } else {
-      var userID = req.param('userID');
-      pool.query("SELECT * FROM users WHERE userID = ?", userID, function (err, result, fields) {
-        pool.release();
-        if (err) {
-          logger.error("Error while fetching values: \n", err);
-          res.status(400).json({
-            "data": [],
-            "error": "Error obtaining values"
-          })
-        } else {
-          res.end(JSON.stringify(result));
-        }
-      });
-    }
-  });
+app.get('/user/:userID', async (req, res) => {
+  var userID = req.param("userID");
+  pool.query("SELECT * FROM users WHERE userID = ?", userID, function (err, result, fields) {
+    if (err) throw err;
+    res.end(JSON.stringify(result)); 
+    });
 });
+
+
+
+
+// app.get('/user/:userID', (req, res) => {
+//   pool.getConnection(function (err, connection){
+//     if(err){
+//       logger.error('Problem obtaining MySQL connection',err)
+//       res.status(400).send('Problem obtaining MySQL connection'); 
+//     } else {
+//       var userID = req.param('userID');
+//       pool.query("SELECT * FROM users WHERE userID = ?", userID, function (err, result, fields) {
+//         pool.release();
+//         if (err) {
+//           logger.error("Error while fetching values: \n", err);
+//           res.status(400).json({
+//             "data": [],
+//             "error": "Error obtaining values"
+//           })
+//         } else {
+//           res.end(JSON.stringify(result));
+//         }
+//       });
+//     }
+//   });
+// });
 
 
 
