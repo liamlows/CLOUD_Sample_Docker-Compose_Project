@@ -515,7 +515,7 @@ app.get('/user', function (req, res) {
 
 //POST a new user - registering 
 //  /api/user
-app.post('/availabilities', async (req, res) => {
+app.post('/user', async (req, res) => {
   var userType = req.param("userType");
   var username = req.param("username");
   var userPassword = req.param("userPassword");
@@ -531,10 +531,10 @@ app.post('/availabilities', async (req, res) => {
 
 //GET a paritcular user, given username and userPassword - login
 //  /api/user
-app.get('/user', function (req, res) {
+app.get('/getuser', function (req, res) {
   var username = req.param('username');
   var userPassword = req.param('userPassword');
-  pool.query("SELECT * FROM users WHERE username = ? AND userPassword = ?", [username, userPassword], function (err, result, fields) {
+  pool.query("SELECT * FROM users WHERE username = ? && userPassword = ?", [username, userPassword], function (err, result, fields) {
     if (err) throw err;
     res.end(JSON.stringify(result)); 
   });
