@@ -106,14 +106,14 @@ module.exports = function routes(app, logger) {
   * DRIVERS
   */
   
-  // //GET all users
-  // // /api/users
-  // app.get('/users', function (req, res) {
-  //   pool.query("SELECT * FROM users", function (err, result, fields) {
-  //     if (err) throw err;
-  //     res.end(JSON.stringify(result)); // Result in JSON format
-  //   });
-  // });
+  //GET all users
+  // /api/users
+  app.get('/users', function (req, res) {
+    pool.query("SELECT * FROM users", function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
 
   //GET all drivers
   // /api/drivers
@@ -501,55 +501,20 @@ module.exports = function routes(app, logger) {
   });
 
 
-//BRIGETTA'S ROUTES
+//BRIGITTA'S ROUTES
 
-//given a userID, return a user
-app.get('/user/:userID', async (req, res) => {
-  var userID = req.param("userID");
-  pool.query("SELECT * FROM users WHERE userID = ?", userID, function (err, result, fields) {
+//GET a paritcular user, given a userID
+//	/api/user
+app.get('/user', function (req, res) {
+  var userID = req.param('userID');
+  pool.query("SELECT * FROM drivers WHERE userID = ?", userID, function (err, result, fields) {
     if (err) throw err;
     res.end(JSON.stringify(result)); 
-    });
+});
+
 });
 
 
-
-
-// app.get('/user/:userID', (req, res) => {
-//   pool.getConnection(function (err, connection){
-//     if(err){
-//       logger.error('Problem obtaining MySQL connection',err)
-//       res.status(400).send('Problem obtaining MySQL connection'); 
-//     } else {
-//       var userID = req.param('userID');
-//       pool.query("SELECT * FROM users WHERE userID = ?", userID, function (err, result, fields) {
-//         pool.release();
-//         if (err) {
-//           logger.error("Error while fetching values: \n", err);
-//           res.status(400).json({
-//             "data": [],
-//             "error": "Error obtaining values"
-//           })
-//         } else {
-//           res.end(JSON.stringify(result));
-//         }
-//       });
-//     }
-//   });
-// });
-
-
-
-
-
-
-
-
-
-
-
-
-  
 
 
 
