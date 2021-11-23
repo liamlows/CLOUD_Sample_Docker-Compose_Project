@@ -2,3 +2,4 @@
 .history
 *.json
 .env
+frontend/package-lock.json
