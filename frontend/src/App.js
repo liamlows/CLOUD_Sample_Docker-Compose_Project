@@ -3,9 +3,7 @@ import './App.css'
 import { BrowserRouter, Route, Routes} from 'react-router-dom';
 import { Homepage } from './components/Homepage';
 import Login from './components/Login';
-import NBA from './components/NBA';
-import NFL from './components/NFL';
-import MLB from './components/MLB';
+import LeaguePage from './components/LeaguePage';
 
 const App = props => {
   return(
@@ -15,9 +13,9 @@ const App = props => {
         <Route path = "/" element = {<Homepage />}/>
         <Route path = "/home" element = {<Homepage />}/>
         <Route path = "/login" element = {<Login />}/>
-        <Route path = "/NBA" element = {<NBA />} />
-        <Route path = "/NFL" element = {<NFL />} />
-        <Route path = "/MLB" element = {<MLB />} />
+        <Route path = "/NBA" element = {<LeaguePage NBA />} />
+        <Route path = "/NFL" element = {<LeaguePage NFL/>} />
+        <Route path = "/MLB" element = {<LeaguePage MLB/>} />
     </Routes>
     </BrowserRouter>
     </div>

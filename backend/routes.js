@@ -413,7 +413,7 @@ module.exports = function routes(app, logger) {
         logger.error('Problem obtaining MySQL connection', err)
         res.status(400).send('Problem obtaining MySQL connection'); 
       }  else {
-			var league = req.body.league;
+			var league = req.query.league;
             connection.query("select * from Games join Teams T on Games.WinnerID = T.TeamID where League = ? order by Date",league, function (err, result, fields) {
               if (err) { 
                 // if there is an error with the query, release the connection instance and log the error
