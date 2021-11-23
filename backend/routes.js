@@ -512,6 +512,60 @@ app.get('/user', function (req, res) {
     res.end(JSON.stringify(result)); 
 });
 
+ //POST a new user - registering 
+//  /api/user
+app.post('/availabilities', async (req, res) => {
+  var userType = req.param("userType");
+  var username = req.param("username");
+  var userPassword = req.param("userPassword");
+  var imageURL = req.param("imageURL");
+  var phoneNumber = req.param("phoneNumber");
+  var email = req.param("email");
+  pool.query("INSERT INTO users (userType, username, userPassword, imageURL, phoneNumber, email, validated) VALUES (?,?,?,?,?,?,1)", 
+  [userType, username, userPassword, imageURL, phoneNumber, email],function (err, result, fields) {
+    if (err) throw err;
+    res.end(JSON.stringify(result)); // Result in JSON format
+  });
+});
+
+//GET a paritcular user, given username and userPassword - login
+//  /api/user
+app.get('/user', function (req, res) {
+  var username = req.param('username');
+  var userPassword = req.param('userPassword');
+  pool.query("SELECT * FROM users WHERE username = ? AND userPassword = ?", [username, userPassword], function (err, result, fields) {
+    if (err) throw err;
+    res.end(JSON.stringify(result)); 
+});
+
+//PUT to update users profile informationn
+// /api/user/updateProfileInformation
+app.put('/user/updateProfileInformation', async (req, res) => {
+  var userID = req.param('userID');
+  var username = req.param("username");
+  var userPassword = req.param("userPassword");
+  var imageURL = req.param("imageURL");
+  var phoneNumber = req.param("phoneNumber");
+  var email = req.param("email");
+  pool.query("UPDATE users SET username = ?, userPassword = ?, imageURL = ?, phoneNumber = ?, email = ? WHERE userID = ?", 
+  [username, userPassword, imageURL, phoneNumber, email, userID],function (err, result, fields) {
+    if (err) throw err;
+    res.end(JSON.stringify(result)); // Result in JSON format
+  });
+});
+
+//PUT to update users validation 
+// /api/user/updateValidation
+app.put('/user/updateValidation', async (req, res) => {
+  var userID = req.param('userID');
+  var validation = req.param("validation");
+  pool.query("UPDATE users SET validation = ? WHERE userID = ?", 
+  [validation, userID],function (err, result, fields) {
+    if (err) throw err;
+    res.end(JSON.stringify(result)); // Result in JSON format
+  });
+});
+
 });
 
 
