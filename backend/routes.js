@@ -510,9 +510,10 @@ app.get('/user', function (req, res) {
   pool.query("SELECT * FROM users WHERE userID = ?", userID, function (err, result, fields) {
     if (err) throw err;
     res.end(JSON.stringify(result)); 
+  });
 });
 
- //POST a new user - registering 
+//POST a new user - registering 
 //  /api/user
 app.post('/availabilities', async (req, res) => {
   var userType = req.param("userType");
@@ -536,6 +537,7 @@ app.get('/user', function (req, res) {
   pool.query("SELECT * FROM users WHERE username = ? AND userPassword = ?", [username, userPassword], function (err, result, fields) {
     if (err) throw err;
     res.end(JSON.stringify(result)); 
+  });
 });
 
 //PUT to update users profile informationn
@@ -565,12 +567,6 @@ app.put('/user/updateValidation', async (req, res) => {
     res.end(JSON.stringify(result)); // Result in JSON format
   });
 });
-
-});
-
-
-
-
 
 
   //BLAKES'S ROUTES
