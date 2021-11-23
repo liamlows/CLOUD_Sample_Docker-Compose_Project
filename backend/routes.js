@@ -516,6 +516,7 @@ app.get('/user', function (req, res) {
 
 //POST a new user - registering 
 //  /api/user
+//tested
 app.post('/register', async (req, res) => {
   var userType = req.param("userType");
   var username = req.param("username");
@@ -544,6 +545,7 @@ app.get('/login', function (req, res) {
 
 //PUT to update users profile informationn
 // /api/user/updateProfileInformation
+//tested
 app.put('/user/updateProfileInformation', async (req, res) => {
   var userID = req.param('userID');
   var userType = req.param('userType');
