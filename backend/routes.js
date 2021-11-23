@@ -507,7 +507,7 @@ module.exports = function routes(app, logger) {
 //	/api/user
 app.get('/user', function (req, res) {
   var userID = req.param('userID');
-  pool.query("SELECT * FROM drivers WHERE userID = ?", userID, function (err, result, fields) {
+  pool.query("SELECT * FROM users WHERE userID = ?", userID, function (err, result, fields) {
     if (err) throw err;
     res.end(JSON.stringify(result)); 
 });
