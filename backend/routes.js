@@ -505,6 +505,7 @@ module.exports = function routes(app, logger) {
 
 //GET a paritcular user, given a userID
 //	/api/user
+//tested
 app.get('/user', function (req, res) {
   var userID = req.param('userID');
   pool.query("SELECT * FROM users WHERE userID = ?", userID, function (err, result, fields) {
@@ -519,11 +520,11 @@ app.post('/register', async (req, res) => {
   var userType = req.param("userType");
   var username = req.param("username");
   var userPassword = req.param("userPassword");
-  var imageURL = req.param("imageURL");
+  var imgURL = req.param("imgURL");
   var phoneNumber = req.param("phoneNumber");
   var email = req.param("email");
-  pool.query("INSERT INTO users (userType, username, userPassword, imageURL, phoneNumber, email, validated) VALUES (?,?,?,?,?,?,1)", 
-  [userType, username, userPassword, imageURL, phoneNumber, email],function (err, result, fields) {
+  pool.query("INSERT INTO users (userType, username, userPassword, imgURL, phoneNumber, email, validated) VALUES (?,?,?,?,?,?,1)", 
+  [userType, username, userPassword, imgURL, phoneNumber, email],function (err, result, fields) {
     if (err) throw err;
     res.end(JSON.stringify(result)); // Result in JSON format
   });
@@ -531,6 +532,7 @@ app.post('/register', async (req, res) => {
 
 //GET a paritcular user, given username and userPassword - login
 //  /api/user
+//tested
 app.get('/login', function (req, res) {
   var username = req.param('username');
   var userPassword = req.param('userPassword');
@@ -547,19 +549,20 @@ app.put('/user/updateProfileInformation', async (req, res) => {
   var userType = req.param('userType');
   var username = req.param("username");
   var userPassword = req.param("userPassword");
-  var imageURL = req.param("imageURL");
+  var imgURL = req.param("imgURL");
   var phoneNumber = req.param("phoneNumber");
   var email = req.param("email");
-  pool.query("UPDATE users SET userType = ?, username = ?, userPassword = ?, imageURL = ?, phoneNumber = ?, email = ? WHERE userID = ?", 
-  [userType, username, userPassword, imageURL, phoneNumber, email, userID],function (err, result, fields) {
+  pool.query("UPDATE users SET userType = ?, username = ?, userPassword = ?, imgURL = ?, phoneNumber = ?, email = ? WHERE userID = ?", 
+  [userType, username, userPassword, imgURL, phoneNumber, email, userID],function (err, result, fields) {
     if (err) throw err;
     res.end(JSON.stringify(result)); 
   });
 });
 
 //PUT to update users validation 
-// /api/user/updateValidation
-app.put('/user/updateValidation', async (req, res) => {
+// /api/user/updateValidated
+//tested
+app.put('/user/updateValidated', async (req, res) => {
   var userID = req.param('userID');
   var validated = req.param("validated");
   pool.query("UPDATE users SET validated = ? WHERE userID = ?", 
