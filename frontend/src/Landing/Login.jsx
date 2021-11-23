@@ -8,14 +8,14 @@ export class Login extends React.Component {
     accountsRepository = new AccountsRepository();
 
     state = {
-        userName: "",
+        username: "",
         password: "",
         attempts: 0,
 
     }
 
     login() {
-        this.accountsRepository.getUsers().then(console.log("yes"));
+        // this.accountsRepository.getUsers().then(console.log("yes"));
     }
 
     render() {
@@ -24,10 +24,10 @@ export class Login extends React.Component {
                 <h2>Login</h2>
                 <form className="m-2">
                     <div className="container w-50">
-                        <label htmlFor="userName" className="form-label"> Username </label>
-                        <input type="text" className="form-control my-1" id="userName" name="userName" 
-                            value={this.state.userName}
-                            onChange={ event => this.setState({ userName: event.target.value})}
+                        <label htmlFor="username" className="form-label"> Username </label>
+                        <input type="text" className="form-control my-1" id="username" name="username" 
+                            value={this.state.username}
+                            onChange={ event => this.setState({ username: event.target.value})}
                         />
                     </div>
                     <div className="container w-50">

@@ -3,8 +3,11 @@ import { ProfileTable } from './ProfileTable';
 import { ProfileEditForm } from './ProfileEditForm';
 import { BsXLg, BsCheckLg } from 'react-icons/bs'
 import { Link } from 'react-router-dom';
+import { AccountsRepository } from '../api/AccountsRepository';
 
 export class Profile extends React.Component {
+
+    accountsRepository = new AccountsRepository();
 
     // 0, 1, 2, 3, 4
     userTypes = [
@@ -15,23 +18,34 @@ export class Profile extends React.Component {
         "Admin"
     ];
 
+    // state = {
+    //     userId: 0,
+    //     username: "Landon Wood",
+    //     userType: 4,
+    //     phoneNumber: "2146016524",
+    //     email: "landonw@smu.edu",
+    //     RDHName: "Test RDH",
+    //     soupKitchenName: "Test Soup Kitchen",
+    //     address: "1111 Test Avenue Dallas, TX, 75205",
+    //     verified: 1
+    // }
+
     state = {
         userId: 0,
-        userName: "Landon Wood",
-        userType: 4,
-        phoneNumber: "2146016524",
-        email: "landonw@smu.edu",
-        RDHName: "Test RDH",
-        soupKitchenName: "Test Soup Kitchen",
-        address: "1111 Test Avenue Dallas, TX, 75205",
-        verified: 1
+        username: "",
+        userType: 0,
+        phoneNumber: "",
+        email: "",
+        RDHName: "",
+        soupKitchenName: "",
+        address: "",
+        verified: 0
     }
 
     render () {
         return (
             <div className="container w-50 my-2">
                 <h2>My Profile</h2> 
-
                 <div className="container w-50 my-3">
                     <div className="row">
                         <div className="col">
@@ -40,7 +54,7 @@ export class Profile extends React.Component {
                         <div className="col mt-4">
                             {(this.state.userType === 0 || this.state.userType === 1 || this.state.userType === 4) && 
                                 <p className="d-inline-flex">
-                                    <b>{this.state.userName}</b>
+                                    <b>{this.state.username}</b>
                                 </p>    
                             }
                             {this.state.userType === 2 && 
@@ -99,7 +113,7 @@ export class Profile extends React.Component {
                     }
                 </div>
 
-                <Link className="btn btn-primary w-10 mb-4" to={`/profiles/edit`}>Edit Profile</Link>
+                <Link className="btn btn-primary w-10 mb-4" to={`/profile/edit`}>Edit Profile</Link>
 
                 {/* Table of each donations where this user is involved */}
                 <ProfileTable></ProfileTable>
@@ -108,6 +122,14 @@ export class Profile extends React.Component {
 
         )
 
+    }
+
+    componentDidMount() {
+        let userID = 1 // update to sessionstorage.siteid 
+        if (userID) {
+            this.accountsRepository.getUser(userID)
+            .then(account => this.setState(account[0]));
+        }
     }
 
 }

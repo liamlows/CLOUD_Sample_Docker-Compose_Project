@@ -6,8 +6,9 @@ import { Register } from './Landing/Register';
 
 export const ROUTES = [
     {path: '/', exact: true, component: Login},
+    // {path: '/donations', component: Donations},
     {path: '/register', component: Register},
-    {path: '/profiles/edit', component: ProfileEditForm},
-    {path: '/profiles/:userID', component: Profile},
+    {path: '/profile/edit', component: ProfileEditForm},
+    {path: '/profile/:userID', component: Profile},
 
 ];

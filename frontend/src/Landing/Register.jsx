@@ -1,7 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { AccountsRepository } from '../api/AccountsRepository';
 
 export class Register extends React.Component {
+
+    accountsRepository = new AccountsRepository();
 
     userTypes = [
         "General User", 
@@ -13,18 +16,21 @@ export class Register extends React.Component {
 
     state = {
         userType: "",
-        userName: "",
+        username: "",
         password: "",
         phone: "",
         email: ""
     }
 
-    // Are we going to have register pages for different types of users?
-    // Same register page, just change the form elements based on what the user selects for user type?
-    // For now, just simple user form
+    
 
-    // on submit click: post route to users table
+    submit() {
+        this.accountsRepository.register(this.state).then(console.log("yes"));
+    }
 
+    //test if adding the missing fields imgurl and validated allows for a post to occur.
+    // the route is working.
+    // could be how we're passing in parameters to register.
 
     render() {
         return ( 
@@ -44,10 +50,10 @@ export class Register extends React.Component {
                         </select>
                     </div>
                     <div className="container w-50 my-1">
-                        <label htmlFor="userName" className="form-label"> New Username </label>
-                        <input type="text" className="form-control my-1" id="userName" name="userName" 
-                            value={this.state.userName}
-                            onChange={ event => this.setState({ userName: event.target.value})}
+                        <label htmlFor="username" className="form-label"> New Username </label>
+                        <input type="text" className="form-control my-1" id="username" name="username" 
+                            value={this.state.username}
+                            onChange={ event => this.setState({ username: event.target.value})}
                         />
                     </div>
                     <div className="container w-50 my-1">
@@ -71,8 +77,9 @@ export class Register extends React.Component {
                             onChange={ event => this.setState({ email: event.target.value})}
                         />
                     </div>
+                    <button className="btn btn-primary" onSubmit={() => this.submit()}>Create Account</button>
                 </form>
-                <button className="btn btn-primary">Create Account</button>
+
                 <p className="my-3"> Already have an account? Log in <Link to={`/`}>here.</Link></p> {/*TODO: update href link*/}
             </div>
         );

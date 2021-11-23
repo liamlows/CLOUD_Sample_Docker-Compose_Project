@@ -1,7 +1,10 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
+import { AccountsRepository } from '../api/AccountsRepository';
 
 export class ProfileEditForm extends React.Component {
+
+    accountsRepository = new AccountsRepository();
 
     userTypes = [
         "General User", 
@@ -13,7 +16,7 @@ export class ProfileEditForm extends React.Component {
 
     state = {
         userId: 0,
-        userName: 'Landon Wood',
+        username: 'Landon Wood',
         userPassword: 'test_pass',
         userType: 3,
         imgURL: '',
@@ -25,32 +28,37 @@ export class ProfileEditForm extends React.Component {
         validated: 0 // that would significantly reduce the amount of conditional rendering i'm having to do.
     }   // But it's also not that difficult to just do a join on userID and populate the corresponding state field.
 
+
+    submitChanges() {
+        // this.accountsRepository.
+    }
+
     render() {
         return (
             <div className="container w-50 my-2"> 
                 <h2>Edit Profile</h2>
                 <form className="m-2">
                     <div className="container w-50">
-                    <label htmlFor="userName" className="form-label" >Change Username</label>
+                    <label htmlFor="username" className="form-label" >Change Username</label>
                         {this.state.userType === 2 && 
-                            <input type="text" className="form-control my-1"  id="userName" name="userName" 
+                            <input type="text" className="form-control my-1"  id="username" name="username" 
                                 value={this.state.soupKitchenName}
                                 placeholder={this.state.soupKitchenName}
                                 onChange={ event => this.setState({ soupKitchenName: event.target.value})}
                             />
                         }
                         {this.state.userType === 3 && 
-                            <input type="text" className="form-control my-1"  id="userName" name="userName" 
+                            <input type="text" className="form-control my-1"  id="username" name="username" 
                                 value={this.state.RDHName}
                                 placeholder={this.state.RDHName}
                                 onChange={ event => this.setState({ RDHName: event.target.value})}
                             />
                         }
                         {(this.state.userType === 0 || this.state.userType === 1 || this.state.userType === 4) && 
-                            <input type="text" className="form-control my-1"  id="userName" name="userName" 
-                                value={this.state.userName}
-                                placeholder={this.state.userName}
-                                onChange={ event => this.setState({ userName: event.target.value})}
+                            <input type="text" className="form-control my-1"  id="username" name="username" 
+                                value={this.state.username}
+                                placeholder={this.state.username}
+                                onChange={ event => this.setState({ username: event.target.value})}
                             />
                         }
                     </div>
@@ -92,16 +100,24 @@ export class ProfileEditForm extends React.Component {
                     <div className="container w-50">
                         <div className="row mt-4">
                             <div className="col">
-                                <Link className="btn btn-danger" to={`/profiles/1`}> Cancel </Link> {/* Need sessionstorage here!*/}
+                                <Link className="btn btn-danger" to={`/profile/1`}> Cancel </Link> {/* Need sessionstorage here!*/}
                             </div>
                             <div className="col">
-                                <button type="button" className="btn btn-primary">Confirm Changes</button> {/*Return to profile with changes*/} {/*Need sessionstorage to call route*/}
+                                <button type="button" className="btn btn-primary" onClick={ () => this.submitChanges() }>Confirm Changes</button> {/*Return to profile with changes*/} {/*Need sessionstorage to call route*/}
                             </div>
                         </div>
                     </div>
                 </form>
             </div>
         )
+    }
+
+    componentDidMount() {
+        let userID = 1 // update to sessionstorage.siteid 
+        if (userID) {
+            this.accountsRepository.getUser(userID)
+            .then(account => this.setState(account[0]));
+        }
     }
 
 }

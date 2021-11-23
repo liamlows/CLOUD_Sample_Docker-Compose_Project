@@ -506,7 +506,7 @@ module.exports = function routes(app, logger) {
 //GET a paritcular user, given a userID
 //	/api/user
 //tested
-app.get('/user', function (req, res) {
+app.get('/users/:userID', function (req, res) {
   var userID = req.param('userID');
   pool.query("SELECT * FROM users WHERE userID = ?", userID, function (err, result, fields) {
     if (err) throw err;
@@ -517,7 +517,7 @@ app.get('/user', function (req, res) {
 //POST a new user - registering 
 //  /api/user
 //tested
-app.post('/register', async (req, res) => {
+app.post('/users/', async (req, res) => {
   var userType = req.param("userType");
   var username = req.param("username");
   var userPassword = req.param("userPassword");
