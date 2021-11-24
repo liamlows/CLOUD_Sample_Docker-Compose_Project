@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes} from 'react-router-dom';
 import { Homepage } from './components/Homepage';
 import Login from './components/Login';
 import LeaguePage from './components/LeaguePage';
+import { Teamview } from './components/TeamView';
 
 const App = props => {
   return(
@@ -16,6 +17,8 @@ const App = props => {
         <Route path = "/NBA" element = {<LeaguePage league = "NBA" />} />
         <Route path = "/NFL" element = {<LeaguePage league = "NFL"/>} />
         <Route path = "/MLB" element = {<LeaguePage league = "MLB"/>} />
+        <Route path = "/TeamView" element = {<Teamview/>}/>
+
     </Routes>
     </BrowserRouter>
     </div>
