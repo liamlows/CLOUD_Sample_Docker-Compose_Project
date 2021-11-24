@@ -14,17 +14,27 @@ import Col from 'react-bootstrap/Col'
 const LeaguePage = (props) => {
 
     const [games, setGames] = useState([]);
-
+    let league_name = props.league
     const getAllGames = () => {
-        axios.get('http://${url}:8000/games/league?league=${props}')
+        console.log("here");
+        console.log(props.league);
+        const leageu_name = 
+        axios.get(`http://${url}:8000/games/league`,{
+            params: {
+              league: league_name
+            }
+          })
             .then((response) => {
                 console.log(response);
                 const allGames = response.data;
                 setGames(allGames);
-            }
+            })
+            .catch(err => {
+                console.log(err)
+            });
 
-            );
-    };
+            ;
+    }
 
     useEffect(() => getAllGames(), []);
 

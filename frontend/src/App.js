@@ -13,9 +13,9 @@ const App = props => {
         <Route path = "/" element = {<Homepage />}/>
         <Route path = "/home" element = {<Homepage />}/>
         <Route path = "/login" element = {<Login />}/>
-        <Route path = "/NBA" element = {<LeaguePage NBA />} />
-        <Route path = "/NFL" element = {<LeaguePage NFL/>} />
-        <Route path = "/MLB" element = {<LeaguePage MLB/>} />
+        <Route path = "/NBA" element = {<LeaguePage league = "NBA" />} />
+        <Route path = "/NFL" element = {<LeaguePage league = "NFL"/>} />
+        <Route path = "/MLB" element = {<LeaguePage league = "MLB"/>} />
     </Routes>
     </BrowserRouter>
     </div>
