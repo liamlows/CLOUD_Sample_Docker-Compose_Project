@@ -550,39 +550,8 @@ module.exports = function routes(app, logger) {
 
                   });
 
-                   //get players peformance from specific game
-              app.get('/league/rankings', async (req, res) => {
-                // obtain a connection from our pool of connections
-                pool.getConnection(function (err, connection){
-                  if (err){
-                    console.log(connection);
-                    // if there is an issue obtaining a connection, release the connection instance and log the error
-                    logger.error('Problem obtaining MySQL connection', err)
-                    res.status(400).send('Problem obtaining MySQL connection'); 
-                  }  else {
-                        var league = req.param('league');
-                        
-                        connection.query("select * from Teams where League=? order by (Wins) desc,(Wins/Losses) desc",league, function (err, result, fields) {
-                          if (err) { 
-                            // if there is an error with the query, release the connection instance and log the error
-                            connection.release()
-                            logger.error("Problem getting games from league: ", err);
-                            res.status(400).send('Problem getting games from league'); 
-                          } else { 
-                            // if there is no error with the query, release the connection instance
-                    res.send(result);
-                            connection.release()
-                            
-                          }
-                        });
-                        
-                      }
-                    });
 
-
-                  });
-
-//get players peformance from specific game
+            //specified leagues standings
               app.get('/league/rankings', async (req, res) => {
                 // obtain a connection from our pool of connections
                 pool.getConnection(function (err, connection){
@@ -628,6 +597,39 @@ module.exports = function routes(app, logger) {
                         var teamName = req.param('teamName');
                         
                         connection.query("select TeamName,Wins,Losses from Teams where TeamName=?",teamName, function (err, result, fields) {
+                          if (err) { 
+                            // if there is an error with the query, release the connection instance and log the error
+                            connection.release()
+                            logger.error("Problem getting games from league: ", err);
+                            res.status(400).send('Problem getting games from league'); 
+                          } else { 
+                            // if there is no error with the query, release the connection instance
+                    res.send(result);
+                            connection.release()
+                            
+                          }
+                        });
+                        
+                      }
+                    });
+
+
+                  });
+
+
+                  //get mvp from specified game
+              app.get('/game/mvp', async (req, res) => {
+                // obtain a connection from our pool of connections
+                pool.getConnection(function (err, connection){
+                  if (err){
+                    console.log(connection);
+                    // if there is an issue obtaining a connection, release the connection instance and log the error
+                    logger.error('Problem obtaining MySQL connection', err)
+                    res.status(400).send('Problem obtaining MySQL connection'); 
+                  }  else {
+                        var gameID = req.param('gameID');
+                        
+                        connection.query("select MVP from Games where GameID=?",gameID, function (err, result, fields) {
                           if (err) { 
                             // if there is an error with the query, release the connection instance and log the error
                             connection.release()
