@@ -637,7 +637,39 @@ module.exports = function routes(app, logger) {
                             res.status(400).send('Problem getting games from league'); 
                           } else { 
                             // if there is no error with the query, release the connection instance
-                    res.send(result);
+                            res.send(result);
+                            connection.release()
+                            
+                          }
+                        });
+                        
+                      }
+                    });
+
+
+                  });
+
+                  //get mvp from specified game
+              app.get('/game/mostRecent', async (req, res) => {
+                // obtain a connection from our pool of connections
+                pool.getConnection(function (err, connection){
+                  if (err){
+                    console.log(connection);
+                    // if there is an issue obtaining a connection, release the connection instance and log the error
+                    logger.error('Problem obtaining MySQL connection', err)
+                    res.status(400).send('Problem obtaining MySQL connection'); 
+                  }  else {
+                        var league = req.param('league');
+                        var gameID = req.param('gameID');
+                        connection.query("with cte1 as(select * from Games join Teams T on Games.WinnerID = T.TeamID where GameID=? and League=? limit 1),cte2 as(select * from Games join Teams T2 on Games.WinnerID = T2.TeamID where T2.League=? order by Date limit 1) select count(Date) as count from( select date from cte2 a union select Date from cte1 b) x;",[gameID,league,league], function (err, result, fields) {
+                          if (err) { 
+                            // if there is an error with the query, release the connection instance and log the error
+                            connection.release()
+                            logger.error("Problem getting games from league: ", err);
+                            res.status(400).send('Problem getting games from league'); 
+                          } else { 
+                            // if there is no error with the query, release the connection instance
+                            res.send(result[0].count===1);
                             connection.release()
                             
                           }
