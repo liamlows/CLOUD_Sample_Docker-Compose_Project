@@ -617,37 +617,7 @@ module.exports = function routes(app, logger) {
                   });
 
 
-                  //get mvp from specified game
-              app.get('/game/mvp', async (req, res) => {
-                // obtain a connection from our pool of connections
-                pool.getConnection(function (err, connection){
-                  if (err){
-                    console.log(connection);
-                    // if there is an issue obtaining a connection, release the connection instance and log the error
-                    logger.error('Problem obtaining MySQL connection', err)
-                    res.status(400).send('Problem obtaining MySQL connection'); 
-                  }  else {
-                        var gameID = req.param('gameID');
-                        
-                        connection.query("select MVP from Games where GameID=?",gameID, function (err, result, fields) {
-                          if (err) { 
-                            // if there is an error with the query, release the connection instance and log the error
-                            connection.release()
-                            logger.error("Problem getting games from league: ", err);
-                            res.status(400).send('Problem getting games from league'); 
-                          } else { 
-                            // if there is no error with the query, release the connection instance
-                            res.send(result);
-                            connection.release()
-                            
-                          }
-                        });
-                        
-                      }
-                    });
-
-
-                  });
+                
 
                   //get mvp from specified game
               app.get('/game/mostRecent', async (req, res) => {
@@ -680,6 +650,70 @@ module.exports = function routes(app, logger) {
 
 
                   });
+                  
+                  //post a vote for a player for a specified game
+                  app.post('/game/mvp', async (req, res) => {
+                    // obtain a connection from our pool of connections
+                    pool.getConnection(function (err, connection){
+                      if (err){
+                        console.log(connection);
+                        // if there is an issue obtaining a connection, release the connection instance and log the error
+                        logger.error('Problem obtaining MySQL connection', err)
+                        res.status(400).send('Problem obtaining MySQL connection'); 
+                      }  else {
+                            var gameID = req.body.gameID;
+                            var playerID = req.body.playerID;
+                            connection.query("insert into votes(gameID, playerID) values (?,?)",[gameID,playerID], function (err, result, fields) {
+                              if (err) { 
+                                // if there is an error with the query, release the connection instance and log the error
+                                connection.release()
+                                logger.error("Problem getting games from league: ", err);
+                                res.status(400).send('Problem getting games from league'); 
+                              } else { 
+                                // if there is no error with the query, release the connection instance
+                                res.send(result);
+                                connection.release()
+                                
+                              }
+                            });
+                            
+                          }
+                        });
+    
+    
+                      });
+
+                      //Get mvp for a specified game
+                  app.get('/game/mvp', async (req, res) => {
+                    // obtain a connection from our pool of connections
+                    pool.getConnection(function (err, connection){
+                      if (err){
+                        console.log(connection);
+                        // if there is an issue obtaining a connection, release the connection instance and log the error
+                        logger.error('Problem obtaining MySQL connection', err)
+                        res.status(400).send('Problem obtaining MySQL connection'); 
+                      }  else {
+                            var gameID = req.param('gameID');
+                            
+                            connection.query("select P.PlayerID, P.FirstName, P.LastName from votes join Games G on G.GameID = votes.gameID join Players P on P.PlayerID = votes.playerID where G.GameID=? group by playerID order by count(*) desc limit 1",gameID, function (err, result, fields) {
+                              if (err) { 
+                                // if there is an error with the query, release the connection instance and log the error
+                                connection.release()
+                                logger.error("Problem getting games from league: ", err);
+                                res.status(400).send('Problem getting games from league'); 
+                              } else { 
+                                // if there is no error with the query, release the connection instance
+                                res.send(result);
+                                connection.release()
+                                
+                              }
+                            });
+                            
+                          }
+                        });
+    
+    
+                      });
 
 }
 
