@@ -6,7 +6,7 @@ const checkAuth = require('./middleware/check-auth');
 module.exports = function routes(app, logger) {
   // GET /
   app.get('/', (req, res) => {
-    res.status(200).send('Go to 0.0.0.0:3000.');
+    res.status(200).send('Go to 0.0.0.0:3001.');
   });
 
 
@@ -404,7 +404,7 @@ module.exports = function routes(app, logger) {
     });
   });
 
-  app.get('/games/league', async (req, res) => {
+  app.get('/games/league', (req, res) => {
     // obtain a connection from our pool of connections
     pool.getConnection(function (err, connection){
       if (err){
@@ -413,7 +413,7 @@ module.exports = function routes(app, logger) {
         logger.error('Problem obtaining MySQL connection', err)
         res.status(400).send('Problem obtaining MySQL connection'); 
       }  else {
-			var league = req.body.league;
+			var league = req.param('league');
             connection.query("select * from Games join Teams T on Games.WinnerID = T.TeamID where League = ? order by Date",league, function (err, result, fields) {
               if (err) { 
                 // if there is an error with the query, release the connection instance and log the error
@@ -441,7 +441,7 @@ module.exports = function routes(app, logger) {
             logger.error('Problem obtaining MySQL connection', err)
             res.status(400).send('Problem obtaining MySQL connection'); 
           }  else {
-                var GameID = req.body.GameID;
+                var GameID = req.param("GameID");
                 connection.query("select TeamName from Teams join Games G on Teams.TeamID = G.Team1ID where GameID=?",GameID, function (err, result, fields) {
                   if (err) { 
                     // if there is an error with the query, release the connection instance and log the error
