@@ -49,3 +49,11 @@ export class GameView extends React.Component {
 }
 
 export default GameView;
+
+/*
+Get all the players from a specific team sorted by name
+Get roster of team sorted by Name
+‘/team/players’
+GET
+Body Params: TeamID
+*/
