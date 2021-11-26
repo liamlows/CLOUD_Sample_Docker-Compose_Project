@@ -113,7 +113,7 @@ export class ProfileEditForm extends React.Component {
     }
 
     componentDidMount() {
-        let userID = 1 // update to sessionstorage.siteid 
+        let userID = sessionStorage.userID;
         if (userID) {
             this.accountsRepository.getUser(userID)
             .then(account => this.setState(account[0]));

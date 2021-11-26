@@ -4,6 +4,7 @@ import { ProfileEditForm } from './ProfileEditForm';
 import { BsXLg, BsCheckLg } from 'react-icons/bs'
 import { Link } from 'react-router-dom';
 import { AccountsRepository } from '../api/AccountsRepository';
+import './Profile.css';
 
 export class Profile extends React.Component {
 
@@ -18,24 +19,14 @@ export class Profile extends React.Component {
         "Admin"
     ];
 
-    // state = {
-    //     userId: 0,
-    //     username: "Landon Wood",
-    //     userType: 4,
-    //     phoneNumber: "2146016524",
-    //     email: "landonw@smu.edu",
-    //     RDHName: "Test RDH",
-    //     soupKitchenName: "Test Soup Kitchen",
-    //     address: "1111 Test Avenue Dallas, TX, 75205",
-    //     verified: 1
-    // }
 
     state = {
-        userId: 0,
+        userID: 0,
         username: "",
         userType: 0,
         phoneNumber: "",
         email: "",
+        imgURL: "",
         RDHName: "",
         soupKitchenName: "",
         address: "",
@@ -49,7 +40,7 @@ export class Profile extends React.Component {
                 <div className="container w-50 my-3">
                     <div className="row">
                         <div className="col">
-                            <img className="border border-dark" src="https://place-hold.it/150" alt="User profile pic"/>
+                            <img className="border border-dark profilephoto" src={this.state.imgURL} alt="User profile pic"/>
                         </div>
                         <div className="col mt-4">
                             {(this.state.userType === 0 || this.state.userType === 1 || this.state.userType === 4) && 
@@ -124,8 +115,12 @@ export class Profile extends React.Component {
 
     }
 
-    componentDidMount() {
-        let userID = 1 // update to sessionstorage.siteid 
+    componentDidMount() { 
+        let userID = sessionStorage.userID; // For my profile, this is ok. 
+        // we need either another component for another's profile, or we need to rewrite profile as function w props.
+        // pass in the id of the thing clicked on to props.
+        // but we should probably just focus on donations and orders now.
+        // GET BASIC DONATIONS TABLE AND NAV BAR WORKING BEFORE WE DO ANYTHING ELSE
         if (userID) {
             this.accountsRepository.getUser(userID)
             .then(account => this.setState(account[0]));

@@ -524,24 +524,35 @@ app.post('/users/', async (req, res) => {
   var imgURL = req.param("imgURL");
   var phoneNumber = req.param("phoneNumber");
   var email = req.param("email");
-  pool.query("INSERT INTO users (userType, username, userPassword, imgURL, phoneNumber, email, validated) VALUES (?,?,?,?,?,?,1)", 
+  pool.query("INSERT INTO users (userType, username, userPassword, imgURL, phoneNumber, email, validated) VALUES (?,?,?,?,?,?,0)", 
   [userType, username, userPassword, imgURL, phoneNumber, email],function (err, result, fields) {
     if (err) throw err;
     res.end(JSON.stringify(result)); // Result in JSON format
   });
 });
 
-//GET a paritcular user, given username and userPassword - login
+//POST a paritcular user, given username and userPassword - login
 //  /api/user
 //tested
-app.get('/login', function (req, res) {
-  var username = req.param('username');
-  var userPassword = req.param('userPassword');
-  pool.query("SELECT * FROM users WHERE username = ? && userPassword = ?", [username, userPassword], function (err, result, fields) {
+
+app.post('/login', function (req, res) {
+  var username = req.body.username;
+  var userPassword = req.body.userPassword;
+  pool.query(`SELECT userID FROM users WHERE username = "${req.body.username}" && userPassword = "${req.body.userPassword}"`, function (err, result, fields) {
     if (err) throw err;
     res.end(JSON.stringify(result)); 
   });
 });
+
+
+// app.get('/login', function (req, res) {
+//   var username = req.param('username');
+//   var userPassword = req.param('userPassword');
+//   pool.query("SELECT * FROM users WHERE username = ? && userPassword = ?", [username, userPassword], function (err, result, fields) {
+//     if (err) throw err;
+//     res.end(JSON.stringify(result)); 
+//   });
+// });
 
 //PUT to update users profile informationn
 // /api/user/updateProfileInformation
