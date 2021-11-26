@@ -619,7 +619,7 @@ module.exports = function routes(app, logger) {
 
                 
 
-                  //get mvp from specified game
+                  //check if game is the most recent game played
               app.get('/game/mostRecent', async (req, res) => {
                 // obtain a connection from our pool of connections
                 pool.getConnection(function (err, connection){
@@ -747,7 +747,7 @@ module.exports = function routes(app, logger) {
             
                               });
 
-                      //Get mvp for a specified game
+                      //choose if game is hidden or not
                   app.put('/game/hide', async (req, res) => {
                     // obtain a connection from our pool of connections
                     pool.getConnection(function (err, connection){
@@ -938,6 +938,39 @@ module.exports = function routes(app, logger) {
                                             });
                                           });
 
+                                          app.post('/game', async (req, res) => {
+                                            // obtain a connection from our pool of connections
+                                            pool.getConnection(function (err, connection){
+                                              if (err){
+                                                console.log(connection);
+                                                // if there is an issue obtaining a connection, release the connection instance and log the error
+                                                logger.error('Problem obtaining MySQL connection', err)
+                                                res.status(400).send('Problem obtaining MySQL connection'); 
+                                              }  else {
+                                                    // does NOT take in playerID
+                                                    var team1ID=req.body.team1ID;
+                                                    var team2ID=req.body.team2ID;
+                                                    var team1Score=req.body.team1Score;
+                                                    var team2Score=req.body.team2Score;
+                                                    var winnerID=req.body.winnerID;
+                                                  
+                                                    var date=req.body.date;
+                                                    connection.query("insert into Games ( Team1ID,Team2ID, Team1Score, Team2Score, WinnerID, Date) values (?,?,?,?,?,?)",[team1ID,team2ID,team1Score,team2Score,winnerID,date], function (err, result, fields) {
+                                                      if (err) { 
+                                                        // if there is an error with the query, release the connection instance and log the error
+                                                        connection.release()
+                                                        logger.error("Problem adding a player: ", err);
+                                                        res.status(400).send('Problem adding a player'); 
+                                                      } else { 
+                                                        // if there is no error with the query, release the connection instance
+                                                        res.send(result);
+                                                        connection.release()
+                                                        
+                                                      }
+                                                    });
+                                                  }
+                                                });
+                                              });
 
 }
 
