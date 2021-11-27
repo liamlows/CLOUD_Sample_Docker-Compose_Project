@@ -3,9 +3,8 @@ import './App.css'
 import { BrowserRouter, Route, Routes} from 'react-router-dom';
 import { Homepage } from './components/Homepage';
 import Login from './components/Login';
-import NBA from './components/NBA';
+import LeaguePage from './components/LeaguePage';
 import { Teamview } from './components/TeamView';
-
 
 const App = props => {
   return(
@@ -15,8 +14,11 @@ const App = props => {
         <Route path = "/" element = {<Homepage />}/>
         <Route path = "/home" element = {<Homepage />}/>
         <Route path = "/login" element = {<Login />}/>
-        <Route path = "/NBA" element = {<NBA />} />
+        <Route path = "/NBA" element = {<LeaguePage league = "NBA" />} />
+        <Route path = "/NFL" element = {<LeaguePage league = "NFL"/>} />
+        <Route path = "/MLB" element = {<LeaguePage league = "MLB"/>} />
         <Route path = "/TeamView" element = {<Teamview/>}/>
+
     </Routes>
     </BrowserRouter>
     </div>
