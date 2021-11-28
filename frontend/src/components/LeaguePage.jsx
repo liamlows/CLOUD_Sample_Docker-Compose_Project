@@ -15,8 +15,8 @@ import { SportRepository } from '../api/SportRepository';
 
 export class LeaguePage extends React.Component {
     state = {
-        recent_games: []
-        
+        recent_games: [],
+        ranking: []
     }
 
     db = new SportRepository();
@@ -27,20 +27,20 @@ export class LeaguePage extends React.Component {
     //         team2 => {
     //             console.log("what is team2",team2);
     //             team_name = team2[0].TeamName;
-                
+
     //             console.log("what is team_name",team_name);
 
     //             return team_name;
     //         }
     //     );
     // }
-    
-    updateTeam2(){
+
+    updateTeam2() {
         var games = this.state.recent_games;
-        games.forEach(g=>{
-            this.db.getTeamName2FromGameID(g.GameID).then(x=> g.TeamName2 =x[0].TeamName);
+        games.forEach(g => {
+            this.db.getTeamName2FromGameID(g.GameID).then(x => g.OpponentName = x[0].TeamName);
         });
-        this.setState({recent_games: games});
+        this.setState({ recent_games: games });
     }
 
     componentDidMount() {
@@ -49,16 +49,30 @@ export class LeaguePage extends React.Component {
         console.log("league : ", league);
         if (league) {
             this.db.getAllGames(league).then(games =>
-                this.setState({recent_games: games}, ()=>{
-                    console.log("Imhere",this.state.recent_games);
+                this.setState({ recent_games: games }, () => {
+                    console.log("Imhere", this.state.recent_games);
                     // this.updateTeam2();
-                    games.forEach(g=>{
-                        this.db.getTeamName2FromGameID(g.GameID).then(x=> g.TeamName2 =x[0].TeamName);
+                    games.forEach(g => {
+                        this.db.getTeamName2FromGameID(g.GameID).then(x => {
+                            g["OpponentName"] = x[0].TeamName;
+                            // g.OpponentName = x[0].TeamName;
+                            
+                        }
+                            );
                     });
-                    this.setState({recent_games: games});
+                    this.setState({ recent_games: games });
                 })
             );
+
+            this.db.getRanking(league).then(x => {
+                this.setState({ ranking: x });
+                console.log(this.state.ranking);
+            }
+
+            )
         }
+
+
 
     }
 
@@ -79,23 +93,44 @@ export class LeaguePage extends React.Component {
 
 
             <Container>
+                <h2> Recent Games </h2>
+                <Row>
+
+                    {console.log(this.state.recent_games)}
+                    <CardGroup>
+                        {this.state.recent_games.map((g) => (
+                            <Col md={12} lg={6}>
+                                <Card>
+                                    <Card.Body>
+                                        <Card.Title>
+                                            {console.log("WTF", g, g.TeamName, g.OpponentName)}
+                                            {g.TeamName} ({g.Wins} - {g.Losses}) vs {g.OpponentName}
+                                        </Card.Title>
+                                        <Card.Text>
+                                            {g.Team1Score} - {g.Team2Score}
+                                        </Card.Text>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                        ))}
+                    </CardGroup>
+                </Row>
+            </Container>
+            <br />
+            <Container>
+                <h3> Ranking in {this.props.league} </h3>
                 <Row>
                     <Col>
-                        <p> test </p>
-                        {console.log(this.state.recent_games)}
-                        <CardGroup>
+                        {this.state.ranking.map((r, idx) => (
 
-                            {this.state.recent_games.map((g) => (
-                                <Card>
-                                    <p>
-                                    {console.log("WTF",g.TeamName,g.TeamName2)}
-                                    {g.TeamName} vs {g.TeamName2} 
-                                    </p>
-                                </Card>
-                            ))}
-                        </CardGroup>
-                    </Col>
-                    <Col >
+                            <Card bg="secondary" key={idx} text="white">
+                                <Card.Body>
+                                    <Card.Title > #{idx+1} : {r.TeamName} </Card.Title>
+                                    <Card.Text> Record : {r.Wins} - {r.Losses} </Card.Text>
+                                </Card.Body>
+                            </Card>
+
+                        ))}
                     </Col>
                 </Row>
             </Container>

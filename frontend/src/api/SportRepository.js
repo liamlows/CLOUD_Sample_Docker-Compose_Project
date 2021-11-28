@@ -49,6 +49,22 @@ export class SportRepository {
     }
 
 
+    getRanking(league_name) {
+        // let config = this.config;
+        // if (params) {
+        //     config.params = params;
+        // }
+        return new Promise((resolve, reject) => {
+            axios.get(`http://${url}:8000/league/rankings?league=${league_name}`)
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
+
+
     getPlayersFromTeam(TeamID) {
         // let config = this.config;
         // if (params) {
