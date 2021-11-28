@@ -19,7 +19,7 @@ export class Homepage extends React.Component {
                             <Nav.Link href="/NFL">NFL</Nav.Link>
                             <Nav.Link href="/MLB">MLB</Nav.Link>
                             <Nav.Link href="/TeamView">TeamView</Nav.Link>
-                            <Nav.Link href="/GameView">GameView</Nav.Link>
+                            <Nav.Link href="/GameView/1">GameView</Nav.Link>
                         </Nav>
                         <Nav.Link href="/login" className="mr-auto">Login</Nav.Link>
                     </Container>

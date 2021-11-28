@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Route, Link, useParams } from 'react-router-dom';
 import { SportRepository } from '../api/SportRepository';
 import { Navbar, Nav, Table, Form, Button, Container, Row, Col } from 'react-bootstrap';
+//import { AccountSearch } from './components/AccountSearch';
 
 /*
 Display MVP results
@@ -23,34 +24,57 @@ export const GameView = () => {
     const { gameId } = useParams();
 
     //create state elements
-    const [ team1Name, setTeam1Name ] = useState();
-    const [ team2Name, setTeam2Name ] = useState();
-    const [ team1ID, setTeam1ID ] = useState();
-    const [ team2ID, setTeam2ID ] = useState();
+    const [ team1Name, setTeam1Name ] = useState("");
+    const [ team2Name, setTeam2Name ] = useState("");
+    const [ team1ID, setTeam1ID ] = useState(0);
+    const [ team2ID, setTeam2ID ] = useState(0);
 
     //set the game info in state using gameId in url
     useEffect(() => { onSearch(); }, []);
 
     let onSearch = () => {
-        repo.getTeamName1FromGameID(gameId).then(x => setTeam1Name(x[0]["TeamName"]));
-        repo.getTeamName2FromGameID(gameId).then(x => onSearch2(x));
+        console.log("Starting onsearch1");
+        
+        repo.getTeamName1FromGameID(gameId).then(x => setTeam1Name(x[0]));
+        repo.getTeamName2FromGameID(gameId).then(x => {
+            setTeam2Name(x[0]);
+
+            console.log("In onsearch:");
+            console.log(team1Name, team2Name);
+            console.log(team1ID, team2ID);
+        
+            onSearch2();
+        })
     }
 
-    let onSearch2 = (x) => {
-        console.log("Here"); //for some reason the entire program doesn't work without this line
-        setTeam2Name(x[0]["TeamName"]);
-        repo.getTeamIDFromTeamName(team1Name).then(x => setTeam1ID(x[0]));
-        setTeam1ID(team1ID["TeamID"]);
-        repo.getTeamIDFromTeamName(team2Name).then(x => setTeam2ID(x[0]));
-        setTeam2ID(team2ID["TeamID"]);
+    let onSearch2 = () => {
+
+        console.log("Starting onsearch2");
+
+        repo.getTeamIDFromTeamName(team1Name["TeamName"]).then(x => setTeam1ID(x[0]));
+        repo.getTeamIDFromTeamName(team2Name["TeamName"]).then(x => {
+            setTeam2ID(x[0]);
+
+            console.log("In onsearch2:");
+            console.log(team1Name, team2Name);
+            console.log(team1ID, team2ID);
+
+            onSearch3();
+        })
     }
+
+    let onSearch3 = () => {
+        console.log("In onsearch3:");
+        console.log(team1Name, team2Name);
+        console.log(team1ID, team2ID);    }
 
     //if data is still loading, pause
-    if(!team1ID || !team2ID){
+    if(team1Name == "" || team2Name == "" || team1ID == 0 || team2ID == 0){
         return <p>Data is loading...</p>;
     }
 
     return <>
+    {console.log("here4")}
     {console.log(team1Name, team2Name)}
     {console.log(team1ID, team2ID)}
             <Navbar bg="dark" variant="dark">
@@ -77,15 +101,9 @@ export const GameView = () => {
                         </div>
                     </Row>
                     <Row>
-                        <Form>
-                            <Form.Group className="mb-3" >
-                                <Form.Control type="email" placeholder="Search For Player" />
-                            </Form.Group>
-                            <Button variant="primary" type="submit">
-                                Search
-                            </Button>
-                        </Form>
+
                         <p>To create a search bar: https://medium.com/@pradityadhitama/simple-search-bar-component-functionality-in-react-6589fda3385d</p>
+
                     </Row>
                 </Container>
             </Navbar>
@@ -158,4 +176,8 @@ Get the name of the teams from a specific game (Had to be 2 separate routes)
 ‘/games/team2’
 GET
 Body Params: GameID
+
+<Route path="/" exact render={ props => <Link className="btn btn-sm btn-info mb-4" to="/search">Search</Link> } />
+                        <Route path="/search" exact render={ props => <AccountSearch onSearch={ params => onSearch(params)} /> } />
+                        
 */
