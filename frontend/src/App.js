@@ -19,7 +19,7 @@ const App = props => {
         <Route path = "/NFL" element = {<LeaguePage league = "NFL"/>} />
         <Route path = "/MLB" element = {<LeaguePage league = "MLB"/>} />
         <Route path = "/TeamView" element = {<Teamview/>}/>
-        <Route path = "/GameView" element = {<GameView/>}/>
+        <Route path = "/GameView/:gameId" element = {<GameView/>}/>
     </Routes>
     </BrowserRouter>
     </div>
