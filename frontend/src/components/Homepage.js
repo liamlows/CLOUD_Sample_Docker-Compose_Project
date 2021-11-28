@@ -18,6 +18,8 @@ export class Homepage extends React.Component {
                             <Nav.Link href="/NBA">NBA</Nav.Link>
                             <Nav.Link href="/NFL">NFL</Nav.Link>
                             <Nav.Link href="/MLB">MLB</Nav.Link>
+                            <Nav.Link href="/TeamView">TeamView</Nav.Link>
+                            <Nav.Link href="/GameView">GameView</Nav.Link>
                         </Nav>
                         <Nav.Link href="/login" className="mr-auto">Login</Nav.Link>
                     </Container>

@@ -9,6 +9,35 @@ module.exports = function routes(app, logger) {
     res.status(200).send('Go to 0.0.0.0:3001.');
   });
 
+  //get all the players from a team
+  app.get('/team/allplayers', async (req, res) => {
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection) {
+      if (err) {
+        console.log(connection);
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection');
+      } else {
+        var TeamID = req.param('TeamID');
+        connection.query("select * from Players join Teams T on T.TeamID = Players.TeamID where T.TeamID = ? order by FirstName", TeamID, function (err, result, fields) {
+          if (err) {
+            // if there is an error with the query, release the connection instance and log the error
+            connection.release()
+            logger.error("Problem getting games from league: ", err);
+            res.status(400).send('Problem getting games from league');
+          } else {
+            // if there is no error with the query, release the connection instance
+            res.send(result);
+            connection.release()
+
+          }
+        });
+
+      }
+    });
+  });
+
 
   //register user
   app.post('/users/register', async (req, res) => {
@@ -987,7 +1016,7 @@ module.exports = function routes(app, logger) {
       } else {
         var team1ID = req.body.team1ID;
         var gameID = req.body.gameID
-        connection.query("update Games set Team1ID=? where GameID=?", [team1ID,gameID], function (err, result, fields) {
+        connection.query("update Games set Team1ID=? where GameID=?", [team1ID, gameID], function (err, result, fields) {
           if (err) {
             // if there is an error with the query, release the connection instance and log the error
             connection.release()
@@ -1017,7 +1046,7 @@ module.exports = function routes(app, logger) {
       } else {
         var team2ID = req.body.team2ID;
         var gameID = req.body.gameID
-        connection.query("update Games set Team2ID=? where GameID=?", [team2ID,gameID], function (err, result, fields) {
+        connection.query("update Games set Team2ID=? where GameID=?", [team2ID, gameID], function (err, result, fields) {
           if (err) {
             // if there is an error with the query, release the connection instance and log the error
             connection.release()
@@ -1047,7 +1076,7 @@ module.exports = function routes(app, logger) {
       } else {
         var team1Score = req.body.team1Score;
         var gameID = req.body.gameID
-        connection.query("update Games set Team1Score=? where GameID=?", [team1Score,gameID], function (err, result, fields) {
+        connection.query("update Games set Team1Score=? where GameID=?", [team1Score, gameID], function (err, result, fields) {
           if (err) {
             // if there is an error with the query, release the connection instance and log the error
             connection.release()
@@ -1076,7 +1105,7 @@ module.exports = function routes(app, logger) {
       } else {
         var team2Score = req.body.team2Score;
         var gameID = req.body.gameID
-        connection.query("update Games set Team2Score=? where GameID=?", [team2Score,gameID], function (err, result, fields) {
+        connection.query("update Games set Team2Score=? where GameID=?", [team2Score, gameID], function (err, result, fields) {
           if (err) {
             // if there is an error with the query, release the connection instance and log the error
             connection.release()
@@ -1105,7 +1134,7 @@ module.exports = function routes(app, logger) {
       } else {
         var winnerID = req.body.winnerID;
         var gameID = req.body.gameID
-        connection.query("update Games set WinnerID=? where GameID=?", [winnerID,gameID], function (err, result, fields) {
+        connection.query("update Games set WinnerID=? where GameID=?", [winnerID, gameID], function (err, result, fields) {
           if (err) {
             // if there is an error with the query, release the connection instance and log the error
             connection.release()
@@ -1135,7 +1164,7 @@ module.exports = function routes(app, logger) {
       } else {
         var date = req.body.date;
         var gameID = req.body.gameID
-        connection.query("update Games set Date=? where GameID=?", [date,gameID], function (err, result, fields) {
+        connection.query("update Games set Date=? where GameID=?", [date, gameID], function (err, result, fields) {
           if (err) {
             // if there is an error with the query, release the connection instance and log the error
             connection.release()
@@ -1153,61 +1182,61 @@ module.exports = function routes(app, logger) {
   });
 
 
- //get teamID given team name
- app.get('/teams/teamID', (req, res) => {
-  // obtain a connection from our pool of connections
-  pool.getConnection(function (err, connection) {
-    if (err) {
-      console.log(connection);
-      // if there is an issue obtaining a connection, release the connection instance and log the error
-      logger.error('Problem obtaining MySQL connection', err)
-      res.status(400).send('Problem obtaining MySQL connection');
-    } else {
-      var teamName = req.param('teamName');
-      connection.query("select TeamID from Teams where TeamName=?", teamName, function (err, result, fields) {
-        if (err) {
-          // if there is an error with the query, release the connection instance and log the error
-          connection.release()
-          logger.error("Problem getting games from league: ", err);
-          res.status(400).send('Problem getting games from league');
-        } else {
-          // if there is no error with the query, release the connection instance
-          res.send(result);
-          connection.release()
+  //get teamID given team name
+  app.get('/teams/teamID', (req, res) => {
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection) {
+      if (err) {
+        console.log(connection);
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection');
+      } else {
+        var teamName = req.param('teamName');
+        connection.query("select TeamID from Teams where TeamName=?", teamName, function (err, result, fields) {
+          if (err) {
+            // if there is an error with the query, release the connection instance and log the error
+            connection.release()
+            logger.error("Problem getting games from league: ", err);
+            res.status(400).send('Problem getting games from league');
+          } else {
+            // if there is no error with the query, release the connection instance
+            res.send(result);
+            connection.release()
 
-        }
-      });
-    }
+          }
+        });
+      }
+    });
   });
-});
 
-//get teamName given team id
-app.get('/teams/teamName', (req, res) => {
-  // obtain a connection from our pool of connections
-  pool.getConnection(function (err, connection) {
-    if (err) {
-      console.log(connection);
-      // if there is an issue obtaining a connection, release the connection instance and log the error
-      logger.error('Problem obtaining MySQL connection', err)
-      res.status(400).send('Problem obtaining MySQL connection');
-    } else {
-      var teamID = req.param('teamID');
-      connection.query("select TeamName from Teams where TeamID=?", teamID, function (err, result, fields) {
-        if (err) {
-          // if there is an error with the query, release the connection instance and log the error
-          connection.release()
-          logger.error("Problem getting games from league: ", err);
-          res.status(400).send('Problem getting games from league');
-        } else {
-          // if there is no error with the query, release the connection instance
-          res.send(result);
-          connection.release()
+  //get teamName given team id
+  app.get('/teams/teamName', (req, res) => {
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection) {
+      if (err) {
+        console.log(connection);
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection');
+      } else {
+        var teamID = req.param('teamID');
+        connection.query("select TeamName from Teams where TeamID=?", teamID, function (err, result, fields) {
+          if (err) {
+            // if there is an error with the query, release the connection instance and log the error
+            connection.release()
+            logger.error("Problem getting games from league: ", err);
+            res.status(400).send('Problem getting games from league');
+          } else {
+            // if there is no error with the query, release the connection instance
+            res.send(result);
+            connection.release()
 
-        }
-      });
-    }
+          }
+        });
+      }
+    });
   });
-});
 
 }
 

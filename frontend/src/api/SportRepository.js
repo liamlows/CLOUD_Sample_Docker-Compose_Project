@@ -35,6 +35,7 @@ export class SportRepository {
                 })
         });
     }
+    
     async getTeamName2FromGameID(id) {
         return await new Promise((resolve, reject) => {
             axios.get(`http://${url}:8000/games/team2?GameID=${id}`, {
@@ -62,4 +63,27 @@ export class SportRepository {
                 })
         });
     }
+
+
+    getPlayersFromTeam(TeamID) {
+        // let config = this.config;
+        // if (params) {
+        //     config.params = params;
+        // }
+        return new Promise((resolve, reject) => {
+            axios.get(`http://${url}:8000/team/allplayers?TeamID=${TeamID}`)
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
+
+        /*
+        Route to get teamID given the teams name
+‘/teams/teamID?teamName=Team 1’
+GET
+Params: teamName
+*/
 }
