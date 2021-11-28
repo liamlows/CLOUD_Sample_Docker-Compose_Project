@@ -425,7 +425,7 @@ module.exports = function routes(app, logger) {
             res.send(result);
             connection.release()
 
-          }
+          }  
         });
       }
     });
