@@ -215,7 +215,7 @@ module.exports = function routes(app, logger) {
     });
   });
   // get players ppg, just specify player first and last name using body
-  app.get('/player/ppg', checkAuth, async (req, res) => {
+  app.get('/player/ppg', async (req, res) => {
     // obtain a connection from our pool of connections
     pool.getConnection(function (err, connection) {
       if (err) {
