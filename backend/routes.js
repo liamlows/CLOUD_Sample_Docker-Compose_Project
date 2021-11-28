@@ -461,7 +461,7 @@ module.exports = function routes(app, logger) {
   });
 
   //get name of second team from specified game
-  app.get('/games/team2', async (req, res) => {
+  app.get('/games/team2', (req, res) => {
     // obtain a connection from our pool of connections
     pool.getConnection(function (err, connection) {
       if (err) {
@@ -470,13 +470,13 @@ module.exports = function routes(app, logger) {
         logger.error('Problem obtaining MySQL connection', err)
         res.status(400).send('Problem obtaining MySQL connection');
       } else {
-        var GameID = req.body.GameID;
+        var GameID = req.param("GameID");
         connection.query("select TeamName from Teams join Games G on Teams.TeamID = G.Team2ID where GameID=?", GameID, function (err, result, fields) {
           if (err) {
             // if there is an error with the query, release the connection instance and log the error
             connection.release()
-            logger.error("Problem getting games from league: ", err);
-            res.status(400).send('Problem getting games from league');
+            logger.error("Problem getting TeamName from Teams: ", err);
+            res.status(400).send('Problem getting TeamName from Teams');
           } else {
             // if there is no error with the query, release the connection instance
             res.send(result);
@@ -911,7 +911,7 @@ module.exports = function routes(app, logger) {
   });
 
 
-  app.get('/games/leagueDESC', (req, res) => {
+  app.get('/games/leagueDESC', async (req, res) => {
     // obtain a connection from our pool of connections
     pool.getConnection(function (err, connection) {
       if (err) {
