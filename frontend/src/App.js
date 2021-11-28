@@ -5,6 +5,7 @@ import { Homepage } from './components/Homepage';
 import Login from './components/Login';
 import LeaguePage from './components/LeaguePage';
 import { Teamview } from './components/TeamView';
+import { GameView } from './components/GameView';
 
 const App = props => {
   return(
@@ -18,7 +19,7 @@ const App = props => {
         <Route path = "/NFL" element = {<LeaguePage league = "NFL"/>} />
         <Route path = "/MLB" element = {<LeaguePage league = "MLB"/>} />
         <Route path = "/TeamView" element = {<Teamview/>}/>
-
+        <Route path = "/GameView/:gameId" element = {<GameView/>}/>
     </Routes>
     </BrowserRouter>
     </div>
