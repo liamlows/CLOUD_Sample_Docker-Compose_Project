@@ -48,10 +48,14 @@ export class SportRepository {
         });
     }
 
-        /*
-        Route to get teamID given the teams name
-‘/teams/teamID?teamName=Team 1’
-GET
-Params: teamName
-*/
+    async getTeamIDFromTeamName(name) {
+        return await new Promise((resolve, reject) => {
+            axios.get(`http://${url}:8000/teams/teamID?teamName=${name}`)
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
 }

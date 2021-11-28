@@ -23,24 +23,36 @@ export const GameView = () => {
     const { gameId } = useParams();
 
     //create state elements
-    const [ gameName1, setGameName1 ] = useState();
-    const [ gameName2, setGameName2 ] = useState();
+    const [ team1Name, setTeam1Name ] = useState();
+    const [ team2Name, setTeam2Name ] = useState();
+    const [ team1ID, setTeam1ID ] = useState();
+    const [ team2ID, setTeam2ID ] = useState();
 
     //set the game info in state using gameId in url
     useEffect(() => { onSearch(); }, []);
 
-    let onSearch = params => {
-        repo.getTeamName1FromGameID(gameId).then(x => setGameName1(x[0]));
-        repo.getTeamName1FromGameID(gameId).then(x => setGameName2(x[0]));
+    let onSearch = () => {
+        repo.getTeamName1FromGameID(gameId).then(x => setTeam1Name(x[0]["TeamName"]));
+        repo.getTeamName2FromGameID(gameId).then(x => onSearch2(x));
+    }
+
+    let onSearch2 = (x) => {
+        console.log("Here"); //for some reason the entire program doesn't work without this line
+        setTeam2Name(x[0]["TeamName"]);
+        repo.getTeamIDFromTeamName(team1Name).then(x => setTeam1ID(x[0]));
+        setTeam1ID(team1ID["TeamID"]);
+        repo.getTeamIDFromTeamName(team2Name).then(x => setTeam2ID(x[0]));
+        setTeam2ID(team2ID["TeamID"]);
     }
 
     //if data is still loading, pause
-    if(!gameName2){
+    if(!team1ID || !team2ID){
         return <p>Data is loading...</p>;
     }
 
     return <>
-    {console.log(gameName1, gameName2)}
+    {console.log(team1Name, team2Name)}
+    {console.log(team1ID, team2ID)}
             <Navbar bg="dark" variant="dark">
                 <Container>
                     <Navbar.Brand>SportsTeamWebsite</Navbar.Brand>
