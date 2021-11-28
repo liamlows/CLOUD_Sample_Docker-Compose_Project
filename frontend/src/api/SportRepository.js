@@ -7,17 +7,17 @@ export class SportRepository {
     };
 
     async getAllGames(league_name) {
-        return await new Promise((resolve,reject)=>{
-        axios.get(`http://${url}:8000/games/leagueDESC`,
-            {params: {league:league_name}}
-          )
-            .then(x => {
-                resolve(x.data);
-            })
-            .catch(x => {
-                alert(x);
-                reject(x);
-            })
+        return await new Promise((resolve, reject) => {
+            axios.get(`http://${url}:8000/games/leagueDESC`,
+                { params: { league: league_name } }
+            )
+                .then(x => {
+                    resolve(x.data);
+                })
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
         });
     }
 
@@ -45,6 +45,21 @@ export class SportRepository {
                     reject(x);
                 })
         });
-        }
+    }
+
+    getPlayersFromTeam(TeamID) {
+        // let config = this.config;
+        // if (params) {
+        //     config.params = params;
+        // }
+        return new Promise((resolve, reject) => {
+            axios.get(`http://${url}:8000/team/allplayers?TeamID=${TeamID}`)
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
 
 }

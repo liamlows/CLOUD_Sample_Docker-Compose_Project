@@ -11,13 +11,13 @@ const App = props => {
     <div className="App">
     <BrowserRouter>
     <Routes>
-        <Route path = "/" element = {<Homepage />}/>
+        {/* <Route path = "/" element = {<Homepage />}/>
         <Route path = "/home" element = {<Homepage />}/>
         <Route path = "/login" element = {<Login />}/>
         <Route path = "/NBA" element = {<LeaguePage league = "NBA" />} />
         <Route path = "/NFL" element = {<LeaguePage league = "NFL"/>} />
-        <Route path = "/MLB" element = {<LeaguePage league = "MLB"/>} />
-        <Route path = "/TeamView" element = {<Teamview/>}/>
+        <Route path = "/MLB" element = {<LeaguePage league = "MLB"/>} /> */}
+        <Route path = "/" element = {<Teamview/>}/>
 
     </Routes>
     </BrowserRouter>
