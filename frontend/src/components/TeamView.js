@@ -61,7 +61,7 @@ export class Teamview extends React.Component {
                 </Navbar>
                 <Navbar variant="white" bg="white" expand="lg">
                     <Container fluid>
-                        <Navbar.Brand >Team Roster for _____</Navbar.Brand>
+                        <Navbar.Brand >Team Roster</Navbar.Brand>
                         <Navbar.Toggle aria-controls="navbar-white-example" />
                         <Navbar.Collapse id="navbar-white-example">
                             <Nav>
