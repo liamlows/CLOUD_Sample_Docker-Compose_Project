@@ -597,7 +597,7 @@ module.exports = function routes(app, logger) {
 //GET a paritcular user, given a userID
 //	/api/users/:userID
 //tested
-app.get('/api/users', function (req, res) {
+app.get('/api/users/:userID', function (req, res) {
   var userID = req.param('userID');
   pool.query("SELECT * FROM users WHERE userID = ?", userID, function (err, result, fields) {
     if (err) throw err;
@@ -625,10 +625,19 @@ app.post('/api/users', async (req, res) => {
 //POST a paritcular user, given username and userPassword - login
 //  /api/user
 //tested
+// app.post('/api/login', function (req, res) {
+//   var username = req.body.username;
+//   var userPassword = req.body.userPassword;
+//   pool.query(`SELECT userID FROM users WHERE username = "${req.body.username}" && userPassword = "${req.body.userPassword}"`, function (err, result, fields) {
+//     if (err) throw err;
+//     res.end(JSON.stringify(result)); 
+//   });
+// });
+
 app.post('/api/login', function (req, res) {
   var username = req.body.username;
   var userPassword = req.body.userPassword;
-  pool.query(`SELECT userID FROM users WHERE username = "${req.body.username}" && userPassword = "${req.body.userPassword}"`, function (err, result, fields) {
+  pool.query(`SELECT userID FROM users WHERE username = ? && userPassword = ?`, [req.body.username, req.body.userPassword], function (err, result, fields) {
     if (err) throw err;
     res.end(JSON.stringify(result)); 
   });
