@@ -4,8 +4,8 @@ import Nav from "react-bootstrap/Nav";
 import Table from "react-bootstrap/Table";
 import { NavDropdown, Form, Button, Modal, Image } from 'react-bootstrap';
 import { SportRepository } from '../api/SportRepository';
-
 import Container from "react-bootstrap/Container"
+import { Ads } from './Ads';
 
 export class Teamview extends React.Component {
     db = new SportRepository();
@@ -148,6 +148,9 @@ export class Teamview extends React.Component {
                 </Table>
 
 
+                {/* ads */}
+
+                <Ads/>
             </>
         )
     }
