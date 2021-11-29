@@ -61,7 +61,7 @@ export class Teamview extends React.Component {
                 </Navbar>
                 <Navbar variant="white" bg="white" expand="lg">
                     <Container fluid>
-                        <Navbar.Brand >Team Roster for _____</Navbar.Brand>
+                        <Navbar.Brand >Team Roster</Navbar.Brand>
                         <Navbar.Toggle aria-controls="navbar-white-example" />
                         <Navbar.Collapse id="navbar-white-example">
                             <Nav>
@@ -78,7 +78,7 @@ export class Teamview extends React.Component {
                         </Navbar.Collapse>
                         <Form>
                             <Form.Group className="mb-3" >
-                                <Form.Control onChange={e => this.setState({ namesearch: e.target.value })}placeholder="Search For Player" />
+                                <Form.Control type = "text" onChange={e => this.setState({ namesearch: e.target.value })}placeholder="Search For Player" />
                             </Form.Group>
                             <Button variant="primary"  onClick={() => { this.searchPlayer(this.state.namesearch) }}>
                                 Search
