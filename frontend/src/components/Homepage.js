@@ -11,8 +11,38 @@ export class Homepage extends React.Component {
 
 
     state = {
-        loggedInUser :undefined
+        loggedInUser: undefined
     }
+
+    // asyncLocalStorage = {
+    //     setItem: function (key, value) {
+    //         return Promise.resolve().then(function () {
+    //             localStorage.setItem(key, value);
+    //         });
+    //     },
+    //     getItem: function (key) {
+    //         return Promise.resolve().then(function () {
+    //             return localStorage.getItem(key);
+    //         });
+    //     }
+    // };
+
+    // componentDidMount() {
+    //     this.asyncLocalStorage.getItem("adminLogin").then(
+    //         x => {
+    //             console.log(x);
+    //             if (typeof x === undefined) {
+    //                 console.log("check::,x");
+    //                 this.setState({ loggedInUser: false });
+    //                 this.asyncLocalStorage.setItem("adminLogin", false);
+    //             }
+    //             else {
+    //                 this.asyncLocalStorage.setItem("adminLogin", x);
+    //                 this.setState({ loggedInUser: x });
+    //             }
+    //         }
+    //     )
+    // }
 
     componentDidMount() {
         var loggedInUser = localStorage.getItem("adminLogin");
@@ -27,6 +57,9 @@ export class Homepage extends React.Component {
             this.setState({ loggedInUser: loggedInUser });
     }
 
+    setLogin = () => {
+        this.setState({ loggedInUser: false });
+    }
     render() {
         return (
             <>
