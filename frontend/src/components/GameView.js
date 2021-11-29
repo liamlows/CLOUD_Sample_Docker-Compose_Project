@@ -4,20 +4,6 @@ import { SportRepository } from '../api/SportRepository';
 import { Navbar, Nav, Table, Form, Button, Container, Row, Col, Modal } from 'react-bootstrap';
 import { Player } from '../models/Player';
 
-/*
-Display MVP results
-- If voting is ongoing, display current MVP
-If it’s the most recent game, MVP voting button
-- Clicking it opens a voting pop-up window
-- Select one player from the list of players, save answer
-Display a list of the players in the game
-- Each name is a link to the individual player page
-- Shows the player’s performance in the game
-- Search bar/dropdown to find a specific player
-Admins can edit values
-Admins can hide certain games if they don’t want them displayed
-*/
-
 export class GameView extends React.Component {
     //props = gameId
     repo = new SportRepository();
@@ -50,9 +36,8 @@ export class GameView extends React.Component {
         this.hideModal = this.hideModal.bind(this);
     }
 
-    //TODO: add time played in game to player table
-    //TODO: add links to player pages
-    //TODO: add mvp functionality
+    //TODO: add links to more info popup for player info
+    //TODO: add mvp functionality (waiting on guidance on how to do a POST route with body params)
 
     componentDidMount(){
         if(this.state.gameID){
