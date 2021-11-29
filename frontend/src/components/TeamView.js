@@ -27,7 +27,7 @@ export class Teamview extends React.Component {
     }
 
     sortPlayersbyName(players) {
-        this.setState(players.sort((a, b) => a.FirstName > b.FirstName ? 1 : -1));
+        this.setState(players.sort((a, b) => a.LastName > b.LastName ? 1 : -1));
     }
 
     sortPlayersbyPosition(players) {
@@ -70,7 +70,7 @@ export class Teamview extends React.Component {
                                     title="Sort Players By"
                                     menuVariant="white"
                                 >
-                                    <NavDropdown.Item onClick={() => { this.sortPlayersbyName(this.state.searchPlayer) }}>First Name</NavDropdown.Item>
+                                    <NavDropdown.Item onClick={() => { this.sortPlayersbyName(this.state.searchPlayer) }}>Last Name</NavDropdown.Item>
                                     <NavDropdown.Item onClick={() => { this.sortPlayersbyPPG(this.state.searchPlayer) }}>Points Per Game</NavDropdown.Item>
                                     <NavDropdown.Item onClick={() => { this.sortPlayersbyPosition(this.state.searchPlayer) }}>Position</NavDropdown.Item>
                                 </NavDropdown>
