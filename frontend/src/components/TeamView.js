@@ -2,7 +2,7 @@ import React, { useState, Component } from 'react';
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import Table from "react-bootstrap/Table";
-import { NavDropdown, Form, Button, Modal } from 'react-bootstrap';
+import { NavDropdown, Form, Button, Modal, Image } from 'react-bootstrap';
 import { SportRepository } from '../api/SportRepository';
 import Container from "react-bootstrap/Container"
 import { Ads } from './Ads';
@@ -22,7 +22,7 @@ export class Teamview extends React.Component {
     }
 
     componentDidMount() {
-        let TeamID = 2;
+        let TeamID = this.props.match.params.teamID;
         if (TeamID) {
             this.db.getPlayersFromTeam(TeamID).then(allplayers => this.setState({ allplayers: allplayers, searchPlayer: allplayers }));
         }
@@ -119,34 +119,28 @@ export class Teamview extends React.Component {
                                     <td>{player.FirstName} {player.LastName}</td>
                                     <td>{player.Position}</td>
                                     <td>{player.PPG}</td>
-                                    <button type="button" onClick={() => { this.showModal() }}>
+                                    <button type="button" onClick={() => { this.showModal();this.searchPlayer(player.FirstName)}}>
                                         Open
                                     </button>
 
-                                    <Modal show={this.state.show} handleClose={this.hideModal}>
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Player Name</th>
-                                                <th>Position</th>
-                                                <th>Points Per Game</th>
-                                                <th>Player Info</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {
-                                               
-                                                    <tr>
-                                                        <td>{player.PlayerNumber}</td>
-                                                        <td>{player.FirstName} {player.LastName}</td>
-                                                        <td>{player.Position}</td>
-                                                        <td>{player.PPG}</td>
-                                                    </tr>
-                                            }
-                                        </tbody>
-                                        <button type="button" onClick={() => { this.hideModal() }}>
-                                            close
-                                        </button>
+                                    <Modal show={this.state.show} handleClose={this.hideModal} aria-labelledby="contained-modal-title-vcenter"
+                                        centered>
+
+                                        <Modal.Header closeButton onClick={() => { this.hideModal() ;this.searchPlayer("")}}>
+                                            <Modal.Title>{player.FirstName} {player.LastName}</Modal.Title>
+                                        </Modal.Header>
+                                        <Modal.Body>
+                                            <p>Player Number: {player.PlayerNumber}</p>
+                                            <p>Position: {player.Position}</p>
+                                            <p>PPG: {player.PPG}</p>
+                                            <p>TimePlayed: {player.TimePlayed}</p>
+
+                                        </Modal.Body>
+                                        <Modal.Footer>
+                                            <Button variant="secondary" onClick={() => { this.hideModal() ;this.searchPlayer("")}}>
+                                                Close
+                                            </Button>
+                                        </Modal.Footer>
                                     </Modal>
                                 </tr>)
                         }

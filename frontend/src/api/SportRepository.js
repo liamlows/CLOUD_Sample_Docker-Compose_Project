@@ -110,4 +110,26 @@ export class SportRepository {
                 })
         });
     }
+
+    getGameMVP(gameID) {
+        return new Promise((resolve, reject) => {
+            axios.get(`http://${url}:8000/game/mvp?gameID=${gameID}`)
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
+
+    getMostRecentBool(league, gameID) {
+        return new Promise((resolve, reject) => {
+            axios.get(`http://${url}:8000/game/mostRecent?league=${league}&${gameID}`)
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
 }
