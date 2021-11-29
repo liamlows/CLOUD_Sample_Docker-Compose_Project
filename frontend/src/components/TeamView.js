@@ -17,7 +17,7 @@ export class Teamview extends React.Component {
     }
 
     componentDidMount() {
-        let TeamID = 2;
+        let TeamID = this.props.match.params.teamID;
         if (TeamID) {
             this.db.getPlayersFromTeam(TeamID).then(allplayers => this.setState({ allplayers:allplayers, searchPlayer:allplayers }));
         }

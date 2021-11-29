@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Route, Link, useParams } from 'react-router-dom';
+import React from 'react';
+import { Route, Link } from 'react-router-dom';
 import { SportRepository } from '../api/SportRepository';
 import { Navbar, Nav, Table, Form, Button, Container, Row, Col } from 'react-bootstrap';
 import { Player } from '../models/Player';
@@ -46,7 +46,6 @@ export class GameView extends React.Component {
     componentDidMount(){
         console.log("componentDidMount method");
         console.log("gameID: ", this.gameID);
-        //make this work for dynamically setting url game ID
 
         if(this.gameID){
             this.repo.getTeamName1FromGameID(this.gameID).then(x => 
