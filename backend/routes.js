@@ -608,7 +608,7 @@ app.get('/api/users/:userID', function (req, res) {
 //POST a new user - registering 
 //  /api/users
 //tested
-app.post('/api/users/', async (req, res) => {
+app.post('/api/users', async (req, res) => {
   var userType = req.param("userType");
   var username = req.param("username");
   var userPassword = req.param("userPassword");
@@ -684,7 +684,7 @@ app.get('/api/getOrders', function (req, res) {
 });
 
 //GET a particular foodDonation, given foodDonationID
-app.get('/foodDonations/:foodDonationID', function (req, res) {
+app.get('/api/foodDonations/:foodDonationID', function (req, res) {
   var foodDonationID = req.param('foodDonationID');
   pool.query("SELECT * FROM foodDonations WHERE userfoodDonationIDID = ?", userfoodDonationIDID, function (err, result, fields) {
     if (err) throw err;
@@ -725,7 +725,7 @@ app.post('/api/foodDonations', async (req, res) => {
 
 //DELETE a particular foodDonation given foodDonationID
 //  /api/foodDonation
-app.delete('/api/foodDonation', async (req, res) => {
+app.delete('/api/foodDonation/:foodDonationID', async (req, res) => {
   var foodDonationID = req.param("foodDonationID");
   pool.query("DELETE FROM foodDonations WHERE foodDonationID = ?", foodDonationID, function (err, result, fields) {
     if (err) throw err;
