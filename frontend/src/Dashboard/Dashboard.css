@@ -1,0 +1,52 @@
+#dashboard {
+    background-color: #192428;
+}
+
+#dashHead {
+    color: #39ace7;
+}
+
+#dashBody {
+    display: flex;
+    flex-direction: column;
+}
+
+#dashSegment {
+    display: flex;
+    flex-direction: row;
+    margin: auto;
+    margin-bottom: 1%;
+    width: 70%;
+}
+
+#dashSegmentText {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2.5%;
+    padding-top: 0%;
+    width: 75%;
+    border: solid #0784b5 1px;
+    border-radius: 10px;
+    color: lightgrey;
+    background-color: #2d383c;
+    margin: 1%;
+}
+
+#dashSegmentHead {
+    text-align: center;
+    color: white;
+}
+
+#dashSegmentImg {
+    display: block;
+    object-fit: cover;
+    max-width: 25%;
+    max-height: auto;
+    width: auto;
+    height: auto;
+    float: right;
+    border-radius: 10px;
+    margin: 1%;
+}

@@ -7,16 +7,17 @@ import Trainers from './Trainers/Trainers'
 import Dashboard from './Dashboard/Dashboard';
 function App() {
     return (
-        <Router>
-            <Navbar />
-            <Switch>
-                <Route path='/' exact component={DefaultApp} />
-                <Route path='/Trainers' component={Trainers} />
-                <Route path='/DefaultApp' component={DefaultApp} />
-                <Route path='/Dashboard' component={Dashboard} />
-            </Switch>
-        </Router>
-
+        <div>
+            <Router>
+                <Navbar />
+                <Switch>
+                    <Route path='/' exact component={DefaultApp} />
+                    <Route path='/Trainers' component={Trainers} />
+                    <Route path='/DefaultApp' component={DefaultApp} />
+                    <Route path='/Dashboard' component={Dashboard} />
+                </Switch>
+            </Router>
+        </div>
     )
 }
 
