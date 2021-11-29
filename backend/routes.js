@@ -696,6 +696,7 @@ app.get('/api/foodDonations', function (req, res) {
 
 //GET a particular foodDonation, given foodDonationID
 //  /api/foodDonation
+//tested
 app.get('/api/foodDonation', function (req, res) {
   var foodDonationID = req.param('foodDonationID');
   pool.query("SELECT * FROM foodDonations WHERE foodDonationID = ?", foodDonationID, function (err, result, fields) {
@@ -708,7 +709,7 @@ app.get('/api/foodDonation', function (req, res) {
 //  /api/user
 app.get('/api/user', function (req, res) {
   var RDH_ID = req.param('RDH_ID');
-  pool.query("SELECT u.userID, u.userType, u.username, u.userPassword, u.imgURL, u.phoneNumber, u.email, u.validated FROM users u INNER JOIN RDH r ON u.userID = r.userID WHERE RDH_ID = ?;", RDH_ID, function (err, result, fields) {
+  pool.query("SELECT u.userID, u.userType, u.username, u.userPassword, u.imgURL, u.phoneNumber, u.email, u.validated FROM users u INNER JOIN RDH r ON u.userID = r.userID WHERE RDH_ID = ?", RDH_ID, function (err, result, fields) {
     if (err) throw err;
     res.end(JSON.stringify(result)); 
   });
@@ -716,6 +717,7 @@ app.get('/api/user', function (req, res) {
 
 //POST a new donation 
 //  /api/foodDonation
+//tested
 app.post('/api/foodDonation', async (req, res) => {
   var RDH_ID = req.param("RDH_ID");
   var soupKitchenID = req.param("soupKitchenID");
@@ -730,12 +732,13 @@ app.post('/api/foodDonation', async (req, res) => {
   pool.query("INSERT INTO foodDonations (RDH_ID, soupKitchenID, foodName, foodCategory, timeMade, expirationDate, photoURL, preservationType, donationDescription, quantity) VALUES (?,?,?,?,?,?,?,?,?,?)", 
   [RDH_ID, soupKitchenID, foodName, foodCategory, timeMade, expirationDate, photoURL, preservationType, donationDescription, quantity],function (err, result, fields) {
     if (err) throw err;
-    res.end(JSON.stringify(result)); // Result in JSON format
+    res.end(JSON.stringify(result)); 
   });
 });
 
 //DELETE a particular foodDonation given foodDonationID
 //  /api/foodDonation
+//tested
 app.delete('/api/foodDonation', async (req, res) => {
   var foodDonationID = req.param("foodDonationID");
   pool.query("DELETE FROM foodDonations WHERE foodDonationID = ?", foodDonationID, function (err, result, fields) {
