@@ -7,7 +7,7 @@ export class AccountsRepository {
 
     getUsers() {
         return new Promise((resolve, reject) => {
-            axios.get(hostname + '/users')
+            axios.get(hostname + '/api/users')
                 .then(x => resolve(x.data))
                 .catch(x => {
                     alert(x);
@@ -19,7 +19,7 @@ export class AccountsRepository {
     
     getUser(userID) {
         return new Promise((resolve, reject) => {
-            axios.get(hostname + '/users/' + userID)
+            axios.get(hostname + '/api/users/' + userID)
                 .then(x => resolve(x.data))
                 .catch(x => {
                     alert(x);
@@ -30,7 +30,7 @@ export class AccountsRepository {
 
     register(account) {
         return new Promise((resolve, reject) => {
-            axios.post(hostname + '/users', account )
+            axios.post(hostname + '/api/users', account )
                 .then(x => resolve(x.data))
                 .catch(x => {
                     alert(x);
@@ -38,13 +38,10 @@ export class AccountsRepository {
                 })
         });
     }
-
-    // look at SO tab to know how to check if data exists in axios response.
-    //
 
     login(username, userPassword) {
         return new Promise((resolve, reject) => {
-            axios.post(hostname + '/login',  username, userPassword )
+            axios.post(hostname + '/api/login',  username, userPassword )
                 .then(x => resolve(x.data))
                 .catch(x => {
                     alert(x);
@@ -53,7 +50,16 @@ export class AccountsRepository {
         });
     }
 
-    // updateUser(id, profile) {}
+    updateUser(userID, account) {
+        return new Promise((resolve, reject) => {
+            axios.put(hostname + '/api/users/' + userID, { ...account })
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
 
 
 }
