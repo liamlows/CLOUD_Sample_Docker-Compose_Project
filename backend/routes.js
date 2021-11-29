@@ -596,6 +596,7 @@ module.exports = function routes(app, logger) {
 
 //GET a paritcular user, given a userID
 //	/api/user
+//tested
 app.get('/api/user', function (req, res) {
   var userID = req.param('userID');
   pool.query("SELECT * FROM users WHERE userID = ?", userID, function (err, result, fields) {
@@ -605,7 +606,8 @@ app.get('/api/user', function (req, res) {
 });
 
 //POST a new user - registering 
-//  /api/users
+//  /api/user
+//tested
 app.post('/api/user', async (req, res) => {
   var userType = req.param("userType");
   var username = req.param("username");
@@ -632,6 +634,7 @@ app.post('/api/user', async (req, res) => {
 //   });
 // });
 
+//tested
 app.post('/api/login', function (req, res) {
   var username = req.body.username;
   var userPassword = req.body.userPassword;
@@ -682,7 +685,7 @@ app.put('/api/user/updateValidated', async (req, res) => {
 });
 
 //GET foodDonationID, soupKitchen, driverID, foodName, and timeMade for all foodDonations
-//  /api/getOrders
+//  /api/foodDonations
 //tested
 app.get('/api/foodDonations', function (req, res) {
   pool.query("SELECT f.foodDonationID, f.soupKitchenID, d.driverID, f.foodName, f.timeMade FROM foodDonations f JOIN drivers d ON f.foodDonationID = d.foodDonationID", function (err, result, fields) {
@@ -692,7 +695,7 @@ app.get('/api/foodDonations', function (req, res) {
 });
 
 //GET a particular foodDonation, given foodDonationID
-//  /api/foodDonations/:foodDonationID
+//  /api/foodDonation
 app.get('/api/foodDonation', function (req, res) {
   var foodDonationID = req.param('foodDonationID');
   pool.query("SELECT * FROM foodDonations WHERE foodDonationID = ?", foodDonationID, function (err, result, fields) {
@@ -702,7 +705,7 @@ app.get('/api/foodDonation', function (req, res) {
 });
 
 //GET a particular user, given RDH_ID
-//  /api/users/:RDH_ID
+//  /api/user
 app.get('/api/user', function (req, res) {
   var RDH_ID = req.param('RDH_ID');
   pool.query("SELECT u.userID, u.userType, u.username, u.userPassword, u.imgURL, u.phoneNumber, u.email, u.validated FROM users u INNER JOIN RDH r ON u.userID = r.userID WHERE RDH_ID = ?;", RDH_ID, function (err, result, fields) {
@@ -712,7 +715,7 @@ app.get('/api/user', function (req, res) {
 });
 
 //POST a new donation 
-//  /api/foodDonations
+//  /api/foodDonation
 app.post('/api/foodDonation', async (req, res) => {
   var RDH_ID = req.param("RDH_ID");
   var soupKitchenID = req.param("soupKitchenID");
