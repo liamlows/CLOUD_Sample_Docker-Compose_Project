@@ -547,6 +547,36 @@ module.exports = function routes(app, logger) {
     });
   });
 
+    //get name of players from team by name
+    app.get('/team/playersByName', async (req, res) => {
+      // obtain a connection from our pool of connections
+      pool.getConnection(function (err, connection) {
+        if (err) {
+          console.log(connection);
+          // if there is an issue obtaining a connection, release the connection instance and log the error
+          logger.error('Problem obtaining MySQL connection', err)
+          res.status(400).send('Problem obtaining MySQL connection');
+        } else {
+          var teamID = req.param('teamID');
+          connection.query("select FirstName,LastName,Position from Players join Teams T on T.TeamID = Players.TeamID where T.TeamID = ? order by LastName", teamID, function (err, result, fields) {
+            if (err) {
+              // if there is an error with the query, release the connection instance and log the error
+              connection.release()
+              logger.error("Problem getting games from league: ", err);
+              res.status(400).send('Problem getting games from league');
+            } else {
+              // if there is no error with the query, release the connection instance
+              res.send(result);
+              connection.release()
+  
+            }
+          });
+  
+        }
+      });
+    });
+  
+
   //get players peformance from specific game
   app.get('/player/stats', async (req, res) => {
     // obtain a connection from our pool of connections
