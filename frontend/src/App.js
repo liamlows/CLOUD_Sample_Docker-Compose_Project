@@ -1,6 +1,6 @@
 import React from 'react'
 import './App.css'
-import { BrowserRouter, Route, Routes} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import { Homepage } from './components/Homepage';
 import Login from './components/Login';
 import LeaguePage from './components/LeaguePage';
@@ -10,23 +10,22 @@ import { GameView } from './components/GameView';
 const App = props => {
   return(
     <div className="App">
-    <BrowserRouter>
-    <Routes>
-        <Route path = "/" element = {<Homepage />}/>
-        <Route path = "/home" element = {<Homepage />}/>
-        <Route path = "/login" element = {<Login />}/>
-        <Route path = "/NBA" element = {<LeaguePage league = "NBA" />} />
-        <Route path = "/NFL" element = {<LeaguePage league = "NFL"/>} />
-        <Route path = "/MLB" element = {<LeaguePage league = "MLB"/>} />
+    <Router>
+    <Switch>
+        <Route exact path = "/" ><Homepage /></Route>
+        <Route path = "/home" ><Homepage /></Route>
+        <Route path = "/login"><Login /></Route>
+        <Route path = "/NBA" ><LeaguePage league = "NBA" /></Route>
+        <Route path = "/NFL" ><LeaguePage league = "NFL"/></Route>
+        <Route path = "/MLB" ><LeaguePage league = "MLB"/></Route>
 
         {/* <Route path = "/" element = {<Teamview/>}/> */}
 
 
-        <Route path = "/TeamView" element = {<Teamview/>}/>
-        <Route path = "/GameView" element = {<GameView gameID = "5"/>}/>
-
-    </Routes>
-    </BrowserRouter>
+        <Route path = "/TeamView"> <Teamview/></Route>
+        <Route path = "/GameView"> <GameView gameID = "5"/></Route>
+    </Switch>
+    </Router>
     </div>
   )
 }
