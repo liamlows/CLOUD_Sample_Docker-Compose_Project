@@ -637,7 +637,7 @@ app.post('/api/users', async (req, res) => {
 app.post('/api/login', function (req, res) {
   var username = req.body.username;
   var userPassword = req.body.userPassword;
-  pool.query(`SELECT userID FROM users WHERE username = ? && userPassword = ?`, [req.body.username, req.body.userPassword], function (err, result, fields) {
+  pool.query(`SELECT userID FROM users WHERE username = ? && userPassword = ?`, [username, userPassword], function (err, result, fields) {
     if (err) throw err;
     res.end(JSON.stringify(result)); 
   });
@@ -652,7 +652,7 @@ app.post('/api/login', function (req, res) {
 //   });
 // });
 
-//PUT to update users profile informationn
+//PUT to update users profile information - do we need to be able to update only one field?
 // /api/user/updateProfileInformation
 //tested
 app.put('/api/users/:userID', async (req, res) => {
@@ -683,8 +683,9 @@ app.put('/api/user/updateValidated', async (req, res) => {
   });
 });
 
-//GET foodDonationID, soupKitchen, driverID, foodName, and timeMade for all orders
+//GET foodDonationID, soupKitchen, driverID, foodName, and timeMade for all foodDonations
 //  /api/getOrders
+//tested
 app.get('/api/getOrders', function (req, res) {
   pool.query("SELECT f.foodDonationID, f.soupKitchenID, d.driverID, f.foodName, f.timeMade FROM foodDonations f JOIN drivers d ON f.foodDonationID = d.foodDonationID", function (err, result, fields) {
     if (err) throw err;
@@ -693,18 +694,18 @@ app.get('/api/getOrders', function (req, res) {
 });
 
 //GET a particular foodDonation, given foodDonationID
-app.get('/api/foodDonations/:foodDonationID', function (req, res) {
+//  /api/foodDonations/:foodDonationID
+app.get('/api/foodDonations', function (req, res) {
   var foodDonationID = req.param('foodDonationID');
-  pool.query("SELECT * FROM foodDonations WHERE userfoodDonationIDID = ?", userfoodDonationIDID, function (err, result, fields) {
+  pool.query("SELECT * FROM foodDonations WHERE foodDonationID = ?", foodDonationID, function (err, result, fields) {
     if (err) throw err;
     res.end(JSON.stringify(result)); 
   });
 });
 
-
 //GET a particular user, given RDH_ID
 //  /api/users/:RDH_ID
-app.get('/api/users/:RDH_ID', function (req, res) {
+app.get('/api/users', function (req, res) {
   var RDH_ID = req.param('RDH_ID');
   pool.query("SELECT u.userID, u.userType, u.username, u.userPassword, u.imgURL, u.phoneNumber, u.email, u.validated FROM users u INNER JOIN RDH r ON u.userID = r.userID WHERE RDH_ID = ?;", RDH_ID, function (err, result, fields) {
     if (err) throw err;
@@ -734,7 +735,7 @@ app.post('/api/foodDonations', async (req, res) => {
 
 //DELETE a particular foodDonation given foodDonationID
 //  /api/foodDonation
-app.delete('/api/foodDonation/:foodDonationID', async (req, res) => {
+app.delete('/api/foodDonation', async (req, res) => {
   var foodDonationID = req.param("foodDonationID");
   pool.query("DELETE FROM foodDonations WHERE foodDonationID = ?", foodDonationID, function (err, result, fields) {
     if (err) throw err;
