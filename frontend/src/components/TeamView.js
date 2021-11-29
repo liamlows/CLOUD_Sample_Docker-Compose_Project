@@ -9,6 +9,7 @@ import { Ads } from './Ads';
 
 export class Teamview extends React.Component {
     db = new SportRepository();
+    loggedInUser = localStorage.getItem("adminLogin");
     constructor() {
         super();
         this.state = {
@@ -69,7 +70,13 @@ export class Teamview extends React.Component {
                             <Nav.Link href="/NFL">NFL</Nav.Link>
                             <Nav.Link href="/MLB">MLB</Nav.Link>
                         </Nav>
-                        <Nav.Link href="/login" className="mr-auto">Login</Nav.Link>
+                        {this.loggedInUser ? (
+                        <Nav.Link href="/logout" className="mr-auto">LogOut</Nav.Link>
+
+                    )
+                        : (<Nav.Link href="/login" className="mr-auto">Login</Nav.Link>
+                        )
+                    }
                     </Container>
                 </Navbar>
                 <Navbar variant="white" bg="white" expand="lg">

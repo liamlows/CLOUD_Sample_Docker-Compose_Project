@@ -9,6 +9,24 @@ import Container from "react-bootstrap/Container"
 export class Homepage extends React.Component {
     testValue = 4;
 
+
+    state = {
+        loggedInUser :undefined
+    }
+
+    componentDidMount() {
+        var loggedInUser = localStorage.getItem("adminLogin");
+        console.log("didmount", loggedInUser);
+        if (typeof loggedInUser === undefined) {
+            localStorage.setItem('adminLogin', false);
+            console.log("Set login to false");
+            loggedInUser = false;
+            this.setState({ loggedInUser: false });
+        }
+        else
+            this.setState({ loggedInUser: loggedInUser });
+    }
+
     render() {
         return (
             <>
@@ -20,14 +38,24 @@ export class Homepage extends React.Component {
                             <Nav.Link href="/NBA">NBA</Nav.Link>
                             <Nav.Link href="/NFL">NFL</Nav.Link>
                             <Nav.Link href="/MLB">MLB</Nav.Link>
-                            <Nav.Link href={ `/TeamView/${this.testValue}` }>
+                            <Nav.Link href={`/TeamView/${this.testValue}`}>
                                 TeamView
                             </Nav.Link>
-                            <Nav.Link href={ `/GameView/${this.testValue}` }>
+                            <Nav.Link href={`/GameView/${this.testValue}`}>
                                 GameView
                             </Nav.Link>
                         </Nav>
-                        <Nav.Link href="/login" className="mr-auto">Login</Nav.Link>
+                        {console.log("login", this.state.loggedInUser)}
+                        {this.state.loggedInUser
+                            ? (<Nav.Link href="/logout" className="mr-auto">LogOut {this.state.loggedInUser}</Nav.Link>)
+                            : (<Nav.Link href="/login" className="mr-auto">Login </Nav.Link>)
+                        }
+
+                        {this.state.loggedInUser && (
+                            <Nav.Link href="/logout" className="mr-auto">LogOut {this.state.loggedInUser}</Nav.Link>
+                        )}
+
+
                     </Container>
                 </Navbar>
 

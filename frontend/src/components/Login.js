@@ -17,6 +17,24 @@ export default function Login() {
 
   function handleSubmit(event) {
     event.preventDefault();
+    console.log('You clicked submit.');
+
+    //window wont work
+    window.adminLogin = true;
+    console.log(window.adminLogin);
+
+
+    // const user = { username, password };
+    // // send the username and password to the server
+    // const response = await axios.post(
+    //   "http://blogservice.herokuapp.com/api/login",
+    //   user
+    // );
+    // // set the state of the user
+    // setUser(response.data)
+    // // store the user in localStorage
+    localStorage.setItem('adminLogin', true)
+    // console.log(response.data)
   }
 
   return (
