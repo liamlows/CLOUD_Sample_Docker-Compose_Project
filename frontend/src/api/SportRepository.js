@@ -149,7 +149,7 @@ export class SportRepository {
 
     getMostRecentBool(league, gameID) {
         return new Promise((resolve, reject) => {
-            axios.get(`http://${url}:8000/game/mostRecent?league=${league}&${gameID}`)
+            axios.get(`http://${url}:8000/game/mostRecent?league=${league}&$gameID=${gameID}`)
                 .then(x => resolve(x.data))
                 .catch(x => {
                     alert(x);
@@ -158,6 +158,31 @@ export class SportRepository {
         });
     }
 
-    
+    getTeamScoreFromGame(gameID, teamID) {
+        return new Promise((resolve, reject) => {
+            axios.get(`http://${url}:8000/game/teamScore?gameID=${gameID}&teamID=${teamID}`)
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
 
+    addMVPVote(gameID) {
+        return new Promise((resolve, reject) => {
+            axios.post(`http://${url}:8000/game/mvp`)
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
+/*
+Post a vote for a specific player as mvp in a specific game
+‘/game/mvp’
+POST
+Body params: gameID, playerID
+*/
 }
