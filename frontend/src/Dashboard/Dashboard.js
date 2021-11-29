@@ -36,7 +36,7 @@ const Dashboard = () => {
                         <h3 id="dashSegmentHead">
                             Join us as a trainer yourself!
                         </h3>
-                        Make a trainer account and personalize it so prospective clients 
+                        Make a trainer account and personalize it so prospective clients can find you easier
                     </div>
                     <img id="dashSegmentImg" src={smiling}></img>
                 </div>
