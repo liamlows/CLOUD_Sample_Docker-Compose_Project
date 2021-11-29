@@ -80,18 +80,18 @@ export class GameView extends React.Component {
                                                                         this.setState({ winnerName: x[0]["TeamName"] }, () => {
                                                                             console.log("winnerName: ", this.state.winnerName);
 
-                                                                            this.repo.getGameMVP(this.gameID).then(x => {
-                                                                                this.setState({ mvpPlayer: new Player(x[0]["PlayerID"], x[0]["FirstName"], x[0]["LastName"]) }, () => {
-                                                                                    console.log("mvpPlayer: ", this.state.mvpPlayer);
-                                                                                    /*
-                                                                                    this.repo.getMostRecentBool(this.gameID).then(x => {
-                                                                                        this.setState({ isMostRecent: x}, () => {
-                                                                                            console.log("isMostRecentBool: ", this.state.isMostRecentBool);
-                                                                                        });
-                                                                                    });
-                                                                                    */
-                                                                                });
-                                                                            });
+                                                                            // this.repo.getGameMVP(this.gameID).then(x => {
+                                                                            //     this.setState({ mvpPlayer: new Player(x[0]["PlayerID"], x[0]["FirstName"], x[0]["LastName"]) }, () => {
+                                                                            //         console.log("mvpPlayer: ", this.state.mvpPlayer);
+                                                                            //         /*
+                                                                            //         this.repo.getMostRecentBool(this.gameID).then(x => {
+                                                                            //             this.setState({ isMostRecent: x}, () => {
+                                                                            //                 console.log("isMostRecentBool: ", this.state.isMostRecentBool);
+                                                                            //             });
+                                                                            //         });
+                                                                            //         */
+                                                                            //     });
+                                                                            // });
                                                                         });
                                                                     });
                                                                 });
