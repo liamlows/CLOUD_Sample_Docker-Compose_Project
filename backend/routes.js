@@ -312,8 +312,8 @@ module.exports = function routes(app, logger) {
         logger.error('Problem obtaining MySQL connection', err)
         res.status(400).send('Problem obtaining MySQL connection');
       } else {
-        var firstName = req.body.firstName;
-        var lastName = req.body.lastName;
+        var firstName = req.param('firstName');
+        var lastName = req.param('lastName');
         connection.query("select FirstName,LastName,GameID from Players P join Teams T on P.TeamID = T.TeamID join Games G on T.TeamID = G.Team1ID or T.TeamID=G.Team2ID where P.FirstName=? and P.LastName=?", [firstName, lastName], function (err, result, fields) {
           if (err) {
             // if there is an error with the query, release the connection instance and log the error
@@ -1343,6 +1343,35 @@ app.get('/player', (req, res) => {
           connection.release()
           logger.error("Problem getting games from league: ", err);
           res.status(400).send('Problem getting games from league');
+        } else {
+          // if there is no error with the query, release the connection instance
+          res.send(result);
+          connection.release()
+
+        }
+      });
+    }
+  });
+});
+
+//gets list of games a player has played in, just specify first and last name, returns the players name, and the game ids
+app.get('/player/gamesCount', async (req, res) => {
+  // obtain a connection from our pool of connections
+  pool.getConnection(function (err, connection) {
+    if (err) {
+      console.log(connection);
+      // if there is an issue obtaining a connection, release the connection instance and log the error
+      logger.error('Problem obtaining MySQL connection', err)
+      res.status(400).send('Problem obtaining MySQL connection');
+    } else {
+      var firstName = req.param('firstName');
+      var lastName = req.param('lastName');
+      connection.query("select count(*) from Players P join Teams T on P.TeamID = T.TeamID join Games G on T.TeamID = G.Team1ID or T.TeamID=G.Team2ID where P.FirstName=? and P.LastName=?", [firstName, lastName], function (err, result, fields) {
+        if (err) {
+          // if there is an error with the query, release the connection instance and log the error
+          connection.release()
+          logger.error("Problem getting ppg: ", err);
+          res.status(400).send('Problem getting ppg');
         } else {
           // if there is no error with the query, release the connection instance
           res.send(result);
