@@ -1482,9 +1482,9 @@ app.put('/player/name', async (req, res) => {
       logger.error('Problem obtaining MySQL connection', err)
       res.status(400).send('Problem obtaining MySQL connection');
     } else {
-      var firstName = req.param('firstName');
-      var lastName = req.param('lastName');
-      var playerID = req.param('playerID');
+      var firstName = req.body.firstName;
+      var lastName = req.body.lastName;
+      var playerID = req.body.playerID;
       connection.query("update Players set FirstName=?,LastName=? where PlayerID=?", [firstName, lastName, playerID], function (err, result, fields) {
         if (err) {
           // if there is an error with the query, release the connection instance and log the error
