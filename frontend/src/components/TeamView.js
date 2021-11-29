@@ -150,7 +150,7 @@ export class Teamview extends React.Component {
 
                 {/* ads */}
 
-                <Ads/>
+                <Ads teamID = {this.props.match.params.teamID}/>
             </>
         )
     }
