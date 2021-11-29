@@ -574,6 +574,14 @@ app.put('/user/updateValidated', async (req, res) => {
   });
 });
 
+//GET foodDonationID, soupKitchen, driverID, foodName, and timeMade for all orders
+//  /api/getOrders
+app.get('/getOrders', function (req, res) {
+  pool.query("SELECT f.foodDonationID, f.soupKitchenID, d.driverID, f.foodName, f.timeMade FROM foodDonations f JOIN drivers d ON f.foodDonationID = d.foodDonationID", function (err, result, fields) {
+    if (err) throw err;
+    res.end(JSON.stringify(result)); 
+  });
+});
 
   //BLAKES'S ROUTES
 }
