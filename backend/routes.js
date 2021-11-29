@@ -538,6 +538,45 @@ module.exports = function routes(app, logger) {
     });
   });
 
+    //PUT a new userID for a soup kitchen
+  // /api/delivery/updateUserID
+  app.put('/api/soupkitchen/updateUserID', async (req, res) => {
+    var soupKitchenID = req.param("soupKitchenID");
+    var userID = req.param("userID");
+
+    pool.query("UPDATE soupKitchens SET userID = ? WHERE soupKitchenID = ?", 
+    [userID, soupKitchenID],function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
+
+      //PUT a new soupKitchenName for a soup kitchen
+  // /api/delivery/updateSoupKitchenName
+  app.put('/api/soupkitchen/updateSoupKitchenName', async (req, res) => {
+    var soupKitchenID = req.param("soupKitchenID");
+    var soupKitchenName = req.param("soupKitchenName");
+
+    pool.query("UPDATE soupKitchens SET soupKitchenName = ? WHERE soupKitchenID = ?", 
+    [soupKitchenName, soupKitchenID],function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
+
+  //PUT a new address for a soup kitchen
+  // /api/delivery/updateAddress
+  app.put('/api/soupkitchen/updateAddress', async (req, res) => {
+    var soupKitchenID = req.param("soupKitchenID");
+    var address = req.param("address");
+
+    pool.query("UPDATE soupKitchens SET address = ? WHERE soupKitchenID = ?", 
+    [address, soupKitchenID],function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
+
     //DELETE a particular delivery
   //  /api/soupkitchen
   app.delete('/api/soupkitchen', async (req, res) => {
