@@ -1587,5 +1587,47 @@ app.get('/game/date', (req, res) => {
   });
 });
 
+app.post('/game/update', (req, res) => {
+  // obtain a connection from our pool of connections
+  pool.getConnection(function (err, connection) {
+    if (err) {
+      console.log(connection);
+      // if there is an issue obtaining a connection, release the connection instance and log the error
+      logger.error('Problem obtaining MySQL connection', err)
+      res.status(400).send('Problem obtaining MySQL connection');
+    } else {
+      var team1ID=req.body.team1ID;
+      var team2ID=req.body.team2ID;
+      var team1Score=req.body.team1Score;
+      var team2Score=req.body.team2Score;
+      var winnerID=req.body.winnerID;
+      var date=req.body.date;
+      connection.query("insert into Games(Team1ID, Team2ID, Team1Score, Team2Score, WinnerID, Date) VALUES(?,?,?,?,?,?)",[team1ID,team2ID,team1Score,team2Score,winnerID,date], function (err, result, fields) {
+        if (err) throw err;
+        else{
+          res.send(result);
+        }
+      });
+      //update team1ID wins
+      connection.query("update Teams set Wins=(select count(WinnerID) from Games where WinnerID=?) where TeamID=?",[team1ID,team1ID], function (err, result, fields) {
+        if (err) throw err;
+      });
+      //update team1ID losses
+      connection.query("update Teams set Losses = (select count(GameID) from Games where WinnerID!=? and (Team1ID=? or Team2ID=?)) where TeamID=?",[team1ID,team1ID,team1ID,team1ID], function (err, result, fields) {
+        if (err) throw err;
+      });
+      //update team2ID wins
+      connection.query("update Teams set Wins=(select count(WinnerID) from Games where WinnerID=?) where TeamID=?",[team2ID,team2ID], function (err, result, fields) {
+        if (err) throw err;
+      });
+      //update team2ID losses
+      connection.query("update Teams set Losses = (select count(GameID) from Games where WinnerID!=? and (Team1ID=? or Team2ID=?)) where TeamID=?",[team2ID,team2ID,team2ID,team2ID], function (err, result, fields) {
+        if (err) throw err;
+      });
+      connection.release();
+    }
+  });
+});
+
 }
 
