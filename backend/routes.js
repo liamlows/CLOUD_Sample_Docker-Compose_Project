@@ -622,18 +622,6 @@ app.post('/api/user', async (req, res) => {
   });
 });
 
-//POST a paritcular user, given username and userPassword - login
-//  /api/user
-//tested
-// app.post('/api/login', function (req, res) {
-//   var username = req.body.username;
-//   var userPassword = req.body.userPassword;
-//   pool.query(`SELECT userID FROM users WHERE username = "${req.body.username}" && userPassword = "${req.body.userPassword}"`, function (err, result, fields) {
-//     if (err) throw err;
-//     res.end(JSON.stringify(result)); 
-//   });
-// });
-
 //tested
 app.post('/api/login', function (req, res) {
   var username = req.body.username;
@@ -643,15 +631,6 @@ app.post('/api/login', function (req, res) {
     res.end(JSON.stringify(result)); 
   });
 });
-
-// app.get('/login', function (req, res) {
-//   var username = req.param('username');
-//   var userPassword = req.param('userPassword');
-//   pool.query("SELECT * FROM users WHERE username = ? && userPassword = ?", [username, userPassword], function (err, result, fields) {
-//     if (err) throw err;
-//     res.end(JSON.stringify(result)); 
-//   });
-// });
 
 //PUT to update users profile information given userID
 // /api/user
