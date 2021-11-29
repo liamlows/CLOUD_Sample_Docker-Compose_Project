@@ -597,7 +597,7 @@ module.exports = function routes(app, logger) {
 //GET a paritcular user, given a userID
 //	/api/users/:userID
 //tested
-app.get('/api/users/:userID', function (req, res) {
+app.get('/api/users', function (req, res) {
   var userID = req.param('userID');
   pool.query("SELECT * FROM users WHERE userID = ?", userID, function (err, result, fields) {
     if (err) throw err;
