@@ -626,7 +626,7 @@ app.post('/api/user', async (req, res) => {
 app.post('/api/login', function (req, res) {
   var username = req.body.username;
   var userPassword = req.body.userPassword;
-  pool.query(`SELECT userID FROM users WHERE username = ? && userPassword = ?`, [username, userPassword], function (err, result, fields) {
+  pool.query(`SELECT userID, userType FROM users WHERE username = ? && userPassword = ?`, [username, userPassword], function (err, result, fields) {
     if (err) throw err;
     res.end(JSON.stringify(result)); 
   });

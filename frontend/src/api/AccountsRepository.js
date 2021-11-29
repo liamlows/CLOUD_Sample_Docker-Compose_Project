@@ -19,7 +19,7 @@ export class AccountsRepository {
     
     getUser(userID) {
         return new Promise((resolve, reject) => {
-            axios.get(hostname + '/api/users/' + userID)
+            axios.get(hostname + '/api/user/' + userID)
                 .then(x => resolve(x.data))
                 .catch(x => {
                     alert(x);
@@ -30,7 +30,7 @@ export class AccountsRepository {
 
     register(account) {
         return new Promise((resolve, reject) => {
-            axios.post(hostname + '/api/users', account )
+            axios.post(hostname + '/api/user', account )
                 .then(x => resolve(x.data))
                 .catch(x => {
                     alert(x);
@@ -52,7 +52,7 @@ export class AccountsRepository {
 
     updateUser(userID, account) {
         return new Promise((resolve, reject) => {
-            axios.put(hostname + '/api/users/' + userID, { ...account })
+            axios.put(hostname + '/api/user/' + userID, { ...account })
                 .then(x => resolve(x.data))
                 .catch(x => {
                     alert(x);

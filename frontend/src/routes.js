@@ -4,6 +4,7 @@ import { ProfileEditForm } from './Profile/ProfileEditForm';
 import { Login } from './Landing/Login';
 import { Register } from './Landing/Register';
 import { Donations } from './Donations/Donations';
+import { NewDonationForm } from './Donations/NewDonationForm';
 
 
 export const ROUTES = [
@@ -13,6 +14,6 @@ export const ROUTES = [
     {path: '/profile/edit', component: ProfileEditForm},
     {path: '/myprofile/', component: MyProfile},
     // {path: '/profile/:userID', component: OtherProfile},
-    // {path: '/newdonation', component: NewDonation}
+    {path: '/newdonation', component: NewDonationForm}
 
 ];
