@@ -143,4 +143,21 @@ export class SportRepository {
                 })
         });
     }
+
+    addMVPVote(gameID) {
+        return new Promise((resolve, reject) => {
+            axios.post(`http://${url}:8000/game/mvp`)
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
+/*
+Post a vote for a specific player as mvp in a specific game
+‘/game/mvp’
+POST
+Body params: gameID, playerID
+*/
 }

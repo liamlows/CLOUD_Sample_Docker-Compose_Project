@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Link } from 'react-router-dom';
 import { SportRepository } from '../api/SportRepository';
-import { Navbar, Nav, Table, Form, Button, Container, Row, Col } from 'react-bootstrap';
+import { Navbar, Nav, Table, Form, Button, Container, Row, Col, Modal } from 'react-bootstrap';
 import { Player } from '../models/Player';
 
 /*
@@ -20,43 +20,47 @@ Admins can hide certain games if they don’t want them displayed
 
 export class GameView extends React.Component {
     //props = gameId
-    state = {
-        team1Name: '',
-        team2Name: '',
-        team1ID: '',
-        team2ID: '',
-        team1Players: [],
-        team2Players: [],
-        team1Score: 0,
-        team2Score: 0,
+    repo = new SportRepository();
+    
+    constructor(props) {
+        super(props);
+        this.state = {
+            gameID: this.props.match.params.gameID,
+            team1Name: '',
+            team2Name: '',
+            team1ID: '',
+            team2ID: '',
+            team1Players: [],
+            team2Players: [],
+            team1Score: 0,
+            team2Score: 0,
 
-        winnerID: '',
-        winnerName: '',
+            winnerID: '',
+            winnerName: '',
 
-        searchPlayers1: [],
-        searchPlayers2: [],
-        nameSearch: '',
+            searchPlayers1: [],
+            searchPlayers2: [],
+            nameSearch: '',
 
-        mvpPlayer: new Player()
+            mvpPlayer: new Player(),
+            isMVP: false,
+            show: false
+        }
+        this.showModal = this.showModal.bind(this);
+        this.hideModal = this.hideModal.bind(this);
     }
 
-    repo = new SportRepository();
-    gameID = this.props.match.params.gameID;
-
-    //TODO: add points player has scored
+    //TODO: add time played in game to player table
     //TODO: add links to player pages
     //TODO: add mvp functionality
 
     componentDidMount(){
-        console.log("componentDidMount method");
-        console.log("gameID: ", this.gameID);
-
-        if(this.gameID){
-            this.repo.getTeamName1FromGameID(this.gameID).then(x => 
+        if(this.state.gameID){
+            this.repo.getTeamName1FromGameID(this.state.gameID).then(x => 
                 this.setState({ team1Name: x[0]["TeamName"]}, () => {
                     console.log("team1Name: ", this.state.team1Name);
 
-                    this.repo.getTeamName2FromGameID(this.gameID).then(x => {
+                    this.repo.getTeamName2FromGameID(this.state.gameID).then(x => {
                         this.setState({ team2Name: x[0]["TeamName"] }, () => {
                             console.log("team2Name: ", this.state.team2Name);
 
@@ -76,7 +80,7 @@ export class GameView extends React.Component {
                                                         this.setState({ team2Players: x, searchPlayers2: x }, () => {
                                                             console.log("team2Players: ", this.state.team2Players);
 
-                                                            this.repo.getWinnerFromGame(this.gameID).then(x => {
+                                                            this.repo.getWinnerFromGame(this.state.gameID).then(x => {
                                                                 this.setState({ winnerID: x[0]["WinnerID"] }, () => {
                                                                     console.log("winnerID: ", this.state.winnerID);
 
@@ -84,18 +88,24 @@ export class GameView extends React.Component {
                                                                         this.setState({ winnerName: x[0]["TeamName"] }, () => {
                                                                             console.log("winnerName: ", this.state.winnerName);
 
-                                                                            this.repo.getTeamScoreFromGame(this.gameID, this.state.team1ID).then(x => {
+                                                                            this.repo.getTeamScoreFromGame(this.state.gameID, this.state.team1ID).then(x => {
                                                                                 this.setState({ team1Score: x[0]["score"] }, () => {
                                                                                     console.log("team1Score: ", this.state.team1Score);
                                                                                 
-                                                                                    this.repo.getTeamScoreFromGame(this.gameID, this.state.team2ID).then(x => {
+                                                                                    this.repo.getTeamScoreFromGame(this.state.gameID, this.state.team2ID).then(x => {
                                                                                         this.setState({ team2Score: x[0]["score"] }, () => {
                                                                                             console.log("team2Score: ", this.state.team2Score);
 
-                                                                                            this.repo.getGameMVP(this.gameID).then(x => {
-                                                                                                this.setState({ mvpPlayer: new Player(x[0]["PlayerID"], x[0]["FirstName"], x[0]["LastName"]) }, () => {
-                                                                                                    console.log("mvpPlayer: ", this.state.mvpPlayer);
-                                                                                                });
+                                                                                            this.repo.getGameMVP(this.state.gameID).then(x => {
+                                                                                                if(x.length == 1){
+                                                                                                    this.setState({ mvpPlayer: new Player(x[0]["PlayerID"], x[0]["FirstName"], x[0]["LastName"])}, () => { 
+                                                                                                        this.setState({ isMVP: true });
+                                                                                                        console.log("mvpPlayer: ", this.state.mvpPlayer);
+                                                                                                    });
+                                                                                                }
+                                                                                                else{
+                                                                                                    console.log("isMVP: ", this.state.isMVP);
+                                                                                                }
                                                                                             });
                                                                                         });
                                                                                     });
@@ -134,9 +144,23 @@ export class GameView extends React.Component {
         }
     }
 
-    mvpVoting() {
-        console.log("in mvp voting method");
+    mvpDisplay(){
+        console.log("in mvpDisplay method");
+        if(this.state.isMVP == true){
+            console.log("mvp found, should display")
+            return <h4>The game MVP was { this.state.mvpPlayer.firstName } { this.state.mvpPlayer.lastName}.</h4>
+        }
+        else
+            return <h4>There's no MVP yet.</h4>
     }
+
+    showModal = () => {
+        this.setState({ show: true });
+    };
+
+    hideModal = () => {
+        this.setState({ show: false });
+    };
 
     render() {
         if(this.state.team2Score == 0){
@@ -173,8 +197,8 @@ export class GameView extends React.Component {
             </Navbar>
 
 
-
-            <Container fluid className="p-3">
+        <div className="p-5">
+            <Container fluid className="pb-3">
                 <Row>
                     <Col><h1>Game Details for { this.state.team1Name } v. { this.state.team2Name }</h1></Col>
                 </Row>
@@ -230,6 +254,7 @@ export class GameView extends React.Component {
                                     <th>Player Name</th>
                                     <th>Position</th>
                                     <th>Points Earned</th>
+                                    <th>Time Played</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -240,6 +265,7 @@ export class GameView extends React.Component {
                                             <td>{player.FirstName} {player.LastName}</td>
                                             <td>{player.Position}</td>
                                             <td>{player.PPG}</td>
+                                            <td>{player.TimePlayed}</td>
                                         </tr>)
                                 }
                             </tbody>
@@ -257,6 +283,7 @@ export class GameView extends React.Component {
                                     <th>Player Name</th>
                                     <th>Position</th>
                                     <th>Points Earned</th>
+                                    <th>Time Played</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -267,6 +294,7 @@ export class GameView extends React.Component {
                                             <td>{player.FirstName} {player.LastName}</td>
                                             <td>{player.Position}</td>
                                             <td>{player.PPG}</td>
+                                            <td>{player.TimePlayed}</td>
                                         </tr>)
                                 }
                             </tbody>
@@ -278,17 +306,32 @@ export class GameView extends React.Component {
             <Container>
                 <Row>
                     <Col>
-                        <h4>The game MVP was { this.state.mvpPlayer.firstName } { this.state.mvpPlayer.lastName}</h4>
+                        { this.mvpDisplay()}
                     </Col>
                 </Row>
                 <Row>
                     <Col>
-                        <button type="button" onClick={() => { this.mvpVoting(); }}>
-                            Vote for game MVP
-                        </button>
+                        <Button type="button" variant="primary" onClick={ () => { this.showModal(); } }>
+                            Cast your MVP vote!
+                        </Button>
+
+                        <Modal show={ this.state.show } handleClose={ this.hideModal } aria-labelledby="contained-modal-title-vcenter" centered>
+                            <Modal.Header closeButton onClick={ () => { this.hideModal() ; } }>
+                                <Modal.Title><p>Header</p></Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <p>Hello</p>
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <Button className="secondary" onClick={ () => { this.hideModal(); } }>
+                                    Close
+                                </Button>
+                            </Modal.Footer>
+                        </Modal>
                     </Col>
                 </Row>
             </Container>
+        </div>
         </>;
     }
 }
