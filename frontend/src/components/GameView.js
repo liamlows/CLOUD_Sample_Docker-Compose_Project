@@ -31,6 +31,7 @@ export class GameView extends React.Component {
 
             mvpPlayer: new Player(),
             isMVP: false,
+            votePosted: false,
 
             show1: false,
             show2: false,
@@ -40,8 +41,6 @@ export class GameView extends React.Component {
         this.showModal = this.showModal.bind(this);
         this.hideModal = this.hideModal.bind(this);
     }
-
-    //TODO: add mvp functionality (waiting on guidance on how to do a POST route with body params)
 
     componentDidMount(){
         if(this.state.gameID){
@@ -127,6 +126,18 @@ export class GameView extends React.Component {
             return <h4>There's no MVP yet.</h4>
     }
 
+    votePostedDisplay(){
+        if(this.state.votePosted == true){
+            return <h4>Vote posted!</h4>
+        }
+        else
+            return<> </>
+    }
+
+    showPosted(){
+        this.setState({votePosted: true});
+    }
+
     showModal = (id) => {
         if(id == 1)
             this.setState({ show1: true });
@@ -153,8 +164,12 @@ export class GameView extends React.Component {
     }
 
     postMVPVote(firstName, lastName){
-        console.log("in post MVP vote");
-        //this.repo.SportRepository.addMVPVote(this.state.gameID, playerID).then();
+        let id = 0;
+
+        this.repo.getPlayer(firstName, lastName).then(x => {
+            id = x[0]["PlayerID"];
+            this.repo.postMVPVote(this.state.gameID, id);
+        })
     }
 
     render() {
@@ -345,19 +360,26 @@ export class GameView extends React.Component {
                             <Modal.Body>
                                 <Container>
                                     <Row>
-                                    <p>Place your vote</p>
+                                        <div className="m-2">
+                                            { this.votePostedDisplay() }
+                                        </div>
                                         <Col>
-                                            <DropdownButton id="dropdown-basic-button" title="Dropdown button">
+                                            <DropdownButton id="dropdown-basic-button" title="Team 1">
                                                 {
                                                     this.state.searchPlayers1.map(player =>
-                                                        <Dropdown.Item onClick={console.log(player.FirstName, player.LastName)}>{ player.FirstName } { player.LastName }</Dropdown.Item>
+                                                        <Dropdown.Item onClick={ () => { this.postMVPVote(player.FirstName, player.LastName); this.showPosted(); }}>{ player.FirstName } { player.LastName }</Dropdown.Item>
                                                 )}
                                             </DropdownButton>
                                         </Col>
                                         <Col>
-                                            <DropdownButton id="dropdown-basic-button" title="Dropdown button">
-                                                <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                                        <Col>
+                                            <DropdownButton id="dropdown-basic-button" title="Team 2">
+                                                {
+                                                    this.state.searchPlayers2.map(player =>
+                                                        <Dropdown.Item onClick={ () => { this.postMVPVote(player.FirstName, player.LastName); this.showPosted(); } }>{ player.FirstName } { player.LastName }</Dropdown.Item>
+                                                )}
                                             </DropdownButton>
+                                        </Col>
                                         </Col>
                                     </Row>
                                 </Container>

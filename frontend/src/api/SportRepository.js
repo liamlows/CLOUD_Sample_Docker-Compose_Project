@@ -169,7 +169,7 @@ export class SportRepository {
         });
     }
 
-    addMVPVote(GameID, PlayerID) {
+    postMVPVote(GameID, PlayerID) {
         return new Promise((resolve, reject) => {
             axios.post(`http://${url}:8000/game/mvp`,{
                 gameID: GameID,
@@ -207,4 +207,16 @@ export class SportRepository {
                 })
         });
     }
+
+    getPlayer(firstname, lastname) {
+        return new Promise((resolve, reject) => {
+            axios.get(`http://${url}:8000/player?firstName=${firstname}&lastName=${lastname}`)
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
+
 }
