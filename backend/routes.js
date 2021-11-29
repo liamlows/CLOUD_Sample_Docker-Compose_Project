@@ -108,7 +108,7 @@ module.exports = function routes(app, logger) {
   
   //GET all users
   // /api/users
-  app.get('/users', function (req, res) {
+  app.get('/api/users', function (req, res) {
     pool.query("SELECT * FROM users", function (err, result, fields) {
       if (err) throw err;
       res.end(JSON.stringify(result)); // Result in JSON format
@@ -117,7 +117,7 @@ module.exports = function routes(app, logger) {
 
   //GET all drivers
   // /api/drivers
-  app.get('/drivers', function (req, res) {
+  app.get('/api/drivers', function (req, res) {
     pool.query("SELECT * FROM drivers", function (err, result, fields) {
       if (err) throw err;
       res.end(JSON.stringify(result)); // Result in JSON format
@@ -126,7 +126,7 @@ module.exports = function routes(app, logger) {
 
   //GET a paritcular driver
   //	/api/driver
-  app.get('/driver', function (req, res) {
+  app.get('/api/driver', function (req, res) {
     var driverID = req.param('driverID');
     pool.query("SELECT * FROM drivers WHERE driverID = ?", driverID, function (err, result, fields) {
       if (err) throw err;
@@ -136,7 +136,7 @@ module.exports = function routes(app, logger) {
 
   //POST a new driver
   // /api/drivers
-  app.post('/drivers', async (req, res) => {
+  app.post('/api/drivers', async (req, res) => {
     var userID = req.param("userID");
     var foodDonationID = req.param("foodDonationID");
     var licensePlate = req.param("licensePlate");
@@ -154,7 +154,7 @@ module.exports = function routes(app, logger) {
 
   //PUT a foodDonationID (give the driver a new donation to deliver)
   // /api/driver/updateFoodDonationID
-  app.put('/driver/updateFoodDonationID', async (req, res) => {
+  app.put('/api/driver/updateFoodDonationID', async (req, res) => {
     var driverID = req.param("driverID");
     var foodDonationID = req.param("foodDonationID");
 
@@ -167,7 +167,7 @@ module.exports = function routes(app, logger) {
 
   //PUT a new license plate
   // /api/driver/updateLicensePlate
-  app.put('/driver/updateLicensePlate', async (req, res) => {
+  app.put('/api/driver/updateLicensePlate', async (req, res) => {
     var driverID = req.param("driverID");
     var licensePlate = req.param("licensePlate");
 
@@ -180,7 +180,7 @@ module.exports = function routes(app, logger) {
 
   //PUT a new car make
   // /api/driver/updateCarMake
-  app.put('/driver/updateCarMake', async (req, res) => {
+  app.put('/api/driver/updateCarMake', async (req, res) => {
     var driverID = req.param("driverID");
     var carMake = req.param("carMake");
 
@@ -193,7 +193,7 @@ module.exports = function routes(app, logger) {
 
   //PUT a new car model
   // /api/driver/updateCarModel
-  app.put('/driver/updateCarModel', async (req, res) => {
+  app.put('/api/driver/updateCarModel', async (req, res) => {
     var driverID = req.param("driverID");
     var carModel = req.param("carModel");
 
@@ -206,7 +206,7 @@ module.exports = function routes(app, logger) {
 
   //PUT a new car year
   // /api/driver/updateCarYear
-  app.put('/driver/updateCarYear', async (req, res) => {
+  app.put('/api/driver/updateCarYear', async (req, res) => {
     var driverID = req.param("driverID");
     var carYear = req.param("carYear");
 
@@ -219,7 +219,7 @@ module.exports = function routes(app, logger) {
 
   //PUT a new car color
   // /api/driver/updateCarColor
-  app.put('/driver/updateCarColor', async (req, res) => {
+  app.put('/api/driver/updateCarColor', async (req, res) => {
     var driverID = req.param("driverID");
     var carColor = req.param("carColor");
 
@@ -232,7 +232,7 @@ module.exports = function routes(app, logger) {
 
   //DELETE a particular driver
   //  /api/driver
-  app.delete('/driver', async (req, res) => {
+  app.delete('/api/driver', async (req, res) => {
   	var driverID = req.param("driverID");
   
     pool.query("DELETE FROM drivers WHERE driverID = ?", driverID, function (err, result, fields) {
@@ -247,7 +247,7 @@ module.exports = function routes(app, logger) {
 
   //GET all availabilites
   // /api/availabilities
-  app.get('/availabilities', function (req, res) {
+  app.get('/api/availabilities', function (req, res) {
     pool.query("SELECT * FROM availabilities", function (err, result, fields) {
       if (err) throw err;
       res.end(JSON.stringify(result)); // Result in JSON format
@@ -256,7 +256,7 @@ module.exports = function routes(app, logger) {
 
   //GET a list of availabilities by driverID
   //	/api/availability
-  app.get('/availability', function (req, res) {
+  app.get('/api/availability', function (req, res) {
     var driverID = req.param('driverID');
     pool.query("SELECT * FROM availabilities WHERE driverID = ?", driverID, function (err, result, fields) {
       if (err) throw err;
@@ -266,7 +266,7 @@ module.exports = function routes(app, logger) {
 
   //POST a new availability for a given driver
   // /api/availabilities
-  app.post('/availabilities', async (req, res) => {
+  app.post('/api/availabilities', async (req, res) => {
     var driverID = req.param("driverID");
     var startAvailability = req.param("startAvailability");
     var endAvailability = req.param("endAvailability");
@@ -280,7 +280,7 @@ module.exports = function routes(app, logger) {
 
   //PUT a new availability start time
   // /api/availability/updateStartTime
-  app.put('/availability/updateStartTime', async (req, res) => {
+  app.put('/api/availability/updateStartTime', async (req, res) => {
     var availabilityID = req.param("availabilityID");
     var startAvailability = req.param("startAvailability");
 
@@ -293,7 +293,7 @@ module.exports = function routes(app, logger) {
 
   //PUT a new availability end time
   // /api/availability/updateEndTime
-  app.put('/availability/updateEndTime', async (req, res) => {
+  app.put('/api/availability/updateEndTime', async (req, res) => {
     var availabilityID = req.param("availabilityID");
     var endAvailability = req.param("endAvailability");
 
@@ -306,7 +306,7 @@ module.exports = function routes(app, logger) {
 
   //DELETE a particular availability
   //  /api/availabilities
-  app.delete('/availability', async (req, res) => {
+  app.delete('/api/availability', async (req, res) => {
     var availabilityID = req.param("availabilityID");
 
     pool.query("DELETE FROM availabilities WHERE availabilityID = ?", availabilityID, function (err, result, fields) {
@@ -320,7 +320,7 @@ module.exports = function routes(app, logger) {
   */
 
   // /api/ratings
-  app.get('/ratings', function (req, res) {
+  app.get('/api/ratings', function (req, res) {
     pool.query("SELECT * FROM ratings", function (err, result, fields) {
       if (err) throw err;
       res.end(JSON.stringify(result)); // Result in JSON format
@@ -329,7 +329,7 @@ module.exports = function routes(app, logger) {
 
   //GET a list of ratings by driverID
   //	/api/rating
-  app.get('/rating', function (req, res) {
+  app.get('/api/rating', function (req, res) {
     var driverID = req.param('driverID');
     pool.query("SELECT * FROM ratings WHERE driverID = ?", driverID, function (err, result, fields) {
       if (err) throw err;
@@ -339,7 +339,7 @@ module.exports = function routes(app, logger) {
 
   //POST a new rating for a given driver
   // /api/ratings
-  app.post('/ratings', async (req, res) => {
+  app.post('/api/ratings', async (req, res) => {
     var driverID = req.param("driverID");
     var stars = req.param("stars");
     var rating = req.param("rating");
@@ -354,7 +354,7 @@ module.exports = function routes(app, logger) {
 
   //PUT a new rating driverID
   // /api/rating/updateDriverID
-  app.put('/rating/updateDriverID', async (req, res) => {
+  app.put('/api/rating/updateDriverID', async (req, res) => {
     var ratingID = req.param("ratingID");
     var driverID = req.param("driverID");
 
@@ -367,7 +367,7 @@ module.exports = function routes(app, logger) {
 
   //PUT a new rating stars value
   // /api/rating/updateStars
-  app.put('/rating/updateStars', async (req, res) => {
+  app.put('/api/rating/updateStars', async (req, res) => {
     var ratingID = req.param("ratingID");
     var stars = req.param("stars");
 
@@ -380,7 +380,7 @@ module.exports = function routes(app, logger) {
 
   //PUT a new rating rating value
   // /api/rating/updateRating
-  app.put('/rating/updateRating', async (req, res) => {
+  app.put('/api/rating/updateRating', async (req, res) => {
     var ratingID = req.param("ratingID");
     var rating = req.param("rating");
 
@@ -393,7 +393,7 @@ module.exports = function routes(app, logger) {
 
   //PUT a new rating datePosted value
   // /api/rating/updateDatePosted
-  app.put('/rating/updateDatePosted', async (req, res) => {
+  app.put('/api/rating/updateDatePosted', async (req, res) => {
     var ratingID = req.param("ratingID");
     var datePosted = req.param("datePosted");
 
@@ -406,7 +406,7 @@ module.exports = function routes(app, logger) {
 
   //DELETE a particular rating
   //  /api/rating
-  app.delete('/rating', async (req, res) => {
+  app.delete('/api/rating', async (req, res) => {
     var ratingID = req.param("ratingID");
     pool.query("DELETE FROM ratings WHERE ratingID = ?", ratingID, function (err, result, fields) {
       if (err) throw err;
@@ -420,7 +420,7 @@ module.exports = function routes(app, logger) {
 
   //GET a list of all deliveries
   // /api/deliveries
-  app.get('/deliveries', function (req, res) {
+  app.get('/api/deliveries', function (req, res) {
     pool.query("SELECT * FROM deliveries", function (err, result, fields) {
       if (err) throw err;
       res.end(JSON.stringify(result)); // Result in JSON format
@@ -429,7 +429,7 @@ module.exports = function routes(app, logger) {
 
   //GET a specific delivery based on deliveryID
   //	/api/delivery
-  app.get('/delivery', function (req, res) {
+  app.get('/api/delivery', function (req, res) {
     var deliveryID = req.param('deliveryID');
     pool.query("SELECT * FROM deliveries WHERE deliveryID = ?", deliveryID, function (err, result, fields) {
       if (err) throw err;
@@ -439,7 +439,7 @@ module.exports = function routes(app, logger) {
 
   //POST a new rating for a given driver
   // /api/deliveries
-  app.post('/deliveries', async (req, res) => {
+  app.post('/api/deliveries', async (req, res) => {
     var driverID = req.param("driverID");
     var foodDonationID = req.param("foodDonationID");
     var deliveryStatus = req.param("deliveryStatus");
@@ -453,7 +453,7 @@ module.exports = function routes(app, logger) {
 
   //PUT a new delivery driverID
   // /api/delivery/updateDriverID
-  app.put('/delivery/updateDriverID', async (req, res) => {
+  app.put('/api/delivery/updateDriverID', async (req, res) => {
     var deliveryID = req.param("deliveryID");
     var driverID = req.param("driverID");
 
@@ -466,7 +466,7 @@ module.exports = function routes(app, logger) {
 
   //PUT a new delivery foodDonationID
   // /api/delivery/updateFoodDonationID
-  app.put('/delivery/updateFoodDonationID', async (req, res) => {
+  app.put('/api/delivery/updateFoodDonationID', async (req, res) => {
     var deliveryID = req.param("deliveryID");
     var foodDonationID = req.param("foodDonationID");
 
@@ -479,7 +479,7 @@ module.exports = function routes(app, logger) {
 
   //PUT a new delivery deliveryStatus
   // /api/delivery/updateDeliveryStatus
-  app.put('/delivery/updateDeliveryStatus', async (req, res) => {
+  app.put('/api/delivery/updateDeliveryStatus', async (req, res) => {
     var deliveryID = req.param("deliveryID");
     var deliveryStatus = req.param("deliveryStatus");
 
@@ -492,7 +492,7 @@ module.exports = function routes(app, logger) {
 
   //DELETE a particular delivery
   //  /api/delivery
-  app.delete('/delivery', async (req, res) => {
+  app.delete('/api/delivery', async (req, res) => {
     var deliveryID = req.param("deliveryID");
     pool.query("DELETE FROM deliveries WHERE deliveryID = ?", deliveryID, function (err, result, fields) {
       if (err) throw err;
