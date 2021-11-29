@@ -14,6 +14,19 @@ export class Homepage extends React.Component {
         loggedInUser: undefined
     }
 
+    componentDidMount() {
+        var loggedInUser = localStorage.getItem("adminLogin");
+        console.log("didmount", loggedInUser);
+        if (typeof loggedInUser === undefined) {
+            localStorage.setItem('adminLogin', false);
+            console.log("Set login to false");
+            loggedInUser = false;
+            this.setState({ loggedInUser: false });
+        }
+        else
+            this.setState({ loggedInUser: loggedInUser });
+    }
+
     // asyncLocalStorage = {
     //     setItem: function (key, value) {
     //         return Promise.resolve().then(function () {
@@ -44,21 +57,10 @@ export class Homepage extends React.Component {
     //     )
     // }
 
-    componentDidMount() {
-        var loggedInUser = localStorage.getItem("adminLogin");
-        console.log("didmount", loggedInUser);
-        if (typeof loggedInUser === undefined) {
-            localStorage.setItem('adminLogin', false);
-            console.log("Set login to false");
-            loggedInUser = false;
-            this.setState({ loggedInUser: false });
-        }
-        else
-            this.setState({ loggedInUser: loggedInUser });
-    }
+    
 
-    setLogin = () => {
-        this.setState({ loggedInUser: false });
+    setLogin = (param) => {
+        this.setState({ loggedInUser: param });
     }
     render() {
         return (
@@ -79,14 +81,11 @@ export class Homepage extends React.Component {
                             </Nav.Link>
                         </Nav>
                         {console.log("login", this.state.loggedInUser)}
-                        {this.state.loggedInUser
-                            ? (<Nav.Link href="/logout" className="mr-auto">LogOut {this.state.loggedInUser}</Nav.Link>)
+                        {this.state.loggedInUser=="true"
+                            ? (<Nav.Link href="/logout" className="mr-auto">LogOut</Nav.Link>)
                             : (<Nav.Link href="/login" className="mr-auto">Login </Nav.Link>)
                         }
 
-                        {this.state.loggedInUser && (
-                            <Nav.Link href="/logout" className="mr-auto">LogOut {this.state.loggedInUser}</Nav.Link>
-                        )}
 
 
                     </Container>

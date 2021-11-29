@@ -11,6 +11,6 @@ export const Logout = () => {
         </h1>
 
         <Link to = "/" onClick ={setFalse}> Back to Home 
-        {localStorage.getItem("adminLogin")} </Link>
+        </Link>
     </>
 }

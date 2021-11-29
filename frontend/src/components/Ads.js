@@ -36,21 +36,20 @@ export const Ads = props => {
         console.log("1", props.teamID);
         db.getAdCount(props.teamID).then(
             x => {
-                console.log("?", x[0].adCount);
-                setCount(x[0].adCount);
+                if (x[0]) { setCount(x[0].adCount); }
+            }
 
-            });
+        );
         return () => {
             // Anything in here is fired on component unmount.
             db.putAdCount(props.teamID, count).then(
                 x => {
-                    console.log("?", x[0].adCount);
-                    setCount(x[0].adCount);
+                    if (x[0]) { setCount(x[0].adCount); }
                 });
         }
     }, [])
 
-    
+
 
     return <>
         <ToastContainer position="middle-start">
@@ -77,13 +76,19 @@ export const Ads = props => {
             </Toast>
         </ToastContainer>
 
-        <p>login? {loggedInUser}</p>
-        {loggedInUser ?(
+        {loggedInUser == "true" ? (
+            <>
+            <h3>Admin log in: View Ads Click</h3>
             <p>Count : {count}</p>
-            )
-            :(  
+            <button onClick={toggleShowA}> Open/Close Ad A</button>
+            <br/>
+            <br/>
+            <button onClick={toggleShowB}> Open/Close Ad B</button>
+            </>
+        )
+            : (
                 <p>Admin not log in</p>
             )
-            }
+        }
     </>
 }

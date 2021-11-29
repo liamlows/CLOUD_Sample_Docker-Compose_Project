@@ -56,6 +56,17 @@ export class GameView extends React.Component {
     //TODO: add mvp functionality
 
     componentDidMount() {
+        var loggedInUser = localStorage.getItem("adminLogin");
+        console.log("didmount", loggedInUser);
+        if (typeof loggedInUser === undefined) {
+            localStorage.setItem('adminLogin', false);
+            console.log("Set login to false");
+            loggedInUser = false;
+            this.setState({ loggedInUser: false });
+        }
+        else {
+            this.setState({ loggedInUser: loggedInUser });
+        }
         if (this.state.gameID) {
             this.repo.getTeamName1FromGameID(this.state.gameID).then(x =>
                 this.setState({ team1Name: x[0]["TeamName"] }, () => {
@@ -174,9 +185,18 @@ export class GameView extends React.Component {
                             <Nav.Link href="/NBA">NBA</Nav.Link>
                             <Nav.Link href="/NFL">NFL</Nav.Link>
                             <Nav.Link href="/MLB">MLB</Nav.Link>
+                            <Nav.Link href={`/TeamView/${this.testValue}`}>
+                                TeamView
+                            </Nav.Link>
+                            <Nav.Link href={`/GameView/${this.testValue}`}>
+                                GameView
+                            </Nav.Link>
                         </Nav>
-
-                        <Nav.Link href="/login" className="mr-auto">Login</Nav.Link>
+                        {console.log("login", this.state.loggedInUser)}
+                        {this.loggedInUser == "true"
+                            ? (<Nav.Link href="/logout" className="mr-auto">LogOut</Nav.Link>)
+                            : (<Nav.Link href="/login" className="mr-auto">Login </Nav.Link>)
+                        }
                     </Container>
                 </Navbar>
 
@@ -193,13 +213,17 @@ export class GameView extends React.Component {
                         <Nav.Link href="/NBA">NBA</Nav.Link>
                         <Nav.Link href="/NFL">NFL</Nav.Link>
                         <Nav.Link href="/MLB">MLB</Nav.Link>
+                        <Nav.Link href={`/TeamView/${this.testValue}`}>
+                            TeamView
+                        </Nav.Link>
+                        <Nav.Link href={`/GameView/${this.testValue}`}>
+                            GameView
+                        </Nav.Link>
                     </Nav>
-                    {this.loggedInUser ? (
-                        <Nav.Link href="/logout" className="mr-auto">LogOut</Nav.Link>
-
-                    )
-                        : (<Nav.Link href="/login" className="mr-auto">Login</Nav.Link>
-                        )
+                    {console.log("login", this.state.loggedInUser)}
+                    {this.state.loggedInUser == "true"
+                        ? (<Nav.Link href="/logout" className="mr-auto">LogOut</Nav.Link>)
+                        : (<Nav.Link href="/login" className="mr-auto">Login </Nav.Link>)
                     }
                 </Container>
             </Navbar>

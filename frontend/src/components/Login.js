@@ -19,11 +19,6 @@ export default function Login() {
     event.preventDefault();
     console.log('You clicked submit.');
 
-    //window wont work
-    window.adminLogin = true;
-    console.log(window.adminLogin);
-
-
     // const user = { username, password };
     // // send the username and password to the server
     // const response = await axios.post(
@@ -33,7 +28,11 @@ export default function Login() {
     // // set the state of the user
     // setUser(response.data)
     // // store the user in localStorage
-    localStorage.setItem('adminLogin', true)
+    
+    if (window.confirm('If you click "ok" you would be redirected . Cancel will load this website ')) {
+      localStorage.setItem('adminLogin', true)
+      window.location.href = '/';
+    };
     // console.log(response.data)
   }
 

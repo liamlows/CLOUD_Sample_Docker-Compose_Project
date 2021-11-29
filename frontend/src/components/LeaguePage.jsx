@@ -45,6 +45,18 @@ export class LeaguePage extends React.Component {
 
     componentDidMount() {
         console.log("didmount");
+        var loggedInUser = localStorage.getItem("adminLogin");
+        console.log("didmount", loggedInUser);
+        if (typeof loggedInUser === undefined) {
+            localStorage.setItem('adminLogin', false);
+            console.log("Set login to false");
+            loggedInUser = false;
+            this.setState({ loggedInUser: false });
+        }
+        else {
+            this.setState({ loggedInUser: loggedInUser });
+        }
+        
         let league = this.props.league;
         console.log("league : ", league);
         if (league) {
@@ -102,6 +114,11 @@ export class LeaguePage extends React.Component {
                         <Nav.Link href="/NFL">NFL</Nav.Link>
                         <Nav.Link href="/MLB">MLB</Nav.Link>
                     </Nav>
+                    {console.log("login", this.state.loggedInUser)}
+                        {this.state.loggedInUser=="true"
+                            ? (<Nav.Link href="/logout" className="mr-auto">LogOut</Nav.Link>)
+                            : (<Nav.Link href="/login" className="mr-auto">Login </Nav.Link>)
+                        }
                 </Container>
             </Navbar>
 

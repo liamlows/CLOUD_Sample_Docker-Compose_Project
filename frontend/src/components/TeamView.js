@@ -23,6 +23,17 @@ export class Teamview extends React.Component {
     }
 
     componentDidMount() {
+        var loggedInUser = localStorage.getItem("adminLogin");
+        console.log("didmount", loggedInUser);
+        if (typeof loggedInUser === undefined) {
+            localStorage.setItem('adminLogin', false);
+            console.log("Set login to false");
+            loggedInUser = false;
+            this.setState({ loggedInUser: false });
+        }
+        else {
+            this.setState({ loggedInUser: loggedInUser });
+        }
         let TeamID = this.props.match.params.teamID;
         if (TeamID) {
             this.db.getPlayersFromTeam(TeamID).then(allplayers => this.setState({ allplayers: allplayers, searchPlayer: allplayers }));
@@ -69,14 +80,21 @@ export class Teamview extends React.Component {
                             <Nav.Link href="/NBA">NBA</Nav.Link>
                             <Nav.Link href="/NFL">NFL</Nav.Link>
                             <Nav.Link href="/MLB">MLB</Nav.Link>
+                            <Nav.Link href={`/TeamView/${this.testValue}`}>
+                                TeamView
+                            </Nav.Link>
+                            <Nav.Link href={`/GameView/${this.testValue}`}>
+                                GameView
+                            </Nav.Link>
                         </Nav>
-                        {this.loggedInUser ? (
-                        <Nav.Link href="/logout" className="mr-auto">LogOut</Nav.Link>
+                        {console.log("login", this.state.loggedInUser)}
+                        {this.state.loggedInUser == "true"
+                            ? (<Nav.Link href="/logout" className="mr-auto">LogOut</Nav.Link>)
+                            : (<Nav.Link href="/login" className="mr-auto">Login </Nav.Link>)
+                        }
 
-                    )
-                        : (<Nav.Link href="/login" className="mr-auto">Login</Nav.Link>
-                        )
-                    }
+
+
                     </Container>
                 </Navbar>
                 <Navbar variant="white" bg="white" expand="lg">
@@ -126,19 +144,19 @@ export class Teamview extends React.Component {
                                     <td>{player.FirstName} {player.LastName}</td>
                                     <td>{player.Position}</td>
                                     <td>{player.PPG}</td>
-                                    <button type="button" onClick={() => { this.showModal();this.searchPlayer(player.FirstName)}}>
+                                    <button type="button" onClick={() => { this.showModal(); this.searchPlayer(player.FirstName) }}>
                                         Open
                                     </button>
 
                                     <Modal show={this.state.show} handleClose={this.hideModal} aria-labelledby="contained-modal-title-vcenter"
                                         centered>
 
-                                        <Modal.Header closeButton onClick={() => { this.hideModal() ;this.searchPlayer("")}}>
+                                        <Modal.Header closeButton onClick={() => { this.hideModal(); this.searchPlayer("") }}>
                                             <Modal.Title>{player.FirstName} {player.LastName}</Modal.Title>
                                         </Modal.Header>
                                         <Modal.Body>
-                                            <div> <img src = "http://snapbuilder.com/code_snippet_generator/image_placeholder_generator/300x300/808080/DDDDDD"/></div>
-                                            
+                                            <div> <img src="http://snapbuilder.com/code_snippet_generator/image_placeholder_generator/300x300/808080/DDDDDD" /></div>
+
                                             <p>Player Number: {player.PlayerNumber}</p>
                                             <p>Position: {player.Position}</p>
                                             <p>PPG: {player.PPG}</p>
@@ -146,7 +164,7 @@ export class Teamview extends React.Component {
 
                                         </Modal.Body>
                                         <Modal.Footer>
-                                            <Button variant="secondary" onClick={() => { this.hideModal() ;this.searchPlayer("")}}>
+                                            <Button variant="secondary" onClick={() => { this.hideModal(); this.searchPlayer("") }}>
                                                 Close
                                             </Button>
                                         </Modal.Footer>
@@ -159,7 +177,7 @@ export class Teamview extends React.Component {
 
                 {/* ads */}
 
-                <Ads teamID = {this.props.match.params.teamID}/>
+                <Ads teamID={this.props.match.params.teamID} />
             </>
         )
     }
