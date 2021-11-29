@@ -506,7 +506,7 @@ module.exports = function routes(app, logger) {
 //GET a paritcular user, given a userID
 //	/api/user
 //tested
-app.get('/user', function (req, res) {
+app.get('/api/user', function (req, res) {
   var userID = req.param('userID');
   pool.query("SELECT * FROM users WHERE userID = ?", userID, function (err, result, fields) {
     if (err) throw err;
@@ -517,7 +517,7 @@ app.get('/user', function (req, res) {
 //POST a new user - registering 
 //  /api/user
 //tested
-app.post('/register', async (req, res) => {
+app.post('/api/register', async (req, res) => {
   var userType = req.param("userType");
   var username = req.param("username");
   var userPassword = req.param("userPassword");
@@ -534,7 +534,7 @@ app.post('/register', async (req, res) => {
 //GET a paritcular user, given username and userPassword - login
 //  /api/user
 //tested
-app.get('/login', function (req, res) {
+app.get('/api/login', function (req, res) {
   var username = req.param('username');
   var userPassword = req.param('userPassword');
   pool.query("SELECT * FROM users WHERE username = ? && userPassword = ?", [username, userPassword], function (err, result, fields) {
@@ -546,7 +546,7 @@ app.get('/login', function (req, res) {
 //PUT to update users profile informationn
 // /api/user/updateProfileInformation
 //tested
-app.put('/user/updateProfileInformation', async (req, res) => {
+app.put('/api/user/updateProfileInformation', async (req, res) => {
   var userID = req.param('userID');
   var userType = req.param('userType');
   var username = req.param("username");
@@ -564,7 +564,7 @@ app.put('/user/updateProfileInformation', async (req, res) => {
 //PUT to update users validation 
 // /api/user/updateValidated
 //tested
-app.put('/user/updateValidated', async (req, res) => {
+app.put('/api/user/updateValidated', async (req, res) => {
   var userID = req.param('userID');
   var validated = req.param("validated");
   pool.query("UPDATE users SET validated = ? WHERE userID = ?", 
@@ -576,7 +576,7 @@ app.put('/user/updateValidated', async (req, res) => {
 
 //GET foodDonationID, soupKitchen, driverID, foodName, and timeMade for all orders
 //  /api/getOrders
-app.get('/getOrders', function (req, res) {
+app.get('/api/getOrders', function (req, res) {
   pool.query("SELECT f.foodDonationID, f.soupKitchenID, d.driverID, f.foodName, f.timeMade FROM foodDonations f JOIN drivers d ON f.foodDonationID = d.foodDonationID", function (err, result, fields) {
     if (err) throw err;
     res.end(JSON.stringify(result)); 
