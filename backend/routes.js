@@ -471,7 +471,7 @@ module.exports = function routes(app, logger) {
         res.status(400).send('Problem obtaining MySQL connection');
       } else {
         var GameID = req.param("GameID");
-        connection.query("select TeamName from Teams join Games G on Teams.TeamID = G.Team1ID where GameID=?", GameID, function (err, result, fields) {
+        connection.query("select * from Teams join Games G on Teams.TeamID = G.Team1ID where GameID=?", GameID, function (err, result, fields) {
           if (err) {
             // if there is an error with the query, release the connection instance and log the error
             connection.release()
@@ -500,7 +500,7 @@ module.exports = function routes(app, logger) {
         res.status(400).send('Problem obtaining MySQL connection');
       } else {
         var GameID = req.param("GameID");
-        connection.query("select TeamName from Teams join Games G on Teams.TeamID = G.Team2ID where GameID=?", GameID, function (err, result, fields) {
+        connection.query("select * from Teams join Games G on Teams.TeamID = G.Team2ID where GameID=?", GameID, function (err, result, fields) {
           if (err) {
             // if there is an error with the query, release the connection instance and log the error
             connection.release()

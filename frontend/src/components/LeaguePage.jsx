@@ -48,30 +48,40 @@ export class LeaguePage extends React.Component {
         let league = this.props.league;
         console.log("league : ", league);
         if (league) {
-            this.db.getAllGames(league).then(games =>
-                this.setState({ recent_games: games }, () => {
-                    console.log("Imhere", this.state.recent_games);
-                    // this.updateTeam2();
-                    games.forEach(g => {
-                        this.db.getTeamName2FromGameID(g.GameID).then(x => {
-                            g["OpponentName"] = x[0].TeamName;
-                            // g.OpponentName = x[0].TeamName;
-
+            this.db.getAllGames(league).then(games => {
+                var itemsProcessed = 0;
+                games.forEach((g, index, array) => {
+                    this.db.getTeamName2FromGameID(g.GameID).then(x => {
+                        g["OpponentName"] = x[0].TeamName;
+                        g["OpponentWins"] = x[0].Wins;
+                        g["OpponentLosses"] = x[0].Losses;
+                    }).then(this.db.getTeamName1FromGameID(g.GameID).then(w => {
+                        console.log("w",w);
+                        g["Team1Name"] = w[0].TeamName;
+                        g["Team1Wins"] = w[0].Wins;
+                        g["Team1Losses"] = w[0].Losses;
+                        //some tricks to get a callback function from forEach
+                        itemsProcessed++;
+                        if (itemsProcessed === array.length) {
+                            this.setState({ recent_games: games });
                         }
-                        );
-                    });
-                    this.setState({ recent_games: games });
-                })
-            );
+                    }
+                    )
+                    )
+                }
+                )
+            });
 
-            this.db.getRanking(league).then(x => {
-                this.setState({ ranking: x });
-                console.log(this.state.ranking);
-            }
+        };
 
-            )
+        this.db.getRanking(league).then(x => {
+            this.setState({ ranking: x });
+            console.log(this.state.ranking);
         }
+
+        )
     }
+
 
     sortGamesbyDateASEC() {
         this.setState(this.state.recent_games.sort((a, b) => a.Date > b.Date ? 1 : -1))
@@ -127,15 +137,15 @@ export class LeaguePage extends React.Component {
                                 <Card>
                                     <Card.Body>
                                         <Card.Title>
-                                            {console.log("WTF", g, g.TeamName, g.OpponentName, g.GameID)}
-                                            <Link to={ `GameView/${g.GameID}` }>
+                                            {console.log("HAHA", g, g.TeamName, g.OpponentName, g.GameID)}
+                                            <Link to={`GameView/${g.GameID}`}>
                                                 <p>Click to view game</p>
                                             </Link>
-                                            {g.TeamName}({g.Wins} - {g.Losses}) vs {g.OpponentName}
+                                            {g.Team1Name}({g.Team1Wins} - {g.Team1Losses}) vs {g.OpponentName}({g.OpponentWins} - {g.OpponentLosses})
                                         </Card.Title>
                                         <Card.Text >
                                             {g.Team1Score} - {g.Team2Score}
-                                            
+
                                         </Card.Text>
                                     </Card.Body>
                                     <Card.Footer className="text-muted"> GameDate: {g.Date.slice(0, 10)}</Card.Footer>
@@ -154,9 +164,9 @@ export class LeaguePage extends React.Component {
 
                             <Card bg="secondary" key={idx} text="white">
                                 <Card.Body>
-                                <Link to={ `TeamView/${r.TeamID}` }>
-                                                <p>Click to view team</p>
-                                            </Link>
+                                    <Link to={`TeamView/${r.TeamID}`}>
+                                        <p>Click to view team</p>
+                                    </Link>
                                     <Card.Title > #{idx + 1} : {r.TeamName} </Card.Title>
                                     <Card.Text> Record : {r.Wins} - {r.Losses} </Card.Text>
                                 </Card.Body>
