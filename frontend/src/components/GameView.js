@@ -35,7 +35,8 @@ export class GameView extends React.Component {
     }
 
     repo = new SportRepository();
-    gameID = this.props.gameID;
+    gameID = this.props.match.params.gameID;
+
     
     //set the game info in state using gameId in url
     componentDidMount(){

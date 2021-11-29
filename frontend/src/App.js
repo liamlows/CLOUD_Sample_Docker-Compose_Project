@@ -23,7 +23,7 @@ const App = props => {
 
 
         <Route path = "/TeamView"> <Teamview/></Route>
-        <Route path = "/GameView"> <GameView gameID = "5"/></Route>
+        <Route path = "/GameView/:id"> <GameView/></Route>
     </Switch>
     </Router>
     </div>
