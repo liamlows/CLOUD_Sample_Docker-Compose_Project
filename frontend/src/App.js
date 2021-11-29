@@ -21,7 +21,6 @@ const App = props => {
 
         {/* <Route path = "/" element = {<Teamview/>}/> */}
 
-
         <Route path = "/TeamView"> <Teamview/></Route>
         <Route path = "/GameView/:id"> <GameView/></Route>
     </Switch>

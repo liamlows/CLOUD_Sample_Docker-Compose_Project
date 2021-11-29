@@ -127,11 +127,15 @@ export class LeaguePage extends React.Component {
                                 <Card>
                                     <Card.Body>
                                         <Card.Title>
-                                            {console.log("WTF", g, g.TeamName, g.OpponentName)}
-                                            {g.TeamName} ({g.Wins} - {g.Losses}) vs {g.OpponentName}
+                                            {console.log("WTF", g, g.TeamName, g.OpponentName, g.GameID)}
+                                            <Link to={ `GameView/${g.GameID}` }>
+                                                <p>Click to view game</p>
+                                            </Link>
+                                            {g.TeamName}({g.Wins} - {g.Losses}) vs {g.OpponentName}
                                         </Card.Title>
-                                        <Card.Text>
+                                        <Card.Text >
                                             {g.Team1Score} - {g.Team2Score}
+                                            
                                         </Card.Text>
                                     </Card.Body>
                                     <Card.Footer className="text-muted"> GameDate: {g.Date.slice(0, 10)}</Card.Footer>
