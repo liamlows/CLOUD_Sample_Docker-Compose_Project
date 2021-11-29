@@ -21,12 +21,12 @@ export class SportRepository {
         });
     }
 
-    getTeamName1FromGameID(id) {
+    async getTeamName1FromGameID(id) {
         // let config = this.config;
         // if (params) {
         //     config.params = params;
         // }
-        return new Promise((resolve, reject) => {
+        return await new Promise((resolve, reject) => {
             axios.get(`http://${url}:8000/games/team1?GameID=${id}`)
                 .then(x => resolve(x.data))
                 .catch(x => {
