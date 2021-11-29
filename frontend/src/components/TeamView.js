@@ -1,25 +1,30 @@
-import React, { useState } from 'react';
-import { Routes, Link } from 'react-router-dom';
+import React, { useState, Component } from 'react';
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import Table from "react-bootstrap/Table";
-import { NavDropdown, Form, Button } from 'react-bootstrap';
+import { NavDropdown, Form, Button, Modal } from 'react-bootstrap';
 import { SportRepository } from '../api/SportRepository';
 
 import Container from "react-bootstrap/Container"
 
 export class Teamview extends React.Component {
     db = new SportRepository();
-    state = {
-        allplayers: [],
-        searchPlayer: [],
-        namesearch :""
+    constructor() {
+        super();
+        this.state = {
+            allplayers: [],
+            searchPlayer: [],
+            namesearch: "",
+            show: false
+        }
+        this.showModal = this.showModal.bind(this);
+        this.hideModal = this.hideModal.bind(this);
     }
 
     componentDidMount() {
         let TeamID = this.props.match.params.teamID;
         if (TeamID) {
-            this.db.getPlayersFromTeam(TeamID).then(allplayers => this.setState({ allplayers:allplayers, searchPlayer:allplayers }));
+            this.db.getPlayersFromTeam(TeamID).then(allplayers => this.setState({ allplayers: allplayers, searchPlayer: allplayers }));
         }
     }
     sortPlayersbyPPG(players) {
@@ -34,12 +39,20 @@ export class Teamview extends React.Component {
         this.setState(players.sort((a, b) => a.Position > b.Position ? 1 : -1));
     }
 
-    async searchPlayer(name){
+    async searchPlayer(name) {
         console.log(name)
-        await this.setState({searchPlayer:this.state.allplayers})
+        await this.setState({ searchPlayer: this.state.allplayers })
         var players = await this.state.searchPlayer.filter(player => player.FirstName.includes(name));
-        this.setState({searchPlayer:players});
+        this.setState({ searchPlayer: players });
     }
+
+    showModal = () => {
+        this.setState({ show: true });
+    };
+
+    hideModal = () => {
+        this.setState({ show: false });
+    };
 
     render() {
         if (!this.state.allplayers) {
@@ -78,9 +91,9 @@ export class Teamview extends React.Component {
                         </Navbar.Collapse>
                         <Form>
                             <Form.Group className="mb-3" >
-                                <Form.Control type = "text" onChange={e => this.setState({ namesearch: e.target.value })}placeholder="Search For Player" />
+                                <Form.Control type="text" onChange={e => this.setState({ namesearch: e.target.value })} placeholder="Search For Player" />
                             </Form.Group>
-                            <Button variant="primary"  onClick={() => { this.searchPlayer(this.state.namesearch) }}>
+                            <Button variant="primary" onClick={() => { this.searchPlayer(this.state.namesearch) }}>
                                 Search
                             </Button>
                         </Form>
@@ -95,6 +108,7 @@ export class Teamview extends React.Component {
                             <th>Player Name</th>
                             <th>Position</th>
                             <th>Points Per Game</th>
+                            <th>Player Info</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -105,10 +119,41 @@ export class Teamview extends React.Component {
                                     <td>{player.FirstName} {player.LastName}</td>
                                     <td>{player.Position}</td>
                                     <td>{player.PPG}</td>
+                                    <button type="button" onClick={() => { this.showModal() }}>
+                                        Open
+                                    </button>
+
+                                    <Modal show={this.state.show} handleClose={this.hideModal}>
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Player Name</th>
+                                                <th>Position</th>
+                                                <th>Points Per Game</th>
+                                                <th>Player Info</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {
+                                               
+                                                    <tr>
+                                                        <td>{player.PlayerNumber}</td>
+                                                        <td>{player.FirstName} {player.LastName}</td>
+                                                        <td>{player.Position}</td>
+                                                        <td>{player.PPG}</td>
+                                                    </tr>
+                                            }
+                                        </tbody>
+                                        <button type="button" onClick={() => { this.hideModal() }}>
+                                            close
+                                        </button>
+                                    </Modal>
                                 </tr>)
                         }
                     </tbody>
                 </Table>
+
+
             </>
         )
     }
