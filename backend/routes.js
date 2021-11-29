@@ -706,8 +706,8 @@ app.get('/api/foodDonation', function (req, res) {
 });
 
 //GET a particular user, given RDH_ID
-//  /api/user
-app.get('/api/user', function (req, res) {
+//  /api/user/RDH
+app.get('/api/user/:RDH_ID', function (req, res) {
   var RDH_ID = req.param('RDH_ID');
   pool.query("SELECT u.userID, u.userType, u.username, u.userPassword, u.imgURL, u.phoneNumber, u.email, u.validated FROM users u INNER JOIN RDH r ON u.userID = r.userID WHERE RDH_ID = ?", RDH_ID, function (err, result, fields) {
     if (err) throw err;
