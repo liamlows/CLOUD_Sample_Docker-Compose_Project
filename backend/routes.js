@@ -707,6 +707,7 @@ app.get('/api/foodDonation', function (req, res) {
 
 //GET a particular user, given RDH_ID
 //  /api/user/RDH
+//tested
 app.get('/api/user/:RDH_ID', function (req, res) {
   var RDH_ID = req.param('RDH_ID');
   pool.query("SELECT u.userID, u.userType, u.username, u.userPassword, u.imgURL, u.phoneNumber, u.email, u.validated FROM users u INNER JOIN RDH r ON u.userID = r.userID WHERE RDH_ID = ?", RDH_ID, function (err, result, fields) {
@@ -747,6 +748,16 @@ app.delete('/api/foodDonation', async (req, res) => {
     });
 });
 
+//GET all users given a specified userType
+//  /api/users/:userType
+//tested
+app.get('/api/users/:userType', function (req, res) {
+  var userType = req.param('userType');
+  pool.query("SELECT * FROM users WHERE userType = ?", userType, function (err, result, fields) {
+    if (err) throw err;
+    res.end(JSON.stringify(result)); 
+  });
+});
 
   //BLAKES'S ROUTES
 }
