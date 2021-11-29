@@ -108,9 +108,13 @@ module.exports = function routes(app, logger) {
   
   //GET all users
   // /api/users
-  app.get('/users', function (req, res) {
+  app.get('/api/users', function (req, res) {
     pool.query("SELECT * FROM users", function (err, result, fields) {
-      if (err) throw err;
+      if (err) {
+        console.log(err);
+        throw err;
+      }
+
       res.end(JSON.stringify(result)); // Result in JSON format
     });
   });
@@ -506,7 +510,7 @@ module.exports = function routes(app, logger) {
 //GET a paritcular user, given a userID
 //	/api/user
 //tested
-app.get('/users/:userID', function (req, res) {
+app.get('/api/users/:userID', function (req, res) {
   var userID = req.param('userID');
   pool.query("SELECT * FROM users WHERE userID = ?", userID, function (err, result, fields) {
     if (err) throw err;
@@ -517,7 +521,7 @@ app.get('/users/:userID', function (req, res) {
 //POST a new user - registering 
 //  /api/user
 //tested
-app.post('/users/', async (req, res) => {
+app.post('/api/users/', async (req, res) => {
   var userType = req.param("userType");
   var username = req.param("username");
   var userPassword = req.param("userPassword");
@@ -535,7 +539,7 @@ app.post('/users/', async (req, res) => {
 //  /api/user
 //tested
 
-app.post('/login', function (req, res) {
+app.post('/api/login', function (req, res) {
   var username = req.body.username;
   var userPassword = req.body.userPassword;
   pool.query(`SELECT userID FROM users WHERE username = "${req.body.username}" && userPassword = "${req.body.userPassword}"`, function (err, result, fields) {
@@ -544,20 +548,10 @@ app.post('/login', function (req, res) {
   });
 });
 
-
-// app.get('/login', function (req, res) {
-//   var username = req.param('username');
-//   var userPassword = req.param('userPassword');
-//   pool.query("SELECT * FROM users WHERE username = ? && userPassword = ?", [username, userPassword], function (err, result, fields) {
-//     if (err) throw err;
-//     res.end(JSON.stringify(result)); 
-//   });
-// });
-
 //PUT to update users profile informationn
 // /api/user/updateProfileInformation
 //tested
-app.put('/user/updateProfileInformation', async (req, res) => {
+app.put('/api/users/:userID', async (req, res) => {
   var userID = req.param('userID');
   var userType = req.param('userType');
   var username = req.param("username");
