@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import { SportRepository } from '../api/SportRepository';
 
 export const Ads = props => {
+    const loggedInUser = localStorage.getItem("adminLogin");
+
     const db = new SportRepository();
     const [showA, setShowA] = useState(true);
     const [showB, setShowB] = useState(true);
@@ -16,37 +18,37 @@ export const Ads = props => {
     const toggleShowB = () => {
         setShowB(!showB);
     }
-    
+
 
     // admin stuff
     const [count, setCount] = useState(0);
-    
+
     const addCount = () => {
         setCount(count + 1);
-        db.putAdCount(props.teamID,count + 1).then(
+        db.putAdCount(props.teamID, count + 1).then(
             x => {
-                console.log("!",x);
+                console.log("!", x);
             });
     }
 
     useEffect(() => {
         // Anything in here is fired on component mount.
-        console.log("1",props.teamID);
+        console.log("1", props.teamID);
         db.getAdCount(props.teamID).then(
             x => {
-                console.log("?",x[0].adCount);
-                setCount(x[0].adCount);
+                if (x[0]) { setCount(x[0].adCount); }
+            }
 
-            });
+        );
         return () => {
             // Anything in here is fired on component unmount.
-            db.putAdCount(props.teamID,count).then(
+            db.putAdCount(props.teamID, count).then(
                 x => {
-                    console.log("?",x[0].adCount);
-                    setCount(x[0].adCount);
+                    if (x[0]) { setCount(x[0].adCount); }
                 });
         }
     }, [])
+
 
 
     return <>
@@ -58,7 +60,7 @@ export const Ads = props => {
                     <small className="text-muted">just now</small>
                 </Toast.Header>
                 <Toast.Body>
-                    Check out our newest merch at <a onClick={addCount} >https://www.fanatics.com</a>
+                    <a onClick={addCount} > Check out our newest merch at https://www.fanatics.com</a>
 
                 </Toast.Body>
             </Toast>
@@ -69,12 +71,24 @@ export const Ads = props => {
                     <small className="text-muted">2 seconds ago</small>
                 </Toast.Header>
                 <Toast.Body>
-                <a onClick={addCount} >Join Our BIG BlackFriday Sell!!!!! </a>
+                    <a onClick={addCount} >Join Our BIG BlackFriday Sell!!!!! </a>
                 </Toast.Body>
             </Toast>
         </ToastContainer>
 
-
-        <p>Count : {count}</p>
+        {loggedInUser == "true" ? (
+            <>
+            <h3>Admin log in: View Ads Click</h3>
+            <p>Count : {count}</p>
+            <button onClick={toggleShowA}> Open/Close Ad A</button>
+            <br/>
+            <br/>
+            <button onClick={toggleShowB}> Open/Close Ad B</button>
+            </>
+        )
+            : (
+                <p>Admin not log in</p>
+            )
+        }
     </>
 }

@@ -8,7 +8,8 @@ import './GameView.css';
 export class GameView extends React.Component {
     //props = gameId
     repo = new SportRepository();
-    
+    loggedInUser = localStorage.getItem("adminLogin");
+
     constructor(props) {
         super(props);
         this.state = {
@@ -41,12 +42,22 @@ export class GameView extends React.Component {
         this.showModal = this.showModal.bind(this);
         this.hideModal = this.hideModal.bind(this);
     }
-
     componentDidMount(){
+      var loggedInUser = localStorage.getItem("adminLogin");
+        console.log("didmount", loggedInUser);
+        if (typeof loggedInUser === undefined) {
+            localStorage.setItem('adminLogin', false);
+            console.log("Set login to false");
+            loggedInUser = false;
+            this.setState({ loggedInUser: false });
+        }
+        else {
+            this.setState({ loggedInUser: loggedInUser });
+        }
+      
         if(this.state.gameID){
             this.repo.getTeamName1FromGameID(this.state.gameID).then(x => 
                 this.setState({ team1Name: x[0]["TeamName"]}, () => {
-
                     this.repo.getTeamName2FromGameID(this.state.gameID).then(x => {
                         this.setState({ team2Name: x[0]["TeamName"] }, () => {
 
@@ -70,13 +81,12 @@ export class GameView extends React.Component {
 
                                                                             this.repo.getTeamScoreFromGame(this.state.gameID, this.state.team1ID).then(x => {
                                                                                 this.setState({ team1Score: x[0]["score"] }, () => {
-                                                                                
                                                                                     this.repo.getTeamScoreFromGame(this.state.gameID, this.state.team2ID).then(x => {
                                                                                         this.setState({ team2Score: x[0]["score"] }, () => {
 
                                                                                             this.repo.getGameMVP(this.state.gameID).then(x => {
-                                                                                                if(x.length == 1){
-                                                                                                    this.setState({ mvpPlayer: new Player(x[0]["PlayerID"], x[0]["FirstName"], x[0]["LastName"])}, () => { 
+                                                                                                if (x.length == 1) {
+                                                                                                    this.setState({ mvpPlayer: new Player(x[0]["PlayerID"], x[0]["FirstName"], x[0]["LastName"]) }, () => {
                                                                                                         this.setState({ isMVP: true });
                                                                                                     });
                                                                                                 }                                                                                         
@@ -173,19 +183,29 @@ export class GameView extends React.Component {
     }
 
     render() {
-        if(this.state.team2Score == 0){
+        if (this.state.team2Score == 0) {
             return <>
                 <Navbar bg="dark" variant="dark">
-                <Container>
-                    <Navbar.Brand>SportsTeamWebsite</Navbar.Brand>
-                    <Nav className="me-auto">
-                        <Nav.Link href="/home">Home</Nav.Link>
-                        <Nav.Link href="/NBA">NBA</Nav.Link>
-                        <Nav.Link href="/NFL">NFL</Nav.Link>
-                        <Nav.Link href="/MLB">MLB</Nav.Link>
-                    </Nav>
-                    <Nav.Link href="/login" className="mr-auto">Login</Nav.Link>
-                </Container>
+                    <Container>
+                        <Navbar.Brand>SportsTeamWebsite</Navbar.Brand>
+                        <Nav className="me-auto">
+                            <Nav.Link href="/home">Home</Nav.Link>
+                            <Nav.Link href="/NBA">NBA</Nav.Link>
+                            <Nav.Link href="/NFL">NFL</Nav.Link>
+                            <Nav.Link href="/MLB">MLB</Nav.Link>
+                            <Nav.Link href={`/TeamView/${this.testValue}`}>
+                                TeamView
+                            </Nav.Link>
+                            <Nav.Link href={`/GameView/${this.testValue}`}>
+                                GameView
+                            </Nav.Link>
+                        </Nav>
+                        {console.log("login", this.state.loggedInUser)}
+                        {this.loggedInUser == "true"
+                            ? (<Nav.Link href="/logout" className="mr-auto">LogOut</Nav.Link>)
+                            : (<Nav.Link href="/login" className="mr-auto">Login </Nav.Link>)
+                        }
+                    </Container>
                 </Navbar>
 
                 <h4 className="m-3"> Data is loading... </h4>
@@ -201,12 +221,20 @@ export class GameView extends React.Component {
                         <Nav.Link href="/NBA">NBA</Nav.Link>
                         <Nav.Link href="/NFL">NFL</Nav.Link>
                         <Nav.Link href="/MLB">MLB</Nav.Link>
+                        <Nav.Link href={`/TeamView/${this.testValue}`}>
+                            TeamView
+                        </Nav.Link>
+                        <Nav.Link href={`/GameView/${this.testValue}`}>
+                            GameView
+                        </Nav.Link>
                     </Nav>
-                    <Nav.Link href="/login" className="mr-auto">Login</Nav.Link>
+                    {console.log("login", this.state.loggedInUser)}
+                    {this.state.loggedInUser == "true"
+                        ? (<Nav.Link href="/logout" className="mr-auto">LogOut</Nav.Link>)
+                        : (<Nav.Link href="/login" className="mr-auto">Login </Nav.Link>)
+                    }
                 </Container>
             </Navbar>
-
-
         <div className="p-5">
             <Container fluid className="pb-3">
                 <Row>
@@ -388,12 +416,117 @@ export class GameView extends React.Component {
                                 <Button className="secondary" onClick={ () => { this.hideModal(3); } }>
                                     Close
                                 </Button>
-                            </Modal.Footer>
-                        </Modal>
-                    </Col>
-                </Row>
-            </Container>
-        </div>
+                            </Form>
+                        </Col>
+                        <Col>
+                            <Form>
+                                <Form.Group className="mb-3" >
+                                    <Form.Control type="text" onChange={x => this.setState({ nameSearch: x.target.value })} placeholder="Search For Team 2 Player" />
+                                </Form.Group>
+                            </Form>
+                        </Col>
+                        <Col>
+                            <Form>
+                                <Button variant="primary" onClick={() => { this.searchPlayer(this.state.nameSearch, 2) }}>
+                                    Search
+                                </Button>
+                            </Form>
+                        </Col>
+                    </Row>
+                </Container>
+
+
+                <Container fluid>
+                    <Row>
+                        <Col>
+                            <Table striped bordered hover>
+                                <thead>
+                                    <tr>
+                                        <th colSpan="4">{this.state.team1Name}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Player Name</th>
+                                        <th>Position</th>
+                                        <th>Points Earned</th>
+                                        <th>Time Played</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        this.state.searchPlayers1.map(player =>
+                                            <tr key={player.id}>
+                                                <td>{player.PlayerNumber}</td>
+                                                <td>{player.FirstName} {player.LastName}</td>
+                                                <td>{player.Position}</td>
+                                                <td>{player.PPG}</td>
+                                                <td>{player.TimePlayed}</td>
+                                            </tr>)
+                                    }
+                                </tbody>
+                            </Table>
+                        </Col>
+
+                        <Col>
+                            <Table striped bordered hover>
+                                <thead>
+                                    <tr>
+                                        <th colSpan="4">{this.state.team2Name}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Player Name</th>
+                                        <th>Position</th>
+                                        <th>Points Earned</th>
+                                        <th>Time Played</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        this.state.searchPlayers2.map(player =>
+                                            <tr key={player.id}>
+                                                <td>{player.PlayerNumber}</td>
+                                                <td>{player.FirstName} {player.LastName}</td>
+                                                <td>{player.Position}</td>
+                                                <td>{player.PPG}</td>
+                                                <td>{player.TimePlayed}</td>
+                                            </tr>)
+                                    }
+                                </tbody>
+                            </Table>
+                        </Col>
+                    </Row>
+                </Container>
+
+                <Container>
+                    <Row>
+                        <Col>
+                            {this.mvpDisplay()}
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Button type="button" variant="primary" onClick={() => { this.showModal(); }}>
+                                Cast your MVP vote!
+                            </Button>
+
+                            <Modal show={this.state.show} handleClose={this.hideModal} aria-labelledby="contained-modal-title-vcenter" centered>
+                                <Modal.Header closeButton onClick={() => { this.hideModal(); }}>
+                                    <Modal.Title><p>Header</p></Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+                                    <p>Hello</p>
+                                </Modal.Body>
+                                <Modal.Footer>
+                                    <Button className="secondary" onClick={() => { this.hideModal(); }}>
+                                        Close
+                                    </Button>
+                                </Modal.Footer>
+                            </Modal>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
         </>;
     }
 }

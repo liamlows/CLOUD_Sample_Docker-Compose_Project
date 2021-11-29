@@ -10,13 +10,14 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import { Card, CardGroup, NavDropdown } from 'react-bootstrap'
 import { SportRepository } from '../api/SportRepository';
-
-
+import { Form,Button } from 'react-bootstrap';
 
 export class LeaguePage extends React.Component {
     state = {
         recent_games: [],
-        ranking: []
+        ranking: [],
+        search_games: [],
+        name_search: ""
     }
 
     db = new SportRepository();
@@ -35,16 +36,27 @@ export class LeaguePage extends React.Component {
     //     );
     // }
 
-    updateTeam2() {
-        var games = this.state.recent_games;
-        games.forEach(g => {
-            this.db.getTeamName2FromGameID(g.GameID).then(x => g.OpponentName = x[0].TeamName);
-        });
-        this.setState({ recent_games: games });
+
+    async searchTeams(name) {
+        await this.setState({ search_games: this.state.recent_games })
+        var games = await this.state.search_games.filter(game => game.Team1Name.includes(name)||game.OpponentName.includes(name) );
+        this.setState({ search_games: games });
     }
 
     componentDidMount() {
         console.log("didmount");
+        var loggedInUser = localStorage.getItem("adminLogin");
+        console.log("didmount", loggedInUser);
+        if (typeof loggedInUser === undefined) {
+            localStorage.setItem('adminLogin', false);
+            console.log("Set login to false");
+            loggedInUser = false;
+            this.setState({ loggedInUser: false });
+        }
+        else {
+            this.setState({ loggedInUser: loggedInUser });
+        }
+        
         let league = this.props.league;
         console.log("league : ", league);
         if (league) {
@@ -56,7 +68,7 @@ export class LeaguePage extends React.Component {
                         g["OpponentWins"] = x[0].Wins;
                         g["OpponentLosses"] = x[0].Losses;
                     }).then(this.db.getTeamName1FromGameID(g.GameID).then(w => {
-                        console.log("w",w);
+                        console.log("w", w);
                         g["Team1Name"] = w[0].TeamName;
                         g["Team1Wins"] = w[0].Wins;
                         g["Team1Losses"] = w[0].Losses;
@@ -64,6 +76,7 @@ export class LeaguePage extends React.Component {
                         itemsProcessed++;
                         if (itemsProcessed === array.length) {
                             this.setState({ recent_games: games });
+                            this.setState({search_games: games});
                         }
                     }
                     )
@@ -84,10 +97,10 @@ export class LeaguePage extends React.Component {
 
 
     sortGamesbyDateASEC() {
-        this.setState(this.state.recent_games.sort((a, b) => a.Date > b.Date ? 1 : -1))
+        this.setState(this.state.search_games.sort((a, b) => a.Date > b.Date ? 1 : -1))
     }
     sortGamesbyDateDESC() {
-        this.setState(this.state.recent_games.sort((a, b) => a.Date < b.Date ? 1 : -1))
+        this.setState(this.state.search_games.sort((a, b) => a.Date < b.Date ? 1 : -1))
     }
 
     render() {
@@ -120,6 +133,11 @@ export class LeaguePage extends React.Component {
                         <Nav.Link href="/NFL">NFL</Nav.Link>
                         <Nav.Link href="/MLB">MLB</Nav.Link>
                     </Nav>
+                    {console.log("login", this.state.loggedInUser)}
+                        {this.state.loggedInUser=="true"
+                            ? (<Nav.Link href="/logout" className="mr-auto">LogOut</Nav.Link>)
+                            : (<Nav.Link href="/login" className="mr-auto">Login </Nav.Link>)
+                        }
                 </Container>
             </Navbar>
 
@@ -138,10 +156,19 @@ export class LeaguePage extends React.Component {
                                 <NavDropdown.Item onClick={() => this.sortGamesbyDateASEC()}> Sort Oldest to Newest </NavDropdown.Item>
                                 <NavDropdown.Item onClick={() => this.sortGamesbyDateDESC()}> Sort Newest to Oldest </NavDropdown.Item>
                                 <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+
                             </NavDropdown>
+
                         </Nav>
                     </Navbar.Collapse>
-
+                    <Form>
+                        <Form.Group className="mb-3" >
+                            <Form.Control type="text" onChange={e => this.setState({ name_search: e.target.value })} placeholder="Search For Games" />
+                        </Form.Group>
+                        <Button variant="primary" onClick={() => { this.searchTeams(this.state.name_search) }}>
+                            Search
+                        </Button>
+                    </Form>
                 </Container>
             </Navbar>
 
@@ -149,9 +176,9 @@ export class LeaguePage extends React.Component {
 
                 <Row>
 
-                    {console.log(this.state.recent_games)}
+                    {console.log(this.state.search_games)}
                     <CardGroup>
-                        {this.state.recent_games.map((g) => (
+                        {this.state.search_games.map((g) => (
                             <Col md={12} lg={6}>
                                 <Card>
                                     <Card.Body>

@@ -17,6 +17,23 @@ export default function Login() {
 
   function handleSubmit(event) {
     event.preventDefault();
+    console.log('You clicked submit.');
+
+    // const user = { username, password };
+    // // send the username and password to the server
+    // const response = await axios.post(
+    //   "http://blogservice.herokuapp.com/api/login",
+    //   user
+    // );
+    // // set the state of the user
+    // setUser(response.data)
+    // // store the user in localStorage
+    
+    if (window.confirm('If you click "ok" you would be redirected . Cancel will load this website ')) {
+      localStorage.setItem('adminLogin', true)
+      window.location.href = '/';
+    };
+    // console.log(response.data)
   }
 
   return (
