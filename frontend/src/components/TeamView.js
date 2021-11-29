@@ -130,6 +130,8 @@ export class Teamview extends React.Component {
                                             <Modal.Title>{player.FirstName} {player.LastName}</Modal.Title>
                                         </Modal.Header>
                                         <Modal.Body>
+                                            <div> <img src = "http://snapbuilder.com/code_snippet_generator/image_placeholder_generator/300x300/808080/DDDDDD"/></div>
+                                            
                                             <p>Player Number: {player.PlayerNumber}</p>
                                             <p>Position: {player.Position}</p>
                                             <p>PPG: {player.PPG}</p>
