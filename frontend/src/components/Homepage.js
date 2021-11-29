@@ -7,6 +7,8 @@ import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container"
 
 export class Homepage extends React.Component {
+    testValue = 4;
+
     render() {
         return (
             <>
@@ -18,8 +20,12 @@ export class Homepage extends React.Component {
                             <Nav.Link href="/NBA">NBA</Nav.Link>
                             <Nav.Link href="/NFL">NFL</Nav.Link>
                             <Nav.Link href="/MLB">MLB</Nav.Link>
-                            <Nav.Link href="/TeamView">TeamView</Nav.Link>
-                            <Nav.Link href="/GameView">GameView</Nav.Link>
+                            <Nav.Link href={ `/TeamView/${this.testValue}` }>
+                                TeamView
+                            </Nav.Link>
+                            <Nav.Link href={ `/GameView/${this.testValue}` }>
+                                GameView
+                            </Nav.Link>
                         </Nav>
                         <Nav.Link href="/login" className="mr-auto">Login</Nav.Link>
                     </Container>
