@@ -169,9 +169,12 @@ export class SportRepository {
         });
     }
 
-    addMVPVote(gameID) {
+    addMVPVote(GameID, PlayerID) {
         return new Promise((resolve, reject) => {
-            axios.post(`http://${url}:8000/game/mvp`)
+            axios.post(`http://${url}:8000/game/mvp`,{
+                gameID: GameID,
+                playerID: PlayerID
+            })
                 .then(x => resolve(x.data))
                 .catch(x => {
                     alert(x);
@@ -179,10 +182,29 @@ export class SportRepository {
                 })
         });
     }
-/*
-Post a vote for a specific player as mvp in a specific game
-‘/game/mvp’
-POST
-Body params: gameID, playerID
-*/
+
+    putAdCount(TeamID,AdCount){
+        return new Promise((resolve, reject) => {
+            axios.put(`http://${url}:8000/team/adCount`,{
+                teamID : TeamID,
+                adCount: AdCount
+            })
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
+
+    getPlayerStats(firstname, lastname) {
+        return new Promise((resolve, reject) => {
+            axios.get(`http://${url}:8000/player/stats?firstName=${firstname}&lastName=${lastname}`)
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
 }

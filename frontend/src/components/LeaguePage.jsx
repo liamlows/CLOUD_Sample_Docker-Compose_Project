@@ -91,6 +91,24 @@ export class LeaguePage extends React.Component {
     }
 
     render() {
+        if(this.state.recent_games == []){
+            return <>
+                <Navbar bg="dark" variant="dark">
+                <Container>
+                    <Navbar.Brand>SportsTeamWebsite</Navbar.Brand>
+                    <Nav className="me-auto">
+                        <Nav.Link href="/home">Home</Nav.Link>
+                        <Nav.Link href="/NBA">NBA</Nav.Link>
+                        <Nav.Link href="/NFL">NFL</Nav.Link>
+                        <Nav.Link href="/MLB">MLB</Nav.Link>
+                    </Nav>
+                    <Nav.Link href="/login" className="mr-auto">Login</Nav.Link>
+                </Container>
+                </Navbar>
+
+                <h4 className="m-3"> Data is loading... </h4>
+            </>
+        }
         return <>
             <Navbar bg="dark" variant="dark">
                 <Container>
