@@ -110,7 +110,11 @@ module.exports = function routes(app, logger) {
   // /api/users
   app.get('/api/users', function (req, res) {
     pool.query("SELECT * FROM users", function (err, result, fields) {
-      if (err) throw err;
+      if (err) {
+        console.log(err);
+        throw err;
+      }
+
       res.end(JSON.stringify(result)); // Result in JSON format
     });
   });
@@ -500,13 +504,100 @@ module.exports = function routes(app, logger) {
       });
   });
 
+  /*
+  * SOUP KITCHEN ROUTES
+  */
+
+  //GET a list of all Soup Kitchens
+  // /api/soupkitchens
+  app.get('/api/soupkitchens', function (req, res) {
+    pool.query("SELECT * FROM soupKitchens", function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
+
+  //GET a specific Soup Kitchen based on soupKitchenID
+  //	/api/soupkitchen
+  app.get('/api/soupkitchen', function (req, res) {
+    var soupKitchenID = req.param('soupKitchenID');
+    pool.query("SELECT * FROM soupKitchens WHERE soupKitchenID = ?", soupKitchenID, function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
+
+  //POST a new soup kitchen
+  // /api/soupkitchens
+  app.post('/api/soupkitchens', async (req, res) => {
+    var soupKitchenID = req.param('soupKitchenID');
+    var userID = req.param('userID');
+    var soupKitchenName = req.param('soupKitchenName')
+    var address = req.param('address')
+
+    pool.query("INSERT INTO soupKitchens (soupKitchenID, userID, soupKitchenName, address) VALUES (?,?,?,?)", 
+    [soupKitchenID, userID, soupKitchenName, address],function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
+
+    //PUT a new userID for a soup kitchen
+  // /api/delivery/updateUserID
+  app.put('/api/soupkitchen/updateUserID', async (req, res) => {
+    var soupKitchenID = req.param("soupKitchenID");
+    var userID = req.param("userID");
+
+    pool.query("UPDATE soupKitchens SET userID = ? WHERE soupKitchenID = ?", 
+    [userID, soupKitchenID],function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
+
+      //PUT a new soupKitchenName for a soup kitchen
+  // /api/delivery/updateSoupKitchenName
+  app.put('/api/soupkitchen/updateSoupKitchenName', async (req, res) => {
+    var soupKitchenID = req.param("soupKitchenID");
+    var soupKitchenName = req.param("soupKitchenName");
+
+    pool.query("UPDATE soupKitchens SET soupKitchenName = ? WHERE soupKitchenID = ?", 
+    [soupKitchenName, soupKitchenID],function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
+
+  //PUT a new address for a soup kitchen
+  // /api/delivery/updateAddress
+  app.put('/api/soupkitchen/updateAddress', async (req, res) => {
+    var soupKitchenID = req.param("soupKitchenID");
+    var address = req.param("address");
+
+    pool.query("UPDATE soupKitchens SET address = ? WHERE soupKitchenID = ?", 
+    [address, soupKitchenID],function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
+
+    //DELETE a particular delivery
+  //  /api/soupkitchen
+  app.delete('/api/soupkitchen', async (req, res) => {
+    var soupKitchenID = req.param('soupKitchenID');
+    pool.query("DELETE FROM soupKitchens WHERE soupKitchenID = ?", soupKitchenID, function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); 
+      });
+  });
+
 
 //BRIGITTA'S ROUTES
 
 //GET a paritcular user, given a userID
 //	/api/users/:userID
 //tested
-app.get('/users/:userID', function (req, res) {
+app.get('/api/users/:userID', function (req, res) {
   var userID = req.param('userID');
   pool.query("SELECT * FROM users WHERE userID = ?", userID, function (err, result, fields) {
     if (err) throw err;
@@ -517,8 +608,7 @@ app.get('/users/:userID', function (req, res) {
 //POST a new user - registering 
 //  /api/users
 //tested
-//app.post('/users/', async (req, res) => {
-app.post('/users', async (req, res) => {
+app.post('/api/users/', async (req, res) => {
   var userType = req.param("userType");
   var username = req.param("username");
   var userPassword = req.param("userPassword");
@@ -535,7 +625,7 @@ app.post('/users', async (req, res) => {
 //POST a paritcular user, given username and userPassword - login
 //  /api/user
 //tested
-app.post('/login', function (req, res) {
+app.post('/api/login', function (req, res) {
   var username = req.body.username;
   var userPassword = req.body.userPassword;
   pool.query(`SELECT userID FROM users WHERE username = "${req.body.username}" && userPassword = "${req.body.userPassword}"`, function (err, result, fields) {
@@ -556,7 +646,7 @@ app.post('/login', function (req, res) {
 //PUT to update users profile informationn
 // /api/user/updateProfileInformation
 //tested
-app.put('/api/user/updateProfileInformation', async (req, res) => {
+app.put('/api/users/:userID', async (req, res) => {
   var userID = req.param('userID');
   var userType = req.param('userType');
   var username = req.param("username");

@@ -14,6 +14,30 @@ export class Register extends React.Component {
         4, //"Admin"
     ];
 
+    userTypesString = [
+        "General User", 
+        "Driver",
+        "Soup Kitchen Owner",
+        "RDH Owner",
+        "Admin"
+    ];
+
+    userTypesMap = {
+        "General User": 0,
+        "Driver": 1,
+        "Soup Kitchen Owner": 2,
+        "RDH Owner": 3,
+        "Admin": 4
+    };
+
+    // userTypesMap = {
+    //     "General User": 0,
+    //     "Driver": 1,
+    //     "Soup Kitchen Owner": 2,
+    //     "RDH Owner": 3,
+    //     "Admin": 4
+    // };
+
     state = {
         userType: 0,
         username: "",
@@ -53,8 +77,12 @@ export class Register extends React.Component {
 	}
 
     setUserType(userType) {
+        console.log(this.userTypesMap[userType])
+        let ut = this.userTypesMap[userType];
+        console.log("ut: " + ut);
+
         this.setState(state => {
-            state.userType = userType;
+            state.userType = ut;
             return state;
         });
     }
@@ -64,6 +92,18 @@ export class Register extends React.Component {
             state.imgURL = imgURL;
             return state;
         });
+    }
+
+    async register() {
+        await this.accountsRepository.register(this.state);
+        // Use login route to get user id
+        const response = await this.accountsRepository.login(this.state)
+        
+        if (response) {
+            sessionStorage.setItem("userID", response[0].userID);
+        }
+
+        this.setState({redirect: true})
     }
 
     render() {
@@ -78,8 +118,7 @@ export class Register extends React.Component {
                 <form id="register-form" className="my-4"
                     onSubmit={ 
                         (e) => {
-                            this.accountsRepository.register(this.state)
-                                .then(() => this.setState({ redirect: true }));
+                            this.register();
                             e.preventDefault();
                         } 
                     }> 
@@ -90,7 +129,7 @@ export class Register extends React.Component {
                             onChange={ e => this.setUserType(e.target.value)}
                         >
                                     {
-                                        this.userTypes.map((x, i) => <option key={ i }>{ x } </option>) // Can't figure out how to convert these to the userType Names.
+                                        this.userTypesString.map((x, i) => <option key={ i }>{ x } </option>) // Can't figure out how to convert these to the userType Names.
                                     }                                                                   {/* The problem is that the conversion has to be done when setting state, can't just ahve strings here and convert to ints later. */}
                         </select>
                     </div>

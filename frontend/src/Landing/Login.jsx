@@ -32,7 +32,6 @@ export class Login extends React.Component {
         const response = await this.accountsRepository.login(this.state);
 
         if (response) {
-            // console.log(response.status);
             sessionStorage.setItem("userID", response[0].userID);
         }
 
@@ -49,34 +48,38 @@ export class Login extends React.Component {
         }
 
         return ( 
-            <div className="container w-50 my-2">
-                <h2>Login</h2>
-                <form className="m-2" id="login-form"
-                    onSubmit={
-                        (e) => {
-                            this.login();
-                            e.preventDefault();
+            <>
+                <h1>Welcome to Souper.</h1>
+                <br></br>
+                <div className="container w-50 my-2">
+                    <h2>Login</h2>
+                    <form className="m-2" id="login-form"
+                        onSubmit={
+                            (e) => {
+                                this.login();
+                                e.preventDefault();
+                            }
+                            
+                            
                         }
-                        
-                        
-                    }
-                >
-                    <div className="container w-50 form-label-group">
-                        <label htmlFor="username"> Username </label>
-                        <input type="text" className="form-control my-1" id="username" name="username" 
-                            onChange={ e => this.setUsername(e.target.value)}
-                        />
-                    </div>
-                    <div className="container w-50 form-label-group">
-                        <label htmlFor="password"> Password </label>
-                        <input type="password" className="form-control my-1" id="userPassword" name="userPassword" 
-                            onChange={ e => this.setUserPassword(e.target.value)}
-                        />
-                    </div>
-                </form>
-                <button type="submit" className="btn btn-primary mt-2" form="login-form">Log In</button>
-                <p className="my-3"> Don't have an account yet? Register <Link to={`/register`}>here.</Link></p>
-            </div>
+                    >
+                        <div className="container w-50 form-label-group">
+                            <label htmlFor="username"> Username </label>
+                            <input type="text" className="form-control my-1" id="username" name="username" 
+                                onChange={ e => this.setUsername(e.target.value)}
+                            />
+                        </div>
+                        <div className="container w-50 form-label-group">
+                            <label htmlFor="password"> Password </label>
+                            <input type="password" className="form-control my-1" id="userPassword" name="userPassword" 
+                                onChange={ e => this.setUserPassword(e.target.value)}
+                            />
+                        </div>
+                    </form>
+                    <button type="submit" className="btn btn-primary mt-2" form="login-form">Log In</button>
+                    <p className="my-3"> Don't have an account yet? Register <Link to={`/register`}>here.</Link></p>
+                </div>
+            </>
         );
     }
 
