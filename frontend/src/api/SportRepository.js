@@ -48,7 +48,6 @@ export class SportRepository {
         });
     }
 
-
     getRanking(league_name) {
         // let config = this.config;
         // if (params) {
@@ -64,6 +63,27 @@ export class SportRepository {
         });
     }
 
+    getTeamIDFromTeamName(name) {
+        return new Promise((resolve, reject) => {
+            axios.get(`http://${url}:8000/teams/teamID?teamName=${name}`)
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
+
+    getTeamNameFromTeamID(teamID) {
+        return new Promise((resolve, reject) => {
+            axios.get(`http://${url}:8000/teams/teamName?teamID=${teamID}`)
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
 
     getPlayersFromTeam(TeamID) {
         // let config = this.config;
@@ -80,10 +100,14 @@ export class SportRepository {
         });
     }
 
-        /*
-        Route to get teamID given the teams name
-‘/teams/teamID?teamName=Team 1’
-GET
-Params: teamName
-*/
+    getWinnerFromGame(gameID) {
+        return new Promise((resolve, reject) => {
+            axios.get(`http://${url}:8000/game/winner?gameID=${gameID}`)
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
 }
