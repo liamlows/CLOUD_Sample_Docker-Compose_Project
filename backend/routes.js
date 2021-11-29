@@ -1238,5 +1238,63 @@ module.exports = function routes(app, logger) {
     });
   });
 
+
+  //get teamName given team id
+  app.get('/game/teamScore', (req, res) => {
+    // obtain a connection from our pool of connections
+    pool.getConnection(function (err, connection) {
+      if (err) {
+        console.log(connection);
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection');
+      } else {
+        var gameID = req.param('gameID');
+        var teamID = req.param('teamID');
+        connection.query("with cte1 as (select * from Games g where GameID=?), cte2 as(select * from Games where GameID=?)select if(cte1.Team1ID=?,cte2.Team1Score,cte2.Team2Score) as score from cte1 join cte2 on cte1.GameID=cte2.GameID", [gameID,gameID,teamID], function (err, result, fields) {
+          if (err) {
+            // if there is an error with the query, release the connection instance and log the error
+            connection.release()
+            logger.error("Problem getting games from league: ", err);
+            res.status(400).send('Problem getting games from league');
+          } else {
+            // if there is no error with the query, release the connection instance
+            res.send(result);
+            connection.release()
+
+          }
+        });
+      }
+    });
+  });
+
+//get teamName given team id
+app.get('/team/league', (req, res) => {
+  // obtain a connection from our pool of connections
+  pool.getConnection(function (err, connection) {
+    if (err) {
+      console.log(connection);
+      // if there is an issue obtaining a connection, release the connection instance and log the error
+      logger.error('Problem obtaining MySQL connection', err)
+      res.status(400).send('Problem obtaining MySQL connection');
+    } else {
+      var teamID = req.param('teamID');
+      connection.query("select League from Teams where TeamID=?", teamID, function (err, result, fields) {
+        if (err) {
+          // if there is an error with the query, release the connection instance and log the error
+          connection.release()
+          logger.error("Problem getting games from league: ", err);
+          res.status(400).send('Problem getting games from league');
+        } else {
+          // if there is no error with the query, release the connection instance
+          res.send(result);
+          connection.release()
+
+        }
+      });
+    }
+  });
+});
+
 }
 
