@@ -124,7 +124,18 @@ export class SportRepository {
 
     getMostRecentBool(league, gameID) {
         return new Promise((resolve, reject) => {
-            axios.get(`http://${url}:8000/game/mostRecent?league=${league}&${gameID}`)
+            axios.get(`http://${url}:8000/game/mostRecent?league=${league}&$gameID=${gameID}`)
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
+
+    getTeamScoreFromGame(gameID, teamID) {
+        return new Promise((resolve, reject) => {
+            axios.get(`http://${url}:8000/game/teamScore?gameID=${gameID}&teamID=${teamID}`)
                 .then(x => resolve(x.data))
                 .catch(x => {
                     alert(x);

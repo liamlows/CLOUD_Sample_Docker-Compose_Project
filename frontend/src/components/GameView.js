@@ -27,22 +27,26 @@ export class GameView extends React.Component {
         team2ID: '',
         team1Players: [],
         team2Players: [],
+        team1Score: 0,
+        team2Score: 0,
+
         winnerID: '',
         winnerName: '',
+
         searchPlayers1: [],
         searchPlayers2: [],
         nameSearch: '',
+
         mvpPlayer: new Player()
     }
 
     repo = new SportRepository();
     gameID = this.props.match.params.gameID;
 
-    //TODO: make this work for dynamically setting url game ID
-    //TODO: add game point values
+    //TODO: add points player has scored
     //TODO: add links to player pages
     //TODO: add mvp functionality
-    //set the game info in state using gameId in url
+
     componentDidMount(){
         console.log("componentDidMount method");
         console.log("gameID: ", this.gameID);
@@ -80,18 +84,23 @@ export class GameView extends React.Component {
                                                                         this.setState({ winnerName: x[0]["TeamName"] }, () => {
                                                                             console.log("winnerName: ", this.state.winnerName);
 
-                                                                            // this.repo.getGameMVP(this.gameID).then(x => {
-                                                                            //     this.setState({ mvpPlayer: new Player(x[0]["PlayerID"], x[0]["FirstName"], x[0]["LastName"]) }, () => {
-                                                                            //         console.log("mvpPlayer: ", this.state.mvpPlayer);
-                                                                            //         /*
-                                                                            //         this.repo.getMostRecentBool(this.gameID).then(x => {
-                                                                            //             this.setState({ isMostRecent: x}, () => {
-                                                                            //                 console.log("isMostRecentBool: ", this.state.isMostRecentBool);
-                                                                            //             });
-                                                                            //         });
-                                                                            //         */
-                                                                            //     });
-                                                                            // });
+                                                                            this.repo.getTeamScoreFromGame(this.gameID, this.state.team1ID).then(x => {
+                                                                                this.setState({ team1Score: x[0]["score"] }, () => {
+                                                                                    console.log("team1Score: ", this.state.team1Score);
+                                                                                
+                                                                                    this.repo.getTeamScoreFromGame(this.gameID, this.state.team2ID).then(x => {
+                                                                                        this.setState({ team2Score: x[0]["score"] }, () => {
+                                                                                            console.log("team2Score: ", this.state.team2Score);
+
+                                                                                            this.repo.getGameMVP(this.gameID).then(x => {
+                                                                                                this.setState({ mvpPlayer: new Player(x[0]["PlayerID"], x[0]["FirstName"], x[0]["LastName"]) }, () => {
+                                                                                                    console.log("mvpPlayer: ", this.state.mvpPlayer);
+                                                                                                });
+                                                                                            });
+                                                                                        });
+                                                                                    });
+                                                                                });
+                                                                            });
                                                                         });
                                                                     });
                                                                 });
@@ -126,10 +135,29 @@ export class GameView extends React.Component {
     }
 
     mvpVoting() {
-
+        console.log("in mvp voting method");
     }
 
     render() {
+        if(this.state.team2Score == 0){
+            return <>
+                <Navbar bg="dark" variant="dark">
+                <Container>
+                    <Navbar.Brand>SportsTeamWebsite</Navbar.Brand>
+                    <Nav className="me-auto">
+                        <Nav.Link href="/home">Home</Nav.Link>
+                        <Nav.Link href="/NBA">NBA</Nav.Link>
+                        <Nav.Link href="/NFL">NFL</Nav.Link>
+                        <Nav.Link href="/MLB">MLB</Nav.Link>
+                    </Nav>
+                    <Nav.Link href="/login" className="mr-auto">Login</Nav.Link>
+                </Container>
+                </Navbar>
+
+                <h4 className="m-3"> Data is loading... </h4>
+            </>
+        }
+
         return <>
             <Navbar bg="dark" variant="dark">
                 <Container>
@@ -148,11 +176,13 @@ export class GameView extends React.Component {
 
             <Container fluid className="p-3">
                 <Row>
-                    <Col><h1>Game Details for {this.state.team1Name} v. {this.state.team2Name}</h1></Col>
+                    <Col><h1>Game Details for { this.state.team1Name } v. { this.state.team2Name }</h1></Col>
                 </Row>
                 <Row>
-                    <Col><p>{this.state.winnerName} won the game.</p></Col>
-                    <p>*Insert game scores*</p>
+                    <Col>
+                        <h3>The { this.state.winnerName } won the game.</h3>
+                        <h4>The score was { this.state.team1Score }-{ this.state.team2Score}.</h4>
+                    </Col>
                 </Row>
                 <Row>
                     <Col>
@@ -248,12 +278,14 @@ export class GameView extends React.Component {
             <Container>
                 <Row>
                     <Col>
-                        <p>*Insert mvp player*</p>
+                        <h4>The game MVP was { this.state.mvpPlayer.firstName } { this.state.mvpPlayer.lastName}</h4>
                     </Col>
                 </Row>
                 <Row>
                     <Col>
-                        <p>*Insert mvp voting*</p>
+                        <button type="button" onClick={() => { this.mvpVoting(); }}>
+                            Vote for game MVP
+                        </button>
                     </Col>
                 </Row>
             </Container>
