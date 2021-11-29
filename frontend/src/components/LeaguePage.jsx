@@ -91,7 +91,7 @@ export class LeaguePage extends React.Component {
     }
 
     render() {
-        if(this.state.recent_games == []){
+        if(this.state.recent_games.length == 0){
             return <>
                 <Navbar bg="dark" variant="dark">
                 <Container>
@@ -109,6 +109,7 @@ export class LeaguePage extends React.Component {
                 <h4 className="m-3"> Data is loading... </h4>
             </>
         }
+
         return <>
             <Navbar bg="dark" variant="dark">
                 <Container>

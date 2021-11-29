@@ -1,8 +1,9 @@
 import React from 'react';
 import { Route, Link } from 'react-router-dom';
 import { SportRepository } from '../api/SportRepository';
-import { Navbar, Nav, Table, Form, Button, Container, Row, Col, Modal } from 'react-bootstrap';
+import { Navbar, Nav, Table, Form, Button, Container, Row, Col, Modal, Dropdown, DropdownButton, DropdownItem } from 'react-bootstrap';
 import { Player } from '../models/Player';
+import './GameView.css';
 
 export class GameView extends React.Component {
     //props = gameId
@@ -149,6 +150,11 @@ export class GameView extends React.Component {
             this.setState({ displayInfoPlayer: x[0] }, () => {
             });
         });
+    }
+
+    postMVPVote(firstName, lastName){
+        console.log("in post MVP vote");
+        //this.repo.SportRepository.addMVPVote(this.state.gameID, playerID).then();
     }
 
     render() {
@@ -328,16 +334,33 @@ export class GameView extends React.Component {
                 </Row>
                 <Row>
                     <Col>
-                        <Button type="button" variant="primary" onClick={ () => { this.showModal(2); } }>
+                        <Button type="button" variant="primary" onClick={ () => { this.showModal(3); } }>
                             Cast your MVP vote!
                         </Button>
 
                         <Modal show={ this.state.show3 } handleClose={ this.hideModal } aria-labelledby="contained-modal-title-vcenter" centered>
                             <Modal.Header closeButton onClick={ () => { this.hideModal(3) ; } }>
-                                <Modal.Title><p>Header</p></Modal.Title>
+                                <Modal.Title><h2>Place your vote for MVP in { this.state.team1Name } v. { this.state.team2Name }</h2></Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
-                                <p>Place your vote</p>
+                                <Container>
+                                    <Row>
+                                    <p>Place your vote</p>
+                                        <Col>
+                                            <DropdownButton id="dropdown-basic-button" title="Dropdown button">
+                                                {
+                                                    this.state.searchPlayers1.map(player =>
+                                                        <Dropdown.Item onClick={console.log(player.FirstName, player.LastName)}>{ player.FirstName } { player.LastName }</Dropdown.Item>
+                                                )}
+                                            </DropdownButton>
+                                        </Col>
+                                        <Col>
+                                            <DropdownButton id="dropdown-basic-button" title="Dropdown button">
+                                                <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                                            </DropdownButton>
+                                        </Col>
+                                    </Row>
+                                </Container>
                             </Modal.Body>
                             <Modal.Footer>
                                 <Button className="secondary" onClick={ () => { this.hideModal(3); } }>
