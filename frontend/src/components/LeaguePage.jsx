@@ -154,6 +154,9 @@ export class LeaguePage extends React.Component {
 
                             <Card bg="secondary" key={idx} text="white">
                                 <Card.Body>
+                                <Link to={ `TeamView/${r.TeamID}` }>
+                                                <p>Click to view team</p>
+                                            </Link>
                                     <Card.Title > #{idx + 1} : {r.TeamName} </Card.Title>
                                     <Card.Text> Record : {r.Wins} - {r.Losses} </Card.Text>
                                 </Card.Body>
