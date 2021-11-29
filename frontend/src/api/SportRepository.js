@@ -100,6 +100,31 @@ export class SportRepository {
         });
     }
 
+    async getAdCount(TeamID) {
+        return await new Promise((resolve, reject) => {
+            axios.get(`http://${url}:8000/team/adCount?teamID=${TeamID}`)
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
+
+    putAdCount(TeamID,AdCount){
+        return new Promise((resolve, reject) => {
+            axios.put(`http://${url}:8000/team/adCount`,{
+                teamID : TeamID,
+                adCount: AdCount
+            })
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
+
     getWinnerFromGame(gameID) {
         return new Promise((resolve, reject) => {
             axios.get(`http://${url}:8000/game/winner?gameID=${gameID}`)
@@ -132,4 +157,7 @@ export class SportRepository {
                 })
         });
     }
+
+    
+
 }
