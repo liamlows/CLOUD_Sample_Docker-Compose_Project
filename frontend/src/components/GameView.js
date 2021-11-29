@@ -158,7 +158,7 @@ export class GameView extends React.Component {
                     <Col>
                         <Form>
                             <Form.Group className="mb-3" >
-                                <Form.Control onChange={x => this.setState({ nameSearch: x.target.value })} placeholder="Search For Team 1 Player" />
+                                <Form.Control type="text" onChange={x => this.setState({ nameSearch: x.target.value })} placeholder="Search For Team 1 Player" />
                             </Form.Group>
                         </Form>
                     </Col>
@@ -172,7 +172,7 @@ export class GameView extends React.Component {
                     <Col>
                         <Form>
                             <Form.Group className="mb-3" >
-                                <Form.Control onChange={x => this.setState({ nameSearch: x.target.value })} placeholder="Search For Team 2 Player" />
+                                <Form.Control type="text" onChange={x => this.setState({ nameSearch: x.target.value })} placeholder="Search For Team 2 Player" />
                             </Form.Group>
                         </Form>
                     </Col>
