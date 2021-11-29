@@ -74,6 +74,16 @@ export class SportRepository {
         });
     }
 
+    getTeamNameFromTeamID(teamID) {
+        return new Promise((resolve, reject) => {
+            axios.get(`http://${url}:8000/teams/teamName?teamID=${teamID}`)
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
 
     getPlayersFromTeam(TeamID) {
         // let config = this.config;
@@ -82,6 +92,17 @@ export class SportRepository {
         // }
         return new Promise((resolve, reject) => {
             axios.get(`http://${url}:8000/team/allplayers?TeamID=${TeamID}`)
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
+
+    getWinnerFromGame(gameID) {
+        return new Promise((resolve, reject) => {
+            axios.get(`http://${url}:8000/game/winner?gameID=${gameID}`)
                 .then(x => resolve(x.data))
                 .catch(x => {
                     alert(x);

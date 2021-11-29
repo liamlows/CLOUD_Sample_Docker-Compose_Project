@@ -23,7 +23,7 @@ const App = props => {
 
 
         <Route path = "/TeamView" element = {<Teamview/>}/>
-        <Route path = "/GameView" element = {<GameView gameID = "1"/>}/>
+        <Route path = "/GameView" element = {<GameView gameID = "5"/>}/>
 
     </Routes>
     </BrowserRouter>

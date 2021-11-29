@@ -26,41 +26,59 @@ export class GameView extends React.Component {
         team1ID: '',
         team2ID: '',
         team1Players: [],
-        team2Players: []
+        team2Players: [],
+        winnerID: '',
+        winnerName: '',
+        searchPlayers1: [],
+        searchPlayers2: [],
+        nameSearch: ''
     }
+
+    repo = new SportRepository();
+    gameID = this.props.gameID;
     
     //set the game info in state using gameId in url
     componentDidMount(){
         console.log("componentDidMount method");
-        let gameID = this.props.gameID;
-        let repo = new SportRepository();
-        console.log("gameID: ", gameID);
+        console.log("gameID: ", this.gameID);
         //make this work for dynamically setting url game ID
 
-        if(gameID){
-            repo.getTeamName1FromGameID(gameID).then(x => 
+        if(this.gameID){
+            this.repo.getTeamName1FromGameID(this.gameID).then(x => 
                 this.setState({ team1Name: x[0]["TeamName"]}, () => {
                     console.log("team1Name: ", this.state.team1Name);
 
-                    repo.getTeamName2FromGameID(gameID).then(x => {
+                    this.repo.getTeamName2FromGameID(this.gameID).then(x => {
                         this.setState({ team2Name: x[0]["TeamName"]}, () => {
                             console.log("team2Name: ", this.state.team2Name);
 
-                            repo.getTeamIDFromTeamName(this.state.team1Name).then(x => {
+                            this.repo.getTeamIDFromTeamName(this.state.team1Name).then(x => {
                                 this.setState({ team1ID: x[0]["TeamID"]}, () => {
                                     console.log("team1ID: ", this.state.team1ID);
 
-                                    repo.getTeamIDFromTeamName(this.state.team2Name).then(x => {
+                                    this.repo.getTeamIDFromTeamName(this.state.team2Name).then(x => {
                                         this.setState({ team2ID: x[0]["TeamID"]}, () => {
                                             console.log("team2ID: ", this.state.team2ID);
 
-                                            repo.getPlayersFromTeam(this.state.team1ID).then(x => {
-                                                this.setState({ team1Players: x }, () => {
+                                            this.repo.getPlayersFromTeam(this.state.team1ID).then(x => {
+                                                this.setState({ team1Players: x, searchPlayers1: x }, () => {
                                                     console.log("team1Players: ", this.state.team1Players);
 
-                                                    repo.getPlayersFromTeam(this.state.team2ID).then(x => {
-                                                        this.setState({ team2Players: x }, () => {
+                                                    this.repo.getPlayersFromTeam(this.state.team2ID).then(x => {
+                                                        this.setState({ team2Players: x, searchPlayers2: x }, () => {
                                                             console.log("team2Players: ", this.state.team2Players);
+
+                                                            this.repo.getWinnerFromGame(this.gameID).then(x => {
+                                                                this.setState({ winnerID: x[0]["WinnerID"] }, () => {
+                                                                    console.log("winnerID: ", this.state.winnerID);
+
+                                                                    this.repo.getTeamNameFromTeamID(this.state.winnerID).then(x => {
+                                                                        this.setState({ winnerName: x[0]["TeamName"] }, () => {
+                                                                            console.log("winnerName: ", this.state.winnerName);
+                                                                        });
+                                                                    });
+                                                                });
+                                                            });
                                                         });
                                                     });
                                                 });
@@ -73,6 +91,20 @@ export class GameView extends React.Component {
                     });
                 })
             );
+        }
+    }
+
+    async searchPlayer(name, teamNum){
+        console.log("Searching for: ", name);
+        if(teamNum == 1){
+            await this.setState({searchPlayers1: this.state.team1Players})
+            var players = await this.state.searchPlayers1.filter(player => player.FirstName.includes(name));
+            this.setState({searchPlayers1: players});
+        }
+        else if(teamNum == 2){
+            await this.setState({searchPlayers2: this.state.team2Players})
+            var players = await this.state.searchPlayers2.filter(player => player.FirstName.includes(name));
+            this.setState({searchPlayers2: players});
         }
     }
 
@@ -93,21 +125,44 @@ export class GameView extends React.Component {
 
 
 
-            <Navbar variant="white" bg="white" expand="lg">
-                <Container fluid>
-                    <Row>
-                        <Navbar.Brand >Game Details for { this.state.team1Name } v. { this.state.team2Name } </Navbar.Brand>
-                        <div>
-                            <p>*Insert basic game details*</p>
-                        </div>
-                    </Row>
-                    <Row>
-
-                        <p>To create a search bar: https://medium.com/@pradityadhitama/simple-search-bar-component-functionality-in-react-6589fda3385d</p>
-
-                    </Row>
-                </Container>
-            </Navbar>
+            <Container fluid className="p-3">
+                <Row>
+                    <Col><h1>Game Details for { this.state.team1Name } v. { this.state.team2Name }</h1></Col>
+                </Row>
+                <Row>
+                    <Col><p>{ this.state.winnerName } won the game.</p></Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <Form>
+                            <Form.Group className="mb-3" >
+                                <Form.Control onChange={x => this.setState({ nameSearch: x.target.value })} placeholder="Search For Team 1 Player" />
+                            </Form.Group>
+                        </Form>
+                    </Col>
+                    <Col>
+                        <Form>
+                            <Button variant="primary" onClick={() => { this.searchPlayer(this.state.nameSearch) }}>
+                                Search
+                            </Button>
+                        </Form>
+                    </Col>
+                    <Col>
+                        <Form>
+                            <Form.Group className="mb-3" >
+                                <Form.Control onChange={x => this.setState({ nameSearch: x.target.value })} placeholder="Search For Team 2 Player" />
+                            </Form.Group>
+                        </Form>
+                    </Col>
+                    <Col>
+                        <Form>
+                            <Button variant="primary" onClick={() => { this.searchPlayer(this.state.nameSearch) }}>
+                                Search
+                            </Button>
+                        </Form>
+                    </Col>
+                </Row>
+            </Container>
 
 
             <Container fluid>
@@ -116,7 +171,7 @@ export class GameView extends React.Component {
                         <Table striped bordered hover>
                             <thead>
                                 <tr>
-                                    <th colSpan="4">Team ___</th>
+                                    <th colSpan="4">{ this.state.team1Name }</th>
                                 </tr>
                                 <tr>
                                     <th>#</th>
@@ -127,7 +182,7 @@ export class GameView extends React.Component {
                             </thead>
                             <tbody>
                                 {
-                                this.state.team1Players.map(player =>
+                                this.state.searchPlayers1.map(player =>
                                     <tr>
                                         <td>{player.PlayerNumber}</td>
                                         <td>{player.FirstName} {player.LastName}</td>
@@ -143,7 +198,7 @@ export class GameView extends React.Component {
                         <Table striped bordered hover>
                             <thead>
                                 <tr>
-                                    <th colSpan="4">Team ___</th>
+                                    <th colSpan="4">{ this.state.team2Name }</th>
                                 </tr>
                                 <tr>
                                     <th>#</th>
@@ -154,7 +209,7 @@ export class GameView extends React.Component {
                             </thead>
                             <tbody>
                                 {
-                                this.state.team2Players.map(player =>
+                                this.state.searchPlayers2.map(player =>
                                     <tr>
                                         <td>{player.PlayerNumber}</td>
                                         <td>{player.FirstName} {player.LastName}</td>
@@ -170,7 +225,6 @@ export class GameView extends React.Component {
 
             <p>Game MPV: *Insert game mvp*</p>
             <p>If it's the most recent game, *insert mvp voting button (which opens a popup window for voting*</p>
-            <p>*Insert a search bar to find a specific player*</p>
         </>;
     }
 }
