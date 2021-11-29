@@ -1251,7 +1251,7 @@ module.exports = function routes(app, logger) {
       } else {
         var gameID = req.param('gameID');
         var teamID = req.param('teamID');
-        connection.query("with cte1 as (select * from Games g where GameID=?), cte2 as(select * from Games where GameID=?)select if(cte1.Team1ID=?,cte2.Team1Score,cte2.Team2Score) as score from cte1 join cte2 on cte1.GameID=cte2.GameID", [gameID,gameID,teamID], function (err, result, fields) {
+        connection.query("select if(Games.Team1ID=?,Games.Team1Score,Games.Team2Score) as score from Games where GameID=?", [teamID,gameID], function (err, result, fields) {
           if (err) {
             // if there is an error with the query, release the connection instance and log the error
             connection.release()
