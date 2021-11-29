@@ -557,7 +557,7 @@ app.post('/login', function (req, res) {
 //PUT to update users profile informationn
 // /api/user/updateProfileInformation
 //tested
-app.put('/user/updateProfileInformation', async (req, res) => {
+app.put('/api/user/updateProfileInformation', async (req, res) => {
   var userID = req.param('userID');
   var userType = req.param('userType');
   var username = req.param("username");
@@ -575,7 +575,7 @@ app.put('/user/updateProfileInformation', async (req, res) => {
 //PUT to update users validation 
 // /api/user/updateValidated
 //tested
-app.put('/user/updateValidated', async (req, res) => {
+app.put('/api/user/updateValidated', async (req, res) => {
   var userID = req.param('userID');
   var validated = req.param("validated");
   pool.query("UPDATE users SET validated = ? WHERE userID = ?", 
@@ -587,7 +587,7 @@ app.put('/user/updateValidated', async (req, res) => {
 
 //GET foodDonationID, soupKitchen, driverID, foodName, and timeMade for all orders
 //  /api/getOrders
-app.get('/getOrders', function (req, res) {
+app.get('/api/getOrders', function (req, res) {
   pool.query("SELECT f.foodDonationID, f.soupKitchenID, d.driverID, f.foodName, f.timeMade FROM foodDonations f JOIN drivers d ON f.foodDonationID = d.foodDonationID", function (err, result, fields) {
     if (err) throw err;
     res.end(JSON.stringify(result)); 
