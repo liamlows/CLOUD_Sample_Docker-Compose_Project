@@ -19,11 +19,8 @@ const App = props => {
         <Route path = "/NFL" ><LeaguePage league = "NFL"/></Route>
         <Route path = "/MLB" ><LeaguePage league = "MLB"/></Route>
 
-        {/* <Route path = "/" element = {<Teamview/>}/> */}
-
-
-        <Route path = "/TeamView"> <Teamview/></Route>
-        <Route path = "/GameView"> <GameView gameID = "5"/></Route>
+        <Route path="/TeamView/:teamID" component={Teamview}/>
+        <Route path="/GameView/:gameID" component={GameView}/>
     </Switch>
     </Router>
     </div>
