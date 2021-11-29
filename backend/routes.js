@@ -156,6 +156,25 @@ module.exports = function routes(app, logger) {
     });
   });
 
+  //PUT all fields for a driver
+  // /api/driver
+    app.put('/api/driver', async (req, res) => {
+      var driverID = req.param("driverID");
+      var userID = req.param("userID");
+      var foodDonationID = req.param("foodDonationID");
+      var licensePlate = req.param("licensePlate");
+      var carMake = req.param('carMake');
+      var carModel = req.param('carModel');
+      var carYear = req.param('carYear');
+      var carColor = req.param('carColor');
+
+      pool.query("UPDATE drivers SET userID = ?, foodDonationID = ?, licensePlate = ?, carMake = ?, carModel = ?, carYear = ?, carColor = ? WHERE driverID = ?", 
+      [userID, foodDonationID, licensePlate, carMake, carModel, carYear, carColor, driverID],function (err, result, fields) {
+        if (err) throw err;
+        res.end(JSON.stringify(result)); // Result in JSON format
+      });
+    });
+
   //PUT a foodDonationID (give the driver a new donation to deliver)
   // /api/driver/updateFoodDonationID
   app.put('/api/driver/updateFoodDonationID', async (req, res) => {
@@ -282,6 +301,21 @@ module.exports = function routes(app, logger) {
     });
   });
 
+      //PUT all fields for an availability
+    // /api/availability
+    app.put('/api/availability', async (req, res) => {
+      var availabilityID = req.param("availabilityID");
+      var driverID = req.param("driverID");
+      var startAvailability = req.param("startAvailability");
+      var endAvailability = req.param("endAvailability");
+
+      pool.query("UPDATE availabilities SET driverID = ?, startAvailability = ?, endAvailability = ? WHERE availabilityID = ?", 
+      [driverID, startAvailability, endAvailability, availabilityID],function (err, result, fields) {
+        if (err) throw err;
+        res.end(JSON.stringify(result)); // Result in JSON format
+      });
+    });
+
   //PUT a new availability start time
   // /api/availability/updateStartTime
   app.put('/api/availability/updateStartTime', async (req, res) => {
@@ -355,6 +389,22 @@ module.exports = function routes(app, logger) {
       res.end(JSON.stringify(result)); // Result in JSON format
     });
   });
+
+    //PUT all fields for a rating
+    // /api/rating
+    app.put('/api/rating', async (req, res) => {
+      var ratingID = req.param("ratingID");
+      var driverID = req.param("driverID");
+      var stars = req.param("stars");
+      var rating = req.param("rating");
+      var datePosted = req.param("datePosted");
+
+      pool.query("UPDATE ratings SET driverID = ?, stars = ?, rating = ?, datePosted = ? WHERE ratingID = ?", 
+      [driverID, stars, rating, datePosted, ratingID],function (err, result, fields) {
+        if (err) throw err;
+        res.end(JSON.stringify(result)); // Result in JSON format
+      });
+    });
 
   //PUT a new rating driverID
   // /api/rating/updateDriverID
@@ -455,6 +505,21 @@ module.exports = function routes(app, logger) {
     });
   });
 
+  //PUT all fields for a delivery
+  // /api/delivery
+  app.put('/api/delivery', async (req, res) => {
+    var deliveryID = req.param("deliveryID");
+    var driverID = req.param("driverID");
+    var foodDonationID = req.param("foodDonationID");
+    var deliveryStatus = req.param("deliveryStatus");
+
+    pool.query("UPDATE deliveries SET driverID = ?, foodDonationID = ?, deliveryStatus = ? WHERE deliveryID = ?", 
+    [driverID, foodDonationID, deliveryStatus, deliveryID],function (err, result, fields) {
+      if (err) throw err;
+      res.end(JSON.stringify(result)); // Result in JSON format
+    });
+  });
+
   //PUT a new delivery driverID
   // /api/delivery/updateDriverID
   app.put('/api/delivery/updateDriverID', async (req, res) => {
@@ -542,8 +607,23 @@ module.exports = function routes(app, logger) {
     });
   });
 
+    //PUT all fields for a soup kitchen
+    // /api/soupkitchen
+    app.put('/api/soupkitchen', async (req, res) => {
+      var soupKitchenID = req.param('soupKitchenID');
+      var userID = req.param('userID');
+      var soupKitchenName = req.param('soupKitchenName')
+      var address = req.param('address')
+
+      pool.query("UPDATE soupKitchens SET userID = ?, soupKitchenName = ?, address = ? WHERE soupKitchenID = ?", 
+      [userID, soupKitchenName, address, soupKitchenID],function (err, result, fields) {
+        if (err) throw err;
+        res.end(JSON.stringify(result)); // Result in JSON format
+      });
+    });
+
     //PUT a new userID for a soup kitchen
-  // /api/delivery/updateUserID
+  // /api/soupkitchen/updateUserID
   app.put('/api/soupkitchen/updateUserID', async (req, res) => {
     var soupKitchenID = req.param("soupKitchenID");
     var userID = req.param("userID");
@@ -555,8 +635,8 @@ module.exports = function routes(app, logger) {
     });
   });
 
-      //PUT a new soupKitchenName for a soup kitchen
-  // /api/delivery/updateSoupKitchenName
+  //PUT a new soupKitchenName for a soup kitchen
+  // /api/soupkitchen/updateSoupKitchenName
   app.put('/api/soupkitchen/updateSoupKitchenName', async (req, res) => {
     var soupKitchenID = req.param("soupKitchenID");
     var soupKitchenName = req.param("soupKitchenName");
@@ -569,7 +649,7 @@ module.exports = function routes(app, logger) {
   });
 
   //PUT a new address for a soup kitchen
-  // /api/delivery/updateAddress
+  // /api/soupkitchen/updateAddress
   app.put('/api/soupkitchen/updateAddress', async (req, res) => {
     var soupKitchenID = req.param("soupKitchenID");
     var address = req.param("address");
