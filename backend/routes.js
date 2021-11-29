@@ -595,9 +595,9 @@ module.exports = function routes(app, logger) {
 //BRIGITTA'S ROUTES
 
 //GET a paritcular user, given a userID
-//	/api/user
+//	/api/user/:userID
 //tested
-app.get('/api/user', function (req, res) {
+app.get('/api/user/:userID', function (req, res) {
   var userID = req.param('userID');
   pool.query("SELECT * FROM users WHERE userID = ?", userID, function (err, result, fields) {
     if (err) throw err;
