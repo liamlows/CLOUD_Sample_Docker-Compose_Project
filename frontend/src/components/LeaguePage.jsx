@@ -84,7 +84,6 @@ export class LeaguePage extends React.Component {
                 }
                 )
             });
-
         };
 
         this.db.getRanking(league).then(x => {
