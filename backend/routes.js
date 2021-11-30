@@ -872,7 +872,6 @@ app.post('/api/register', (req, res) => {
   var phoneNumber = req.body.phoneNumber
   var email = req.body.email
     bcrypt.hash(userPassword, 1, function(err, hash) {
-      if (err) reject(err)
       pool.query("INSERT INTO users (userType, username, userPassword, imgURL, phoneNumber, email, validated) VALUES (?,?,?,?,?,?,0)", 
       [userType, username, hash, imgURL, phoneNumber, email], function (err, result, fields) {
       if (err) {
@@ -881,9 +880,6 @@ app.post('/api/register', (req, res) => {
       res.end(JSON.stringify(result));
       });
     });
-    if (err) {
-      res.status(500).send('Something went wrong');
-    }
 });
 
 //login route that returns userID or empty array, given the username and pasword stored in the DB (hashed password)
@@ -892,9 +888,6 @@ app.post('/api/login', (req, res) => {
   var username = req.body.username
   var userPassword = req.body.userPassword
   pool.query("SELECT userPassword, userID FROM users WHERE username = ?", username, function (err, result, fields) {
-  if(err) {
-    throw err
-  } else {
     console.log(result)
     console.log(result[0])
       bcrypt.compare(userPassword, result[0].userPassword, function(err, isMatch) {
@@ -909,7 +902,6 @@ app.post('/api/login', (req, res) => {
             res.end(JSON.stringify([result[0].userID])); //if password matches return userID
         }
       });
-  }
   }); 
 });
 
