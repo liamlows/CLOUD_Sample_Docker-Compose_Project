@@ -7,7 +7,8 @@ import { Logout } from './components/Logout';
 import LeaguePage from './components/LeaguePage';
 import { Teamview } from './components/TeamView';
 import { GameView } from './components/GameView';
-
+import {PrivateRoute} from './components/PrivateRoute'
+import { Dashboard } from './components/Dashboard';
 const App = props => {
   return(
     <div className="App">
@@ -23,6 +24,8 @@ const App = props => {
 
         <Route path="/TeamView/:teamID" component={Teamview}/>
         <Route path="/GameView/:gameID" component={GameView}/>
+
+        <PrivateRoute component={Dashboard} path="/dashboard" exact />
     </Switch>
     </Router>
     </div>

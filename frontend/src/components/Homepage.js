@@ -82,7 +82,12 @@ export class Homepage extends React.Component {
                         </Nav>
                         {console.log("login", this.state.loggedInUser)}
                         {this.state.loggedInUser=="true"
-                            ? (<Nav.Link href="/logout" className="mr-auto">LogOut</Nav.Link>)
+                            ? (
+                                <>
+                            <Nav.Link href="/logout" className="mr-auto">LogOut</Nav.Link>
+                            <Nav.Link href="/dashboard" className="mr-auto">Admin Dashboard</Nav.Link>
+                            </>
+                            )
                             : (<Nav.Link href="/login" className="mr-auto">Login </Nav.Link>)
                         }
 
