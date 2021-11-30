@@ -30,14 +30,6 @@ export class Register extends React.Component {
         "Admin": 4
     };
 
-    // userTypesMap = {
-    //     "General User": 0,
-    //     "Driver": 1,
-    //     "Soup Kitchen Owner": 2,
-    //     "RDH Owner": 3,
-    //     "Admin": 4
-    // };
-
     state = {
         userType: 0,
         username: "",
@@ -96,11 +88,12 @@ export class Register extends React.Component {
 
     async register() {
         await this.accountsRepository.register(this.state);
-        // Use login route to get user id
+        // Use login route to get user id and user type
         const response = await this.accountsRepository.login(this.state)
         
         if (response) {
             sessionStorage.setItem("userID", response[0].userID);
+            sessionStorage.setItem("userType", response[0].userType);
         }
 
         this.setState({redirect: true})

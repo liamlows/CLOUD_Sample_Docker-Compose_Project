@@ -120,7 +120,7 @@ export class MyProfile extends React.Component {
                     <Link className="btn btn-primary w-10 mb-4" to={`/profile/edit`}>Edit Profile</Link>
 
                     {/* Table of each donations where this user is involved */}
-                    <ProfileTable></ProfileTable>
+                    <ProfileTable userID={sessionStorage.userID}></ProfileTable>
 
                 </div>
             </>

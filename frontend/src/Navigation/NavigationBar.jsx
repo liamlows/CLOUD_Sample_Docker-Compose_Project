@@ -9,6 +9,7 @@ export class NavigationBar extends React.Component {
 
     signout = () => {
         sessionStorage.setItem("userID", undefined);
+        sessionStorage.setItem("userType", undefined);
         this.setState({redirect: true});
     }
 
@@ -26,14 +27,16 @@ export class NavigationBar extends React.Component {
                                 <li className="nav-item">
                                     <Link to={`/donations/`} className="nav-link">All Donations</Link>
                                 </li>
-                                <li className="nav-item">
-                                    <Link to={`/newdonation/`} className="nav-link">New Donation</Link>
-                                </li>
+                                {sessionStorage.userType === "3" &&
+                                    <li className="nav-item">
+                                        <Link to={`/newdonation/`} className="nav-link">New Donation</Link>
+                                    </li>
+                                }
                                 <li className="nav-item">
                                     <Link to={`/myprofile/`} className="nav-link">My Profile</Link>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="nav-link" onClick={() => this.signout() }>Sign out</a>
+                                    <a className="nav-link" onClick={() => this.signout() }>Sign Out</a>
                                 </li>
                             </ul>
                         </div>
