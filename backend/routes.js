@@ -840,7 +840,7 @@ app.get('/api/RDHSoupKitchens/:foodDonationID', function (req, res) {
 //PUT to update claimed field in foodDonations
 // /api/foodDonations/updateClaimed
 //tested
-app.put('/api/foodDonations/updateClaimed', async (req, res) => {
+app.put('/api/foodDonation/:foodDonationID/:claimed', async (req, res) => {
   var foodDonationID = req.param('foodDonationID');
   var claimed = req.param("claimed");
   pool.query("UPDATE foodDonations SET claimed = ? WHERE foodDonationID = ?", 
