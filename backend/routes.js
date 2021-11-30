@@ -715,7 +715,7 @@ app.post('/api/login', function (req, res) {
 //PUT to update users profile information given userID
 // /api/users/:userID
 //tested
-app.put('/api/users/:userID', async (req, res) => {
+app.put('/api/user/:userID', async (req, res) => {
   var userID = req.param('userID');
   var userType = req.param('userType');
   var username = req.param("username");
@@ -765,7 +765,7 @@ app.get('/api/foodDonations/:foodDonationID', function (req, res) {
 });
 
 //GET a particular user, given RDH_ID
-//  /api/user/RDH
+//  /api/users/RDH
 //tested
 app.get('/api/users/:RDH_ID', function (req, res) {
   var RDH_ID = req.param('RDH_ID');
