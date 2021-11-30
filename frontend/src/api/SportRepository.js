@@ -35,7 +35,7 @@ export class SportRepository {
                 })
         });
     }
-    
+
     async getTeamName2FromGameID(id) {
         return await new Promise((resolve, reject) => {
             axios.get(`http://${url}:8000/games/team2?GameID=${id}`, {
@@ -111,10 +111,10 @@ export class SportRepository {
         });
     }
 
-    putAdCount(TeamID,AdCount){
+    putAdCount(TeamID, AdCount) {
         return new Promise((resolve, reject) => {
-            axios.put(`http://${url}:8000/team/adCount`,{
-                teamID : TeamID,
+            axios.put(`http://${url}:8000/team/adCount`, {
+                teamID: TeamID,
                 adCount: AdCount
             })
                 .then(x => resolve(x.data))
@@ -171,7 +171,7 @@ export class SportRepository {
 
     postMVPVote(GameID, PlayerID) {
         return new Promise((resolve, reject) => {
-            axios.post(`http://${url}:8000/game/mvp`,{
+            axios.post(`http://${url}:8000/game/mvp`, {
                 gameID: GameID,
                 playerID: PlayerID
             })
@@ -183,10 +183,10 @@ export class SportRepository {
         });
     }
 
-    putAdCount(TeamID,AdCount){
+    putAdCount(TeamID, AdCount) {
         return new Promise((resolve, reject) => {
-            axios.put(`http://${url}:8000/team/adCount`,{
-                teamID : TeamID,
+            axios.put(`http://${url}:8000/team/adCount`, {
+                teamID: TeamID,
                 adCount: AdCount
             })
                 .then(x => resolve(x.data))
@@ -211,6 +211,70 @@ export class SportRepository {
     getPlayer(firstname, lastname) {
         return new Promise((resolve, reject) => {
             axios.get(`http://${url}:8000/player?firstName=${firstname}&lastName=${lastname}`)
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
+
+    putPlayerName(PlayerID, FirstName, LastName) {
+        return new Promise((resolve, reject) => {
+            axios.put(`http://${url}:8000/player/name`, {
+                firstName: FirstName,
+                lastName: LastName,
+                playerID: PlayerID
+            })
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
+
+    putPlayerPicture(PlayerID, PictureURL) {
+        return new Promise((resolve, reject) => {
+            axios.put(`http://${url}:8000/player/picture`, {
+                playerID: PlayerID,
+                playerPicture: PictureURL
+            })
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
+
+    putPlayerPosition(PlayerID, PlayerPosition) {
+        return new Promise((resolve, reject) => {
+            axios.put(`http://${url}:8000/player/position`, {
+                playerID: PlayerID,
+                playerPos: PlayerPosition
+            })
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
+
+    postNewPlayer(FirstName, LastName, PlayerNumber,TeamID,PlayerPPG, PlayerPosition, PlayerTimePlayed, CoachID, PlayerPictureURL ) {
+        return new Promise((resolve, reject) => {
+            axios.post(`http://${url}:8000/player`, {
+                playerLastName: LastName,
+                playerFirstName: FirstName,
+                playerNumber: PlayerNumber,
+                teamID: TeamID,
+                playerPPG: PlayerPPG,
+                playerPos: PlayerPosition,
+                playerTimePlayed: PlayerTimePlayed,
+                coachID: CoachID,
+                playerPicture: PlayerPictureURL
+            })
                 .then(x => resolve(x.data))
                 .catch(x => {
                     alert(x);

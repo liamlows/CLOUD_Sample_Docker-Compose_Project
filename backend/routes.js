@@ -1452,36 +1452,6 @@ app.put('/player/name', async (req, res) => {
       logger.error('Problem obtaining MySQL connection', err)
       res.status(400).send('Problem obtaining MySQL connection');
     } else {
-      var firstName = req.param('firstName');
-      var lastName = req.param('lastName');
-      var playerID = req.param('playerID');
-      connection.query("update Players set FirstName=?,LastName=? where PlayerID=?", [firstName, lastName, playerID], function (err, result, fields) {
-        if (err) {
-          // if there is an error with the query, release the connection instance and log the error
-          connection.release()
-          logger.error("Problem getting ppg: ", err);
-          res.status(400).send('Problem getting ppg');
-        } else {
-          // if there is no error with the query, release the connection instance
-          res.send(result);
-          connection.release()
-
-        }
-      });
-    }
-  });
-});
-
-//update players name
-app.put('/player/name', async (req, res) => {
-  // obtain a connection from our pool of connections
-  pool.getConnection(function (err, connection) {
-    if (err) {
-      console.log(connection);
-      // if there is an issue obtaining a connection, release the connection instance and log the error
-      logger.error('Problem obtaining MySQL connection', err)
-      res.status(400).send('Problem obtaining MySQL connection');
-    } else {
       var firstName = req.body.firstName;
       var lastName = req.body.lastName;
       var playerID = req.body.playerID;
@@ -1530,7 +1500,7 @@ app.get('/team/adCount', (req, res) => {
   });
 });
 
-//update players name
+//update adCount
 app.put('/team/adCount', (req, res) => {
   // obtain a connection from our pool of connections
   pool.getConnection(function (err, connection) {
