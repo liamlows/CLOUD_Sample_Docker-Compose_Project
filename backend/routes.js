@@ -884,7 +884,7 @@ app.post('/api/register', (req, res) => {
 
 //login route that returns userID or empty array, given the username and pasword stored in the DB (hashed password)
 //returns userID if hashed password matches password and an empty array if they do not match
-app.post('/api/login', (req, res) => {
+app.post('/api/loginHash', (req, res) => {
   var username = req.body.username
   var userPassword = req.body.userPassword
   pool.query("SELECT userPassword, userID FROM users WHERE username = ?", username, function (err, result, fields) {
