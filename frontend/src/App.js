@@ -22,9 +22,6 @@ const App = props => {
         <Route path = "/NFL" ><LeaguePage league = "NFL"/></Route>
         <Route path = "/MLB" ><LeaguePage league = "MLB"/></Route>
 
-        <Route path="/TeamView/:teamID" component={Teamview}/>
-        <Route path="/GameView/:gameID" component={GameView}/>
-
         <PrivateRoute component={Dashboard} path="/dashboard" exact />
     </Switch>
     </Router>

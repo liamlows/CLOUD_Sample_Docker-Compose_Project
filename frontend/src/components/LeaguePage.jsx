@@ -22,21 +22,6 @@ export class LeaguePage extends React.Component {
 
     db = new SportRepository();
 
-    // async getTeamName2FromGameID(GameID) {
-    //     var team_name;
-    //     await this.db.getTeamName2FromGameID(GameID).then(
-    //         team2 => {
-    //             console.log("what is team2",team2);
-    //             team_name = team2[0].TeamName;
-
-    //             console.log("what is team_name",team_name);
-
-    //             return team_name;
-    //         }
-    //     );
-    // }
-
-
     async searchTeams(name) {
         await this.setState({ search_games: this.state.recent_games })
         var games = await this.state.search_games.filter(game => game.Team1Name.includes(name)||game.OpponentName.includes(name) );
@@ -161,8 +146,8 @@ export class LeaguePage extends React.Component {
                         </Nav>
                     </Navbar.Collapse>
                     <Form>
-                        <Form.Group className="mb-3" >
-                            <Form.Control type="text" onChange={e => this.setState({ name_search: e.target.value })} placeholder="Search For Games" />
+                        <Form.Group className="mb-3 pr-10" >
+                            <Form.Control type="text" onChange={e => this.setState({ name_search: e.target.value })} placeholder="Search Games by Name" />
                         </Form.Group>
                         <Button variant="primary" onClick={() => { this.searchTeams(this.state.name_search) }}>
                             Search
