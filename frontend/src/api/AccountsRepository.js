@@ -19,7 +19,7 @@ export class AccountsRepository {
     
     getUser(userID) {
         return new Promise((resolve, reject) => {
-            axios.get(hostname + '/api/users/' + userID)
+            axios.get(hostname + '/api/user/' + userID)
                 .then(x => resolve(x.data))
                 .catch(x => {
                     alert(x);
@@ -61,5 +61,15 @@ export class AccountsRepository {
         });
     }
 
+    getUsersByType(userType) {
+        return new Promise((resolve, reject) => {
+            axios.get(hostname + '/api/users/' + userType)
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
 
 }
