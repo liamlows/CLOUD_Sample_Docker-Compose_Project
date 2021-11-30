@@ -889,7 +889,8 @@ app.post('/api/loginHash', (req, res) => {
   var userPassword = req.body.userPassword
   pool.query("SELECT userPassword, userID FROM users WHERE username = ?", username, function (err, result, fields) {
     console.log(result)
-    console.log(result[0])
+    console.log(result[0].userPassword)
+    console.log(userPassword)
       bcrypt.compare(userPassword, result[0].userPassword, function(err, isMatch) {
         if(err) {
           throw err
