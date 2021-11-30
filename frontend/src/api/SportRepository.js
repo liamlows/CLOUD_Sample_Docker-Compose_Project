@@ -283,4 +283,134 @@ export class SportRepository {
         });
     }
 
+    putGameScore(ID, Score, TeamNum) {
+        return new Promise((resolve, reject) => {
+            axios.put(`http://${url}:8000/games/score`, {
+                GameID: ID,
+                score: Score,
+                teamNum: TeamNum
+            })
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
+
+    putGameHidden(GameID, IsHidden) {
+        return new Promise((resolve, reject) => {
+            axios.put(`http://${url}:8000/game/hide`, {
+                gameID: GameID,
+                isHidden: IsHidden
+            })
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
+
+    putTeam1ID(GameID, TeamID) {
+        return new Promise((resolve, reject) => {
+            axios.put(`http://${url}:8000/games/team1ID`, {
+                team1ID: TeamID,
+                gameID: GameID
+            })
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
+
+    putTeam2ID(GameID, TeamID) {
+        return new Promise((resolve, reject) => {
+            axios.put(`http://${url}:8000/games/team2ID`, {
+                team2ID: TeamID,
+                gameID: GameID
+            })
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
+
+    putTeam1Score(GameID, Score) {
+        return new Promise((resolve, reject) => {
+            axios.put(`http://${url}:8000/games/team1score`, {
+                team1Score: Score,
+                gameID: GameID
+            })
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
+
+    putTeam1Score(GameID, Score) {
+        return new Promise((resolve, reject) => {
+            axios.put(`http://${url}:8000/games/team2score`, {
+                team2Score: Score,
+                gameID: GameID
+            })
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
+
+    putTeam1Score(GameID, Winner) {
+        return new Promise((resolve, reject) => {
+            axios.put(`http://${url}:8000/games/winnerID`, {
+                winnerID: Winner,
+                gameID: GameID
+            })
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
+
+    putGameDate(GameID, Date) {
+        return new Promise((resolve, reject) => {
+            axios.put(`http://${url}:8000/games/date`, {
+                date: Date,
+                gameID: GameID
+            })
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
+
+    postGame(Team1ID, Team2ID,Team1Score,Team2Score,Winner) {
+        return new Promise((resolve, reject) => {
+            axios.put(`http://${url}:8000/games/date`, {
+                team1ID: Team1ID,
+                team2ID: Team2ID,
+                team1Score: Team1Score,
+                team2Score: Team2Score,
+                winnerID: Winner
+            })
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
+
 }
