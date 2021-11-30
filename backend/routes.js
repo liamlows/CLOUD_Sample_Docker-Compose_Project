@@ -715,7 +715,7 @@ app.post('/api/login', function (req, res) {
 //PUT to update users profile information given userID
 // /api/users/:userID
 //tested
-app.put('/api/user/:userID', async (req, res) => {
+app.put('/api/users/:userID', async (req, res) => {
   var userID = req.param('userID');
   var userType = req.param('userType');
   var username = req.param("username");
@@ -849,5 +849,16 @@ app.put('/api/foodDonations/updateClaimed', async (req, res) => {
     res.end(JSON.stringify(result)); 
   });
 });
+
+// GET all donations associated with a specific userID
+// api/users/foodDonations/:userID
+app.get('/api/users/foodDonations/:userID', function (req, res) {
+  var userID = req.param('userID');
+  pool.query("SELECT * from foodDonations d INNER JOIN RDH r ON d.RDH_ID = r.RDH_ID INNER JOIN users u ON r.userID = u.userID WHERE u.userID = ?", userID, function (err, result, fields) {
+    if (err) throw err;
+    res.end(JSON.stringify(result)); 
+  });
+});
+
 
 }

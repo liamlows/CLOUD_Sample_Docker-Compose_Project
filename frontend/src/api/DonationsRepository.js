@@ -59,4 +59,15 @@ export class DonationsRepository {
         });
     }
 
+    getUserDonations(userID) {
+        return new Promise((resolve, reject) => {
+            axios.get(hostname + '/api/users/foodDonations/' + userID)
+            .then(x => resolve(x.data))
+            .catch(x => {
+                alert(x);
+                reject(x);
+            })
+        });
+    }
+
 }

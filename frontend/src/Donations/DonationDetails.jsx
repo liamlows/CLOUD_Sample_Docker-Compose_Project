@@ -100,7 +100,6 @@ export class Donation extends React.Component {
     }
 
     async populateStateFields(foodDonationID) {
-        console.log(foodDonationID);
         const response = await this.donationsRepository.getRDHandSoupKitchenInfo(foodDonationID);
 
         if (response) {
