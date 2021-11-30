@@ -876,15 +876,10 @@ app.post('/api/register', (req, res) => {
       pool.query("INSERT INTO users (userType, username, userPassword, imgURL, phoneNumber, email, validated) VALUES (?,?,?,?,?,?,0)", 
       [userType, username, hash, imgURL, phoneNumber, email], function (err, result, fields) {
       if (err) {
-        logger.error("Error while fetching values: \n", err);
-        res.status(400).json({
-        "data": [],
-        "error": "Error obtaining values"
-        })
-      } else {
-          res.end(JSON.stringify(result));
-        }
-    });
+        throw err;
+      } 
+      res.end(JSON.stringify(result));
+      });
     });
     if (err) {
       res.status(500).send('Something went wrong');
