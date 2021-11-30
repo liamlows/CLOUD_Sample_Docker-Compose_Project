@@ -33,6 +33,7 @@ export class Login extends React.Component {
 
         if (response) {
             sessionStorage.setItem("userID", response[0].userID);
+            sessionStorage.setItem("userType", response[0].userType);
         }
 
         this.setState({redirect: true});
