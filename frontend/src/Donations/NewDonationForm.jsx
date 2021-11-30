@@ -9,12 +9,6 @@ export class NewDonationForm extends React.Component {
     donationsRepository = new DonationsRepository();
     accountsRepository = new AccountsRepository();
 
-    // soupKitchenStrings = {};
-
-
-
-    
-
     state = {
         RDH_ID: sessionStorage.userID,
         soupKitchenID: 0,
@@ -211,7 +205,7 @@ export class NewDonationForm extends React.Component {
     }
 
     async populateSoupKitchenIDs() {
-        const response = await this.accountsRepository.getUsersByType(2);
+        const response = await this.donationsRepository.getSoupKitchens();
 
         if (response) {
             this.setState({soupKitchenIDs: response})

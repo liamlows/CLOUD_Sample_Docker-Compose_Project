@@ -3,9 +3,21 @@ import { hostname } from './config';
 
 export class DonationsRepository {
 
+    getDonations() {
+        return new Promise((resolve, reject) => {
+            axios.get(hostname + '/api/foodDonations')
+            .then(x => resolve(x.data))
+            .catch(x => {
+                alert(x);
+                reject(x);
+            })
+        });
+    }
+
+
     addDonation(donation) {
         return new Promise((resolve, reject) => {
-            axios.post(hostname + '/api/foodDonation', donation )
+            axios.post(hostname + '/api/foodDonations', donation )
                 .then(x => resolve(x.data))
                 .catch(x => {
                     alert(x);
@@ -33,6 +45,17 @@ export class DonationsRepository {
                     alert(x);
                     reject(x);
                 })
+        });
+    }
+
+    getSoupKitchens() {
+        return new Promise((resolve, reject) => {
+            axios.get(hostname + '/api/soupKitchens')
+            .then(x => resolve(x.data))
+            .catch(x => {
+                alert(x);
+                reject(x);
+            })
         });
     }
 

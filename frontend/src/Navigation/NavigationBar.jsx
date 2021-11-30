@@ -36,7 +36,7 @@ export class NavigationBar extends React.Component {
                                     <Link to={`/myprofile/`} className="nav-link">My Profile</Link>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="nav-link" onClick={() => this.signout() }>Sign out</a>
+                                    <a className="nav-link" onClick={() => this.signout() }>Sign Out</a>
                                 </li>
                             </ul>
                         </div>

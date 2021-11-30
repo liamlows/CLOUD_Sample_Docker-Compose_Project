@@ -9,20 +9,20 @@ export class Donation extends React.Component {
     accountsRepository = new AccountsRepository();
     donationsRepository = new DonationsRepository();
 
-    // const {id} = props.match.params;
+
 
     state = {
         RDHUsername: "",
         RDHAddress: "",
         soupKitchenUsername: "",
         soupKitchenAddress: "",
-        donationImgURL: "https://assets.epicurious.com/photos/57b361d4df05218810c5212b/16:9/w_1280,c_limit/the-one-and-only-truly-belgian-fries.jpg",
-        foodName: "test",
+        donationImgURL: "",
+        foodName: "",
         quantity: 0,
         foodCategory: "",
-        description: "desc desc desc desc desc desc desc",
-        timeMade: undefined,
-        expirationDate: undefined,
+        description: "",
+        timeMade: "",
+        expirationDate: "",
         preservationType: "",
     }
 
@@ -84,13 +84,13 @@ export class Donation extends React.Component {
                 <div className="container">
                     <h5><u>Preservation Info</u></h5>
                     <div className="row my-1">
-                        <p>Food items made at: {this.state.timeMade}</p>
+                        <p>Food items made on: {this.state.timeMade.substring(0,10)}</p>
                     </div>
                     <div className="row my-1">
                         <p>Preservation Method: {this.state.preservationType}</p>
                     </div>
                     <div className="row my-1">
-                        <p>Food items expire on: {this.state.expirationDate}</p>
+                        <p>Food items expire on: {this.state.expirationDate.substring(0,10)}</p>
                     </div>
                 </div>
             </div>
@@ -99,8 +99,9 @@ export class Donation extends React.Component {
         </>;
     }
 
-    async populateStateFields() {
-        const response = await this.donationsRepository.getRDHandSoupKitchenInfo(1);
+    async populateStateFields(foodDonationID) {
+        console.log(foodDonationID);
+        const response = await this.donationsRepository.getRDHandSoupKitchenInfo(foodDonationID);
 
         if (response) {
             this.setState({
@@ -111,16 +112,17 @@ export class Donation extends React.Component {
             })
         }
         
-        const response2 = await this.donationsRepository.getDonation(1);
+        const response2 = await this.donationsRepository.getDonation(foodDonationID);
         if (response2) {
             this.setState({
+                donationImgURL: response2[0].photoURL,
                 foodName: response2[0].foodName,
                 quantity: response2[0].quantity,
                 foodCategory: response2[0].foodCategory,
                 description: response2[0].description,
                 timeMade: response2[0].timeMade,
                 preservationType: response2[0].preservationType,
-                expirationDate: response2[0].expirationDate,
+                expirationDate: response2[0].expirationDate
             })
         }
 
@@ -129,8 +131,10 @@ export class Donation extends React.Component {
     componentDidMount() {
         
         // pass in props as foodDonation id on link. 
+        const foodDonationID = this.props.match.params;
 
-        this.populateStateFields();
+
+        this.populateStateFields(foodDonationID.foodDonationID);
 
     }
 

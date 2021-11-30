@@ -745,13 +745,21 @@ app.put('/api/users/updateValidated', async (req, res) => {
 
 //GET foodDonationID, soupKitchen, driverID, foodName, timeMade, RDH_ID, expirationDate, quantity, and claimed for all foodDonations
 //  /api/foodDonations
-//tested
+//
+
 app.get('/api/foodDonations', function (req, res) {
-  pool.query("SELECT f.foodDonationID, f.soupKitchenID, d.driverID, f.foodName, f.timeMade, f.RDH_ID, f.expirationDate, f.quantity, f.claimed FROM foodDonations f JOIN drivers d ON f.foodDonationID = d.foodDonationID", function (err, result, fields) {
+  pool.query("SELECT * from foodDonations d INNER JOIN RDH r on d.RDH_ID = r.RDH_ID INNER JOIN soupKitchens s ON d.soupKitchenID = s.soupKitchenID", function (err, result, fields) {
     if (err) throw err;
     res.end(JSON.stringify(result)); 
   });
 });
+
+// app.get('/api/foodDonations', function (req, res) {
+//   pool.query("SELECT f.foodDonationID, f.soupKitchenID, d.driverID, f.foodName, f.timeMade, f.RDH_ID, f.expirationDate, f.quantity, f.claimed FROM foodDonations f JOIN drivers d ON f.foodDonationID = d.foodDonationID", function (err, result, fields) {
+//     if (err) throw err;
+//     res.end(JSON.stringify(result)); 
+//   });
+// });
 
 //GET a particular foodDonation, given foodDonationID
 //  /api/foodDonations/:foodDonationID
@@ -789,7 +797,7 @@ app.post('/api/foodDonations', async (req, res) => {
   var preservationType = req.param("preservationType");
   var donationDescription = req.param("donationDescription");
   var quantity = req.param("quantity");  
-  pool.query("INSERT INTO foodDonations (RDH_ID, soupKitchenID, foodName, foodCategory, timeMade, expirationDate, photoURL, preservationType, donationDescription, quantity) VALUES (?,?,?,?,?,?,?,?,?,?,0)", 
+  pool.query("INSERT INTO foodDonations (RDH_ID, soupKitchenID, foodName, foodCategory, timeMade, expirationDate, photoURL, preservationType, donationDescription, quantity, claimed) VALUES (?,?,?,?,?,?,?,?,?,?,?,0)", 
   [RDH_ID, soupKitchenID, foodName, foodCategory, timeMade, expirationDate, photoURL, preservationType, donationDescription, quantity],function (err, result, fields) {
     if (err) throw err;
     res.end(JSON.stringify(result)); 
