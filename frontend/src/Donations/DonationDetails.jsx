@@ -9,23 +9,37 @@ export class Donation extends React.Component {
     accountsRepository = new AccountsRepository();
     donationsRepository = new DonationsRepository();
 
-    // const {id} = props.match.params;
+
 
     state = {
+        // foodDonationID: 0,
         RDHUsername: "",
         RDHAddress: "",
         soupKitchenUsername: "",
         soupKitchenAddress: "",
-        donationImgURL: "https://assets.epicurious.com/photos/57b361d4df05218810c5212b/16:9/w_1280,c_limit/the-one-and-only-truly-belgian-fries.jpg",
-        foodName: "test",
+        donationImgURL: "",
+        foodName: "",
         quantity: 0,
         foodCategory: "",
-        description: "desc desc desc desc desc desc desc",
-        timeMade: undefined,
-        expirationDate: undefined,
+        description: "",
+        timeMade: "",
+        expirationDate: "",
         preservationType: "",
+        // claimed: 0
     }
 
+    // updateClaimed(claimedStatus) {
+    //     if (claimedStatus) {
+    //         this.donationsRepository.updateClaimed(this.state.foodDonationID, 0).then(
+    //         this.setState({claimed: 0}))
+
+    //     }
+    //     else if (!claimedStatus) {
+    //         this.donationsRepository.updateClaimed(this.state.foodDonationID, 1).then(
+    //         this.setState({claimed: 1}))
+    //     }
+
+    // }
 
     render() {
         return  <>
@@ -84,23 +98,70 @@ export class Donation extends React.Component {
                 <div className="container">
                     <h5><u>Preservation Info</u></h5>
                     <div className="row my-1">
-                        <p>Food items made at: {this.state.timeMade}</p>
+                        <p>Food items made on: {this.state.timeMade.substring(0,10)}</p>
                     </div>
                     <div className="row my-1">
                         <p>Preservation Method: {this.state.preservationType}</p>
                     </div>
                     <div className="row my-1">
-                        <p>Food items expire on: {this.state.expirationDate}</p>
+                        <p>Food items expire on: {this.state.expirationDate.substring(0,10)}</p>
                     </div>
                 </div>
+                {/* Anytime something is claimed, it means that any driver can cancel any claim.
+                    This is problematic so we can't leave it in.
+                    I was wrong.
+                    We need to change the schema to have a driverID on every food donation.
+                    When the driver usertype clicks the button, it calls a simple PUT to
+                    assigns their sessionStorage.siteID to the foodDonations' driverID field.
+                    That way only a driver who actually claimed the dono could cancel.
+                */}
+                {/* {(this.state.claimed === 0 && sessionStorage.userType !== "1") && 
+                    <div className="container mt-4">
+                        <p>This donation has <b>not</b> been claimed.</p>.
+                        Contact a driver to ensure this donation gets delivered!
+                    </div>
+                }
+                {(this.state.claimed === 0 && sessionStorage.userType === "1") &&
+                    <div className="container">
+                        <form id="claim-form"
+                            onSubmit={
+                                (e) => {
+                                    this.updateClaimed(this.state.claimed);
+                                    e.preventDefault();
+                                }
+                            }
+                        > 
+                            <button type="submit" form="claim-form" className="btn btn-primary">Claim this Delivery</button>
+                        </form>
+                    </div>
+                }
+                {(this.state.claimed === 1 && sessionStorage.userType !== "1") &&
+                    <div className="container">
+                        <p>This donation has been claimed.</p>
+                    </div>
+                }
+                {(this.state.claimed === 1 && sessionStorage.userType === "1") &&
+                    <div className="container">
+                        <form id="claim-form"
+                            onSubmit={
+                                (e) => {
+                                    this.updateClaimed(this.state.claimed);
+                                    e.preventDefault();
+                                }
+                            }
+                        > 
+                            <button type="submit" form="claim-form" className="btn btn-danger">Cancel Claim</button>
+                        </form>
+                    </div>
+                } */}
             </div>
 
 
         </>;
     }
 
-    async populateStateFields() {
-        const response = await this.donationsRepository.getRDHandSoupKitchenInfo(1);
+    async populateStateFields(foodDonationID) {
+        const response = await this.donationsRepository.getRDHandSoupKitchenInfo(foodDonationID);
 
         if (response) {
             this.setState({
@@ -111,9 +172,11 @@ export class Donation extends React.Component {
             })
         }
         
-        const response2 = await this.donationsRepository.getDonation(1);
+        const response2 = await this.donationsRepository.getDonation(foodDonationID);
         if (response2) {
             this.setState({
+                foodDonationID: response2[0].foodDonationID,
+                donationImgURL: response2[0].photoURL,
                 foodName: response2[0].foodName,
                 quantity: response2[0].quantity,
                 foodCategory: response2[0].foodCategory,
@@ -121,6 +184,7 @@ export class Donation extends React.Component {
                 timeMade: response2[0].timeMade,
                 preservationType: response2[0].preservationType,
                 expirationDate: response2[0].expirationDate,
+                claimed: response2[0].claimed
             })
         }
 
@@ -129,8 +193,10 @@ export class Donation extends React.Component {
     componentDidMount() {
         
         // pass in props as foodDonation id on link. 
+        const foodDonationID = this.props.match.params;
 
-        this.populateStateFields();
+
+        this.populateStateFields(foodDonationID.foodDonationID);
 
     }
 
