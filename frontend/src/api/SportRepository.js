@@ -105,9 +105,11 @@ export class SportRepository {
         //     config.params = params;
         // }
         return new Promise((resolve, reject) => {
+            console.log("Inside axios",PlayerID);
             axios.get(`http://${url}:8000/playerByID?PlayerID=${PlayerID}`)
                 .then(x => resolve(x.data))
                 .catch(x => {
+                    console.log(x);
                     alert(x);
                     reject(x);
                 })

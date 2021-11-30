@@ -7,10 +7,16 @@ export const Logout = () => {
     }
     return <>
         <h1>
-            You are Logout!
+            Are you sure you want to Logout?
         </h1>
 
-        <Link to = "/" onClick ={setFalse}> Back to Home 
+        <Link to = "/" onClick ={setFalse}> Yes
+        </Link>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <Link to = "/" > Nevermind!
         </Link>
     </>
 }
