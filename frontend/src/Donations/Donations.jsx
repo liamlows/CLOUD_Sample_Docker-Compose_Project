@@ -31,8 +31,10 @@ export class Donations extends React.Component {
 
         return(
             <>
+
                 <NavigationBar></NavigationBar>
                 <div>Incomplete</div>
+                <Link to={`/donation/` + "1"}> yo</Link>
                 {/* <span type="button" 
                     className="btn btn-primary" 
                     onClick={() => this.goToProfile(this.state.userID)}>

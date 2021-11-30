@@ -30,7 +30,7 @@ export class AccountsRepository {
 
     register(account) {
         return new Promise((resolve, reject) => {
-            axios.post(hostname + '/api/user', account )
+            axios.post(hostname + '/api/users', account )
                 .then(x => resolve(x.data))
                 .catch(x => {
                     alert(x);
@@ -52,7 +52,7 @@ export class AccountsRepository {
 
     updateUser(userID, account) {
         return new Promise((resolve, reject) => {
-            axios.put(hostname + '/api/user/' + userID, { ...account })
+            axios.put(hostname + '/api/users/' + userID, { ...account })
                 .then(x => resolve(x.data))
                 .catch(x => {
                     alert(x);
@@ -71,10 +71,5 @@ export class AccountsRepository {
                 })
         });
     }
-
-    getRDHUser(RDH_ID) {
-        
-    }
-
 
 }

@@ -16,7 +16,18 @@ export class DonationsRepository {
 
     getDonation(foodDonationID) {
         return new Promise((resolve, reject) => {
-            axios.get(hostname + '/api/foodDonation/' + foodDonationID )
+            axios.get(hostname + '/api/foodDonations/' + foodDonationID )
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
+
+    getRDHandSoupKitchenInfo(foodDonationID) {
+        return new Promise((resolve, reject) => {
+            axios.get(hostname + '/api/RDHSoupKitchens/' + foodDonationID )
                 .then(x => resolve(x.data))
                 .catch(x => {
                     alert(x);

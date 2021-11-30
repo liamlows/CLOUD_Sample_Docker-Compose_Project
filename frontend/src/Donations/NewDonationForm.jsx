@@ -213,7 +213,7 @@ export class NewDonationForm extends React.Component {
     async populateSoupKitchenIDs() {
         const response = await this.accountsRepository.getUsersByType(2);
 
-        if(response) {
+        if (response) {
             this.setState({soupKitchenIDs: response})
         }
 

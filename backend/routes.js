@@ -675,9 +675,9 @@ module.exports = function routes(app, logger) {
 //BRIGITTA'S ROUTES
 
 //GET a paritcular user, given a userID
-//	/api/users/:userID
+//	/api/user/:userID
 //tested
-app.get('/api/users/:userID', function (req, res) {
+app.get('/api/user/:userID', function (req, res) {
   var userID = req.param('userID');
   pool.query("SELECT * FROM users WHERE userID = ?", userID, function (err, result, fields) {
     if (err) throw err;
@@ -767,7 +767,7 @@ app.get('/api/foodDonations/:foodDonationID', function (req, res) {
 //GET a particular user, given RDH_ID
 //  /api/user/RDH
 //tested
-app.get('/api/users/:RDH_ID', function (req, res) {
+app.get('/api/rdhs/:RDH_ID', function (req, res) {
   var RDH_ID = req.param('RDH_ID');
   pool.query("SELECT u.userID, u.userType, u.username, u.userPassword, u.imgURL, u.phoneNumber, u.email, u.validated FROM users u INNER JOIN RDH r ON u.userID = r.userID WHERE RDH_ID = ?", RDH_ID, function (err, result, fields) {
     if (err) throw err;
@@ -811,8 +811,8 @@ app.delete('/api/foodDonations', async (req, res) => {
 //  /api/users/:userType
 //tested
 app.get('/api/users/:userType', function (req, res) {
-  var userType = req.param('userType');
-  pool.query("SELECT * FROM users WHERE userType = ?", userType, function (err, result, fields) {
+  var userType = req.param("userType");
+  pool.query("SELECT userID, username FROM users WHERE userType = ?", userType, function (err, result, fields) {
     if (err) throw err;
     res.end(JSON.stringify(result)); 
   });
@@ -821,9 +821,9 @@ app.get('/api/users/:userType', function (req, res) {
 //GET all RDH name and address and soup kitchen name and address given a userID
 //  /api/RDHSoupKitchens/:userID
 //tested
-app.get('/api/RDHSoupKitchens/:userID', function (req, res) {
-  var userID = req.param('userID');
-  pool.query("SELECT r.RDH_name, r.address, s.soupKitchenName, s.address FROM foodDonations d INNER JOIN RDH r ON d.RDH_ID = r.RDH_ID INNER JOIN soupKitchens s ON d.soupKitchenID = s.soupKitchenID WHERE r.userID = ?", userID, function (err, result, fields) {
+app.get('/api/RDHSoupKitchens/:foodDonationID', function (req, res) {
+  var foodDonationID = req.param('foodDonationID');
+  pool.query("SELECT r.RDH_name, r.address, s.soupKitchenName, s.address AS sAddress FROM foodDonations d INNER JOIN RDH r ON d.RDH_ID = r.RDH_ID INNER JOIN soupKitchens s ON d.soupKitchenID = s.soupKitchenID WHERE d.foodDonationID= ?", foodDonationID, function (err, result, fields) {
     if (err) throw err;
     res.end(JSON.stringify(result)); 
   });
