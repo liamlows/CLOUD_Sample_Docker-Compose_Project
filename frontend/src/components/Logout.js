@@ -1,3 +1,4 @@
+import Button from 'react-bootstrap/Button'
 import { Link } from "react-router-dom";
 
 export const Logout = () => {
@@ -10,13 +11,11 @@ export const Logout = () => {
             Are you sure you want to Logout?
         </h1>
 
-        <Link to = "/" onClick ={setFalse}> Yes
-        </Link>
+        <Button variant="primary" href = "/" onClick ={setFalse}> Yes
+        </Button>
         <br/>
         <br/>
-        <br/>
-        <br/>
-        <Link to = "/" > Nevermind!
-        </Link>
+        <Button variant="primary" href = "/" > Nevermind!
+        </Button>
     </>
 }

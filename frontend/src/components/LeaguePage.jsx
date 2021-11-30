@@ -90,17 +90,32 @@ export class LeaguePage extends React.Component {
     render() {
         if(this.state.recent_games.length == 0){
             return <>
-                <Navbar bg="dark" variant="dark">
-                <Container>
-                    <Navbar.Brand>SportsTeamWebsite</Navbar.Brand>
-                    <Nav className="me-auto">
-                        <Nav.Link href="/home">Home</Nav.Link>
-                        <Nav.Link href="/NBA">NBA</Nav.Link>
-                        <Nav.Link href="/NFL">NFL</Nav.Link>
-                        <Nav.Link href="/MLB">MLB</Nav.Link>
-                    </Nav>
-                    <Nav.Link href="/login" className="mr-auto">Login</Nav.Link>
-                </Container>
+                <Navbar expand="lg" bg="dark" variant="dark">
+                    <Container fluid>
+                        <Navbar.Brand>SportsTeamWebsite</Navbar.Brand>
+                        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                        <Navbar.Collapse id="navbar-white-example">
+                            <Nav className="me-auto">
+                                <Nav.Link href="/home">Home</Nav.Link>
+                                <Nav.Link href="/NBA">NBA</Nav.Link>
+                                <Nav.Link href="/NFL">NFL</Nav.Link>
+                                <Nav.Link href="/MLB">MLB</Nav.Link>
+                            </Nav>
+                            <Nav className="mr-auto">
+                                {console.log("login", this.state.loggedInUser)}
+                                {this.state.loggedInUser == "true"
+                                    ? (
+                                        <>
+                                            <Nav.Link href="/logout" className="mr-auto">LogOut</Nav.Link>
+                                            <Nav.Link href="/dashboard" className="mr-auto">Admin Dashboard</Nav.Link>
+                                        </>
+                                    )
+                                    : (<Nav.Link href="/login" className="mr-auto">Login </Nav.Link>)
+                                }
+                            </Nav>
+
+                        </Navbar.Collapse>
+                    </Container>
                 </Navbar>
 
                 <h4 className="m-3"> Data is loading... </h4>
@@ -108,22 +123,33 @@ export class LeaguePage extends React.Component {
         }
 
         return <>
-            <Navbar bg="dark" variant="dark">
-                <Container>
-                    <Navbar.Brand>SportsTeamWebsite</Navbar.Brand>
-                    <Nav className="me-auto">
-                        <Nav.Link href="/home">Home</Nav.Link>
-                        <Nav.Link href="/NBA">NBA</Nav.Link>
-                        <Nav.Link href="/NFL">NFL</Nav.Link>
-                        <Nav.Link href="/MLB">MLB</Nav.Link>
-                    </Nav>
-                    {console.log("login", this.state.loggedInUser)}
-                        {this.state.loggedInUser=="true"
-                            ? (<Nav.Link href="/logout" className="mr-auto">LogOut</Nav.Link>)
-                            : (<Nav.Link href="/login" className="mr-auto">Login </Nav.Link>)
-                        }
-                </Container>
-            </Navbar>
+            <Navbar expand="lg" bg="dark" variant="dark">
+                    <Container fluid>
+                        <Navbar.Brand>SportsTeamWebsite</Navbar.Brand>
+                        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                        <Navbar.Collapse id="navbar-white-example">
+                            <Nav className="me-auto">
+                                <Nav.Link href="/home">Home</Nav.Link>
+                                <Nav.Link href="/NBA">NBA</Nav.Link>
+                                <Nav.Link href="/NFL">NFL</Nav.Link>
+                                <Nav.Link href="/MLB">MLB</Nav.Link>
+                            </Nav>
+                            <Nav className="mr-auto">
+                                {console.log("login", this.state.loggedInUser)}
+                                {this.state.loggedInUser == "true"
+                                    ? (
+                                        <>
+                                            <Nav.Link href="/logout" className="mr-auto">LogOut</Nav.Link>
+                                            <Nav.Link href="/dashboard" className="mr-auto">Admin Dashboard</Nav.Link>
+                                        </>
+                                    )
+                                    : (<Nav.Link href="/login" className="mr-auto">Login </Nav.Link>)
+                                }
+                            </Nav>
+
+                        </Navbar.Collapse>
+                    </Container>
+                </Navbar>
 
             <Navbar bg="light" expand="lg">
                 <Container>

@@ -74,13 +74,16 @@ export class Dashboard extends React.Component {
     render() {
         return (
             <>
-                <Navbar bg="dark" variant="dark">
-                    <Container>
+                <Navbar expand="lg" bg="dark" variant="dark">
+                    <Container fluid>
                         <Navbar.Brand>SportsTeamWebsite</Navbar.Brand>
+                        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                        <Navbar.Collapse id="navbar-white-example">
                         <Nav className="me-auto">
                             <Nav.Link href="/home">Home</Nav.Link>
                             <Nav.Link href="/dashboard">Refresh</Nav.Link>
                         </Nav>
+                        </Navbar.Collapse>
                     </Container>
                 </Navbar>
 

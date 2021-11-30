@@ -87,7 +87,8 @@ export const Ads = props => {
             </>
         )
             : (
-                <p>Admin not log in</p>
+                <>
+                </>
             )
         }
     </>

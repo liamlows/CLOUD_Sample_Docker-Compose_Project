@@ -72,29 +72,31 @@ export class Teamview extends React.Component {
         }
         return (
             <>
-                <Navbar bg="dark" variant="dark">
-                    <Container>
+                <Navbar expand="lg" bg="dark" variant="dark">
+                    <Container fluid>
                         <Navbar.Brand>SportsTeamWebsite</Navbar.Brand>
-                        <Nav className="me-auto">
-                            <Nav.Link href="/home">Home</Nav.Link>
-                            <Nav.Link href="/NBA">NBA</Nav.Link>
-                            <Nav.Link href="/NFL">NFL</Nav.Link>
-                            <Nav.Link href="/MLB">MLB</Nav.Link>
-                            <Nav.Link href={`/TeamView/${this.testValue}`}>
-                                TeamView
-                            </Nav.Link>
-                            <Nav.Link href={`/GameView/${this.testValue}`}>
-                                GameView
-                            </Nav.Link>
-                        </Nav>
-                        {console.log("login", this.state.loggedInUser)}
-                        {this.state.loggedInUser == "true"
-                            ? (<Nav.Link href="/logout" className="mr-auto">LogOut</Nav.Link>)
-                            : (<Nav.Link href="/login" className="mr-auto">Login </Nav.Link>)
-                        }
+                        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                        <Navbar.Collapse id="navbar-white-example">
+                            <Nav className="me-auto">
+                                <Nav.Link href="/home">Home</Nav.Link>
+                                <Nav.Link href="/NBA">NBA</Nav.Link>
+                                <Nav.Link href="/NFL">NFL</Nav.Link>
+                                <Nav.Link href="/MLB">MLB</Nav.Link>
+                            </Nav>
+                            <Nav className="mr-auto">
+                                {console.log("login", this.state.loggedInUser)}
+                                {this.state.loggedInUser == "true"
+                                    ? (
+                                        <>
+                                            <Nav.Link href="/logout" className="mr-auto">LogOut</Nav.Link>
+                                            <Nav.Link href="/dashboard" className="mr-auto">Admin Dashboard</Nav.Link>
+                                        </>
+                                    )
+                                    : (<Nav.Link href="/login" className="mr-auto">Login </Nav.Link>)
+                                }
+                            </Nav>
 
-
-
+                        </Navbar.Collapse>
                     </Container>
                 </Navbar>
                 <Navbar variant="white" bg="white" expand="lg">

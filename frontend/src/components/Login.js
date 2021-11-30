@@ -28,7 +28,7 @@ export default function Login() {
     // // set the state of the user
     // setUser(response.data)
     // // store the user in localStorage
-    
+
     if (window.confirm('If you click "ok" you would be redirected . Cancel will load this website ')) {
       localStorage.setItem('adminLogin', true)
       window.location.href = '/';
@@ -38,15 +38,18 @@ export default function Login() {
 
   return (
     <>
-      <Navbar bg="dark" variant="dark">
-        <Container>
+      <Navbar expand="lg" bg="dark" variant="dark">
+        <Container fluid>
           <Navbar.Brand>SportsTeamWebsite</Navbar.Brand>
-          <Nav className="me-auto">
-            <Nav.Link href="/home">Home</Nav.Link>
-            <Nav.Link href="/NBA">NBA</Nav.Link>
-            <Nav.Link href="/NFL">NFL</Nav.Link>
-            <Nav.Link href="/MLB">MLB</Nav.Link>
-          </Nav>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="navbar-white-example">
+            <Nav className="me-auto">
+              <Nav.Link href="/home">Home</Nav.Link>
+              <Nav.Link href="/NBA">NBA</Nav.Link>
+              <Nav.Link href="/NFL">NFL</Nav.Link>
+              <Nav.Link href="/MLB">MLB</Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
         </Container>
       </Navbar>
       <div className="Login">
