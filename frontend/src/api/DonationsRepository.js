@@ -14,4 +14,15 @@ export class DonationsRepository {
         });
     }
 
+    getDonation(foodDonationID) {
+        return new Promise((resolve, reject) => {
+            axios.get(hostname + '/api/foodDonation/' + foodDonationID )
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
+
 }

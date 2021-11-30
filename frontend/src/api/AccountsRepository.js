@@ -61,5 +61,20 @@ export class AccountsRepository {
         });
     }
 
+    getUsersByType(userType) {
+        return new Promise((resolve, reject) => {
+            axios.get(hostname + '/api/users/' + userType)
+                .then(x => resolve(x.data))
+                .catch(x => {
+                    alert(x);
+                    reject(x);
+                })
+        });
+    }
+
+    getRDHUser(RDH_ID) {
+        
+    }
+
 
 }

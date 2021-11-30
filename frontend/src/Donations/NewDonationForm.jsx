@@ -2,14 +2,22 @@ import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { NavigationBar } from '../Navigation/NavigationBar';
 import { DonationsRepository } from '../api/DonationsRepository';
+import { AccountsRepository } from '../api/AccountsRepository';
 
 export class NewDonationForm extends React.Component {
 
     donationsRepository = new DonationsRepository();
+    accountsRepository = new AccountsRepository();
+
+    // soupKitchenStrings = {};
+
+
+
+    
 
     state = {
-        RDH_ID: 1,
-        soupKitchenID: 1,
+        RDH_ID: sessionStorage.userID,
+        soupKitchenID: 0,
         foodName: "",
         foodCategory: "",
         timeMade: undefined,
@@ -19,10 +27,9 @@ export class NewDonationForm extends React.Component {
         donationDescription: "",
         quantity: 0,
         redirect: false,
-    }
+        soupKitchenIDs: [],
 
-    // map all rdh id names to RDH_ID dropdown? // populate with user id that clicks on it?
-    // same with soupKitchenID?
+    }
 
     setRDH_ID(RDH_ID) {
 		this.setState(state => {
@@ -31,7 +38,7 @@ export class NewDonationForm extends React.Component {
 		});
 	}
 
-    setsoupKitchenID(soupKitchenID) {
+    setSoupKitchenID(soupKitchenID) {
 		this.setState(state => {
 			state.soupKitchenID = soupKitchenID;
 			return state;
@@ -96,7 +103,7 @@ export class NewDonationForm extends React.Component {
 
 
     async createNewDonation() {
-        
+
         await this.donationsRepository.addDonation(this.state).then(
             this.setState({redirect: true})
         )
@@ -107,6 +114,10 @@ export class NewDonationForm extends React.Component {
         if (this.state.redirect) {
             return <Redirect to={ `/donations/` }/> // Or redirect to the newly donated donation page?
         }
+
+        // if(!this.state.soupKitchenIDs) {
+        //     return <div>Loading...</div>
+        // }
 
         return <>
             <NavigationBar></NavigationBar>
@@ -121,13 +132,18 @@ export class NewDonationForm extends React.Component {
                     }
                 >
                     <h2>Donate Food</h2> 
-                    <div className="container w-50 my-1 form-label-group">
-                        <label htmlFor="RDH_ID">RDH Donor</label>
-                        <p>Figure this out</p>
+                    <div className="container w-50 my-1">
+                        <p> RDH Donor (You): {this.state.RDH_ID} </p>
                     </div>
                     <div className="container w-50 my-1 form-label-group">
-                        <label htmlFor="soupKitchenID">Soup Kitchen Recipient</label>
-                        <p>Figure this out</p>
+                        <label htmlFor="soupKitchenID">Soup Kitchen/Shelter Recipient</label>
+                        <select id="soupKitchenID" name="soupKitchenID" className="form-control"
+                            onChange={ e => this.setSoupKitchenID(e.target.value)}
+                        >
+                                    {
+                                        this.state.soupKitchenIDs.map((x, i) => <option key={ i }>{ x.userID }</option>)
+                                    }
+                        </select>
                     </div>
                     <div className="container w-50 my-1 form-label-group">
                         <label htmlFor="foodName">Donation Item(s) Name</label>
@@ -170,7 +186,6 @@ export class NewDonationForm extends React.Component {
                         <textarea className="form-control my-1" id="donationDescription" name="donationDescription" 
                             onChange={e => this.setDonationDescription(e.target.value)}
                         />
-                        {/* Make this a textarea */}
                     </div>
                     <div className="container w-50 my-1 form-label-group">
                         <label htmlFor="quantity">Donation Item Quantity</label>
@@ -195,8 +210,21 @@ export class NewDonationForm extends React.Component {
         </>;
     }
 
-    componentDidMount() {
+    async populateSoupKitchenIDs() {
+        const response = await this.accountsRepository.getUsersByType(2);
 
+        if(response) {
+            this.setState({soupKitchenIDs: response})
+        }
+
+
+    }
+
+    componentDidMount() {
+        // If user can view this page, they are an RDH owner. Admin as well?
+        // Nah, admin as well is too much work. Admin shouldn't be able to create new donations.
+        // Actually check user stories
+        this.populateSoupKitchenIDs();
     }
 
 }
