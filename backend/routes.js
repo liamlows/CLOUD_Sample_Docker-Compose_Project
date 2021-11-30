@@ -740,6 +740,7 @@ app.get('/api/users/:userType', function (req, res) {
 
 //GET all RDH name and address and soup kitchen name and address given a userID
 //  /api/RDHSoupKitchens/:userID
+//tested
 app.get('/api/RDHSoupKitchens/:userID', function (req, res) {
   var userID = req.param('userID');
   pool.query("SELECT r.RDH_name, r.address, s.soupKitchenName, s.address FROM foodDonations d INNER JOIN RDH r ON d.RDH_ID = r.RDH_ID INNER JOIN soupKitchens s ON d.soupKitchenID = s.soupKitchenID WHERE r.userID = ?", userID, function (err, result, fields) {
@@ -750,6 +751,7 @@ app.get('/api/RDHSoupKitchens/:userID', function (req, res) {
 
 //PUT to update claimed field in foodDonations
 // /api/foodDonations/updateClaimed
+//tested
 app.put('/api/foodDonations/updateClaimed', async (req, res) => {
   var foodDonationID = req.param('foodDonationID');
   var claimed = req.param("claimed");
