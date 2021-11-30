@@ -893,7 +893,7 @@ app.post('/api/loginHash', (req, res) => {
     console.log(userPassword)
       bcrypt.compare(userPassword, result[0].userPassword, function(err, isMatch) {
         if(err) {
-          throw err
+          throw err;
         } else if (!isMatch){
             console.log("Password doesn't match!") 
             emptyArray = []
