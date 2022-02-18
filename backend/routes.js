@@ -5,7 +5,74 @@ module.exports = function routes(app, logger) {
   app.get('/', (req, res) => {
     res.status(200).send('Go to 0.0.0.0:3000.');
   });
-
+  app.post('/api/account/register', (req, res) => { 
+    let user = req.body.rUser.trim();
+    let email = req.body.email.trim();
+    let password = req.body.rPassword;
+    //if there are any fields missing, throw error
+    if(!user|| !email || !password){
+      res.status(400).send('Missing Required Fields');
+    } else {
+      // obtain a connection from our pool of connections
+      pool.getConnection(function (err, connection){
+        if (err){
+          console.log(connection);
+          // if there is an issue obtaining a connection, release the connection instance and log the error
+          logger.error('Problem obtaining MySQL connection', err)
+          res.status(400).send('Problem obtaining MySQL connection'); 
+        } else {
+          // if there is no issue obtaining a connection, execute query
+          connection.query('INSERT into `db`.`user`(`username`,`password`,`email`) values(?,?,?);',[user,password,email], function (err, rows, fields) {
+            if (err) { 
+              // if there is an error with the query, release the connection instance and log the error
+              connection.release()
+              logger.error("Problem Registering User: ", err); 
+              res.status(400).send('Username/Email is already registered'); 
+            } else {
+                  // if there is no error with the query, release the connection instance
+                  connection.release()
+                  res.status(200).send('created user'); 
+                }
+          });
+        }
+      });
+    }
+});
+  app.post('/api/account/login', (req, res) => {
+    // obtain a connection from our pool of connections
+    console.log(req?.body);
+    pool.getConnection(function (err, connection){
+      if (err){
+        console.log(connection);
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+        // if there is no issue obtaining a connection, execute query
+        connection.query('SELECT password from `db`.`user` where username=?;',[req.body.user], function (err, rows, fields) {
+          if (err) { 
+            // if there is an error with the query, release the connection instance and log the error
+            connection.release()
+            logger.error("Problem Logging in: ", err); 
+            res.status(400).send('Problem Logging in '); 
+          } else {
+                //if no field is return, no user wiht the given username exists
+                if(!rows.length){
+                  res.status(401).send('Username not registered');
+                } else {//if there is no error, check if passwords match
+                      if(rows[0].password === req.body.password) {
+                        console.log("Successful login")
+                        res.status(200).send({accessToken: "aJLJsif1233k"});
+                      } else {
+                      console.log("failed login")
+                      res.status(401).send('Incorrect Password');
+                    }
+              }
+              }
+        });
+      }
+    });
+  });
   // POST /reset
   app.post('/reset', (req, res) => {
     // obtain a connection from our pool of connections
