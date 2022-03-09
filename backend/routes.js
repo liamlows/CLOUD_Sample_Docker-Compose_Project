@@ -1,4 +1,5 @@
-const pool = require('./db')
+const pool = require('./db');
+const jwt = require('jsonwebtoken');
 
 module.exports = function routes(app, logger) {
   // GET /
@@ -49,20 +50,24 @@ module.exports = function routes(app, logger) {
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
         // if there is no issue obtaining a connection, execute query
-        connection.query('SELECT password from `db`.`user` where username=?;',[req.body.user], function (err, rows, fields) {
+        connection.query('SELECT id, username, password from `db`.`user` where username=?;',[req.body.user], function (err, rows, fields) {
           if (err) { 
             // if there is an error with the query, release the connection instance and log the error
             connection.release()
             logger.error("Problem Logging in: ", err); 
             res.status(400).send('Problem Logging in '); 
           } else {
-                //if no field is return, no user wiht the given username exists
+                //if no field is returned, no user with the given username exists
                 if(!rows.length){
                   res.status(401).send('Username not registered');
-                } else {//if there is no error, check if passwords match
+                } else {
+                    //if there is no error, check if passwords match
                       if(rows[0].password === req.body.password) {
-                        console.log("Successful login")
-                        res.status(200).send({accessToken: "aJLJsif1233k"});
+                        console.log("Successful login");
+                        const id = rows[0].id;
+                        const username = rows[0].username;
+                        const token = jwt.sign({id: id, username: username },"supersecretkeythatprotectsus",{expiresIn:60*60});
+                        res.status(200).send({userToken: token});
                       } else {
                       console.log("failed login")
                       res.status(401).send('Incorrect Password');
@@ -73,6 +78,41 @@ module.exports = function routes(app, logger) {
       }
     });
   });
+  app.post('/api/farm', (req, res) => {
+    // obtain a connection from our pool of connections
+    let token;
+    console.log(req.body);
+      token = jwt.verify(req.body.userToken,"supersecretkeythatprotectsus");
+    
+    console.log(token);
+    pool.getConnection(function (err, connection){
+      if (err){
+        console.log(connection);
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+        // if there is no issue obtaining a connection, execute query
+        connection.query('select description from Farm where id = ?;',[token.id], function (err, rows, fields) {
+          if (err) { 
+            // if there is an error with the query, release the connection instance and log the error
+            connection.release()
+            logger.error("Problem Logging in: ", err); 
+            res.status(400).send('Problem Logging in '); 
+          } else {
+                //if no field is returned, no data for that farm
+                if(!rows.length){
+                  res.status(401).send('Farm does not exist');
+                } else {
+                    //if there is no error, return farm data
+                    res.status(200).json(rows[0]);
+                }
+              }
+        });
+      }
+    });
+  });
+  
   // POST /reset
   app.post('/reset', (req, res) => {
     // obtain a connection from our pool of connections

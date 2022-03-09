@@ -15,7 +15,6 @@ const Login=()=>{
 
     const handleSubmit = (e) =>{
         e.preventDefault();
-
         if(signUp) {
             if(rPassword !== cPassword){
                 setErr("passwords do not match");
@@ -30,15 +29,17 @@ const Login=()=>{
             
         } else {
                 api.login(user,password).then((res)=>{
-                     alert(res)
-                });
+                    console.log(res);
+                    localStorage.setItem("userToken", res.data.userToken);
+                }).catch(alert("error logging in"));
             }    
     }
+
     const toggleSignUp = (e)=>{
         e.preventDefault();
         setSignUp(prev=>!prev);
     }
-    return(
+    return (
         <div className="login">
             <form>
                 <div className="login-container">
@@ -52,7 +53,7 @@ const Login=()=>{
                             
                             <div className="login-form-field">
                                 <label htmlFor="password"> Password</label>
-                                <input type="text" value={password} name="user" id="password" onChange={e=>setPassword(e.target.value)}/>
+                                <input type="password" value={password} name="user" id="password" onChange={e=>setPassword(e.target.value)}/>
                             </div>
                         </>
                     :
@@ -68,15 +69,12 @@ const Login=()=>{
                             </div>
                             <div className="login-form-field">
                                 <label htmlFor="rPassword">Password</label>
-                                <input type="text" value={rPassword} name="rPassword" id="rPassword" onChange={e=>setRPassword(e.target.value)}/>
+                                <input type="password" value={rPassword} name="rPassword" id="rPassword" onChange={e=>setRPassword(e.target.value)}/>
                             </div>
                             <div className="login-form-field">
                                 <label htmlFor="cPassword">Confirm Password</label>
-                                <input type="text" value={cPassword} name="cPassword" id="cPassword" onChange={e=>setCPassword(e.target.value)}/>
-                            </div>
-                                
-                            
-
+                                <input type="password" value={cPassword} name="cPassword" id="cPassword" onChange={e=>setCPassword(e.target.value)}/>
+                            </div>  
                         </>
                     }
                     <button type="submit" onClick={handleSubmit}>{signUp ? "Register":"Login"}</button>
