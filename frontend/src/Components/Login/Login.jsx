@@ -1,32 +1,43 @@
-import { useState } from "react"
-import { render } from "react-dom"
+import { useState, useEffect } from "react";
 import './Login.css';
-import {account} from "../../api/account";
-const Login=()=>{
-    const[user, setUsername]= useState("");
-    const[password, setPassword]=useState("");
-    const[err, setErr]=useState('');
-    const[signUp, setSignUp]=useState(false);
-    const[rUser, setRUsername]= useState("");
-    const[email, setEmail]= useState("");
-    const[rPassword, setRPassword]=useState("");
-    const[cPassword, setCPassword]= useState("");
+import { account } from "../../api/account";
+const Login = () => {
+    const [user, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [err, setErr] = useState('');
+    const [signUp, setSignUp] = useState(false);
+    const [rUser, setRUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [rPassword, setRPassword] = useState("");
+    const [cPassword, setCPassword] = useState("");
     const api = new account();
 
-    const handleSubmit = (e) =>{
+    useEffect(() => {
+        if (err) {
+            setTimeout(() => {
+                setErr("");
+            }, 4000);
+        }
+
+    }, [err]);
+
+    const handleSubmit = (e) => {
         e.preventDefault();
-        if(signUp) {
-            if(rPassword !== cPassword){
+        if (signUp) {
+            if (rPassword !== cPassword) {
                 setErr("passwords do not match");
-                return;
             } else {
-                api.register(rUser,email,rPassword).then((res)=>{
-                    console.log(res);
-                }).catch((err)=>{
-                    setErr(err);
-                });
+                api.register(rUser, email, rPassword)
+                    .then((res) => {
+                        console.log(res);
+                        alert("successfully registered");
+                    })
+                    .catch((err) => {
+                        setErr(err);
+                        console.log(err);
+                    });
             }
-            
+
         } else {
                 api.login(user,password).then((res)=>{
                     console.log(res);
@@ -37,7 +48,7 @@ const Login=()=>{
 
     const toggleSignUp = (e)=>{
         e.preventDefault();
-        setSignUp(prev=>!prev);
+        setSignUp(prev => !prev);
     }
     return (
         <div className="login">
@@ -77,8 +88,8 @@ const Login=()=>{
                             </div>  
                         </>
                     }
-                    <button type="submit" onClick={handleSubmit}>{signUp ? "Register":"Login"}</button>
-                    <button onClick={toggleSignUp}>{signUp ? "login instead":"sign up"}</button>
+                    <button type="button" onClick={handleSubmit}>{signUp ? "Register" : "Login"}</button>
+                    <button onClick={toggleSignUp}>{signUp ? "login instead" : "sign up"}</button>
                 </div>
             </form>
         </div>
