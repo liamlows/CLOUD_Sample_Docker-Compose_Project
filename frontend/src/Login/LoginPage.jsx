@@ -1,19 +1,24 @@
-import { TextField } from "../common";
+import { PasswordField, TextField } from "../common";
 import { useState } from "react";
+import { GenericButton } from "../common/GenericButton";
 
 
-export const LoginPage = () => { 
+export const LoginPage = () => {
 
-    const [ username, setUsername ] = useState('');
-    const [ password, setPassword ] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
 
-    return <form className="container">
-        <TextField label="Username"
-                   value={username}
-                   setValue={x => setUsername(x)} />
+    return <div>
+        <h1>Login</h1>
+        <form className="container">
+            <TextField label="Username"
+                value={username}
+                setValue={x => setUsername(x)} />
 
-        <TextField label="Password"
-                   value={password}
-                   setValue={x => setPassword(x)} />
-    </form>
+            <PasswordField label="Password"
+                value={password}
+                setValue={x => setPassword(x)} />
+        </form>
+        <GenericButton label="Login" />
+    </div>;
 }
