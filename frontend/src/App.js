@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import axios from 'axios';
-
+import { LoginPage } from './Login/LoginPage';
 // React functional component
 function App () {
   // state for storage of the information on the webpage of forms and list, uses hooks
@@ -70,7 +70,8 @@ function App () {
 
   return (
     <div className="App">
-      <header className="App-header">
+      <LoginPage />
+      {/* <header className="App-header">
         <button onClick={fetchBase} style={{marginBottom: '1rem'}}> {`GET: http://${url}:8000/`} </button>
         <button onClick={reset}> Reset DB </button>
         <form onSubmit={handleSubmit}>
@@ -81,7 +82,7 @@ function App () {
         <ul>
           { values.map((value, i) => <li key={i}>{value.value}</li>) }
         </ul>
-      </header>
+      </header> */}
     </div>
   );
 }
