@@ -1,5 +1,6 @@
-export const GenericButton = ({ label }) => {
+export const GenericButton = ({ label, click}) => {
     return <div className="form-group">
-    <button type="button">{ label }</button>
+        <button type="button" onClick={click}>{ label }</button>
+    
 </div>
 }
