@@ -5,6 +5,7 @@ import { LoginPage } from './Login/LoginPage';
 import { LoggedIn } from './LoggedIn/LoggedIn';
 // import { Route } from reactDom;
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Base } from './BaseView/Base';
 
 // React functional component
 function App() {
@@ -76,6 +77,7 @@ function App() {
     <div className="App" >
       <BrowserRouter>
         <Routes>
+          <Route path='/' element={<Base />} />
           <Route path='/login' element={<LoginPage />} />
           <Route path='/loggedIn' element={<LoggedIn />} />
         </Routes>
