@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useParams
+} from "react-router-dom";
+
 import axios from 'axios';
+import { NavBar } from './Components/NavBar/NavBar';
+import { Home } from './Components/Home/Home';
 import Login from './Components/Login/Login';
 import FarmPage from './Components/FarmPage/FarmPage';
 import { AccountEditor } from './account/AccountEditor';
@@ -17,7 +26,7 @@ function App () {
   // USE localhost OR ec2_url ACCORDING TO ENVIRONMENT
   const url = ec2 ? ec2_url : 'localhost'
 
-  // handle input field state change
+   // handle input field state change
   const handleChange = (e) => {
     setNumber(e.target.value);
   }
@@ -72,11 +81,17 @@ function App () {
 
   return (
     <div className="App">
-      <header className="App-header">
-        
-        <Login/>
-        <FarmPage/>
-        <button onClick={fetchBase} style={{marginBottom: '1rem'}}> {`GET: http://${url}:8000/`} </button>
+      Home
+      <NavBar/>
+      <Router>
+        <Routes>
+          <Route exact path="/">
+            <h1>hello </h1>
+          </Route>
+          
+        </Routes>
+      </Router>
+        {/* <button onClick={fetchBase} style={{marginBottom: '1rem'}}> {`GET: http://${url}:8000/`} </button>
         <button onClick={reset}> Reset DB </button>
         <form onSubmit={handleSubmit}>
           <input type="text" value={number} onChange={handleChange}/>
@@ -85,8 +100,8 @@ function App () {
         </form>
         <ul>
           { values.map((value, i) => <li key={i}>{value.value}</li>) }
-        </ul>
-      </header>
+        </ul> */}
+      
     </div>
   );
 }
