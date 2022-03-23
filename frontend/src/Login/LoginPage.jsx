@@ -21,9 +21,9 @@ export const LoginPage = () => {
                 value={password}
                 setValue={x => setPassword(x)} />
 
-            <GenericButton label="Login" click="app.loginView.load()" />
+            <GenericButton label="Login" click="/loggedIn" />
             <p className="mb-0">or</p>
-            <GenericButton label="Sign Up" />
+            <GenericButton label="Sign Up" click="/login" />
         </form>
         
     </section>;
