@@ -6,6 +6,7 @@ import { LoggedIn } from './LoggedIn/LoggedIn';
 // import { Route } from reactDom;
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Base } from './BaseView/Base';
+import { SignUpPage } from './Login/SignUpPage';
 
 // React functional component
 function App() {
@@ -80,6 +81,7 @@ function App() {
           <Route path='/' element={<Base />} />
           <Route path='/login' element={<LoginPage />} />
           <Route path='/loggedIn' element={<LoggedIn />} />
+          <Route path='/signUp' element={<SignUpPage />} />
         </Routes>
       </BrowserRouter>
 
