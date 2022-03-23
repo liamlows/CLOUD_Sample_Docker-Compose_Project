@@ -3,8 +3,11 @@ import './App.css';
 import axios from 'axios';
 import { LoginPage } from './Login/LoginPage';
 import { LoggedIn } from './LoggedIn/LoggedIn';
+// import { Route } from reactDom;
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+
 // React functional component
-function App () {
+function App() {
   // state for storage of the information on the webpage of forms and list, uses hooks
   const [number, setNumber] = useState("")
   const [values, setValues] = useState([])
@@ -22,7 +25,7 @@ function App () {
   }
 
   const fetchBase = () => {
-    axios.get(`http://${url}:8000/`).then((res)=>{
+    axios.get(`http://${url}:8000/`).then((res) => {
       alert(res.data);
     })
   }
@@ -34,16 +37,16 @@ function App () {
         const values = res.data.data;
         console.log(values);
         setValues(values)
-    }).catch(err => {
-      console.log(err)
-    });
+      }).catch(err => {
+        console.log(err)
+      });
   }
 
   // handle input form submission to backend via POST request
   const handleSubmit = (e) => {
     e.preventDefault();
     let prod = number * number;
-    axios.post(`http://${url}:8000/multplynumber`, {product: prod}).then(res => {
+    axios.post(`http://${url}:8000/multplynumber`, { product: prod }).then(res => {
       console.log(res);
       fetchVals();
     }).catch(err => {
@@ -66,13 +69,18 @@ function App () {
   // the comment below silences an error that doesn't matter.=
   useEffect(() => {
     fetchVals();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
     <div className="App" >
-      <LoginPage />
-      <LoggedIn />
+      <BrowserRouter>
+        <Routes>
+          <Route path='/login' element={<LoginPage />} />
+          <Route path='/loggedIn' element={<LoggedIn />} />
+        </Routes>
+      </BrowserRouter>
+
       {/* <header className="App-header">
         <button onClick={fetchBase} style={{marginBottom: '1rem'}}> {`GET: http://${url}:8000/`} </button>
         <button onClick={reset}> Reset DB </button>
