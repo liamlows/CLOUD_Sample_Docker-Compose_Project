@@ -1,2 +1,4 @@
 .DS_Store
 .env
+frontend/src/.vscode/launch.json
+frontend/src/App.jsx
