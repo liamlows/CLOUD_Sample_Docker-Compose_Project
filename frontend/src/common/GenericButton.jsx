@@ -4,7 +4,7 @@ export const GenericButton = ({ label, click}) => {
     const navigate = useNavigate();
     const path = click;
     return <div className="form-group">
-        <button type="button" onClick={() => navigate(path) }>{ label }</button>
+        <button type="button" onClick={() => path && navigate(path) }>{ label }</button>
     
 </div>
 }
