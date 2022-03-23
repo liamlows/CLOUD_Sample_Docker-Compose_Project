@@ -23,7 +23,7 @@ export const LoginPage = () => {
 
             <GenericButton label="Login" click="/loggedIn" />
             <p className="mb-0">or</p>
-            <GenericButton label="Sign Up" click="/login" />
+            <GenericButton label="Sign Up" click="/signUp" />
         </form>
         
     </section>;
