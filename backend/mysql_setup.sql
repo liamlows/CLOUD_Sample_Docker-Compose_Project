@@ -20,6 +20,8 @@ CREATE TABLE 'db'.'account' (
     'account_id' INT SERIAL NOT NULL,
     'username' VARCHAR(100) NOT NULL,
     'password' VARCHAR(255) NOT NULL,
+    'first_name' VARCHAR(255) NOT NULL,
+    'last_name' VARCHAR(255) NOT NULL,
     'student_id' INT,
     'role_id' INT,
     'logged_in' BOOLEAN NOT NULL DEFAULT 0,
