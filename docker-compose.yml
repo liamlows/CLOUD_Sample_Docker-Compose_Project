@@ -9,7 +9,7 @@ services:
     # working directory in container to place files
     working_dir: /usr/src/app
     # startup command
-    command: bash -c "npm run dev"
+    command: bash -c "yarn run dev"
     # map code volumes from local to inside working directory, changes made locally will update into the container
     volumes:
       - ./backend:/usr/src/app
@@ -30,7 +30,7 @@ services:
     # working directory in container to place files
     working_dir: /usr/src/app
     # startup command 
-    command: bash -c "npm start"
+    command: bash -c "yarn start"
     # map code volumes from local to inside working directory, changes made locally will update into the container
     volumes:
       - ./frontend:/usr/src/app
