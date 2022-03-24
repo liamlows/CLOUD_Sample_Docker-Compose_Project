@@ -1,7 +1,7 @@
 require('dotenv').config()
 const express = require('express');
 const bodyParser = require('body-parser');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const cors = require('cors');
 const { log, ExpressAPILogMiddleware } = require('@rama41222/node-logger');
 // const mysqlConnect = require('./db');
@@ -28,7 +28,9 @@ app.use(cors({
 app.use(ExpressAPILogMiddleware(logger, { request: true }));
 
 //include routes
-routes(app, logger);
+const account = require('./routes/account');
+app.use('/account', account);
+app.use('/', routes);
 
 // connecting the express object to listen on a particular port as defined in the config object.
 app.listen(config.port, config.host, (e) => {
