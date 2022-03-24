@@ -38,6 +38,17 @@ CREATE TABLE 'db'.'school' (
     'school_location' VARCHAR(255) NOT NULL,
     PRIMARY KEY ('school_id')
 )
+-- create table in db
+CREATE TABLE 'db'.'Waitlist' (
+    `id` INT NOT NULL AUTO_INCREMENT, 
+    'studentID' VARCHAR NOT NULL,
+    'schoolID' VARCHAR NOT NULL, 
+    'timestamp' datetime NOT NULL,
+    FOREIGN KEY('studentID') REFERENCES Student('id') 
+    FOREIGN KEY('schoolID') REFERENCES School('id') 
+    PRIMARY KEY (`id`), 
+    UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE
+);
 
 -- STUDENT TABLE
 CREATE TABLE 'db'.'student' (
