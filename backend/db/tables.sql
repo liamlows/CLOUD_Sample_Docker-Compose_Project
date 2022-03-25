@@ -15,7 +15,7 @@ CREATE TABLE Land (
     ID SERIAL PRIMARY KEY,
     Acres INT,
     is_available BOOLEAN,
-    owner VARCHAR(30),
+    owner VARCHAR(30) REFERENCES User(username),
     description VARCHAR(30),
     coord_lat FLOAT,
     coord_long FLOAT,
@@ -26,9 +26,9 @@ CREATE TABLE Land (
 
 CREATE TABLE Contract (
     ID SERIAL PRIMARY KEY,
-    land_id INT,
-    owner VARCHAR(30),
-    renter VARCHAR(30),
+    land_id INT REFERENCES Land(ID),
+    owner VARCHAR(30) REFERENCES User(username),
+    renter VARCHAR(30) REFERENCES User(username),
     start DATE,
     end DATE
 );
@@ -36,16 +36,16 @@ CREATE TABLE Contract (
 
 CREATE TABLE Bid (
     ID SERIAL PRIMARY KEY,
-    land_id INT,
-    owner VARCHAR(30),
+    land_id INT REFERENCES Land(ID),
+    owner VARCHAR(30) REFERENCES User(username),
     top_bid INT,
     top_bidder VARCHAR(30)
 );
 
 CREATE TABLE Review (
     ID SERIAL PRIMARY KEY,
-    land_id INT,
-    review VARCHAR(30),
+    land_id INT REFERENCES Land(ID),
+    reviewer VARCHAR(30) REFERENCES User(username),
     rating INT,
     contents VARCHAR(200)
 );
