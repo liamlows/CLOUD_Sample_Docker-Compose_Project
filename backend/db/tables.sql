@@ -1,6 +1,8 @@
 CREATE DATABASE acres_tables;
 DROP DATABASE acres_tables;
 
+
+
 CREATE TABLE User (
     username VARCHAR(30) PRIMARY KEY,
     password VARCHAR(30),
