@@ -8,14 +8,14 @@ export const Profile = () => {
     return <section id="profile">
         <GenericButton label="Classes" click="/loggedIn" />
         <GenericButton label="Sign Out" click="/" />
-        <GenericButton label="Edit Profile" click="/profileStudentEdit" />
+        <GenericButton label="Profile" click="/profile" />
         {/* TODO:  add actual stuff from table*/}
-        <h1>User Name</h1>
-        <p>Majors and Minors</p>
-        <p>Standing (1st year, 2nd year, etc.)</p>
-        <h3>My Schedule:</h3>
-        {/* TODO:  add table*/}
-        <h4>Classes I've taken</h4>
-        {/* TODO: add hidden grade table?*/}
+        <h1>Course Name</h1>
+        <p>Course Description</p>
+        <p>Professor</p>
+        <p>Time</p>
+        <p>Average</p>
+        {/* TODO:  add button to add to schedule*/}
+
     </section>
 }
