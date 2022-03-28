@@ -47,7 +47,7 @@ router.post("/register", async (req, res, next) => {
 
     // Insert new account into DB
     try {
-        await promisePool.execute('INSERT INTO `account`(username, password, first_name, last_name, school_id) VALUES (?, ?, ?, ?, ?)',
+        await pool.execute('INSERT INTO `account`(username, password, first_name, last_name, school_id) VALUES (?, ?, ?, ?, ?)',
             [username, hash, "", "", 1]);
     } catch (error) {
         return next(error);
