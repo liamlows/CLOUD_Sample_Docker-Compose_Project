@@ -28,7 +28,7 @@ router.post("/", async (req, res, next) => {
 router.get("/:id", async (req, res, next) => {
     let rows, fields;
     try{
-        [rows, fields] = await promisePool.execute('SELECT * FROM `school` WHERE school_id = ? LIMIT 1', [req.params.id]);
+        [rows, fields] = await pool.execute('SELECT * FROM `school` WHERE school_id = ? LIMIT 1', [req.params.id]);
     } catch(error){
         return next(error);
     }
