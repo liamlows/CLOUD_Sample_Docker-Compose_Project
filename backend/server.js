@@ -1,10 +1,10 @@
 require('dotenv').config()
 const express = require('express');
 const bodyParser = require('body-parser');
-const mysql = require('mysql');
+const mysql = require('mysql2');
+const pool = require("./db");
 const cors = require('cors');
 const { log, ExpressAPILogMiddleware } = require('@rama41222/node-logger');
-// const mysqlConnect = require('./db');
 const routes = require('./routes');
 
 // set up some configs for express.
@@ -27,8 +27,37 @@ app.use(cors({
 }));
 app.use(ExpressAPILogMiddleware(logger, { request: true }));
 
+
+const session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session);
+const sessionStore = new MySQLStore({}, pool);
+
+// 1 day in milliseconds
+const oneDay = 1000 * 60 * 60 * 24;
+
+app.use(session({
+  secret: "llama-llama-llama",
+  store: sessionStore,
+  resave: false,
+  saveUninitialized: false,
+  cookie: { maxAge: oneDay },
+}));
+
+
 //include routes
-routes(app, logger);
+const account = require('./routes/account');
+const courses = require('./routes/courses');
+const enrollments = require('./routes/enrollments');
+const roles = require('./routes/roles');
+const schools = require('./routes/schools');
+const students = require('./routes/students');
+app.use('/account', account);
+app.use('/courses', courses);
+app.use('/enrollments', enrollments);
+app.use('/roles', roles);
+app.use('/schools', schools);
+app.use('/students', students);
+app.use('/', routes);
 
 // connecting the express object to listen on a particular port as defined in the config object.
 app.listen(config.port, config.host, (e) => {
