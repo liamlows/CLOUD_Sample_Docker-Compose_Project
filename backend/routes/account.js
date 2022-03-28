@@ -44,7 +44,8 @@ router.post("/register", async (req, res, next) => {
         return next(error);
     }
 
-    // TODO: session cookies?
+    // This initializes the login session.
+    req.session.username = username;
 
     res.status(200).json({success: 1, error: ""}).send();
 });
@@ -84,8 +85,19 @@ router.post("/login", async (req, res, next) => {
         return;
     }
 
+    // This initializes the login session.
+    req.session.username = username;
+
     res.json({"success": 1, "error": ""}).send();
 });
 
+
+// GET /account/logout
+router.get("/logout", async (req, res, next) => {
+    req.session.destroy((err) => {
+        if(err) return next(err);
+        res.redirect('/');
+    });
+});
 
 module.exports = router;

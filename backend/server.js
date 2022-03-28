@@ -29,6 +29,21 @@ app.use(ExpressAPILogMiddleware(logger, { request: true }));
 
 //include routes
 const account = require('./routes/account');
+const pool = require("./db");
+const session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session);
+const sessionStore = new MySQLStore({}, pool.promise());
+
+// 1 day in milliseconds
+const oneDay = 1000 * 60 * 60 * 24;
+
+app.use(session({
+  secret: "llama-llama-llama",
+  store: sessionStore,
+  resave: false,
+  saveUninitialized: false,
+  cookie: { maxAge: oneDay },
+}));
 app.use('/account', account);
 app.use('/', routes);
 
