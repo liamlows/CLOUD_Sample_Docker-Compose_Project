@@ -1,9 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
-const promisePool = pool.promise();
 const secret = 'not-a-secret';
 const crypto = require('crypto');
+
+/* TODO
+
+PUT /users/:username/student
+    Sets the student ID on the account.
+
+PUT /users/:username/role
+    Assigns role ID for the account.
+
+ */
 
 // POST /account/register
 router.post("/register", async (req, res, next) => {
@@ -25,7 +34,7 @@ router.post("/register", async (req, res, next) => {
     // Query DB for an already existing account
     let rows, fields;
     try{
-        [rows, fields] = await promisePool.execute('SELECT * FROM `account` WHERE `username` = ?', [username]);
+        [rows, fields] = await pool.execute('SELECT * FROM `account` WHERE `username` = ?', [username]);
     } catch(error){
         return next(error);
     }
@@ -71,7 +80,7 @@ router.post("/login", async (req, res, next) => {
     // Query DB for credentials
     let rows, fields;
     try{
-        [rows, fields] = await promisePool.execute('SELECT * FROM `account` WHERE `username` = ? AND `password` = ?',
+        [rows, fields] = await pool.execute('SELECT * FROM `account` WHERE `username` = ? AND `password` = ?',
             [username, hash]);
     } catch(error){
         return next(error);
