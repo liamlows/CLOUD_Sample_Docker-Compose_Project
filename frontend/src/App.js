@@ -78,9 +78,23 @@ function App() {
     <div className="App" >
       <BrowserRouter>
         <Routes>
+          {/* TODO: Integrate Material UI */}
           <Route path='/' element={<Base />} />
+          {/* TODO: Make home page nicer and more professional. */}
           <Route path='/login' element={<LoginPage />} />
+          
           <Route path='/loggedIn' element={<LoggedIn />} />
+          {/* TODO: Classes tab */}
+            {/* TODO: Go directly to "Classes display" with  */}
+              {/* TODO: When logged in need to be able to view all classes */}
+              {/* TODO: Currently Enrolled classes */}
+            
+          {/* TODO: View Profile (Probably later on) */}
+          {/* TODO: Specific Classes (Probably later on) */}
+          {/* TODO: Account Settings (Probably later on) */}
+          
+          
+          
           <Route path='/signUp' element={<SignUpPage />} />
         </Routes>
       </BrowserRouter>
