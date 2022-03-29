@@ -95,7 +95,7 @@ router.post("/login", async (req, res, next) => {
     req.session.username = username;
     res.cookie('username', username, {httpOnly: true});
 
-    res.json({"success": 1, "error": ""}).send();
+    res.json({"success": 1, "error": "", "username": username}).send();
 });
 
 
