@@ -1,4 +1,5 @@
 import axios from 'axios';
+axios.defaults.withCredentials = true
 
 
 export const addAccount = (account) => new Promise((resolve, reject) => {
