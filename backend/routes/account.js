@@ -93,7 +93,7 @@ router.post("/login", async (req, res, next) => {
 
     // This initializes the login session.
     req.session.username = username;
-    res.cookie('username', username);
+    res.cookie('username', username, {httpOnly: true});
 
     res.json({"success": 1, "error": ""}).send();
 });
