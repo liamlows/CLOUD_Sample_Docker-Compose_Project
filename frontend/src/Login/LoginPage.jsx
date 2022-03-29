@@ -9,7 +9,9 @@ import Cookies from 'js-cookie';
 export const LoginPage = () => {
     const navigate = useNavigate();
     const checkIfLoginSucc = (response) => {if(response.success === 1){
-        navigate(`/users/${Cookies.get("username")}`);
+        // console.log("yuh");
+        Cookies.set("username", `${username}`);// 
+        navigate('/');
     }else{
         window.alert("Fail");
     };}
@@ -19,8 +21,7 @@ export const LoginPage = () => {
     const login = (username, password) => {
 
 
-        logIntoAccount({"username": username, "password": password}).then(response => checkIfLoginSucc(response)).catch(console.log("boner biter"));
-        // console.log(response);
+        logIntoAccount({"username": username, "password": password}).then(response => checkIfLoginSucc(response)).catch(console.log("caught"));
         
     }
     const [username, setUsername] = useState('');
