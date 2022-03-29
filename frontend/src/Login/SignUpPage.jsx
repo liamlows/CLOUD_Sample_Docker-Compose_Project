@@ -1,8 +1,11 @@
 import { PasswordField, SelectField, TextField } from "../common";
 import { useState } from "react";
 import { GenericButton } from "../common/GenericButton";
+import { addAccount } from "../APIFolder/loginApi";
+import { useNavigate } from "react-router-dom";
 
 export const SignUpPage = () => {
+    const navigate = useNavigate();
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -12,6 +15,9 @@ export const SignUpPage = () => {
         "Teacher"
     ]);
 
+    const [ account, setAccount ] = useState([]);
+
+    // const mergeAccount = delta => setAccount({ ...account, ...delta });
 
     return <section id="loginView">
         <h1>Sign Up</h1>
@@ -30,7 +36,14 @@ export const SignUpPage = () => {
                 options={accountTypes}
                 value={accountType}
                 setValue={setAccountType} />
-            <GenericButton label="Sign Up" click="/login" />
+            <button 
+            type="button" 
+            onClick={() => addAccount({"username": username, "password": password}).then(navigate('/login').catch(window.alert("Failed to Sign Up")))}
+            variant="contained" 
+            color="success">
+                Sign Up
+            </button>
+            {/* <GenericButton label="Sign Up" click="/login" /> */}
         </form>
 
     </section>;
