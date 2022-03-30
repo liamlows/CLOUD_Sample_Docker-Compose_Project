@@ -1,3 +1,4 @@
+import { Button } from "@material-ui/core";
 import { TextField } from "@mui/material";
 import { useState } from "react";
 
@@ -8,5 +9,7 @@ export const LoginPage = () => {
     <br/>
     <br/>
     <TextField helperText="Please enter your password" id="demo-helper-text-misaligned" label="Password"/>
+   <br/> <br/> <br/>
+   <Button variant="outlined">Submit</Button>
     </>);
 }
