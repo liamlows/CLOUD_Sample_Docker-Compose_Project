@@ -9,7 +9,7 @@ import Cookies from 'js-cookie';
 export const LoginPage = () => {
     const navigate = useNavigate();
     const checkIfLoginSucc = (response) => {if(response.success === 1){
-        Cookies.set("username", `${username}`);
+        // Cookies.set("username", `${username}`);
         navigate('/');
     }else{
         window.alert("Fail");

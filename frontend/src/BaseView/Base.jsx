@@ -9,6 +9,9 @@ export const Base = () => {
 
     const navigate = useNavigate();
 
+    console.log("Cookies:");
+    console.log(Cookies.get("username"));
+
     if(Cookies.get("username"))
     {
         return <section className="baseView">
