@@ -7,6 +7,7 @@ import { LoggedIn } from './LoggedIn/LoggedIn';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Base } from './BaseView/Base';
 import { SignUpPage } from './Login/SignUpPage';
+import { Profile } from './Profiles/Profile';
 
 // React functional component
 function App() {
@@ -96,6 +97,7 @@ function App() {
           
           
           <Route path='/signUp' element={<SignUpPage />} />
+          <Route path='/wes' element={<Profile />} />
         </Routes>
       </BrowserRouter>
 

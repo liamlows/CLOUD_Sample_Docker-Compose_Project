@@ -53,9 +53,6 @@ router.post("/register", async (req, res, next) => {
         return next(error);
     }
 
-    // This initializes the login session.
-    req.session.username = username;
-
     res.status(200).json({success: 1, error: ""}).send();
 });
 
@@ -96,13 +93,16 @@ router.post("/login", async (req, res, next) => {
 
     // This initializes the login session.
     req.session.username = username;
+    res.cookie('username', username, {httpOnly: true});
 
-    res.json({"success": 1, "error": ""}).send();
+    res.json({"success": 1, "error": "", "username": username}).send();
 });
 
 
 // GET /account/logout
 router.get("/logout", async (req, res, next) => {
+    // Clear the login session.
+    res.cookie('username', "");
     req.session.destroy((err) => {
         if(err) return next(err);
         res.redirect('/');
