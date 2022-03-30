@@ -79,6 +79,13 @@ function App() {
     <div className="App" >
       <BrowserRouter>
         <Routes>
+
+
+          {/* TODO: Add nav bar at top to have easy access to tabs??? 
+          Probably Easiest to create react component then add to each view independently.
+          May want to have 3 different nav bars for the different users and 
+          check what type of user when loading and return different based on which type user is...Seems decently simple to implement */}
+
           {/* TODO: Integrate Material UI */}
           <Route path='/' element={<Base />} />
           {/* TODO: Make home page nicer and more professional. */}
