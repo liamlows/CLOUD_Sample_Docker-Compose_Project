@@ -51,18 +51,19 @@ const Login = () => {
         setSignUp(prev => !prev);
     }
     return (
+        <>
         <div className="login">
             <form>
-                <div className="login-container">
+                <div className="container">
                     {
                         !signUp ?
                             <>
-                                <div className="login-form-field">
-                                    <label htmlFor="user">Username</label>
+                                <div className="form-control">
+                                    <label htmlFor="user" className="form-label">Username</label>
                                     <input type="text" value={user} name="user" id="user" onChange={e => setUsername(e.target.value)} />
                                 </div>
                         
-                                <div className="login-form-field">
+                                <div className="form-control">
                                     <label htmlFor="password"> Password</label>
                                     <input type="password" value={password} name="user" id="password" onChange={e => setPassword(e.target.value)} />
                                 </div>
@@ -70,19 +71,19 @@ const Login = () => {
                             :
                             <>
                                 {err ? <p>{err}</p> : ''}
-                                <div className="login-form-field">
+                                <div className="form-control">
                                     <label htmlFor="user">Username</label>
                                     <input type="text" value={rUser} name="rUser" id="rUser" onChange={e => setRUsername(e.target.value)} />
                                 </div>
-                                <div className="login-form-field">
+                                <div className="form-control">
                                     <label htmlFor="email">Email</label>
-                                    <input type="text" value={email} name="email" id="email" onChange={e => setEmail(e.target.value)} />
+                                    <input type="email" value={email} name="email" id="email" onChange={e => setEmail(e.target.value)} />
                                 </div>
-                                <div className="login-form-field">
+                                <div className="form-control">
                                     <label htmlFor="rPassword">Password</label>
                                     <input type="password" value={rPassword} name="rPassword" id="rPassword" onChange={e => setRPassword(e.target.value)} />
                                 </div>
-                                <div className="login-form-field">
+                                <div className="form-control">
                                     <label htmlFor="cPassword">Confirm Password</label>
                                     <input type="password" value={cPassword} name="cPassword" id="cPassword" onChange={e => setCPassword(e.target.value)} />
                                 </div>
@@ -93,6 +94,7 @@ const Login = () => {
                 </div>
             </form>
         </div>
+        </>
     )
 }
 export default Login;
