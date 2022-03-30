@@ -3,10 +3,20 @@ import { useState } from "react";
 import { GenericButton } from "../common/GenericButton";
 import { addAccount } from "../APIFolder/loginApi";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 export const SignUpPage = () => {
     const navigate = useNavigate();
-
+    const login = (response) => {
+        if(response.success === 1){
+        Cookies.set("username", `${username}`);
+        navigate('/');
+    }else{
+        window.alert("Failed to Sign Up");
+    }}
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [ accountType, setAccountType ] = useState('');
@@ -22,6 +32,17 @@ export const SignUpPage = () => {
     return <section id="loginView">
         <h1>Sign Up</h1>
         <form className="container">
+
+            <TextField label="First Name"
+                value={firstName}
+                setValue={x => setFirstName(x)} />
+            <TextField label="Username"
+                value={lastName}
+                setValue={x => setLastName(x)} />
+            <TextField label="Email"
+                value={email}
+                setValue={x => setEmail(x)} />
+                {/* May want to use for confirmations in the future? If we can figure it out */}
             <TextField label="Username"
                 value={username}
                 setValue={x => setUsername(x)} />
@@ -38,7 +59,9 @@ export const SignUpPage = () => {
                 setValue={setAccountType} />
             <button 
             type="button" 
-            onClick={() => addAccount({"username": username, "password": password}).then(navigate('/login').catch(window.alert("Failed to Sign Up")))}
+            onClick={() => addAccount({"username": username, "password": password, "firstName": firstName, "lastName": lastName, "email": email})
+            .then(response => login(response))
+            .catch()}
             variant="contained" 
             color="success">
                 Sign Up
