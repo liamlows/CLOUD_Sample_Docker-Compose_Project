@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import axios from 'axios';
+import { LoginPage } from './Login/LoginPage';
+import { LoggedIn } from './LoggedIn/LoggedIn';
+// import { Route } from reactDom;
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Base } from './BaseView/Base';
+import { SignUpPage } from './Login/SignUpPage';
+import { Profile } from './Profiles/Profile';
 
 // React functional component
-function App () {
+function App() {
   // state for storage of the information on the webpage of forms and list, uses hooks
   const [number, setNumber] = useState("")
   const [values, setValues] = useState([])
@@ -21,7 +28,7 @@ function App () {
   }
 
   const fetchBase = () => {
-    axios.get(`http://${url}:8000/`).then((res)=>{
+    axios.get(`http://${url}:8000/`).then((res) => {
       alert(res.data);
     })
   }
@@ -33,16 +40,16 @@ function App () {
         const values = res.data.data;
         console.log(values);
         setValues(values)
-    }).catch(err => {
-      console.log(err)
-    });
+      }).catch(err => {
+        console.log(err)
+      });
   }
 
   // handle input form submission to backend via POST request
   const handleSubmit = (e) => {
     e.preventDefault();
     let prod = number * number;
-    axios.post(`http://${url}:8000/multplynumber`, {product: prod}).then(res => {
+    axios.post(`http://${url}:8000/multplynumber`, { product: prod }).then(res => {
       console.log(res);
       fetchVals();
     }).catch(err => {
@@ -65,12 +72,36 @@ function App () {
   // the comment below silences an error that doesn't matter.=
   useEffect(() => {
     fetchVals();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
-    <div className="App">
-      <header className="App-header">
+    <div className="App" >
+      <BrowserRouter>
+        <Routes>
+          {/* TODO: Integrate Material UI */}
+          <Route path='/' element={<Base />} />
+          {/* TODO: Make home page nicer and more professional. */}
+          <Route path='/login' element={<LoginPage />} />
+          
+          <Route path='/loggedIn' element={<LoggedIn />} />
+          {/* TODO: Classes tab */}
+            {/* TODO: Go directly to "Classes display" with  */}
+              {/* TODO: When logged in need to be able to view all classes */}
+              {/* TODO: Currently Enrolled classes */}
+            
+          {/* TODO: View Profile (Probably later on) */}
+          {/* TODO: Specific Classes (Probably later on) */}
+          {/* TODO: Account Settings (Probably later on) */}
+          
+          
+          
+          <Route path='/signUp' element={<SignUpPage />} />
+          <Route path='/wes' element={<Profile />} />
+        </Routes>
+      </BrowserRouter>
+
+      {/* <header className="App-header">
         <button onClick={fetchBase} style={{marginBottom: '1rem'}}> {`GET: http://${url}:8000/`} </button>
         <button onClick={reset}> Reset DB </button>
         <form onSubmit={handleSubmit}>
@@ -81,7 +112,7 @@ function App () {
         <ul>
           { values.map((value, i) => <li key={i}>{value.value}</li>) }
         </ul>
-      </header>
+      </header> */}
     </div>
   );
 }
