@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import './Login.css';
-import { account } from "../../api/account";
+import { login,register } from "../../api/account";
 const Login = () => {
     const [user, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -10,7 +10,7 @@ const Login = () => {
     const [email, setEmail] = useState("");
     const [rPassword, setRPassword] = useState("");
     const [cPassword, setCPassword] = useState("");
-    const api = new account();
+    
 
     useEffect(() => {
         if (err) {
@@ -21,13 +21,12 @@ const Login = () => {
 
     }, [err]);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleSubmit = () => {
         if (signUp) {
             if (rPassword !== cPassword) {
                 setErr("passwords do not match");
             } else {
-                api.register(rUser, email, rPassword)
+                register({rUser, email, rPassword})
                     .then((res) => {
                         console.log(res);
                         alert("successfully registered");
@@ -39,15 +38,17 @@ const Login = () => {
             }
 
         } else {
-            api.login(user, password).then((res) => {
-                console.log(res);
-                localStorage.setItem("userToken", res.data.userToken);
-            }).catch(alert("error logging in"));
-        }
+                login({user,password})
+                    .then((res)=>{
+                        localStorage.setItem("userToken", res.data.userToken);
+                        console.log("super sucess")
+                    })
+                    .catch((err)=> alert("error logging in: " + err));
+            }    
     }
 
-    const toggleSignUp = (e) => {
-        e.preventDefault();
+    const toggleSignUp = () => {
+       
         setSignUp(prev => !prev);
     }
     return (
