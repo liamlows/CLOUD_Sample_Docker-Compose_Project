@@ -14,10 +14,12 @@ export const Base = () => {
         return <section className="baseView">
         <h1 className="mb-4">Welcome {Cookies.get("username")}</h1>
         <h2 className="">Mega Yuh</h2>
+        <GenericButton label="Wes" click="/wes" />
         <button type="button" onClick={() => {
             Cookies.remove("username");
             navigate('/');
     }}>Sign Out</button>
+    
     </section>
     }
 
