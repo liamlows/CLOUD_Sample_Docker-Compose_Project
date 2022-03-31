@@ -6,7 +6,10 @@ export const Navbar = () => {
   return (
     <>
       <div className= "nav">
+
+
       <div className="title"> <h1 className="setColor">NFTShop</h1> </div>
+
         <div className="menu">
           <div className="navLink">
             <Link to='/home'>Home</Link>
