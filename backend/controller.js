@@ -137,3 +137,29 @@ exports.put = async function(req, res) {
     [rows, fields] = await pool.execute(query);
     res.json(rows).send();
 }
+
+exports.delete = async function(req, res) {
+    // get the params from the link
+    var table = req.params.table;
+    var variable = req.params.variable;
+    var value = req.params.value;
+  
+    // get the key-value pairs from the body
+    var result = joinKeys(req.body, 'delete');
+  
+    // set the initial query
+    var query = 'DELETE FROM '.concat(table).concat(' WHERE ')
+  
+    // check for the params
+    if (value != null)
+      query = query.concat(variable).concat(' = ').concat(value);
+    else if (variable != null)
+      query = query.concat(key[table][0]).concat(' = ').concat(variable);
+    else if (result[0].length > 0)
+      query = query.concat(result[0]);
+  
+    // send the query
+    let rows, fields;
+    [rows, fields] = await pool.execute(query);
+    res.json(rows).send();
+  }
