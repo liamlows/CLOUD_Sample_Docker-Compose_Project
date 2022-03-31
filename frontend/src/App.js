@@ -5,8 +5,8 @@ import axios from 'axios';
 // React functional component
 function App () {
   // state for storage of the information on the webpage of forms and list, uses hooks
-  const [number, setNumber] = useState("")
-  const [values, setValues] = useState([])
+  const [name, setName] = useState("NFT name")
+  const [nft_url, setURL] = useState("website.com")
 
   // ENTER YOUR EC2 PUBLIC IP/URL HERE
   const ec2_url = ''
@@ -17,7 +17,7 @@ function App () {
 
   // handle input field state change
   const handleChange = (e) => {
-    setNumber(e.target.value);
+    setName(e.target.value);
   }
 
   const fetchBase = () => {
@@ -26,60 +26,42 @@ function App () {
     })
   }
 
-  // fetches vals of db via GET request
-  const fetchVals = () => {
-    axios.get(`http://${url}:8000/values`).then(
-      res => {
-        const values = res.data.data;
-        console.log(values);
-        setValues(values)
-    }).catch(err => {
-      console.log(err)
-    });
-  }
 
-  // handle input form submission to backend via POST request
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    let prod = number * number;
-    axios.post(`http://${url}:8000/multplynumber`, {product: prod}).then(res => {
+    console.log(e.target.value)
+    axios.post(`http://${url}:8000/uploadnft`, {name}).then(res => {
       console.log(res);
-      fetchVals();
     }).catch(err => {
       console.log(err)
     });;
-    setNumber("");
+    setName("");
   }
 
-  // handle intialization and setup of database table, can reinitialize to wipe db
-  const reset = () => {
-    axios.post(`http://${url}:8000/reset`).then(res => {
-      console.log(res);
-      fetchVals();
-    }).catch(err => {
-      console.log(err)
-    });;
-  }
 
   // tell app to fetch values from db on first load (if initialized)
   // the comment below silences an error that doesn't matter.=
   useEffect(() => {
-    fetchVals();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
     <div className="App">
       <header className="App-header">
-        <button onClick={fetchBase} style={{marginBottom: '1rem'}}> {`GET: http://${url}:8000/`} </button>
-        <button onClick={reset}> Reset DB </button>
         <form onSubmit={handleSubmit}>
-          <input type="text" value={number} onChange={handleChange}/>
+          Enter your NFT's name: 
+          <br/>
+          <input type="text" value={name} onChange={setName}/>
+          <br/>
+          Enter your NFT's URL: 
+          <br/>
+          <input type="text" value={nft_url} onChange={setURL}/>
           <br/>
           <input type="submit" value="Submit" />
         </form>
         <ul>
-          { values.map((value, i) => <li key={i}>{value.value}</li>) }
+          {/* { values.map((value, i) => <li key={i}>{value.value}</li>) } */}
         </ul>
       </header>
     </div>
