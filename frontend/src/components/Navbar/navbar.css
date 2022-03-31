@@ -25,12 +25,11 @@
   display: flex;
   align-items: center;
   margin-right: 2rem;
-  border-radius: 1rem;
+  margin-top: .4rem;
   background: #591baa;
-  padding: 1rem 2rem;
   color: #fffefe;
-  outline: none;
-  border: none;
+  font-size: x-large;
+  border: 20%;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   text-decoration: none;
@@ -47,4 +46,17 @@
     background: #fff;
     text-decoration: none;
     color: #66148b;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 0 1rem;
+  height: 100%;
+  cursor: pointer;
+}
+
+.setColor {
+  color: rgb(88, 21, 128);
 }
