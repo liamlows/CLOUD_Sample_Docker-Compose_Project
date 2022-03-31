@@ -40,7 +40,7 @@ const Login = () => {
         } else {
                 login({user,password})
                     .then((res)=>{
-                        localStorage.setItem("userToken", res.data.userToken);
+                        localStorage.setItem("userData", res.data);
                         console.log("super sucess")
                     })
                     .catch((err)=> alert("error logging in: " + err));
