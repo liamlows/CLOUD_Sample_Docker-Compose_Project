@@ -3,6 +3,14 @@ const express = require('express');
 const router = express.Router();
 const pool = require('./db');
 
+// DEFAULT KEYS FOR THE TABLES
+var key = {
+    'school': ['school_id'],
+    'account': ['account_id']
+  };
+  
+  // DEFAULT VALS TO CHANGE FOR THE TABLES
+
 // Processing the JSON object
 var joinKeys = function(object, type) {
     // result of the joined keys
@@ -44,19 +52,19 @@ var joinKeys = function(object, type) {
 }
   
 var getKeyValues = function(object) {
-// get the json key-value pairs and assign it to a variable
-const keys = Object.keys(object);
+    // get the json key-value pairs and assign it to a variable
+    const keys = Object.keys(object);
 
-// initialization of the key and value lists
-var keyList = [];
-var valueList = [];
+    // initialization of the key and value lists
+    var keyList = [];
+    var valueList = [];
 
-// push all of the keys and values to their lists with correct formatting
-for (let i = 0; i < keys.length; i++) {
-    keyList[i] = keys[i];
-    valueList[i] = '\''.concat(object[keys[i]]).concat('\'');
-}
-return [keyList, valueList];
+    // push all of the keys and values to their lists with correct formatting
+    for (let i = 0; i < keys.length; i++) {
+        keyList[i] = keys[i];
+        valueList[i] = '\''.concat(object[keys[i]]).concat('\'');
+    }
+    return [keyList, valueList];
 }
 
 exports.get = async function(req, res) {
@@ -86,6 +94,46 @@ exports.get = async function(req, res) {
     // send the query
     let rows, fields;
     [rows, fields] = await pool.execute(query);
-    res.json(result).send();
-
+    res.json(rows).send();
   };
+
+
+exports.post = async function(req, res) {
+    // get the params from the link
+    var table = req.params.table;
+
+    // get the key-value pairs from the body
+    var result = joinKeys(req.body, 'post');
+
+    // set the initial query
+    var query = 'INSERT INTO '.concat(table).concat(' (').concat(result[0]).concat(') VALUES (').concat(result[1]).concat(')');
+
+    // send the query
+    let rows, fields;
+    [rows, fields] = await pool.execute(query);
+    res.json(rows).send();
+}
+
+exports.put = async function(req, res) {
+    // get the params from the link
+    var table = req.params.table;
+    var variable = req.params.variable;
+    var value = req.params.value;
+
+    // get the key-value pairs from the body
+    var result = joinKeys(req.body, 'put');
+
+    // set the initial query
+    var query = 'UPDATE '.concat(table).concat(' SET ').concat(result[0]);
+
+    // check for the params
+    if (value != null)
+        query = query.concat(' WHERE ').concat(variable).concat(' = ').concat(value);
+    else
+        query = query.concat(' WHERE ').concat(key[table][0]).concat(' = ').concat(variable);
+
+    // send the query
+    let rows, fields;
+    [rows, fields] = await pool.execute(query);
+    res.json(rows).send();
+}
