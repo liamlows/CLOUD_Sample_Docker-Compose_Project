@@ -1,0 +1,34 @@
+.Login-component {
+    position: relative;
+    background-image: url(./loginImage.jpg);
+    /* Full height */
+    width: 100vw;
+    height: 100vh;
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 0;
+}
+
+h1 {
+    margin: 0;
+    color: rgb(41, 7, 161);
+}
+
+.whiteBox {
+    margin: 0;
+    background: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    padding: 2%;
+    border-radius: 1rem;
+}
+
+.createLink {
+    color:rgb(28, 146, 146);
+    text-decoration: none;
+}
