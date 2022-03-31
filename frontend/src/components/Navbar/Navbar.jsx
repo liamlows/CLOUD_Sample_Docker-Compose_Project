@@ -22,9 +22,6 @@ export const Navbar = () => {
           <div className="navLink">
             <Link to='/notifications'>Notifications</Link>
           </div>
-          <div className="navLink">
-            <Link to='/create'>Sign Up</Link>
-          </div>
         </div>
             <Link to='/' className="navBtnLink">
               <button type="button" className="navBtn">
