@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import axios from 'axios';
-import { LoginPage } from './Login/LoginPage';
-import { LoggedIn } from './LoggedIn/LoggedIn';
+import { LoginPage } from './Components/Login/LoginPage';
+// import { LoggedIn } from './LoggedIn/LoggedIn';
 // import { Route } from reactDom;
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Base } from './BaseView/Base';
-import { SignUpPage } from './Login/SignUpPage';
-import { Profile } from './Profiles/Profile';
+import { Base } from './Components/BaseView/Base';
+import { SignUpPage } from './Components/Login/SignUpPage';
+import { Profile } from './Components/Profiles/Profile';
 
 // React functional component
 function App() {
@@ -80,6 +80,7 @@ function App() {
       <BrowserRouter>
         <Routes>
 
+          {/* When clicking on profile have a global hook that gets set to currViewUser  */}
 
           {/* TODO: Add nav bar at top to have easy access to tabs??? 
           Probably Easiest to create react component then add to each view independently.
@@ -91,7 +92,7 @@ function App() {
           {/* TODO: Make home page nicer and more professional. */}
           <Route path='/login' element={<LoginPage />} />
           
-          <Route path='/loggedIn' element={<LoggedIn />} />
+          {/* <Route path='/loggedIn' element={<LoggedIn />} /> */}
           {/* TODO: Classes tab */}
             {/* TODO: Go directly to "Classes display" with  */}
               {/* TODO: When logged in need to be able to view all classes */}
@@ -104,7 +105,7 @@ function App() {
           
           
           <Route path='/signUp' element={<SignUpPage />} />
-          <Route path='/wes' element={<Profile />} />
+          <Route path="/users/:id" element={<Profile />} />
         </Routes>
       </BrowserRouter>
 

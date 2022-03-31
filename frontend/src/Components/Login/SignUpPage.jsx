@@ -12,7 +12,7 @@ export const SignUpPage = () => {
         Cookies.set("username", `${username}`);
         navigate('/');
     }else{
-        window.alert("Failed to Sign Up");
+        window.alert("Failed to Sign Up. Username is taken");
     }}
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -36,7 +36,7 @@ export const SignUpPage = () => {
             <TextField label="First Name"
                 value={firstName}
                 setValue={x => setFirstName(x)} />
-            <TextField label="Username"
+            <TextField label="Last Name"
                 value={lastName}
                 setValue={x => setLastName(x)} />
             <TextField label="Email"

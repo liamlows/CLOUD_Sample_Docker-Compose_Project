@@ -16,7 +16,10 @@ export const Base = () => {
         <h2 className="">Mega Yuh</h2>
         <GenericButton label="Wes" click="/wes" />
         <button type="button" onClick={() => {
+            console.log(Cookies.get());
             Cookies.remove("username");
+            Cookies.remove("connect.sid");
+            console.log(Cookies.get());
             navigate('/');
     }}>Sign Out</button>
     

@@ -12,7 +12,7 @@ export const LoginPage = () => {
         Cookies.set("username", `${username}`);
         navigate('/');
     }else{
-        window.alert("Fail");
+        window.alert("Password for given username is incorrect");
     };}
     
 
