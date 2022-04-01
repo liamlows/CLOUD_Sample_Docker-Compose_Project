@@ -1,0 +1,30 @@
+#item-card-image{
+    height: 125px;
+}
+#item-card-description{
+    height: 2rem;
+    
+    text-overflow: ellipsis;
+    width: 200px;
+    display: block;
+    overflow: hidden
+}
+@media screen and (max-width:600px) {
+    #item-card-image{
+        height: 125px;
+    }
+    #item-card-description{
+        display:none;
+    }
+    #item-card-price{
+        text-align: center;
+        
+    }
+}
+@media screen and (max-width:900px) {
+   
+    #item-card-description{
+        display:none;
+    }
+   
+}

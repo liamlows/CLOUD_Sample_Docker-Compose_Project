@@ -1,7 +1,7 @@
 import { Route, Navigate, Outlet } from "react-router-dom";
 import { UserContext } from "./userContext";
 
-export const ProtectedRoute = ({ element, path}) => {
+export const ProtectedRoute = () => {
     return (
         <UserContext.Consumer>
         {

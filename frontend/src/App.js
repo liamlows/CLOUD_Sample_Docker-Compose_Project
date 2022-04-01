@@ -20,7 +20,7 @@ import { ProtectedRoute } from './Components/ProtectedRoute';
 // React functional component
 function App () {
   // state for storage of the information on the webpage of forms and list, uses hooks
-  const[user,setUser]=useState({});
+  const[user,setUser]=useState({user: "token"});
 
   const logout=()=>{
     console.log("logout");
@@ -42,9 +42,11 @@ function App () {
               <Routes>
                   <Route exact path="/" element={<Home/>}/>
                   <Route path="/login" element={<Login/>}/>
-                  <Route path="/feed" element={<Feed/>}/>
-                  <Route path='/farm' element={<ProtectedRoute/>}>
-                    <Route path='/farm' element={<Home/>}/>
+                  <Route path='/feed' element={<ProtectedRoute/>}>
+                      <Route path="/feed" element={<Feed/>}/>
+                  </Route>
+                  <Route path='/farm/:id' element={<ProtectedRoute/>}>
+                    <Route path='/farm/:id' element={<FarmPage/>}/>
                   </Route>
                   <Route path='*' element={<Navigate to="/" replace />}/>
               </Routes>

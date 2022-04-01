@@ -1,10 +1,11 @@
 export class item {
-    constructor(name, description, image, farmId, ownerId, dateFounded,){
+    constructor(name, description, image, farmId, ownerId, dateFounded, items){
         this.name = name;
         this.description = description;
         this.image = image;
-        this.price = price;
-        this.stock = stock;
+        this.items = items;
         this.farmId = farmId;
+        this.ownerId = ownerId;
+        this.dateFounded = dateFounded;
     }
 }
