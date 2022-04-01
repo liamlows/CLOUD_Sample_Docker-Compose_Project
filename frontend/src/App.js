@@ -11,6 +11,7 @@ import {
 import axios from 'axios';
 import { NavBar } from './Components/NavBar/NavBar';
 import { Home } from './Components/Home/Home';
+import { Feed } from './Components/Feed/Feed';
 import Login from './Components/Login/Login';
 import FarmPage from './Components/FarmPage/FarmPage';
 import { UserContext } from './Components/userContext';
@@ -41,7 +42,7 @@ function App () {
               <Routes>
                   <Route exact path="/" element={<Home/>}/>
                   <Route path="/login" element={<Login/>}/>
-                  
+                  <Route path="/feed" element={<Feed/>}/>
                   <Route path='/farm' element={<ProtectedRoute/>}>
                     <Route path='/farm' element={<Home/>}/>
                   </Route>

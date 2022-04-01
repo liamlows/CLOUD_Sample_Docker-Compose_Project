@@ -3,9 +3,9 @@ import * as FaIcons from 'react-icons/fa';
 import {GiCardAceSpades} from 'react-icons/gi';
 export const NavbarItems = [
     {
-        title:'Hotels',
+        title:'Feed',
         icon: <FaIcons.FaHotel/>,
-        path:'/Hotels'
+        path:'/Feed'
     },
     {
         title:'Dining',
