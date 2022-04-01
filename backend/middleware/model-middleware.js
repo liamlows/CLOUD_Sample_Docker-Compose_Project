@@ -1,4 +1,9 @@
+const connectToDatabase = require('../models/database-helpers.js');
 const User = require('../models/users');
+const Bid = require('../models/bid');
+const Contract = require('../models/contract');
+const Land = require('../models/land');
+const Review = require('../models/review');
 
 /**
  * This middleware function is meant to be registered BEFORE the route handlers (see index.js)
@@ -9,12 +14,25 @@ const User = require('../models/users');
  */
 const createModelsMiddleware = async (req, res, next) => {
     console.log('Creating models in middleware');
+    const { DBQuery, disconnect } = await connectToDatabase();
     req.models = {
         user: User,
+        bid: new Bid(DBQuery, disconnect),
+        contract: new Contract(DBQuery, disconnect),
+        land: new Land(DBQuery, disconnect),
+        review: new Review(DBQuery, disconnect)
     }
+    req.disconnect = disconnect;
+    next();
+}
+
+const disconnectFromDatababaseMiddleware = (req, res, next) => {
+    console.log('Disconnecting from the database');
+    req.disconnect();
     next();
 }
 
 module.exports = {
     createModelsMiddleware,
+    disconnectFromDatababaseMiddleware
 }
