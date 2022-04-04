@@ -1,3 +1,5 @@
+import apiURL from "./APIURL"
+
 const apiEndpoint = apiURL + "farms"
 const apiConfig = {
     headers: {

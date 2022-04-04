@@ -1,5 +1,7 @@
 // This is used to edit the items belonging to farms
 
+import apiURL from "./APIURL"
+
 const apiEndpoint = apiURL + "farms"
 const apiConfig = {
     headers: {
