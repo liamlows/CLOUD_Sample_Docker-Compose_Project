@@ -1,17 +1,45 @@
 const express = require('express');
 const router = express.Router();
+const controller = require('./controller');
 
-// GET /
-router.get('/', (req, res) => {
-  res.status(200);
+// Dynamic Get
+router.get('/api/d/:table', async (req, res, next) => {
+  try{
+      await controller.get(req, res);
+  } catch(error){
+      return next(error);
+  } 
+});
 
-  if(req.session.username){
-    res.write(`Welcome, ${req.session.username}.`);
-  } else{
-    res.write('You are not currently logged in.');
+
+// Dynamic Post
+// /api/d/{table}/post
+router.post('/api/d/:table/post', async (req, res, next) => {
+  try{
+    await controller.post(req, res);
+  } catch(error){
+    return next(error);
   }
+});
 
-  res.send();
+// Dynamic Put
+// /api/d/{table}/{variable}/put
+router.put('/api/d/:table/:variable/put', async (req, res, next) => {
+  try{
+    await controller.put(req, res);
+  } catch(error){
+    return next(error);
+  }
+});
+
+// Dynamic Delete
+// /api/d/{table}/{variable}/delete
+router.delete('/api/d/:table/:variable/delete', async (req, res, next) => {
+  try{
+    await controller.delete(req, res);
+  } catch(error){
+    return next(error);
+  }
 });
 
 module.exports = router;
