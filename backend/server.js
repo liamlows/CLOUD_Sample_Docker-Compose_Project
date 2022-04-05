@@ -22,9 +22,25 @@ const logger = log({ console: true, file: false, label: config.name });
 
 // specify middleware to use
 app.use(bodyParser.json());
-app.use(cors({
-  origin: '*'
-}));
+
+let corOptions;
+
+if(process.env.REACT_CLIENT_ORIGIN === undefined){
+  corOptions = {
+    origin: 'http://localhost:3000',
+    credentials: true,
+  };
+}
+else{
+  corOptions = {
+    origin: process.env.REACT_CLIENT_ORIGIN,
+    credentials: true,
+  };
+}
+
+app.use(cors(corOptions));
+
+
 app.use(ExpressAPILogMiddleware(logger, { request: true }));
 
 
