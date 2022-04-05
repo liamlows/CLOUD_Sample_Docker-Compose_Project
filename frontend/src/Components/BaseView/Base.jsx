@@ -9,20 +9,10 @@ export const Base = () => {
 
     const navigate = useNavigate();
 
+    //if logged in (will store across refreshes) - May want to use local storage instead of cookie creation
     if (Cookies.get("username")) {
-        return <section className="baseView">
-            <h1 className="mb-4">Welcome {Cookies.get("username")}</h1>
-            <h2 className="">Mega Yuh</h2>
-            <GenericButton label="Wes" click="/wes" />
-            <button type="button" onClick={() => {
-                console.log(Cookies.get());
-                Cookies.remove("username");
-                Cookies.remove("connect.sid");
-                console.log(Cookies.get());
-                navigate('/');
-            }}>Sign Out</button>
-
-        </section>
+        
+        navigate('/home')
     }
 
 
