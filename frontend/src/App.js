@@ -9,6 +9,7 @@ import { Base } from './Components/BaseView/Base';
 import { SignUpPage } from './Components/Login/SignUpPage';
 import { Profile } from './Components/Profiles/Profile';
 import { HomeView } from './Components/LoggedIn/HomeView';
+import { AccountInfo } from './Components/Profiles/AccountInfo';
 
 // React functional component
 function App() {
@@ -110,7 +111,8 @@ function App() {
           
           
           <Route path='/signUp' element={<SignUpPage />} />
-          <Route path="/users/:id" element={<Profile />} />
+          <Route path="/users/:userId" element={<Profile />} />
+          <Route path="/accounts/:accountId" element={<AccountInfo />} />
         </Routes>
       </BrowserRouter>
 
