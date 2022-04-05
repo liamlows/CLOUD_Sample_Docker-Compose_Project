@@ -11,8 +11,10 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
+import { Link } from 'react-router-dom';
+import "./ResponsiveAppBar.css";
 
-export const ResponsiveAppBar = (props) => {
+export const ResponsiveAppBar = ({ pages, settings }) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -73,7 +75,7 @@ export const ResponsiveAppBar = (props) => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {props.pages.map((page) => (
+              {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
@@ -89,7 +91,7 @@ export const ResponsiveAppBar = (props) => {
             LOGO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {props.pages.map((page) => (
+            {pages.map((page) => (
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
@@ -122,11 +124,16 @@ export const ResponsiveAppBar = (props) => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {props.settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
+              {settings.map((setting) => (
+              <MenuItem key={setting.label} onClick={handleCloseUserMenu}>
+                <Typography textAlign="center">
+                  {setting.route
+                    ? <Link to={`${setting.route}`} className='settingsLink'>{setting.label}</Link>
+                    : <Link onClick={setting.onclick}>{setting.label}</Link>}
+                </Typography>
+              </MenuItem>
               ))}
+
             </Menu>
           </Box>
         </Toolbar>
