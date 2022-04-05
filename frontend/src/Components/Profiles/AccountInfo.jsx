@@ -1,5 +1,5 @@
 import { getEmailbyUsername, getFirstNamebyUsername, getLastNamebyUsername, updateAccount, getAccountbyUsername } from "../../APIFolder/loginApi";
-import { TextField } from "../common";
+import { PasswordField, TextField } from "../common";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +12,7 @@ export const AccountInfo = (props) => {
     let editPasswordMode = false;
     let confirmUserName = false;
     let confirmPassword = false;
+    let currUser = props.username;
 
     //Doesn't currently know what info to get from the database
     const [account, setAccount] = useState(undefined);
@@ -31,7 +32,9 @@ export const AccountInfo = (props) => {
 
     const doneUserNameEditing = (bool) => {
         if (bool) {
+            //use currUser here to access database and change username
             //updateAccount
+            //update currUser
         }
         editUserNameMode = false;
         confirmUserName = false;
@@ -62,17 +65,17 @@ export const AccountInfo = (props) => {
 
             <h2>Username :</h2>
             <p>{account.username}</p>
-            <button onClick={updateUserName()}>Edit Username</button>
+            <button onClick={updateUserName()}>Change Username</button>
         </div>}
         {editPasswordMode && <div>
-            <TextField label="Username :" value={account.username} setValue={x => changeUserName(x)} />
+            <PasswordField label="Password: " value='' setValue={x => changePassword(x)} />
             <button onClick={confirmUserNameUpdate()}>Save</button>
         </div>}
         {!editPasswordMode && <div>
 
-            <h2>Username :</h2>
-            <p>{account.username}</p>
-            <button onClick={updateUserName()}>Edit Username</button>
+            {/* <h2>Password :</h2> */}
+            <PasswordField label="Password: " value="default value" />
+            <button onClick={updatePassword()}>Change Password</button>
         </div>}
         {confirmUserName && <div className=".confimWindowOuter">
             <div className=".confirmWindowInner">
