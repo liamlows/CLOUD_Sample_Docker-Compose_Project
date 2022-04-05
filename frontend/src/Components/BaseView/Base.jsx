@@ -9,27 +9,26 @@ export const Base = () => {
 
     const navigate = useNavigate();
 
-    if(Cookies.get("username"))
-    {
+    if (Cookies.get("username")) {
         return <section className="baseView">
-        <h1 className="mb-4">Welcome {Cookies.get("username")}</h1>
-        <h2 className="">Mega Yuh</h2>
-        <GenericButton label="Wes" click="/wes" />
-        <button type="button" onClick={() => {
-            console.log(Cookies.get());
-            Cookies.remove("username");
-            Cookies.remove("connect.sid");
-            console.log(Cookies.get());
-            navigate('/');
-    }}>Sign Out</button>
-    
-    </section>
+            <h1 className="mb-4">Welcome {Cookies.get("username")}</h1>
+            <h2 className="">Mega Yuh</h2>
+            <GenericButton label="Wes" click="/wes" />
+            <button type="button" onClick={() => {
+                console.log(Cookies.get());
+                Cookies.remove("username");
+                Cookies.remove("connect.sid");
+                console.log(Cookies.get());
+                navigate('/');
+            }}>Sign Out</button>
+
+        </section>
     }
 
 
     return <section className="baseView">
         <h1 className="mb-4">Welcome</h1>
         <h2 className="">This is the base page to be updated with logo and stuff</h2>
-        <GenericButton  label="Login" click="/login" variant="contained" color="success"/>
+        <GenericButton label="Login" click="/login" variant="contained" color="success" />
     </section>
 }
