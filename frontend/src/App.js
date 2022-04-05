@@ -79,6 +79,18 @@ function App() {
 
   const [ currUser, setCurrUser ] = useState('')
 
+  //Nav bar now made available from all views (at least thats the goal)
+  const [loggedInPages] = useState(['Classes']);
+  const [basePages] = useState(['']);
+    const [settings] = useState([
+        // {label: 'Public Profile', route: `/users/${account.id}` }, Keep out until have an account id confirmed
+        // { label: 'Account', route: `/accounts/${account.id}` }, 
+        { label: 'Public Profile', route: `/users` },
+        { label: 'Account', route: `/accounts` },
+        { label: 'Dashboard', route: '/' },
+        { label: 'Logout', route: '/signout' }
+    ]);
+
   return (
     <div className="App" >
       <BrowserRouter>
@@ -92,10 +104,13 @@ function App() {
           check what type of user when loading and return different based on which type user is...Seems decently simple to implement */}
 
           {/* TODO: Integrate Material UI */}
-          <Route path='/' element={<Base currUser={currUser} setCurrUser={x => setCurrUser(x)}/>} />
+          <Route path='/' element={<Base currUser={currUser} 
+                                          setCurrUser={x => setCurrUser(x) 
+                                          basePages={basePages}
+                                          loggedInPages={loggedInPages}
+                                          settings={settings}}/>} />
 
           {/* TODO: MAKE HOME NOT ACCESSABLE IF USER IS NOT LOGGED IN */}
-          <Route path='/home' element={<HomeView currUser={currUser}/>} setCurrUser={x => setCurrUser(x)}/>
 
           {/* TODO: Make home page nicer and more professional. */}
           <Route path='/login' element={<LoginPage currUser={currUser} setCurrUser={x => setCurrUser(x)}/>} />
