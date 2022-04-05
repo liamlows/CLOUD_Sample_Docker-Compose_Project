@@ -21,6 +21,10 @@ export const logIntoAccount = (account) => new Promise((resolve, reject) => {
         });
 });
 
+export const getAccountbyUsername = (account) => {
+    return axios.get(`http://localhost:8000/users/${account.username}`, account);
+}
+
 export const getFirstNamebyUsername = (account) => {
     return axios.get(`http://localhost:8000/users/${account.username}`, account).firstName;
 }
