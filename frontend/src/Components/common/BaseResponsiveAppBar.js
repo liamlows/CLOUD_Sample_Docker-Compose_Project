@@ -11,11 +11,13 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import "./ResponsiveAppBar.css";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-export const BaseResponsiveAppBar = ({ pages, settings, signIn, signUp }) => {
+export const BaseResponsiveAppBar = ({ pages, signIn, signUp }) => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -57,7 +59,7 @@ export const BaseResponsiveAppBar = ({ pages, settings, signIn, signUp }) => {
               onClick={handleOpenNavMenu}
               color="inherit"
             >
-              <MenuIcon />
+              <ExpandMoreIcon/>
             </IconButton>
             <Menu
               id="menu-appbar"
@@ -78,8 +80,8 @@ export const BaseResponsiveAppBar = ({ pages, settings, signIn, signUp }) => {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem key={page.label} onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center">{page.label}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -95,11 +97,11 @@ export const BaseResponsiveAppBar = ({ pages, settings, signIn, signUp }) => {
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
-                key={page}
+                key={page.label}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                {page}
+                {page.label}
               </Button>
             ))}
           </Box>
@@ -126,7 +128,6 @@ export const BaseResponsiveAppBar = ({ pages, settings, signIn, signUp }) => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              
               <MenuItem key='signIn' onClick={handleCloseUserMenu}>
                 <Typography textAlign="center">
                   <Link to='/login' className='settingsLink' onClick={signIn}>Login</Link>
@@ -137,8 +138,6 @@ export const BaseResponsiveAppBar = ({ pages, settings, signIn, signUp }) => {
                   <Link to='/signUp' className='settingsLink' onClick={signUp}>Sign Up</Link>
                 </Typography>
               </MenuItem>
-              
-
             </Menu>
           </Box>
         </Toolbar>
