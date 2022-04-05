@@ -36,7 +36,7 @@ export const LoggedInResponsiveAppBar = ({ pages, settings, signOut }) => {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{background:'black'}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -107,7 +107,8 @@ export const LoggedInResponsiveAppBar = ({ pages, settings, signOut }) => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                {/* changed Alt to account. Dont know what that did, but may need to pass in username */}
+                <Avatar alt='Account' src="" /> 
               </IconButton>
             </Tooltip>
             <Menu

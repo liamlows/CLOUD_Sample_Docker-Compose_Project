@@ -36,8 +36,8 @@ export const BaseResponsiveAppBar = ({ pages, settings, signIn, signUp }) => {
   };
 
   return (
-    <AppBar position="static">
-      <Container maxWidth="xl">
+    <AppBar position="static" sx={{background:'black'}}>
+      <Container maxWidth="xl" >
         <Toolbar disableGutters>
           <Typography
             variant="h6"
@@ -106,8 +106,8 @@ export const BaseResponsiveAppBar = ({ pages, settings, signIn, signUp }) => {
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Sign In">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="S" src="" />
+              <IconButton onClick={handleOpenUserMenu}>
+                <MenuIcon sx={{color : 'white'}}/>
               </IconButton>
             </Tooltip>
             <Menu
