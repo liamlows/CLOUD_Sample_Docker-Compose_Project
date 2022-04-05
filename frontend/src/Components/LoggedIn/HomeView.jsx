@@ -9,9 +9,9 @@ import Cookies from "js-cookie";
 export const HomeView = () => {
 
     const navigate = useNavigate();
-    
-    const pages = ['Products', 'Pricing', 'Blog'];
-    const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+
+    const pages = ['Classes'];
+    const settings = ['Public Profile', 'Account', 'Dashboard', 'Logout'];
 
     return <div>
         <ResponsiveAppBar pages={pages} settings={settings}></ResponsiveAppBar>
