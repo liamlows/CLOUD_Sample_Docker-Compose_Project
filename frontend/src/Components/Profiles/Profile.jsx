@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 export const Profile = () => {
 
     const navigate = useNavigate();
-    const loadedUser = "wes"
+    const loadedUser = "wes"//hardcoded for now however will make dynamic later. 
     let editMode = false;
 
     //Doesn't currently know what info to get from the database
@@ -17,18 +17,22 @@ export const Profile = () => {
     // const [email, setEmail] = useState(getEmailbyUsername(username));
     const username = Cookies.get("username");
 
-    useEffect(() => {
+
+    if(!account)
+    {
         getAccountbyUsername({ loadedUser }).then(x => setAccount(x));
-    }, [startEditing]);
+
+    }
+    useEffect(() => {}, [editMode]);
 
     const startEditing = () => {
         editMode = true;
-        navigate(`/${username}`)
+        // navigate(`users/${username}`) //dont think I need this since useEffect should update dom
     }
     const doneEditing = () => {
-        editMode = false;
         updateAccount({ "username": account.username, "firstName": account.firstName, "lastName": account.lastName, "email": account.email });
-        navigate(`/${username}`)
+        editMode = false;
+        // navigate(`users/${username}`) //dont think I need this since useEffect should update dom
     }
 
     const changeFirstName = delta => setAccount({...account, ...delta});
