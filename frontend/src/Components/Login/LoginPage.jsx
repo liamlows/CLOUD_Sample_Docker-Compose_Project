@@ -1,9 +1,9 @@
 import { PasswordField, TextField } from "../common";
 import { useState } from "react";
 import { GenericButton } from "../common/GenericButton";
-import { logIntoAccount } from "../APIFolder/loginApi";
 import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
+import { logIntoAccount } from "../../APIFolder/loginApi";
 
 
 export const LoginPage = () => {

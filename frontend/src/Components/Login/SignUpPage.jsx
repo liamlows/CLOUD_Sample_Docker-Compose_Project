@@ -1,7 +1,7 @@
 import { PasswordField, SelectField, TextField } from "../common";
 import { useState } from "react";
 import { GenericButton } from "../common/GenericButton";
-import { addAccount } from "../APIFolder/loginApi";
+import { addAccount } from "../../APIFolder/loginApi";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
