@@ -30,7 +30,7 @@ CREATE TABLE consumer(
     user_login VARCHAR(50),
     user_password VARCHAR(50)
 );
-
+--Extra?
 CREATE TABLE customer(
     customer_id VARCHAR(50),  PRIMARY KEY(customer_id),
     first_name VARCHAR(50),
@@ -42,7 +42,7 @@ CREATE TABLE customer(
 
 
 /*------------------------APP CAPABILITIES----------------------------*/
-
+--Need customer id?
 CREATE TABLE requests(
     request_id VARCHAR(50),
     request_type VARCHAR(50),
@@ -50,13 +50,12 @@ CREATE TABLE requests(
     farmer_id VARCHAR(50), FOREIGN KEY (farmer_id) REFERENCES product(farmer_id)
 
 );
-
+--Need customer id and quantity?
 CREATE TABLE cart(
     product_id VARCHAR(50), FOREIGN KEY (product_id) REFERENCES product(product_id),
     farmer_id VARCHAR(50), FOREIGN KEY (farmer_id) REFERENCES product(farmer_id)
 
 );
-
 CREATE TABLE event(
     event_id VARCHAR(50),  PRIMARY KEY(event_id),
     event_name VARCHAR(50),
@@ -69,6 +68,5 @@ CREATE TABLE product(
     product_name VARCHAR(50),
     product_price VARCHAR(50),
     product_description VARCHAR(50),
-    farmer_id VARCHAR(50), FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id),
-    farm_name VARCHAR(50), FOREIGN KEY (farm_name) REFERENCES farmer(farm_name)
+    farmer_id VARCHAR(50), FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id)
 );
