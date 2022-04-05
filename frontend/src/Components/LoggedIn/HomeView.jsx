@@ -3,13 +3,13 @@
 import { Link, useNavigate } from "react-router-dom";
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
-import ResponsiveAppBar from "./ResponsiveAppBar";
+import { LoggedInResponsiveAppBar } from "../common/LoggedInResponsiveAppBar";
 import Cookies from "js-cookie";
 import { useState } from "react";
 import { getAccountbyUsername } from "../../APIFolder/loginApi";
 import { useEffect } from "react";
 
-export const HomeView = ({ currUser, setCurrUser }) => {
+export const HomeView = ({ currUser, setCurrUser, pages, settings}) => {
 
     const navigate = useNavigate();
 
@@ -33,18 +33,8 @@ export const HomeView = ({ currUser, setCurrUser }) => {
         setCurrUser('');
     }
 
-    const [pages] = useState(['Classes']);
-    const [settings] = useState([
-        // {label: 'Public Profile', route: `/users/${account.id}` }, Keep out until have an account id confirmed
-        // { label: 'Account', route: `/accounts/${account.id}` }, 
-        { label: 'Public Profile', route: `/users` },
-        { label: 'Account', route: `/accounts` },
-        { label: 'Dashboard', route: '/home' },
-        { label: 'Logout', route: '/signout' }
-    ]);
-
     return <div>
-        <ResponsiveAppBar pages={pages} settings={settings} signOut={signOut()}></ResponsiveAppBar>
+        <LoggedInResponsiveAppBar pages={pages} settings={settings} signOut={signOut()}></LoggedInResponsiveAppBar>
         <h1 className="mb-4">Welcome {account.firstName}</h1>
     </div>
 }
