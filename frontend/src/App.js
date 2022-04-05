@@ -8,6 +8,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Base } from './Components/BaseView/Base';
 import { SignUpPage } from './Components/Login/SignUpPage';
 import { Profile } from './Components/Profiles/Profile';
+import { HomeView } from './Components/LoggedIn/HomeView';
 
 // React functional component
 function App() {
@@ -89,6 +90,10 @@ function App() {
 
           {/* TODO: Integrate Material UI */}
           <Route path='/' element={<Base />} />
+
+          {/* TODO: MAKE HOME NOT ACCESSABLE IF USER IS NOT LOGGED IN */}
+          <Route path='/home' element={<HomeView />} />
+
           {/* TODO: Make home page nicer and more professional. */}
           <Route path='/login' element={<LoginPage />} />
           
