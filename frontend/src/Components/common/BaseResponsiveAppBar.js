@@ -105,9 +105,9 @@ export const BaseResponsiveAppBar = ({ pages, settings, signIn, signUp }) => {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
+            <Tooltip title="Sign In">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt="S" src="" />
               </IconButton>
             </Tooltip>
             <Menu
@@ -127,12 +127,12 @@ export const BaseResponsiveAppBar = ({ pages, settings, signIn, signUp }) => {
               onClose={handleCloseUserMenu}
             >
               
-              <MenuItem key={setting.label} onClick={handleCloseUserMenu}>
+              <MenuItem key='signIn' onClick={handleCloseUserMenu}>
                 <Typography textAlign="center">
                   <Link to='/login' className='settingsLink' onClick={signIn}>Login</Link>
                 </Typography>
               </MenuItem>
-              <MenuItem key={setting.label} onClick={handleCloseUserMenu}>
+              <MenuItem key='signUp' onClick={handleCloseUserMenu}>
                 <Typography textAlign="center">
                   <Link to='/signUp' className='settingsLink' onClick={signUp}>Sign Up</Link>
                 </Typography>

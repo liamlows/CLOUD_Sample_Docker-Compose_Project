@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import { HomeView } from "../LoggedIn/HomeView";
 import BaseResponsiveAppBar from "../common/BaseResponsiveAppBar";
 
-export const Base = ({ currUser, setCurrUser, basePages, loggedInPages, settings}) => {
+export const Base = ({ currUser, setCurrUser, basePages, loggedInPages, settings }) => {
 
     const navigate = useNavigate();
 
@@ -24,10 +24,9 @@ export const Base = ({ currUser, setCurrUser, basePages, loggedInPages, settings
 
     return <section className="baseView">
         {currUser === '' && <div>
-            <BaseResponsiveAppBar pages={basePages} signIn={navigate('/login')} signUp={navigate('/signUp')}/>
+            <BaseResponsiveAppBar pages={basePages} signIn={navigate('/login')} signUp={navigate('/signUp')} />
             <h1 className="mb-4">Welcome</h1>
             <h2 className="">This is the base page to be updated with logo and stuff</h2>
-            <GenericButton label="Login" click="/login" variant="contained" color="success" />
         </div>}
         {currUser !== '' && <HomeView currUser={currUser} setCurrUser={x => setCurrUser(x)} pages={loggedInPages} settings={settings} />}
     </section>

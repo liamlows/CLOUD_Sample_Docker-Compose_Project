@@ -105,10 +105,10 @@ function App() {
 
           {/* TODO: Integrate Material UI */}
           <Route path='/' element={<Base currUser={currUser} 
-                                          setCurrUser={x => setCurrUser(x) 
+                                          setCurrUser={x => setCurrUser(x)}
                                           basePages={basePages}
                                           loggedInPages={loggedInPages}
-                                          settings={settings}}/>} />
+                                          settings={settings}/>} />
 
           {/* TODO: MAKE HOME NOT ACCESSABLE IF USER IS NOT LOGGED IN */}
 
