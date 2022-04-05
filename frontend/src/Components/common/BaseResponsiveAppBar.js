@@ -14,7 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { Link, useLocation } from 'react-router-dom';
 import "./ResponsiveAppBar.css";
 
-export const ResponsiveAppBar = ({ pages, settings, signOut }) => {
+export const BaseResponsiveAppBar = ({ pages, settings, signIn, signUp }) => {
   const location = useLocation();
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -126,14 +126,18 @@ export const ResponsiveAppBar = ({ pages, settings, signOut }) => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
+              
               <MenuItem key={setting.label} onClick={handleCloseUserMenu}>
                 <Typography textAlign="center">
-                  {setting.route != '/signout' && <Link to={`${setting.route}`} className='settingsLink'>{setting.label}</Link>}
-                  {setting.route == '/signout' && <Link to={location.pathname} className='settingsLink' onClick={signOut}>{setting.label}</Link>}
+                  <Link to='/login' className='settingsLink' onClick={signIn}>Login</Link>
                 </Typography>
               </MenuItem>
-              ))}
+              <MenuItem key={setting.label} onClick={handleCloseUserMenu}>
+                <Typography textAlign="center">
+                  <Link to='/signUp' className='settingsLink' onClick={signUp}>Sign Up</Link>
+                </Typography>
+              </MenuItem>
+              
 
             </Menu>
           </Box>
@@ -142,4 +146,4 @@ export const ResponsiveAppBar = ({ pages, settings, signOut }) => {
     </AppBar>
   );
 };
-export default ResponsiveAppBar;
+export default BaseResponsiveAppBar;
