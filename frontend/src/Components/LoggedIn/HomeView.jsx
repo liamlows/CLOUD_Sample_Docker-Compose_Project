@@ -32,11 +32,11 @@ export const HomeView = (props) => {
         {label: 'Public Profile', route: `/users` }, 
         { label: 'Account', route: `/accounts` }, 
         { label: 'Dashboard', route: '/home' },
-        // { label: 'Logout', onclick: 'signOut()'}
+        { label: 'Logout', route: '/signout'}
     ]);
 
     return <div>
-        <ResponsiveAppBar pages={pages} settings={settings}></ResponsiveAppBar>
+        <ResponsiveAppBar pages={pages} settings={settings} signOut={signOut()}></ResponsiveAppBar>
         <h1 className="mb-4">Welcome {props.username}</h1>
     </div>
 }

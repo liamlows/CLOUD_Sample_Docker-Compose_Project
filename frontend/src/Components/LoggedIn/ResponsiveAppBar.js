@@ -11,10 +11,12 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import "./ResponsiveAppBar.css";
 
-export const ResponsiveAppBar = ({ pages, settings }) => {
+export const ResponsiveAppBar = ({ pages, settings, signOut }) => {
+  const location = useLocation();
+
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -127,9 +129,8 @@ export const ResponsiveAppBar = ({ pages, settings }) => {
               {settings.map((setting) => (
               <MenuItem key={setting.label} onClick={handleCloseUserMenu}>
                 <Typography textAlign="center">
-                  {setting.route
-                    ? <Link to={`${setting.route}`} className='settingsLink'>{setting.label}</Link>
-                    : <Link onClick={setting.onclick}>{setting.label}</Link>}
+                  {setting.route != '/signout' && <Link to={`${setting.route}`} className='settingsLink'>{setting.label}</Link>}
+                  {setting.route == '/signout' && <Link to={location.pathname} className='settingsLink' onClick={signOut}>{setting.label}</Link>}
                 </Typography>
               </MenuItem>
               ))}
