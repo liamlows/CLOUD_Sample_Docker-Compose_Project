@@ -77,6 +77,8 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const [ currUser, setCurrUser ] = useState('')
+
   return (
     <div className="App" >
       <BrowserRouter>
@@ -93,7 +95,7 @@ function App() {
           <Route path='/' element={<Base />} />
 
           {/* TODO: MAKE HOME NOT ACCESSABLE IF USER IS NOT LOGGED IN */}
-          <Route path='/home' element={<HomeView />} />
+          <Route path='/home' element={<HomeView username={currUser}/>} />
 
           {/* TODO: Make home page nicer and more professional. */}
           <Route path='/login' element={<LoginPage />} />
