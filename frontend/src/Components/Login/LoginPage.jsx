@@ -6,16 +6,21 @@ import Cookies from 'js-cookie';
 import { logIntoAccount } from "../../APIFolder/loginApi";
 
 
-export const LoginPage = () => {
+export const LoginPage = ({currUser, setCurrUser}) => {
     const navigate = useNavigate();
     const checkIfLoginSucc = (response) => {if(response.success === 1){
         Cookies.set("username", `${username}`);
+        setCurrUser(username);
         navigate('/');
+
     }else{
         window.alert("Password for given username is incorrect");
     };}
-    
 
+    //will prevent someone from logging in if they are currently logged in
+    if(!currUser === ''){
+        navigate('/');
+    }
 
     const login = (username, password) => {
         logIntoAccount({"username": username, "password": password}).then(response => checkIfLoginSucc(response)).catch();

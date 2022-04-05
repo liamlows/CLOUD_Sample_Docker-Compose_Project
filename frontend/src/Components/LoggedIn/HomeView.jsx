@@ -7,36 +7,44 @@ import ResponsiveAppBar from "./ResponsiveAppBar";
 import Cookies from "js-cookie";
 import { useState } from "react";
 import { getAccountbyUsername } from "../../APIFolder/loginApi";
+import { useEffect } from "react";
 
-export const HomeView = (props) => {
+export const HomeView = ({ currUser, setCurrUser }) => {
 
     const navigate = useNavigate();
 
-    const [ account, setAccount ] = useState(undefined);
+    const [account, setAccount] = useState(undefined);
 
-    if(!account){
-        getAccountbyUsername(props.username).then(x => setAccount(x));
+    useEffect(() => {
+        if (currUser == '') {
+            navigate('/');
+        }
+    }, [currUser]);
+
+    if (!account) {
+
+        getAccountbyUsername(currUser).then(x => setAccount(x));
     }
 
     const signOut = () => {
         Cookies.remove("username");
         Cookies.remove("connect.sid");
         console.log(Cookies.get());
-        navigate('/');
+        setCurrUser('');
     }
 
     const [pages] = useState(['Classes']);
     const [settings] = useState([
         // {label: 'Public Profile', route: `/users/${account.id}` }, Keep out until have an account id confirmed
         // { label: 'Account', route: `/accounts/${account.id}` }, 
-        {label: 'Public Profile', route: `/users` }, 
-        { label: 'Account', route: `/accounts` }, 
+        { label: 'Public Profile', route: `/users` },
+        { label: 'Account', route: `/accounts` },
         { label: 'Dashboard', route: '/home' },
-        { label: 'Logout', route: '/signout'}
+        { label: 'Logout', route: '/signout' }
     ]);
 
     return <div>
         <ResponsiveAppBar pages={pages} settings={settings} signOut={signOut()}></ResponsiveAppBar>
-        <h1 className="mb-4">Welcome {props.username}</h1>
+        <h1 className="mb-4">Welcome {account.firstName}</h1>
     </div>
 }

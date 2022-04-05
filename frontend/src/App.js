@@ -92,13 +92,13 @@ function App() {
           check what type of user when loading and return different based on which type user is...Seems decently simple to implement */}
 
           {/* TODO: Integrate Material UI */}
-          <Route path='/' element={<Base />} />
+          <Route path='/' element={<Base currUser={currUser} setCurrUser={x => setCurrUser(x)}/>} />
 
           {/* TODO: MAKE HOME NOT ACCESSABLE IF USER IS NOT LOGGED IN */}
-          <Route path='/home' element={<HomeView username={currUser}/>} />
+          <Route path='/home' element={<HomeView currUser={currUser}/>} setCurrUser={x => setCurrUser(x)}/>
 
           {/* TODO: Make home page nicer and more professional. */}
-          <Route path='/login' element={<LoginPage />} />
+          <Route path='/login' element={<LoginPage currUser={currUser} setCurrUser={x => setCurrUser(x)}/>} />
           
           {/* <Route path='/loggedIn' element={<LoggedIn />} /> */}
           {/* TODO: Classes tab */}
@@ -112,9 +112,9 @@ function App() {
           
           
           
-          <Route path='/signUp' element={<SignUpPage />} />
-          <Route path="/users/:userId" element={<Profile />} />
-          <Route path="/accounts/:accountId" element={<AccountInfo />} />
+          <Route path='/signUp' element={<SignUpPage currUser={currUser} setCurrUser={x => setCurrUser(x)} />} />
+          <Route path="/users/:userId" element={<Profile currUser={currUser}/>} />
+          <Route path="/accounts/:accountId" element={<AccountInfo currUser={currUser} setCurrUser={x => setCurrUser(x)}/>} />
         </Routes>
       </BrowserRouter>
 
