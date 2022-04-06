@@ -12,8 +12,11 @@ export const SignUpPage = ({ currUser, setCurrUser }) => {
         if (username && password && firstName && lastName && email) {
             addAccount({ "username": username, "password": password, "firstName": firstName, "lastName": lastName, "email": email });
         }
-        else {
+        else if(!username || !password || !firstName || !lastName || !email){
             window.alert("Please fill out all fields");
+        }
+        else{
+            window.alert("Username is already taken");
         }
     }
 
