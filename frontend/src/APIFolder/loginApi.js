@@ -21,18 +21,22 @@ export const logIntoAccount = (account) => new Promise((resolve, reject) => {
         });
 });
 
+export const getAccountbyUsername = (account) => {
+    return axios.get(`http://localhost:8000/users/${account.username}`, account);
+}
+
 export const getFirstNamebyUsername = (account) => {
-    return axios.get('http://localhost:8000/users', account).firstName;
+    return axios.get(`http://localhost:8000/users/${account.username}`, account).firstName;
 }
 
 export const getLastNamebyUsername = (account) => {
-    return axios.get('http://localhost:8000/users', account).lastName;
+    return axios.get(`http://localhost:8000/users/${account.username}`, account).lastName;
 }
 
 export const getEmailbyUsername = (account) => {
-    return axios.get('http://localhost:8000/users', account).email;
+    return axios.get(`http://localhost:8000/users/${account.username}`, account).email;
 }
 
 export const updateAccount = (account) => {
-    axios.update('http://localhost:8000/users', account);
+    axios.post(`http://localhost:8000/users/${account.username}`, account);
 }
