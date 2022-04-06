@@ -28,14 +28,14 @@ export const HomeView = ({ currUser, setCurrUser, pages, settings}) => {
 
     const signOut = () => {
         Cookies.remove("username");
-        Cookies.remove("connect.sid");
+        // Cookies.remove("connect.sid");
         console.log("Neeed to reset curr user");
         setCurrUser('');
 
     }
 
     return <div>
-        <LoggedInResponsiveAppBar pages={pages} settings={settings} signOut={signOut}></LoggedInResponsiveAppBar>
+        <LoggedInResponsiveAppBar pages={pages} settings={settings} signOut={signOut} username={currUser.username}></LoggedInResponsiveAppBar>
         {/* <h1 className="mb-4">Welcome {account.firstName}</h1> */}
     </div>
 }
