@@ -144,7 +144,7 @@ router.get("/api/account/logout", async (req, res, next) => {
     res.cookie('username', "");
     req.session.destroy((err) => {
         if(err) return next(err);
-        res.redirect('/');
+        res.status(200).send();
     });
 });
 
