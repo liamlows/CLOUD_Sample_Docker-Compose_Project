@@ -4,7 +4,7 @@ axios.defaults.withCredentials = true
 
 export const addAccount = (account) => new Promise((resolve, reject) => {
     console.log(account)
-    axios.post('http://localhost:8000/account/register', account)
+    axios.post('http://localhost:8000/api/account/register', account)
         .then(x => resolve(x.data))
         .catch(x => {
             alert(x);
@@ -13,7 +13,7 @@ export const addAccount = (account) => new Promise((resolve, reject) => {
 });
 export const logIntoAccount = (account) => new Promise((resolve, reject) => {
     console.log(account)
-    axios.post('http://localhost:8000/account/login', account)
+    axios.post('http://localhost:8000/api/account/login', account)
         .then(x => resolve(x.data))
         .catch(x => {
             // alert(x);
@@ -22,15 +22,15 @@ export const logIntoAccount = (account) => new Promise((resolve, reject) => {
 });
 
 export const getAccountbyUsername = (account) => {
-    return axios.get(`http://localhost:8000/users/${account.username}`, account);
+    return axios.get(`http://localhost:8000/api/users/${account.username}`, account);
 }
 
 export const getFirstNamebyUsername = (account) => {
-    return axios.get(`http://localhost:8000/users/${account.username}`, account).firstName;
+    return axios.get(`http://localhost:8000/api/users/${account.username}`, account).firstName;
 }
 
 export const getLastNamebyUsername = (account) => {
-    return axios.get(`http://localhost:8000/users/${account.username}`, account).lastName;
+    return axios.get(`http://localhost:8000/api/users/${account.username}`, account).lastName;
 }
 
 export const getEmailbyUsername = (account) => {
