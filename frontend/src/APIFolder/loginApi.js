@@ -23,6 +23,14 @@ export const logIntoAccount = async (credentials) => {
     return res.data;
 };
 
+export const logout = async () => {
+    try {
+        const res = await axios.get('http://localhost:8000/api/account/logout');
+    } catch(e) {
+        console.log(`Failed to logout.: ${e}`)
+    }
+}
+
 export const getAccountbyUsername = async (username) => {
     if(username === undefined || username === null){
         return null;

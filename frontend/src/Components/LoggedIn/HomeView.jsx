@@ -6,7 +6,7 @@ import AppBar from '@mui/material/AppBar';
 import { LoggedInResponsiveAppBar } from "../common/LoggedInResponsiveAppBar";
 import Cookies from "js-cookie";
 import { useState } from "react";
-import { getAccountbyUsername } from "../../APIFolder/loginApi";
+import { getAccountbyUsername, logout } from "../../APIFolder/loginApi";
 import { useEffect } from "react";
 
 export const HomeView = ({ currUser, setCurrUser, pages, settings}) => {
@@ -27,11 +27,7 @@ export const HomeView = ({ currUser, setCurrUser, pages, settings}) => {
     }
 
     const signOut = () => {
-        Cookies.remove("username");
-        // Cookies.remove("connect.sid");
-        console.log("Neeed to reset curr user");
-        setCurrUser('');
-
+        logout().then(() =>setCurrUser(''));
     }
 
     return <div>
