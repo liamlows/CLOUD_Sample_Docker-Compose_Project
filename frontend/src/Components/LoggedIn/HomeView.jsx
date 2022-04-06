@@ -16,7 +16,7 @@ export const HomeView = ({ currUser, setCurrUser, pages, settings}) => {
     const [account, setAccount] = useState(undefined);
 
     useEffect(() => {
-        if (currUser == '') {
+        if (currUser === '') {
             navigate('/');
         }
     }, [currUser]);
