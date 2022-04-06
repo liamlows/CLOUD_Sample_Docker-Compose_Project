@@ -1,7 +1,7 @@
 import { PasswordField, SelectField, TextField } from "../common";
 import { useState } from "react";
 import { GenericButton } from "../common/GenericButton";
-import { registerAccount } from "../../APIFolder/loginApi";
+import { getAccountbyUsername, registerAccount } from "../../APIFolder/loginApi";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
@@ -13,8 +13,9 @@ export const SignUpPage = ({ currUser, setCurrUser }) => {
             registerAccount({ "username": username, "password": password, "firstName": firstName, "lastName": lastName, "email": email })
                 .then(response => {
                     if(response.success === 1){
-                        setCurrUser(response.username);
-                        navigate('/');
+                        getAccountbyUsername(response.username)
+                            .then(user => user && setCurrUser(user))
+                            .then(() => navigate('/'));
                     }
                     else {
                         window.alert(`Failed to Sign Up. ${response.error}`);
