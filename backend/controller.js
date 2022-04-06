@@ -75,6 +75,8 @@ exports.get = async function(req, res) {
   
     // get the key-value pairs from the body
     var result = joinKeys(req.body, 'get');
+
+    console.log(result);
   
     // set the initial query
     var query = 'SELECT * FROM '.concat(table);
