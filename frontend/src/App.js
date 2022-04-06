@@ -10,6 +10,8 @@ import { SignUpPage } from './Components/Login/SignUpPage';
 import { Profile } from './Components/Profiles/Profile';
 import { HomeView } from './Components/LoggedIn/HomeView';
 import { AccountInfo } from './Components/Profiles/AccountInfo';
+import Cookies from 'js-cookie';
+import { getAccountbyUsername } from './APIFolder/loginApi';
 
 // React functional component
 function App() {
@@ -73,8 +75,15 @@ function App() {
   // tell app to fetch values from db on first load (if initialized)
   // the comment below silences an error that doesn't matter.=
   useEffect(() => {
-    fetchVals();
+    // fetchVals();
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    Cookies.get("username") &&
+      getAccountbyUsername(Cookies.get("username"))
+        .then(response => {
+          response.success === 1
+            && setCurrUser(response.account)
+        })
+      || setCurrUser('');
   }, [])
 
   const [currUser, setCurrUser] = useState('')
@@ -133,8 +142,8 @@ function App() {
 
 
           <Route path='/signUp' element={<SignUpPage currUser={currUser} setCurrUser={x => setCurrUser(x)} />} />
-          <Route path="/users/:userId" element={<Profile currUser={currUser} />} />
-          <Route path="/accounts/:accountId" element={<AccountInfo currUser={currUser} setCurrUser={x => setCurrUser(x)} />} />
+          <Route path="/users/:username" element={<Profile currUser={currUser} />} />
+          <Route path="/accounts/:username" element={<AccountInfo currUser={currUser} setCurrUser={x => setCurrUser(x)} />} />
         </Routes>
       </BrowserRouter>
 

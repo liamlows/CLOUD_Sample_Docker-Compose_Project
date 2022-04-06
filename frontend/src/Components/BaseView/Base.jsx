@@ -3,19 +3,28 @@ import ReactDOM from "react-dom";
 import React from "react";
 import Button from "@mui/material/Button";
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { HomeView } from "../LoggedIn/HomeView";
 import BaseResponsiveAppBar from "../common/BaseResponsiveAppBar";
+import { getAccountbyUsername } from "../../APIFolder/loginApi";
+import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 
 export const Base = ({ currUser, setCurrUser, basePages, loggedInPages, settings }) => {
 
     const navigate = useNavigate();
+    const location = useLocation();
 
     //if logged in (will store across refreshes) - May want to use local storage instead of cookie creation
     useEffect(() => {
         if (Cookies.get("username")) {
-            setCurrUser(Cookies.get("username"));
+            getAccountbyUsername(Cookies.get("username"))
+            .then(response => {response.success === 1 && setCurrUser(response.account) || window.alert("Error gathering data")})
+            .catch();
+
+            // setCurrUser());
+            // console.log(currUser.id);
+            // console.log(currUser.username);
         }
         else {
             setCurrUser('');

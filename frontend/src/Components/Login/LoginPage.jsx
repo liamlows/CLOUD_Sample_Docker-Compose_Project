@@ -3,14 +3,14 @@ import { useState } from "react";
 import { GenericButton } from "../common/GenericButton";
 import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
-import { logIntoAccount } from "../../APIFolder/loginApi";
+import { getAccountbyUsername, logIntoAccount } from "../../APIFolder/loginApi";
 
 
 export const LoginPage = ({currUser, setCurrUser}) => {
     const navigate = useNavigate();
     const checkIfLoginSucc = (response) => {if(response.success === 1){
         Cookies.set("username", `${username}`);
-        setCurrUser(username);
+        setCurrUser(response.account);
         navigate('/');
 
     }else{

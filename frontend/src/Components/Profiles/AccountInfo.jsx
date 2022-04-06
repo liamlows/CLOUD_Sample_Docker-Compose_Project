@@ -1,4 +1,4 @@
-import { getEmailbyUsername, getFirstNamebyUsername, getLastNamebyUsername, updateAccount, getAccountbyUsername } from "../../APIFolder/loginApi";
+import { getEmailbyUsername, getFirstNamebyUsername, getLastNamebyUsername, updateAccountbyId, getAccountbyUsername } from "../../APIFolder/loginApi";
 import { PasswordField, TextField } from "../common";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
@@ -40,6 +40,10 @@ export const AccountInfo = (props) => {
         confirmUserName = false;
 
     }
+
+
+    //need to have user id
+    //https://localhost:8000/api/d/school
 
     const updatePassword = () => { editPasswordMode = true; }
 
