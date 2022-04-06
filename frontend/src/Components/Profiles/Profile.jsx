@@ -1,26 +1,23 @@
-import { getEmailbyUsername, getFirstNamebyUsername, getLastNamebyUsername, updateAccount, getAccountbyUsername } from "../../APIFolder/loginApi";
+import { getEmailbyUsername, getFirstNamebyUsername, getLastNamebyUsername, updateAccountbyId, getAccountbyUsername } from "../../APIFolder/loginApi";
 import { TextField } from "../common";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 
-export const Profile = () => {
+export const Profile = ({currUser, setCurrUser, loadedUser}) => {
 
     const navigate = useNavigate();
-    const loadedUser = "wes"//hardcoded for now however will make dynamic later. 
     let editMode = false;
 
     //Doesn't currently know what info to get from the database
     const [account, setAccount] = useState(undefined)
-    // const [firstName, setFirstName] = useState(getFirstNamebyUsername(username));
-    // const [lastName, setLastName] = useState(getLastNamebyUsername(username));
-    // const [email, setEmail] = useState(getEmailbyUsername(username));
     const username = Cookies.get("username");
 
 
     if(!account)
     {
-        getAccountbyUsername({ loadedUser }).then(x => setAccount(x));
+        // getAccountbyUsername({ loadedUser }).then(x => setAccount(x));
+        setAccount(currUser);
 
     }
     useEffect(() => {}, [editMode]);
@@ -30,13 +27,13 @@ export const Profile = () => {
         // navigate(`users/${username}`) //dont think I need this since useEffect should update dom
     }
     const doneEditing = () => {
-        updateAccount({ "username": account.username, "firstName": account.firstName, "lastName": account.lastName, "email": account.email });
+        updateAccountbyId(account);
+        setCurrUser(account);
         editMode = false;
         // navigate(`users/${username}`) //dont think I need this since useEffect should update dom
     }
 
     const changeFirstName = delta => setAccount({...account, ...delta});
-
     const changeLastName = delta => setAccount({...account, ...delta});
     const changeEmail = delta => setAccount({...account, ...delta});
     // Basically check if user is the same user as the loaded profile.
@@ -53,7 +50,7 @@ export const Profile = () => {
             <TextField label="Email :" value={account.email} setValue={x => changeEmail(x)} />
             <button onClick={doneEditing()}>Save</button>
         </div>}
-        {account.username === loadedUser && !editMode && <div> <h1>{loadedUser}'s Profile</h1>
+        {account.username === loadedUser.username && !editMode && <div> <h1>{loadedUser}'s Profile</h1>
             <h2>First Name :</h2>
             <p>{account.firstName}</p>
             <h2>Last Name :</h2>
@@ -62,14 +59,14 @@ export const Profile = () => {
             <p>{account.email}</p>
             <button onClick={startEditing()}>Edit Profile</button>
         </div>}
-        {account.username !== loadedUser && <div>
-            <h1>{loadedUser}'s Profile</h1>
+        {account.username !== loadedUser.username && <div>
+            <h1>{loadedUser.username}'s Profile</h1>
             <h2>First Name :</h2>
-            <p>{account.firstName}</p>
+            <p>{loadedUser.firstName}</p>
             <h2>Last Name :</h2>
-            <p>{account.lastName}</p>
+            <p>{loadedUser.lastName}</p>
             <h2>Email :</h2>
-            <p>{account.email}</p>
+            <p>{loadedUser.email}</p>
         </div>}
     </section>
 }
