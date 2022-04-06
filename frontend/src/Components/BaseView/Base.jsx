@@ -16,20 +16,6 @@ export const Base = ({ currUser, setCurrUser, basePages, loggedInPages, settings
     const location = useLocation();
 
     //if logged in (will store across refreshes) - May want to use local storage instead of cookie creation
-    useEffect(() => {
-        if (Cookies.get("username")) {
-            getAccountbyUsername(Cookies.get("username"))
-            .then(response => {response.success === 1 && setCurrUser(response.account) || window.alert("Error gathering data")})
-            .catch();
-
-            // setCurrUser());
-            // console.log(currUser.id);
-            // console.log(currUser.username);
-        }
-        else {
-            setCurrUser('');
-        }
-    }, [currUser]);
 
     return <section className="baseView">
         {currUser === '' && <div>
