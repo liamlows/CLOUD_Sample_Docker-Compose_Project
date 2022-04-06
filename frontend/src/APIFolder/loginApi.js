@@ -4,7 +4,7 @@ axios.defaults.withCredentials = true
 
 export const addAccount = (account) => new Promise((resolve, reject) => {
     console.log(account)
-    axios.post('http://localhost:8000/account/register', account)
+    axios.post('http://localhost:8000/api/account/register', account)
         .then(x => resolve(x.data))
         .catch(x => {
             // alert(x);
@@ -13,7 +13,7 @@ export const addAccount = (account) => new Promise((resolve, reject) => {
 });
 export const logIntoAccount = (account) => new Promise((resolve, reject) => {
     console.log(account)
-    axios.post('http://localhost:8000/account/login', account)
+    axios.post('http://localhost:8000/api/account/login', account)
         .then(x => resolve(x.data))
         .catch(x => {
             // alert(x);
@@ -22,7 +22,7 @@ export const logIntoAccount = (account) => new Promise((resolve, reject) => {
 });
 
 export const getAccountbyUsername = (account) => new Promise((resolve, reject) => {
-    axios.get(`http://localhost:8000/api/users/${account.username}`, account).then(x => resolve(x.data)).catch(x => {reject(x)})
+    return axios.get(`http://localhost:8000/api/users/${account.username}`, account).then(x => resolve(x.data)).catch(x => {reject(x)})
 });
 
 export const updateAccountbyId = (account) => {
