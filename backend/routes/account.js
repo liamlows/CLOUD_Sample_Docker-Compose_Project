@@ -30,7 +30,6 @@ router.post("/api/account/register", async (req, res, next) => {
 
     let firstName = req.body.firstName;
     let lastName = req.body.lastName;
-    let schoolId = req.body.schoolId;
 
     console.log(req.body);
 
@@ -39,10 +38,6 @@ router.post("/api/account/register", async (req, res, next) => {
     }
     if(lastName === undefined) {
         lastName = "";
-    }
-
-    if(schoolId === undefined){
-        schoolId = DEFAULT_SCHOOL_ID;
     }
 
     // Hash password
@@ -65,23 +60,23 @@ router.post("/api/account/register", async (req, res, next) => {
         return;
     }
 
-    // Check if school exists
-    try{
-        [rows, fields] = await pool.execute('SELECT * FROM `school` WHERE `school_id` = ?', [schoolId]);
-    } catch(error){
-        return next(error);
-    }
-
-    // School does not exist
-    if(rows.length === 0){
-        res.status(200).json({success: 0, error: `School with ID ${schoolId} does not exist.`}).send();
-        return;
-    }
+    // // Check if school exists
+    // try{
+    //     [rows, fields] = await pool.execute('SELECT * FROM `school` WHERE `school_id` = ?', [schoolId]);
+    // } catch(error){
+    //     return next(error);
+    // }
+    //
+    // // School does not exist
+    // if(rows.length === 0){
+    //     res.status(200).json({success: 0, error: `School with ID ${schoolId} does not exist.`}).send();
+    //     return;
+    // }
 
     // Insert new account into DB
     try {
-        await pool.execute('INSERT INTO `account`(username, password, first_name, last_name, school_id) VALUES (?, ?, ?, ?, ?)',
-            [username, hash, firstName, lastName, DEFAULT_SCHOOL_ID]);
+        await pool.execute('INSERT INTO `account`(username, password, first_name, last_name) VALUES (?, ?, ?, ?, ?)',
+            [username, hash, firstName, lastName]);
     } catch (error) {
         return next(error);
     }
