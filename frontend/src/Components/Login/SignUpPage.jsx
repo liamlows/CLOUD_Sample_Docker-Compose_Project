@@ -1,7 +1,7 @@
 import { PasswordField, SelectField, TextField } from "../common";
 import { useState } from "react";
 import { GenericButton } from "../common/GenericButton";
-import { addAccount } from "../../APIFolder/loginApi";
+import { registerAccount } from "../../APIFolder/loginApi";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
@@ -10,7 +10,16 @@ export const SignUpPage = ({ currUser, setCurrUser }) => {
 
     const clickAddAccount = () => {
         if (username && password && firstName && lastName && email) {
-            addAccount({ "username": username, "password": password, "firstName": firstName, "lastName": lastName, "email": email });
+            registerAccount({ "username": username, "password": password, "firstName": firstName, "lastName": lastName, "email": email })
+                .then(response => {
+                    if(response.success === 1){
+                        setCurrUser(response.username);
+                        navigate('/');
+                    }
+                    else {
+                        window.alert(`Failed to Sign Up. ${response.error}`);
+                    }
+                });
         }
         else if(!username || !password || !firstName || !lastName || !email){
             window.alert("Please fill out all fields");
@@ -20,15 +29,6 @@ export const SignUpPage = ({ currUser, setCurrUser }) => {
         }
     }
 
-    const login = (response) => {
-        if (response.success === 1) {
-            Cookies.set("username", `${username}`);
-            setCurrUser(username)
-            navigate('/');
-        } else {
-            window.alert("Failed to Sign Up. Username is taken");
-        }
-    }
     //prevents a logged in user from signing up
     if (currUser !== '') {
         navigate('/');
