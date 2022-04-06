@@ -2,24 +2,26 @@ import axios from 'axios';
 axios.defaults.withCredentials = true
 
 
-export const addAccount = (account) => new Promise((resolve, reject) => {
-    console.log(account)
-    axios.post('http://localhost:8000/api/account/register', account)
-        .then(x => resolve(x.data))
-        .catch(x => {
-            // alert(x);
-            reject(x);
-        });
-});
-export const logIntoAccount = (account) => new Promise((resolve, reject) => {
-    console.log(account)
-    axios.post('http://localhost:8000/api/account/login', account)
-        .then(x => resolve(x.data))
-        .catch(x => {
-            // alert(x);
-            reject(x);
-        });
-});
+export const registerAccount = async (credentials) =>  {
+    console.log("Registering...");
+
+    const res = await axios.post('http://localhost:8000/api/account/register', credentials);
+    if(res.status !== 200){
+        console.log(`Couldn't register. ${res.status}`)
+        return null;
+    }
+    return res.data;
+};
+
+export const logIntoAccount = async (credentials) => {
+    console.log("Logging in...");
+    const res = await axios.post('http://localhost:8000/api/account/login', credentials);
+    if(res.status !== 200){
+        console.log(`Couldn't log in. ${res.status}`)
+        return null;
+    }
+    return res.data;
+};
 
 export const getAccountbyUsername = async (username) => {
     if(username === undefined || username === null){
