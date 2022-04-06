@@ -21,9 +21,18 @@ export const logIntoAccount = (account) => new Promise((resolve, reject) => {
         });
 });
 
-export const getAccountbyUsername = (account) => new Promise((resolve, reject) => {
-    return axios.get(`http://localhost:8000/api/users/${account.username}`, account).then(x => resolve(x.data)).catch(x => {reject(x)})
-});
+export const getAccountbyUsername = async (username) => {
+    if (username === undefined || username === null) {
+        return null;
+    }
+    const res = await axios.get(`http://localhost:8000/api/users/${username}`);
+    if (res.status === 404) {
+        console.log("Conldn't Find User");
+        return null;
+    }
+    return res;
+};
+
 
 export const updateAccountbyId = (account) => {
     return axios.put(`http://localhost:8000/api/account/${account.id}`, account);
