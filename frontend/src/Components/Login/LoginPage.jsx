@@ -6,24 +6,32 @@ import Cookies from 'js-cookie';
 import { getAccountbyUsername, logIntoAccount } from "../../APIFolder/loginApi";
 
 
-export const LoginPage = ({currUser, setCurrUser}) => {
+export const LoginPage = ({ currUser, setCurrUser }) => {
     const navigate = useNavigate();
-    const checkIfLoginSucc = (response) => {if(response.success === 1){
-        Cookies.set("username", `${username}`);
-        setCurrUser(response.account);
-        navigate('/');
+    const checkIfLoginSucc = (response) => {
+        if (response.success === 1) {
+            Cookies.set("username", username) && console.log("cookies set");
+            getAccountbyUsername(username).then(user => user && setCurrUser(user)) && console.log(`currUser = ${currUser}`);
+            if (!currUser) {
+                window.alert("Problem loading user info")
+            }
+            else {
+                console.log("navigating now");
+                navigate('/');
+            }
 
-    }else{
-        window.alert("Password for given username is incorrect");
-    };}
+        } else {
+            window.alert("Password for given username is incorrect");
+        };
+    }
 
     //will prevent someone from logging in if they are currently logged in
-    if(!currUser === ''){
+    if (!currUser === '') {
         navigate('/');
     }
 
     const login = (username, password) => {
-        logIntoAccount({"username": username, "password": password}).then(response => checkIfLoginSucc(response)).catch();
+        logIntoAccount({ "username": username, "password": password }).then(response => checkIfLoginSucc(response)).catch();
     }
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -41,17 +49,17 @@ export const LoginPage = ({currUser, setCurrUser}) => {
                 value={password}
                 setValue={x => setPassword(x)} />
 
-            <button 
-            type="button" 
-            onClick={() => login(username,password)}
-            variant="contained" 
-            color="success">
+            <button
+                type="button"
+                onClick={() => login(username, password)}
+                variant="contained"
+                color="success">
                 Login
             </button>
             {/* <GenericButton label="Login" click="/loggedIn" /> */}
             <p className="mb-0">or</p>
             <GenericButton label="Sign Up" click="/signUp" />
         </form>
-        
+
     </section>;
 }

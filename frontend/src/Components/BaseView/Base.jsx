@@ -16,11 +16,11 @@ export const Base = ({ currUser, setCurrUser, basePages, loggedInPages, settings
     const location = useLocation();
 
     return <section className="baseView">
-        {currUser === '' && <div>
+        {currUser == '' && <div>
             <BaseResponsiveAppBar pages={basePages} signIn={navigate('/login')} signUp={navigate('/signUp')} />
             <h1 className="mb-4">Welcome</h1>
             <h2 className="">This is the base page to be updated with logo and stuff</h2>
         </div>}
-        {currUser !== '' && <HomeView currUser={currUser} setCurrUser={x => setCurrUser(x)} pages={loggedInPages} settings={settings} />}
+        {currUser != '' && <HomeView currUser={currUser} setCurrUser={x => setCurrUser(x)} pages={loggedInPages} settings={settings} />}
     </section>
 }
