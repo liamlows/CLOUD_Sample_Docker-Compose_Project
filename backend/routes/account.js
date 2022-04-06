@@ -75,7 +75,7 @@ router.post("/api/account/register", async (req, res, next) => {
 
     // Insert new account into DB
     try {
-        await pool.execute('INSERT INTO `account`(username, password, first_name, last_name) VALUES (?, ?, ?, ?, ?)',
+        await pool.execute('INSERT INTO `account`(username, password, first_name, last_name) VALUES (?, ?, ?, ?)',
             [username, hash, firstName, lastName]);
     } catch (error) {
         return next(error);
