@@ -10,15 +10,9 @@ export const LoginPage = ({ currUser, setCurrUser }) => {
     const navigate = useNavigate();
     const checkIfLoginSucc = (response) => {
         if (response.success === 1) {
-            Cookies.set("username", response.username) && console.log("cookies set");
-            getAccountbyUsername(response.username).then(user => user && setCurrUser(user)) && console.log(`currUser = ${currUser}`);
-            if (!currUser) {
-                window.alert("Problem loading user info")
-            }
-            else {
-                console.log("navigating now");
-                navigate('/');
-            }
+            getAccountbyUsername(response.username)
+                .then(user => user && setCurrUser(user))
+                .then(() => navigate('/'));
 
         } else {
             window.alert("Password for given username is incorrect");
