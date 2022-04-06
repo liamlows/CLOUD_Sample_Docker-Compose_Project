@@ -22,12 +22,12 @@ export const ItemCard = ({ name, description, image, price, stock, farmId, addTe
 
     return (
     
-        <Card variant="outlined" sx={{maxWidth:[150,150,'100%'], height:"100%", display:"flex",flexDirection:"column",justifyContent:"space-between"}} >
+        <Card variant="outlined" sx={{ height:"100%", display:"flex",flexDirection:"column",justifyContent:"space-between"}} >
             <Typography gutterBottom variant="h5" component="div" align="center" sx={{height:"5rem"}}>
                 {name}
             </Typography>
 
-            <CardMedia align="center">
+            <CardMedia align="center" sx={{marginTop:"12px"}}>
                 <img src={image} id="item-card-image" />
             </CardMedia>
             <ThemeProvider theme={theme}>

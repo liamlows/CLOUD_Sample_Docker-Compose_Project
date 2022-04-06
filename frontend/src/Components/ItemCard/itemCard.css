@@ -1,5 +1,5 @@
 #item-card-image{
-    height: 125px;
+    height: 100px;
 }
 #item-card-description{
     height: 2rem;
@@ -11,7 +11,7 @@
 }
 @media screen and (max-width:600px) {
     #item-card-image{
-        height: 125px;
+        height: 72px;
     }
     #item-card-description{
         display:none;

@@ -4,7 +4,7 @@ import solar from '../../images/solar.jpg';
 import { useEffect, useState } from 'react';
 import { item } from '../../models/item';
 import { Container, Grid } from '@mui/material';
-import { FarmCard } from '../farmCard';
+import { FarmCard } from '../FarmCard/farmCard';
 export const Feed = () => {
     const [loadedFarms, setLoadedFarms] = useState([
         {

@@ -16,6 +16,7 @@ import Login from './Components/Login/Login';
 import FarmPage from './Components/FarmPage/FarmPage';
 import { UserContext } from './Components/userContext';
 import { ProtectedRoute } from './Components/ProtectedRoute';
+import { SignUp } from './Components/SignUp/SignUp';
 
 // React functional component
 function App () {
@@ -42,6 +43,7 @@ function App () {
               <Routes>
                   <Route exact path="/" element={<Home/>}/>
                   <Route path="/login" element={<Login/>}/>
+                  <Route path="/signup" element={<SignUp/>}/>
                   <Route path='/feed' element={<ProtectedRoute/>}>
                       <Route path="/feed" element={<Feed/>}/>
                   </Route>
