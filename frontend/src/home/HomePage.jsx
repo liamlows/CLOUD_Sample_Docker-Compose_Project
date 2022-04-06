@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import './HomePage.css';
 import axios from 'axios';
 
-
 export class HomePage extends React.Component{
     constructor(props){
         super(props);
@@ -37,5 +36,4 @@ export class HomePage extends React.Component{
     
         );
     };
-
 }
