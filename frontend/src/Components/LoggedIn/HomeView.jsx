@@ -27,7 +27,8 @@ export const HomeView = ({ currUser, setCurrUser, pages, settings, loadedProfile
     }
 
     const signOut = () => {
-        logout().then(() =>setCurrUser(''));
+        logout().then(() =>setCurrUser(''))
+            .then(()=>navigate('/')); // temp fix
     }
     const profileNav = () => {
         setloadedProfile(currUser);
