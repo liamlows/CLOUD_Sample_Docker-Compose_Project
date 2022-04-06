@@ -22,19 +22,19 @@ export const HomeView = ({ currUser, setCurrUser, pages, settings}) => {
     }, [currUser]);
 
     if (!account) {
-
-        getAccountbyUsername(currUser).then(x => setAccount(x));
+        setAccount(currUser);
+        // getAccountbyUsername(currUser).then(x => setAccount(x));
     }
 
     const signOut = () => {
         Cookies.remove("username");
         Cookies.remove("connect.sid");
-        console.log(Cookies.get());
+        // console.log(Cookies.get());
         setCurrUser('');
     }
 
     return <div>
         <LoggedInResponsiveAppBar pages={pages} settings={settings} signOut={signOut()}></LoggedInResponsiveAppBar>
-        <h1 className="mb-4">Welcome {account.firstName}</h1>
+        {/* <h1 className="mb-4">Welcome {account.firstName}</h1> */}
     </div>
 }
