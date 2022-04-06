@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import './AccountInfo.css';
 
-export const AccountInfo = (props) => {
+export const AccountInfo = ({loadedUser, props}) => {
 
     const navigate = useNavigate();
     let editUserNameMode = false;

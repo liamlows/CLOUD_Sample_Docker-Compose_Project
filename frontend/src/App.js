@@ -45,6 +45,7 @@ function App() {
   }, [])
 
   const [currUser, setCurrUser] = useState('')
+  const [loadedProfile, setloadedProfile] = useState('')
 
   //Nav bar now made available from all views (at least thats the goal)
   const [loggedInPages] = useState([

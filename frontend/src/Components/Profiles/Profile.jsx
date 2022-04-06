@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 
-export const Profile = ({currUser, setCurrUser, loadedUser}) => {
+export const Profile = ({currUser, setCurrUser, loadedProfile}) => {
 
     const navigate = useNavigate();
     let editMode = false;
 
     //Doesn't currently know what info to get from the database
-    const [account, setAccount] = useState(loadedUser)
+    const [account, setAccount] = useState(loadedProfile)
     const username = Cookies.get("username");
 
     useEffect(() => {}, [editMode]);
@@ -20,7 +20,7 @@ export const Profile = ({currUser, setCurrUser, loadedUser}) => {
         // navigate(`users/${username}`) //dont think I need this since useEffect should update dom
     }
     const doneEditing = () => {
-        updateAccountbyId(account);
+        // updateAccountbyId(account);
         setCurrUser(account);
         editMode = false;
         // navigate(`users/${username}`) //dont think I need this since useEffect should update dom
@@ -36,14 +36,14 @@ export const Profile = ({currUser, setCurrUser, loadedUser}) => {
     // NOTE - IN FUTURE ADD BUTTON TO SEND FRIEND REQUEST...ONLY IF FUNCTIONALITY IS IMPLEMENTED
 
     return <section className="userProfile">
-        {account.username === loadedUser && editMode && <div>
-            <h1>{loadedUser}'s Profile</h1>
+        {account.username === loadedProfile && editMode && <div>
+            <h1>{loadedProfile}'s Profile</h1>
             <TextField label="First Name :" value={account.firstName} setValue={x => changeFirstName(x)} />
             <TextField label="Last Name :" value={account.lastName} setValue={x => changeLastName(x)} />
             {/* <TextField label="Email :" value={account.email} setValue={x => changeEmail(x)} /> */}
             <button onClick={doneEditing()}>Save</button>
         </div>}
-        {account.username === loadedUser.username && !editMode && <div> <h1>{loadedUser}'s Profile</h1>
+        {account.username === loadedProfile.username && !editMode && <div> <h1>{loadedProfile}'s Profile</h1>
             <h2>First Name :</h2>
             <p>{account.firstName}</p>
             <h2>Last Name :</h2>
@@ -52,14 +52,14 @@ export const Profile = ({currUser, setCurrUser, loadedUser}) => {
             <p>{account.email}</p> */}
             <button onClick={startEditing()}>Edit Profile</button>
         </div>}
-        {account.username !== loadedUser.username && <div>
-            <h1>{loadedUser.username}'s Profile</h1>
+        {account.username !== loadedProfile.username && <div>
+            <h1>{loadedProfile.username}'s Profile</h1>
             <h2>First Name :</h2>
-            <p>{loadedUser.firstName}</p>
+            <p>{loadedProfile.firstName}</p>
             <h2>Last Name :</h2>
-            <p>{loadedUser.lastName}</p>
+            <p>{loadedProfile.lastName}</p>
             {/* <h2>Email :</h2>
-            <p>{loadedUser.email}</p> */}
+            <p>{loadedProfile.email}</p> */}
         </div>}
     </section>
 }

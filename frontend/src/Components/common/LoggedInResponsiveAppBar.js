@@ -14,7 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { Link, useLocation } from 'react-router-dom';
 import "./ResponsiveAppBar.css";
 
-export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, username }) => {
+export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, username, profileNav, accountNav }) => {
   const location = useLocation();
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -130,7 +130,8 @@ export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, username })
               {settings.map((setting) => (
               <MenuItem key={setting.label} onClick={handleCloseUserMenu}>
                 <Typography textAlign="center">
-                  {setting.route != '/signout' && <Link to={`${setting.route}/${username}`} className='settingsLink'>{setting.label}</Link>}
+                  {setting.route == '/profiles' && <Link to={`${setting.route}/${username}`} onClick={profileNav} className='settingsLink'>{setting.label}</Link>}
+                  {setting.route == '/accounts' && <Link to={`${setting.route}/${username}`} onClick={accountNav} className='settingsLink'>{setting.label}</Link>}
                   {setting.route == '/signout' && <Link to={location.pathname} className='settingsLink' onClick={signOut}>{setting.label}</Link>}
                 </Typography>
               </MenuItem>

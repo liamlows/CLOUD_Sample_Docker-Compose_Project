@@ -10,7 +10,7 @@ import BaseResponsiveAppBar from "../common/BaseResponsiveAppBar";
 import { getAccountbyUsername } from "../../APIFolder/loginApi";
 import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 
-export const Base = ({ currUser, setCurrUser, basePages, loggedInPages, settings }) => {
+export const Base = ({ currUser, setCurrUser, basePages, loggedInPages, settings, loadedProfile, setloadedProfile}) => {
 
     const navigate = useNavigate();
     const location = useLocation();
