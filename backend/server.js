@@ -67,7 +67,7 @@ const enrollments = require('./routes/enrollments');
 const roles = require('./routes/roles');
 const schools = require('./routes/schools');
 const students = require('./routes/students');
-app.use('/account', account);
+app.use('/', account);
 app.use('/courses', courses);
 app.use('/enrollments', enrollments);
 app.use('/roles', roles);

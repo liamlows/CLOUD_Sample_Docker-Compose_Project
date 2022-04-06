@@ -65,11 +65,9 @@ CREATE TABLE `db`.`account` (
     `role_id` BIGINT UNSIGNED,
     `logged_in` BOOLEAN NOT NULL DEFAULT 0,
     `last_logged_in` DATETIME DEFAULT NOW(),
-    `school_id` BIGINT UNSIGNED NOT NULL,
     PRIMARY KEY (`account_id`),
     FOREIGN KEY (`student_id`) REFERENCES student(`student_id`),
     FOREIGN KEY (`role_id`) REFERENCES course_roles(`role_id`),
-    FOREIGN KEY (`school_id`) REFERENCES school(`school_id`)
 );
 
 

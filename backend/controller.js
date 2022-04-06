@@ -3,8 +3,15 @@ const express = require('express');
 const router = express.Router();
 const pool = require('./db');
 
+const EXCLUDED_TABLES = ["account", ];
+
+
+function isTableExcluded(tableName) {
+    return EXCLUDED_TABLES.includes(tableName);
+}
+
 // DEFAULT KEYS FOR THE TABLES
-var key = {
+const key = {
     'school': ['school_id'],
     'account': ['account_id']
   };
@@ -12,15 +19,15 @@ var key = {
   // DEFAULT VALS TO CHANGE FOR THE TABLES
 
 // Processing the JSON object
-var joinKeys = function(object, type) {
+let joinKeys = function(object, type) {
     // result of the joined keys
-    var result = ["", ""];
+    let result = ["", ""];
   
     // returns the array of keys and array of values given a json object
-    var [k, v] = getKeyValues(object);
+    let [k, v] = getKeyValues(object);
   
     // loop through and push the key value pairs to the string with correct formatting
-    for (var i = 0; i < k.length; i++) {
+    for (let i = 0; i < k.length; i++) {
       if (k[i] == 'token') {
         continue;
       }
@@ -51,13 +58,13 @@ var joinKeys = function(object, type) {
     return result;
 }
   
-var getKeyValues = function(object) {
+let getKeyValues = function(object) {
     // get the json key-value pairs and assign it to a variable
     const keys = Object.keys(object);
 
     // initialization of the key and value lists
-    var keyList = [];
-    var valueList = [];
+    let keyList = [];
+    let valueList = [];
 
     // push all of the keys and values to their lists with correct formatting
     for (let i = 0; i < keys.length; i++) {
@@ -69,17 +76,21 @@ var getKeyValues = function(object) {
 
 exports.get = async function(req, res) {
     // get the params from the link
-    var table = req.params.table;
-    var variable = req.params.variable;
-    var value = req.params.value;
+    let table = req.params.table;
+
+    if(isTableExcluded(table)) {
+        res.status(403).send();
+        return;
+    }
+    
+    let variable = req.params.variable;
+    let value = req.params.value;
   
     // get the key-value pairs from the body
-    var result = joinKeys(req.body, 'get');
-
-    console.log(result);
+    let result = joinKeys(req.body, 'get');
   
     // set the initial query
-    var query = 'SELECT * FROM '.concat(table);
+    let query = 'SELECT * FROM '.concat(table);
   
     // explicit table, explicit variable, and explicit value
     if (value != null)
@@ -102,13 +113,18 @@ exports.get = async function(req, res) {
 
 exports.post = async function(req, res) {
     // get the params from the link
-    var table = req.params.table;
+    let table = req.params.table;
+
+    if(isTableExcluded(table)) {
+        res.status(403).send();
+        return;
+    }
 
     // get the key-value pairs from the body
-    var result = joinKeys(req.body, 'post');
+    let result = joinKeys(req.body, 'post');
 
     // set the initial query
-    var query = 'INSERT INTO '.concat(table).concat(' (').concat(result[0]).concat(') VALUES (').concat(result[1]).concat(')');
+    let query = 'INSERT INTO '.concat(table).concat(' (').concat(result[0]).concat(') VALUES (').concat(result[1]).concat(')');
 
     // send the query
     let rows, fields;
@@ -118,15 +134,21 @@ exports.post = async function(req, res) {
 
 exports.put = async function(req, res) {
     // get the params from the link
-    var table = req.params.table;
-    var variable = req.params.variable;
-    var value = req.params.value;
+    let table = req.params.table;
+
+    if(isTableExcluded(table)) {
+        res.status(403).send();
+        return;
+    }
+    
+    let variable = req.params.variable;
+    let value = req.params.value;
 
     // get the key-value pairs from the body
-    var result = joinKeys(req.body, 'put');
+    let result = joinKeys(req.body, 'put');
 
     // set the initial query
-    var query = 'UPDATE '.concat(table).concat(' SET ').concat(result[0]);
+    let query = 'UPDATE '.concat(table).concat(' SET ').concat(result[0]);
 
     // check for the params
     if (value != null)
@@ -142,15 +164,21 @@ exports.put = async function(req, res) {
 
 exports.delete = async function(req, res) {
     // get the params from the link
-    var table = req.params.table;
-    var variable = req.params.variable;
-    var value = req.params.value;
+    let table = req.params.table;
+
+    if(isTableExcluded(table)) {
+        res.status(403).send();
+        return;
+    }
+
+    let variable = req.params.variable;
+    let value = req.params.value;
   
     // get the key-value pairs from the body
-    var result = joinKeys(req.body, 'delete');
+    let result = joinKeys(req.body, 'delete');
   
     // set the initial query
-    var query = 'DELETE FROM '.concat(table).concat(' WHERE ')
+    let query = 'DELETE FROM '.concat(table).concat(' WHERE ')
   
     // check for the params
     if (value != null)

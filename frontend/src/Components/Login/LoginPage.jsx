@@ -1,24 +1,31 @@
 import { PasswordField, TextField } from "../common";
 import { useState } from "react";
 import { GenericButton } from "../common/GenericButton";
-import { logIntoAccount } from "../APIFolder/loginApi";
 import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
+import { getAccountbyUsername, logIntoAccount } from "../../APIFolder/loginApi";
 
 
-export const LoginPage = () => {
+export const LoginPage = ({ currUser, setCurrUser }) => {
     const navigate = useNavigate();
-    const checkIfLoginSucc = (response) => {if(response.success === 1){
-        // Cookies.set("username", `${username}`);
-        navigate('/');
-    }else{
-        window.alert("Fail");
-    };}
-    
+    const checkIfLoginSucc = (response) => {
+        if (response.success === 1) {
+            getAccountbyUsername(response.username)
+                .then(user => user && setCurrUser(user))
+                .then(() => navigate('/'));
 
+        } else {
+            window.alert("Password for given username is incorrect");
+        };
+    }
+
+    //will prevent someone from logging in if they are currently logged in
+    if (!currUser === '') {
+        navigate('/');
+    }
 
     const login = (username, password) => {
-        logIntoAccount({"username": username, "password": password}).then(response => checkIfLoginSucc(response)).catch();
+        logIntoAccount({ "username": username, "password": password }).then(response => checkIfLoginSucc(response)).catch();
     }
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -36,17 +43,17 @@ export const LoginPage = () => {
                 value={password}
                 setValue={x => setPassword(x)} />
 
-            <button 
-            type="button" 
-            onClick={() => login(username,password)}
-            variant="contained" 
-            color="success">
+            <button
+                type="button"
+                onClick={() => login(username, password)}
+                variant="contained"
+                color="success">
                 Login
             </button>
             {/* <GenericButton label="Login" click="/loggedIn" /> */}
             <p className="mb-0">or</p>
             <GenericButton label="Sign Up" click="/signUp" />
         </form>
-        
+
     </section>;
 }

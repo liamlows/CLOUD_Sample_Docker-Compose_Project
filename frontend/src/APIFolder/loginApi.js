@@ -2,37 +2,50 @@ import axios from 'axios';
 axios.defaults.withCredentials = true
 
 
-export const addAccount = (account) => new Promise((resolve, reject) => {
-    console.log(account)
-    axios.post('http://localhost:8000/account/register', account)
-        .then(x => resolve(x.data))
-        .catch(x => {
-            alert(x);
-            reject(x);
-        });
-});
-export const logIntoAccount = (account) => new Promise((resolve, reject) => {
-    console.log(account)
-    axios.post('http://localhost:8000/account/login', account)
-        .then(x => resolve(x.data))
-        .catch(x => {
-            // alert(x);
-            reject(x);
-        });
-});
+export const registerAccount = async (credentials) =>  {
+    console.log("Registering...");
 
-export const getFirstNamebyUsername = (account) => {
-    return axios.get('http://localhost:8000/users', account).firstName;
+    const res = await axios.post('http://localhost:8000/api/account/register', credentials);
+    if(res.status !== 200){
+        console.log(`Couldn't register. ${res.status}`)
+        return null;
+    }
+    return res.data;
+};
+
+export const logIntoAccount = async (credentials) => {
+    console.log("Logging in...");
+    const res = await axios.post('http://localhost:8000/api/account/login', credentials);
+    if(res.status !== 200){
+        console.log(`Couldn't log in. ${res.status}`)
+        return null;
+    }
+    return res.data;
+};
+
+export const logout = async () => {
+    try {
+        const res = await axios.get('http://localhost:8000/api/account/logout');
+    } catch(e) {
+        console.log(`Failed to logout.: ${e}`)
+    }
 }
 
-export const getLastNamebyUsername = (account) => {
-    return axios.get('http://localhost:8000/users', account).lastName;
+export const getAccountbyUsername = async (username) => {
+    if(username === undefined || username === null){
+        return null;
+    }
+
+    const res = await axios.get(`http://localhost:8000/api/users/${username}`);
+    if(res.status !== 200){
+        console.log(`Couldn't find user: ${username}`)
+        return null;
+    }
+    return res.data;
 }
 
-export const getEmailbyUsername = (account) => {
-    return axios.get('http://localhost:8000/users', account).email;
+export const updateAccountbyId = (account) => {
+    return axios.put(`http://localhost:8000/api/account/${account.id}`, account);
 }
 
-export const updateAccount = (account) => {
-    axios.update('http://localhost:8000/users', account);
-}
+// export const 
