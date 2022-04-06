@@ -74,16 +74,27 @@ function App() {
 
   // tell app to fetch values from db on first load (if initialized)
   // the comment below silences an error that doesn't matter.=
-  useEffect(() => {
+  useEffect( () => {
     // fetchVals();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    Cookies.get("username") &&
-      getAccountbyUsername(Cookies.get("username"))
-        .then(response => {
-          response.success === 1
-            && setCurrUser(response.account)
-        })
-      || setCurrUser('');
+
+    let username = Cookies.get("username");
+
+    if(username){
+      getAccountbyUsername(username)
+          .then(account => {
+            if(account){
+              setCurrUser(account);
+            }
+            else{
+              console.log("User is null after request");
+              setCurrUser('');
+            }
+          })
+    }
+    else{
+      setCurrUser('');
+    }
   }, [])
 
   const [currUser, setCurrUser] = useState('')
