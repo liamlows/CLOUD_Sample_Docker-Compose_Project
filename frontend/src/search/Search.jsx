@@ -1,3 +1,7 @@
+import './search.css'
+
 export const Search = () => {
-    return(<div>search</div>);
+    return(<div className="container">
+        
+    </div>);
 }
