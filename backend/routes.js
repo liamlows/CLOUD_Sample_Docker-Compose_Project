@@ -41,6 +41,21 @@ module.exports = function routes(app, logger) {
             next();
         })
 
+        router.get('/validate_user', async (req, res, next) => {
+          connection.query('SELECT COUNT(*) FROM nft_marketplace.user WHERE username = ' + req.body.username + ' AND password = ' + req.body.password + ';');
+          if (err) {
+              connection.release();
+              logger.error("Problem validating user: ", err);
+              res.status(400).send('Problem validating user');
+          } else {
+              res.status(200).json({
+                "data":rows
+              })
+          }
+
+          next();
+      })
+
         module.exports = router;
 
 
