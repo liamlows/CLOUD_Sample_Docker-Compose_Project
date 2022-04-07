@@ -40,7 +40,6 @@ export const SignUpPage = ({ currUser, setCurrUser }) => {
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [accountType, setAccountType] = useState('');
     const [school, setSchool] = useState('');
     const [accountTypes] = useState([
         "Student",
@@ -79,10 +78,6 @@ export const SignUpPage = ({ currUser, setCurrUser }) => {
             <PasswordField label="Password"
                 value={password}
                 setValue={x => setPassword(x)} />
-            <SelectField label="Account Type"
-                options={accountTypes}
-                value={accountType}
-                setValue={setAccountType} />
             <SelectField label="School"
                 options={schools}
                 value={school}
@@ -94,7 +89,7 @@ export const SignUpPage = ({ currUser, setCurrUser }) => {
                 color="success">
                 Sign Up
             </button>
-            {/* <GenericButton label="Sign Up" click="/login" /> */}
+
         </form>
 
     </section>;
