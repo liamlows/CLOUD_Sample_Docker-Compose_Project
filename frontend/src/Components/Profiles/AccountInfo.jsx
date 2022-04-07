@@ -5,26 +5,26 @@ import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import './AccountInfo.css';
 
-export const AccountInfo = ({loadedUser, props}) => {
+export const AccountInfo = ({currUser, setCurrUser}) => {
 
     const navigate = useNavigate();
-    let editUserNameMode = false;
-    let editPasswordMode = false;
-    let confirmUserName = false;
-    let confirmPassword = false;
-    let currUser = props.username;
+
+    const [editUserNameMode, setEditUserNameMode] = useState(false);
+    const [editPasswordMode, setEditPasswordMode] = useState(false);
+    const [confirmUserName, setConfirmUserName] = useState(false);
+    const [confirmPassword, setConfirmPassword] = useState(false);
 
     //Doesn't currently know what info to get from the database
     const [account, setAccount] = useState(undefined);
 
-    useEffect(() => { }, [editUserNameMode, editPasswordMode, confirmUserName, confirmPassword]);
+    useEffect(() => {
+    }, [editUserNameMode, editPasswordMode, confirmUserName, confirmPassword]);
 
     if (!account) {
-        getAccountbyUsername(props.username).then(x => setAccount(x));
+        changeAccount({...currUser});
+        changeAccount()
+        return <>Loading...</>
     }
-
-    const changeUserName = delta => setAccount({ ...account, ...delta });
-    const changePassword = delta => setAccount({ ...account, ...delta });
 
     const updateUserName = () => { editUserNameMode = true; }
 
@@ -35,12 +35,14 @@ export const AccountInfo = ({loadedUser, props}) => {
             //use currUser here to access database and change username
             //updateAccount
             //update currUser
+            console.log("Yuh")
         }
         editUserNameMode = false;
         confirmUserName = false;
 
     }
 
+    const changeAccount = delta => setAccount({ ...account, ...delta });
 
     //need to have user id
     //https://localhost:8000/api/d/school
@@ -60,38 +62,37 @@ export const AccountInfo = ({loadedUser, props}) => {
     //This is where username and password can be edited
 
     return <section className="userAccount">
-        <h1>{props.username}</h1>
+        <h1>{currUser.username}</h1>
         {editUserNameMode && <div>
-            <TextField label="Username :" value={account.username} setValue={x => changeUserName(x)} />
-            <button onClick={confirmUserNameUpdate()}>Save</button>
+            <TextField label="Username :" value={account.username} setValue={username => changeAccount({username})} />
+            <button onClick={() => confirmUserNameUpdate()}>Save</button>
         </div>}
         {!editUserNameMode && <div>
 
             <h2>Username :</h2>
-            <p>{account.username}</p>
-            <button onClick={updateUserName()}>Change Username</button>
+            <p>{currUser.username}</p>
+            <button onClick={() => updateUserName()}>Change Username</button>
         </div>}
         {editPasswordMode && <div>
-            <PasswordField label="Password: " value='' setValue={x => changePassword(x)} />
-            <button onClick={confirmUserNameUpdate()}>Save</button>
+            <PasswordField label="Password: " value='' setValue={password => changeAccount({password})} />
+            <button onClick={() => confirmUserNameUpdate()}>Save</button>
         </div>}
         {!editPasswordMode && <div>
-
             {/* <h2>Password :</h2> */}
-            <PasswordField label="Password: " value="default value" />
-            <button onClick={updatePassword()}>Change Password</button>
+            <PasswordField label="Password: " value="LOL YOU THOUGHT" />
+            <button onClick={() => updatePassword()}>Change Password</button>
         </div>}
         {confirmUserName && <div className=".confimWindowOuter">
             <div className=".confirmWindowInner">
                 <h1>Do you really want to update your username?</h1>
                 <button type="button"
                     className="btn btn-danger rounded border-0"
-                    onClick={doneUserNameEditing(true)}>
+                    onClick={() => doneUserNameEditing(true)}>
                     Confirm
                 </button>
                 <button type="button"
                     className="btn btn-light rounded border-0"
-                    onClick={doneUserNameEditing(false)}>
+                    onClick={() => doneUserNameEditing(false)}>
                     Cancel
                 </button>
             </div>
@@ -102,12 +103,12 @@ export const AccountInfo = ({loadedUser, props}) => {
                 <h1>Do you really want to update your password?</h1>
                 <button type="button"
                     className="btn btn-danger rounded border-0"
-                    onClick={donePasswordEditing(true)}>
+                    onClick={() => donePasswordEditing(true)}>
                     Confirm
                 </button>
                 <button type="button"
                     className="btn btn-light rounded border-0"
-                    onClick={donePasswordEditing(false)}>
+                    onClick={() => donePasswordEditing(false)}>
                     Cancel
                 </button>
             </div>
