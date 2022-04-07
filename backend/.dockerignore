@@ -1,0 +1,4 @@
+volumes:
+  - ./:/usr/src/app
+  - ./:/usr/src/app/node_modules
+  - /node_modules

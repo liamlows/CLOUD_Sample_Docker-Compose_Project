@@ -6,6 +6,8 @@ const cors = require('cors');
 const { log, ExpressAPILogMiddleware } = require('@rama41222/node-logger');
 // const mysqlConnect = require('./db');
 const routes = require('./routes');
+// const usersRoutes = require('./routes/users');
+// const sessionRoutes = require('./routes/sessions');
 
 // set up some configs for express.
 const config = {
@@ -26,6 +28,19 @@ app.use(cors({
   origin: '*'
 }));
 app.use(ExpressAPILogMiddleware(logger, { request: true }));
+const { authenticateJWT, authenticateWithClaims } = require('./middleware/auth');
+
+// app.use('/users', authenticateJWT, usersRoutes);
+
+app.get('/health', (request, response, next) => {
+  const responseBody = { status: 'up', port };
+  response.json(responseBody);
+  // next() is how we tell express to continue through the middleware chain
+  next();
+});
+
+// app.use('/session', sessionRoutes);
+
 
 //include routes
 routes(app, logger);
