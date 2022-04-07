@@ -101,9 +101,19 @@ function App() {
 
 
           <Route path="/users/:username/friends" element={<FriendsList currUser={currUser} setCurrUser={setCurrUser}/>} />
-          <Route path="/users" element={<UserSearch currUser={currUser} setCurrUser={setCurrUser}/>} />
+
+          <Route path="/users" element={<UserSearch 
+            currUser={currUser} 
+            setCurrUser={setCurrUser} 
+            pages={loggedInPages}
+            settings={settings}/>} />
+
           <Route path='/signUp' element={<SignUpPage currUser={currUser} setCurrUser={x => setCurrUser(x)} />} />
-          <Route path="/users/:username" element={<Profile currUser={currUser} />} />
+          <Route path="/users/:username" element={<Profile 
+            currUser={currUser} 
+            setCurrUser={x => setCurrUser(x)}
+            pages={loggedInPages}
+            settings={settings}/>} />
           <Route path="/accounts/:username" element={<AccountInfo currUser={currUser} setCurrUser={x => setCurrUser(x)} />} />
         </Routes>
       </BrowserRouter>
