@@ -44,6 +44,6 @@ export const FriendsList = ({ currUser, setCurrUser, setLoadedUser }) => {
                     </tr>
                 </thead>
             </table>}
-        {friends.length === 0 && <h2>You have no friends</h2>
+            {friends.length === 0 && <h2>You have no friends</h2>}
     </div>
 }
