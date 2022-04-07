@@ -84,19 +84,17 @@ export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, username, p
               {pages.map((page) => (
                 <div key={page.label}>
                   {page.route === '/users/:username/friends' && <MenuItem key={page.label} component={Link} to={`/users/${username}/friends`} onClick={handleCloseNavMenu}>
-                    <PeopleTwoToneIcon sx={{ background: 'white' }} />
-                    <Typography textAlign="center">{page.label}</Typography>
+                    <PeopleTwoToneIcon/>
+                    <Typography className="m-1" textAlign="center">{page.label}</Typography>
                   </MenuItem>}
                   {page.route === '/classes' && <MenuItem key={page.label} component={Link} to={`users/${username}/classes`} onClick={handleCloseNavMenu}>
-                    <ShoppingCartIcon sx={{ background: 'white' }} />
-
-
-                    <Typography textAlign="center">{page.label}</Typography>
+                    <ShoppingCartIcon/>
+                    <Typography className="m-1" textAlign="center">{page.label}</Typography>
                   </MenuItem>}
 
                   {page.route === '/' && <MenuItem key={page.label} component={Link} to={'/'} onClick={handleCloseNavMenu}>
-                    <HomeIcon sx={{ background: 'white' }} />
-                    <Typography textAlign="center">{page.label}</Typography>
+                    <HomeIcon />
+                    <Typography className="m-1" textAlign="center">{page.label}</Typography>
                   </MenuItem>}
             </div>
               ))}
