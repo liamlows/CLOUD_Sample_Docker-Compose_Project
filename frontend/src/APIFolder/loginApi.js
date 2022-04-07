@@ -52,7 +52,7 @@ export const updateAccountbyId = (account) => {
 
 export const getProfiles = async () => {
 
-    const res = await axios.get('http://localhost:8000/api/users/');
+    const res = await axios.get('http://localhost:8000/api/users');
     if(res.status !== 200){
         console.log("Couldn't find users");
         return null;
