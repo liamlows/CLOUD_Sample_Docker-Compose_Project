@@ -22,7 +22,7 @@ export const AccountInfo = ({currUser, setCurrUser}) => {
 
     if (!account) {
         changeAccount({...currUser});
-        changeAccount()
+        // changeAccount()
         return <>Loading...</>
     }
 
