@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useLocation, useNavigate } from "react-router-dom";
 import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
+import CircleIcon from '@mui/icons-material/Circle';
 
 export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
 
@@ -14,6 +15,7 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
     //Doesn't currently know what info to get from the database
     const [account, setAccount] = useState('')
     const [loadedProfile, setLoadedProfile] = useState('')
+    const [online, setOnline] = useState('')
 
     // const username = Cookies.get("username");
 
@@ -65,7 +67,8 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
                         console.log("User is null after request");
                         setCurrUser('');
                     }
-                })
+                });
+            getStatusByUsername(username).then(status => setOnline(status));
         }
         else {
             setCurrUser('');
@@ -101,6 +104,8 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
                         <table className='table float-start'>
                             <thead>
                                 <th className="col-3 fs-3 mt-5 text-start">{loadedProfile.username}</th>
+                                {online && <th className="col-1"><CircleIcon sx={{background:'green'}} /></th>}
+                                {!online && <th className="col-1"><CircleIcon sx={{background:'red'}} /></th>}
                                 <th className="col-1">
                                     <button className="btn btn-light" onClick={() => startEditing()}>Edit Profile</button>
                                 </th>
@@ -145,6 +150,8 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
                         <table className='table float-start'>
                             <thead>
                                 <th className="col-3 fs-3 mt-5 text-start">{loadedProfile.username}</th>
+                                {online && <th className="col-1"><CircleIcon sx={{background:'green'}} /></th>}
+                                {!online && <th className="col-1"><CircleIcon sx={{background:'red'}} /></th>}
                                 <th className="col-1">
                                     <button className="btn btn-light" onClick={() => startEditing()}>Edit Profile</button>
                                 </th>
@@ -170,6 +177,8 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
                         <table className='table float-start'>
                             <thead>
                                 <th className="col-3 fs-3 mt-5 text-start">{loadedProfile.username}</th>
+                                {online && <th className="col-1"><CircleIcon sx={{background:'green'}} /></th>}
+                                {!online && <th className="col-1"><CircleIcon sx={{background:'red'}} /></th>}
                             </thead>
                             <tbody>
                                 <td className="col-3 fs-6 text-start">
