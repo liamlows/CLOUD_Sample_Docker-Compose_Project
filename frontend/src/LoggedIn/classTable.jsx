@@ -11,54 +11,17 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
-/*interface Column {
-    id: 'Class' | 'ID' | 'Professor' | 'Days' | 'Time';
-    label: string;
-    minWidth?: number;
-    align?: 'right';
-    format?: (value: number) => string;
-}*/
-
-var columns = [
-    { id: 'Class', label: 'Class', minWidth: 170 },
-    { id: 'ID', label: 'Class-ID', minWidth: 100 },
-    {
-        id: 'Professor',
-        label: 'Professor',
-        minWidth: 170,
-        align: 'right',
-        format: function (value) { return value.toLocaleString('en-US'); },
-    },
-    {
-        id: 'Days',
-        label: 'Days',
-        minWidth: 170,
-        align: 'right',
-        format: function (value) { return value.toLocaleString('en-US'); },
-    },
-    {
-        id: 'Time',
-        label: 'Time',
-        minWidth: 170,
-        align: 'right',
-        format: function (value) { return value.toFixed(2); },
-    },
-];
-
-const rows = [
-    //Insert Data
-];
-
-export default function classTable() {
+export default function classTable(rows, columns) {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-    var handleChangePage = function (event, newPage) {
-        setPage(newPage);
-    };
-    var handleChangeRowsPerPage = function (event) {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
+    const handleChangePage = (event, newPage) => {	
+        setPage(newPage);	
+      };	    
+    	
+    const handleChangeRowsPerPage = (event) => {	
+        setRowsPerPage(+event.target.value);	
+        setPage(0);	
     };
 
     return (
