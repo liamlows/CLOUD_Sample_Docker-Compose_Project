@@ -128,13 +128,11 @@ export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, username, p
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-              <MenuItem key={setting.label} onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">
-                  {setting.route == '/profiles' && <Link to={`${setting.route}/${username}`} onClick={profileNav} className='settingsLink'>{setting.label}</Link>}
-                  {setting.route == '/accounts' && <Link to={`${setting.route}/${username}`} onClick={accountNav} className='settingsLink'>{setting.label}</Link>}
-                  {setting.route == '/signout' && <Link to={location.pathname} className='settingsLink' onClick={signOut}>{setting.label}</Link>}
-                </Typography>
-              </MenuItem>
+                  <div>
+                    {setting.route === '/users' && <MenuItem textAlign="center" component={Link} to={`${setting.route}/${username}`} onClick={profileNav}>{setting.label}</MenuItem>}
+                    {setting.route === '/accounts' && <MenuItem textAlign="center" component={Link} to={`${setting.route}/${username}`} onClick={accountNav}>{setting.label}</MenuItem>}
+                    {setting.route === '/signout' && <MenuItem textAlign="center" component={Link} to={location.pathname} onClick={signOut}>{setting.label}</MenuItem>}
+                  </div>
               ))}
 
             </Menu>

@@ -11,7 +11,7 @@ export const Profile = ({currUser, setCurrUser, loadedProfile}) => {
 
     //Doesn't currently know what info to get from the database
     const [account, setAccount] = useState(loadedProfile)
-    const username = Cookies.get("username");
+    // const username = Cookies.get("username");
 
     useEffect(() => {}, [editMode]);
 
