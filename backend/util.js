@@ -1,9 +1,10 @@
 
-const TA_ROLE_TYPE = 1;
-const PROFESSOR_ROLE_TYPE = 2;
-const ADMIN_ROLE_TYPE = 3 ;
+const STUDENT_ROLE_TYPE = 'student';
+const TA_ROLE_TYPE = 'ta';
+const PROFESSOR_ROLE_TYPE = 'professor';
+const ADMIN_ROLE_TYPE = 'admin';
 
-
+exports.STUDENT_ROLE_TYPE = STUDENT_ROLE_TYPE;
 exports.TA_ROLE_TYPE = TA_ROLE_TYPE;
 exports.PROFESSOR_ROLE_TYPE = PROFESSOR_ROLE_TYPE;
 exports.ADMIN_ROLE_TYPE = ADMIN_ROLE_TYPE;

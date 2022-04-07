@@ -9,7 +9,7 @@ import { useState } from "react";
 import { getAccountbyUsername, logout } from "../../APIFolder/loginApi";
 import { useEffect } from "react";
 
-export const HomeView = ({ currUser, setCurrUser, pages, settings, loadedProfile, setloadedProfile}) => {
+export const HomeView = ({ currUser, setCurrUser, pages, settings}) => {
 
     const navigate = useNavigate();
 
@@ -30,16 +30,22 @@ export const HomeView = ({ currUser, setCurrUser, pages, settings, loadedProfile
         logout().then(() =>setCurrUser(''));
     }
     const profileNav = () => {
-        setloadedProfile(currUser);
+
         navigate(`users/${currUser.username}`);
     }
     const accountNav = () => {
-        setloadedProfile(currUser);
+
         navigate(`accounts/${currUser.username}`);
     }
 
     return <div>
-        <LoggedInResponsiveAppBar pages={pages} settings={settings} signOut={signOut} username={currUser.username} profileNav={profileNav} account={accountNav}></LoggedInResponsiveAppBar>
+        <LoggedInResponsiveAppBar 
+            pages={pages} 
+            settings={settings} 
+            signOut={() => signOut()} 
+            username={currUser.username} 
+            profileNav={() => profileNav()} 
+            account={() => accountNav()} />
         {/* <h1 className="mb-4">Welcome {account.firstName}</h1> */}
     </div>
 }

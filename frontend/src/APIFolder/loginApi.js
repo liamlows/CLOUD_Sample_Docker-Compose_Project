@@ -44,8 +44,30 @@ export const getAccountbyUsername = async (username) => {
     return res.data;
 }
 
-export const updateAccountbyId = (account) => {
-    return axios.put(`http://localhost:8000/api/account/${account.id}`, account);
+
+//Still work in progress. Account editing is not fully implemented
+export const updateAccountbyUsername = async (account) => {
+    return axios.put(`http://localhost:8000/api/users/${account.username}`, account);
 }
+
+export const getProfiles = async () => {
+
+    const res = await axios.get('http://localhost:8000/api/users');
+    if(res.status !== 200){
+        console.log("Couldn't find users");
+        return null;
+    }
+    return res.data;
+}
+
+export const getStatusByUsername = async (username) => {
+    const res = await axios.get(`http://localhost:8000/api/users/${username}`);
+    if(res.status !== 200){
+        console.log("Couldn't find user status");
+        return null;
+    }
+    return res.data;
+}
+
 
 // export const 

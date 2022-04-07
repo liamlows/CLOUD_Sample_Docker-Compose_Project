@@ -28,8 +28,8 @@ export const Base = ({ currUser, setCurrUser, basePages, loggedInPages, settings
     return <section className="baseView">
         {currUser === '' && <div>
             <BaseResponsiveAppBar pages={basePages}
-                                  signIn={onSignIn}
-                                  signUp={onSignUp} />
+                                  signIn={() => onSignIn()}
+                                  signUp={() => onSignUp()} />
             <h1 className="mb-4">Welcome</h1>
             <h2 className="">This is the base page to be updated with logo and stuff</h2>
         </div>}

@@ -10,7 +10,7 @@ export const SignUpPage = ({ currUser, setCurrUser }) => {
 
     const clickAddAccount = () => {
         if (username && password && firstName && lastName && email) {
-            registerAccount({ "username": username, "password": password, "firstName": firstName, "lastName": lastName, "email": email })
+            registerAccount({ "username": username, "password": password, "firstName": firstName, "lastName": lastName, "email": email, "school": school})
                 .then(response => {
                     if(response.success === 1){
                         getAccountbyUsername(response.username)
@@ -40,13 +40,17 @@ export const SignUpPage = ({ currUser, setCurrUser }) => {
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [accountType, setAccountType] = useState('');
+    const [school, setSchool] = useState('');
     const [accountTypes] = useState([
         "Student",
         "Teacher"
     ]);
 
-    const [account, setAccount] = useState([]);
+    const [schools] = useState([
+        "Yuh",
+        "Mega Yuh"
+    ]);
+
 
     // const mergeAccount = delta => setAccount({ ...account, ...delta });
 
@@ -74,10 +78,10 @@ export const SignUpPage = ({ currUser, setCurrUser }) => {
             <PasswordField label="Password"
                 value={password}
                 setValue={x => setPassword(x)} />
-            <SelectField label="Account Type"
-                options={accountTypes}
-                value={accountType}
-                setValue={setAccountType} />
+            <SelectField label="School"
+                options={schools}
+                value={school}
+                setValue={setSchool} />
             <button
                 type="button"
                 onClick={() => clickAddAccount()}
@@ -85,7 +89,7 @@ export const SignUpPage = ({ currUser, setCurrUser }) => {
                 color="success">
                 Sign Up
             </button>
-            {/* <GenericButton label="Sign Up" click="/login" /> */}
+
         </form>
 
     </section>;
