@@ -47,7 +47,6 @@ function App() {
   }, [])
 
   const [currUser, setCurrUser] = useState('')
-  const [loadedProfile, setloadedProfile] = useState('')
 
   //Nav bar now made available from all views (at least thats the goal)
   const [loggedInPages] = useState([
@@ -101,10 +100,10 @@ function App() {
           {/* TODO: Account Settings (Probably later on) */}
 
 
-          <Route path="/users/:username/friends" element={<FriendsList currUser={currUser} setCurrUser={setCurrUser} setLoadedUser={setloadedProfile} />} />
-          <Route path="/users" element={<UserSearch currUser={currUser} setCurrUser={setCurrUser} setLoadedUser={setloadedProfile} />} />
+          <Route path="/users/:username/friends" element={<FriendsList currUser={currUser} setCurrUser={setCurrUser}/>} />
+          <Route path="/users" element={<UserSearch currUser={currUser} setCurrUser={setCurrUser}/>} />
           <Route path='/signUp' element={<SignUpPage currUser={currUser} setCurrUser={x => setCurrUser(x)} />} />
-          <Route path="/users/:username" element={<Profile currUser={currUser} loadedProfile={loadedProfile} />} />
+          <Route path="/users/:username" element={<Profile currUser={currUser} />} />
           <Route path="/accounts/:username" element={<AccountInfo currUser={currUser} setCurrUser={x => setCurrUser(x)} />} />
         </Routes>
       </BrowserRouter>
