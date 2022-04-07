@@ -1,7 +1,6 @@
 /**
  * Based on the Material UL table example
  */
-
 import * as React from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -12,15 +11,15 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
-interface Column {
+/*interface Column {
     id: 'Class' | 'ID' | 'Professor' | 'Days' | 'Time';
     label: string;
     minWidth?: number;
     align?: 'right';
     format?: (value: number) => string;
-}
+}*/
 
-const columns: readonly Column[] = [
+var columns = [
     { id: 'Class', label: 'Class', minWidth: 170 },
     { id: 'ID', label: 'Class-ID', minWidth: 100 },
     {
@@ -28,21 +27,21 @@ const columns: readonly Column[] = [
         label: 'Professor',
         minWidth: 170,
         align: 'right',
-        format: (value: number) => value.toLocaleString('en-US'),
+        format: function (value) { return value.toLocaleString('en-US'); },
     },
     {
         id: 'Days',
         label: 'Days',
         minWidth: 170,
         align: 'right',
-        format: (value: number) => value.toLocaleString('en-US'),
+        format: function (value) { return value.toLocaleString('en-US'); },
     },
     {
         id: 'Time',
         label: 'Time',
         minWidth: 170,
         align: 'right',
-        format: (value: number) => value.toFixed(2),
+        format: function (value) { return value.toFixed(2); },
     },
 ];
 
@@ -50,15 +49,14 @@ const rows = [
     //Insert Data
 ];
 
-export default function StickyHeadTable() {
+export default function classTable() {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-    const handleChangePage = (event: unknown, newPage: number) => {
+    var handleChangePage = function (event, newPage) {
         setPage(newPage);
     };
-
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    var handleChangeRowsPerPage = function (event) {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };

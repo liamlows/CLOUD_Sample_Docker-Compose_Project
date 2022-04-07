@@ -26,28 +26,34 @@ import PersonIcon from "@mui/icons-material/Person";
 
 const drawerWidth = 240;
 
-const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
-    open?: boolean;
-}>(({ theme, open }) => ({
-    flexGrow: 1,
-    padding: theme.spacing(3),
-    transition: theme.transitions.create("margin", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen
-    }),
-    marginLeft: `-${drawerWidth}px`,
-    ...(open && {
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+var Main = styled("main", { shouldForwardProp: function (prop) { return prop !== "open"; } })(function (_a) {
+    var theme = _a.theme, open = _a.open;
+    return (__assign({ flexGrow: 1, padding: theme.spacing(3), transition: theme.transitions.create("margin", {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen
+        }), marginLeft: "-".concat(drawerWidth, "px") }, (open && {
         transition: theme.transitions.create("margin", {
             easing: theme.transitions.easing.easeOut,
             duration: theme.transitions.duration.enteringScreen
         }),
         marginLeft: 0
-    })
-}));
+    })));
+});
 
-interface AppBarProps extends MuiAppBarProps {
+/*interface AppBarProps extends MuiAppBarProps {
     open?: boolean;
-}
+}*/
 
 const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== "open"
