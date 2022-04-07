@@ -6,10 +6,11 @@ USE db;
 
 
 -- SCHOOL TABLE
-CREATE TABLE `db`.`school` (
+CREATE TABLE `db`.`schools` (
     `school_id` SERIAL,
     `school_name` VARCHAR(255) NOT NULL,
     `school_location` VARCHAR(255) NOT NULL,
+    `school_logo_url` VARCHAR(511) NOT NULL,
     PRIMARY KEY (`school_id`)
 );
 
@@ -21,11 +22,11 @@ CREATE TABLE `db`.`course_metadata` (
     `department` VARCHAR(255) NOT NULL,
     `description` VARCHAR(1000) NOT NULL,
     PRIMARY KEY (`course_meta_id`),
-    FOREIGN KEY (`school_id`) REFERENCES school(`school_id`)
+    FOREIGN KEY (`school_id`) REFERENCES schools(`school_id`)
 );
 
 -- COURSE TABLE
-CREATE TABLE `db`.`course` (
+CREATE TABLE `db`.`courses` (
     `course_id` SERIAL,
     `course_meta_id` BIGINT UNSIGNED,
     `max_seats` INT NOT NULL,
@@ -36,59 +37,91 @@ CREATE TABLE `db`.`course` (
     FOREIGN KEY (`course_meta_id`) REFERENCES course_metadata(`course_meta_id`)
 );
 
--- COURSE ROLES TABLE
-CREATE TABLE `db`.`course_roles` (
+-- ROLES TABLE
+CREATE TABLE `db`.`roles` (
     `role_id` SERIAL,
-    `role_type` INT DEFAULT 0,
+    `role_type` ENUM('student', 'ta', 'professor', 'admin') DEFAULT 'student',
     `course_id` BIGINT UNSIGNED,
+    'school_id' BIGINT UNSIGNED,
     PRIMARY KEY (`role_id`),
-    FOREIGN KEY (`course_id`) REFERENCES  course(`course_id`)
-);
-
-
--- STUDENT TABLE
-CREATE TABLE `db`.`student` (
-    `student_id` SERIAL,
-    `school_id` BIGINT UNSIGNED NOT NULL,
-    PRIMARY KEY (`student_id`),
-    FOREIGN KEY (`school_id`) REFERENCES school(`school_id`)
+    FOREIGN KEY (`course_id`) REFERENCES  course(`course_id`),
+    FOREIGN KEY ('school_id') REFERENCES school('school_id')
 );
 
 -- ACCOUNT TABLE
-CREATE TABLE `db`.`account` (
+CREATE TABLE `db`.`accounts` (
     `account_id` SERIAL,
-    `username` VARCHAR(100) NOT NULL,
+    `username` UNIQUE VARCHAR(100) NOT NULL,
     `password` VARCHAR(255) NOT NULL,
     `first_name` VARCHAR(255) NOT NULL,
     `last_name` VARCHAR(255) NOT NULL,
-    `student_id` BIGINT UNSIGNED,
-    `role_id` BIGINT UNSIGNED,
-    `logged_in` BOOLEAN NOT NULL DEFAULT 0,
+    `school_id` BIGINT UNSIGNED,
+    `role_id` BIGINT UNSIGNED NOT NULL,
     `last_logged_in` DATETIME DEFAULT NOW(),
+    `logged_in` BOOLEAN NOT NULL DEFAULT 0,
+    `offline_mode` BOOLEAN NOT NULL DEFAULT 0,
+    `email` VARCHAR(255),
     PRIMARY KEY (`account_id`),
-    FOREIGN KEY (`student_id`) REFERENCES student(`student_id`),
-    FOREIGN KEY (`role_id`) REFERENCES course_roles(`role_id`),
+    FOREIGN KEY (`school_id`) REFERENCES school_id(`school_id`),
+    FOREIGN KEY (`role_id`) REFERENCES course_roles(`role_id`)
+);
+
+
+CREATE TABLE `db`.`friendships` (
+    `friend_a` BIGINT UNSIGNED,
+    'friend_b' BIGINT UNSIGNED,
+    `friendship_time` DATETIME DEFAULT NOW(),
+    PRIMARY KEY (`friend_a`, `friend_b`),
+    FOREIGN KEY (`friend_a`) REFERENCES accounts(`account_id`),
+    FOREIGN KEY (`friend_b`) REFERENCES accounts(`account_id`),
+
+     -- Ensures that friend_a is always less than friend_b so
+     -- that we can ensure we don't have duplicate friendships in a different order.
+    CHECK(`friend_a` < `friend_b`)
+);
+
+
+CREATE TABLE `db`.`friend_requests` (
+    `requester_id` BIGINT UNSIGNED,
+    `requested_id` BIGINT UNSIGNED,
+    `timestamp` DATETIME DEFAULT NOW(),
+    PRIMARY KEY (`requester_id`, `requested_id`),
+    FOREIGN KEY (`requester_id`) REFERENCES accounts(`account_id`),
+    FOREIGN KEY (`requested_id`) REFERENCES accounts(`account_id`),
+);
+
+
+CREATE TABLE `db`.`announcements` (
+    `announcement_id` SERIAL,
+    `author_id` BIGINT UNSIGNED,
+    `school_id` BIGINT UNSIGNED,
+    `timestamp` DATETIME DEFAULT NOW(),
+    PRIMARY KEY (`announcement_id`)
+    FOREIGN KEY (`author_id`) REFERENCES accounts(`account_id`),
+    FOREIGN KEY (`school_id`) REFERENCES schools(`school_id`)
 );
 
 
 
--- STUDENT ENROLLMENT TABLE
-CREATE TABLE `db`.`student_enrollment` (
-    `student_id` BIGINT UNSIGNED NOT NULL,
+-- ENROLLMENT TABLE
+CREATE TABLE `db`.`enrollments` (
+    `account_id` BIGINT UNSIGNED NOT NULL,
     `course_id` BIGINT UNSIGNED NOT NULL,
-    PRIMARY KEY (`student_id`, `course_id`),
-    FOREIGN KEY (`student_id`) REFERENCES student(`student_id`),
+    PRIMARY KEY (`account_id`, `course_id`),
+    FOREIGN KEY (`account_id`) REFERENCES accounts(`account_id`),
     FOREIGN KEY (`course_id`) REFERENCES course(`course_id`)
 );
 
 
 -- WAITLIST TABLE
-CREATE TABLE `db`.`waitlist` (
-    `student_id` BIGINT UNSIGNED NOT NULL,
+CREATE TABLE `db`.`waitlists` (
+    `account_id` BIGINT UNSIGNED NOT NULL,
     `course_id` BIGINT UNSIGNED NOT NULL,
     `timestamp` DATETIME NOT NULL,
-    PRIMARY KEY (`student_id`, `course_id`),
-    FOREIGN KEY (`student_id`) REFERENCES  student(`student_id`),
+    PRIMARY KEY (`account_id`, `course_id`),
+    FOREIGN KEY (`account_id`) REFERENCES  accounts(`account_id`),
     FOREIGN KEY (`course_id`) REFERENCES course(`course_id`)
 );
 
+
+INSERT INTO `roles`(role_type) VALUES('admin');

@@ -3,6 +3,7 @@ const router = express.Router();
 const pool = require('../db');
 const secret = 'not-a-secret';
 const crypto = require('crypto');
+const util = require('../util');
 
 /* TODO
 
@@ -14,7 +15,36 @@ PUT /users/:username/role
 
  */
 
-const DEFAULT_SCHOOL_ID = 1;
+async function findRole(roleType, schoolId, courseId){
+    let rows, fields;
+    [rows, fields] = await pool.execute('SELECT * FROM `roles` WHERE `role_type` = ? AND `school_id` = ? AND `course_id` = ?',
+        [roleType, schoolId, courseId]);
+    return rows;
+}
+
+async function createRole(roleType, schoolId, courseId){
+    try{
+        await pool.execute('INSERT INTO `roles`(role_type, course_id, school_id) VALUES (? ? ?)',
+            [roleType, courseId, schoolId]);
+    } catch(error){
+        return false;
+    }
+
+    return true;
+}
+
+async function createGlobalAdminRole(){
+    return await createRole(util.ADMIN_ROLE_TYPE, null, null);
+}
+
+
+async function createSchoolAdminRole(schoolId){
+    return await createRole(util.ADMIN_ROLE_TYPE, schoolId, null);
+}
+
+async function createTARole(schoolId, courseId){
+    return await createRole(util.TA_ROLE_TYPE, schoolId, courseId);
+}
 
 
 // POST /account/register
@@ -28,16 +58,20 @@ router.post("/api/account/register", async (req, res, next) => {
         return;
     }
 
+    // Optional parameters
     let firstName = req.body.firstName;
     let lastName = req.body.lastName;
-
-    console.log(req.body);
+    let schoolId = req.body.schoolId;
 
     if (firstName === undefined){
         firstName = "";
     }
     if(lastName === undefined) {
         lastName = "";
+    }
+
+    if(schoolId === undefined) {
+        schoolId = null;
     }
 
     // Hash password
@@ -49,7 +83,7 @@ router.post("/api/account/register", async (req, res, next) => {
     // Query DB for an already existing account
     let rows, fields;
     try{
-        [rows, fields] = await pool.execute('SELECT * FROM `account` WHERE `username` = ?', [username]);
+        [rows, fields] = await pool.execute('SELECT * FROM `accounts` WHERE `username` = ?', [username]);
     } catch(error){
         return next(error);
     }
@@ -60,23 +94,25 @@ router.post("/api/account/register", async (req, res, next) => {
         return;
     }
 
-    // // Check if school exists
-    // try{
-    //     [rows, fields] = await pool.execute('SELECT * FROM `school` WHERE `school_id` = ?', [schoolId]);
-    // } catch(error){
-    //     return next(error);
-    // }
-    //
-    // // School does not exist
-    // if(rows.length === 0){
-    //     res.status(200).json({success: 0, error: `School with ID ${schoolId} does not exist.`}).send();
-    //     return;
-    // }
+    if(schoolId !== null){
+        // Check if school exists
+        try{
+            [rows, fields] = await pool.execute('SELECT * FROM `school` WHERE `school_id` = ?', [schoolId]);
+        } catch(error){
+            return next(error);
+        }
+
+        // School does not exist
+        if(rows.length === 0){
+            res.status(200).json({success: 0, error: `School with ID ${schoolId} does not exist.`}).send();
+            return;
+        }
+    }
 
     // Insert new account into DB
     try {
-        await pool.execute('INSERT INTO `account`(username, password, first_name, last_name) VALUES (?, ?, ?, ?)',
-            [username, hash, firstName, lastName]);
+        await pool.execute('INSERT INTO `accounts`(username, password, first_name, last_name, school_id) VALUES (?, ?, ?, ?, ?)',
+            [username, hash, firstName, lastName, schoolId]);
     } catch (error) {
         return next(error);
     }
@@ -105,7 +141,7 @@ router.post("/api/account/login", async (req, res, next) => {
     // Query DB for credentials
     let rows, fields;
     try{
-        [rows, fields] = await pool.execute('SELECT * FROM `account` WHERE `username` = ? AND `password` = ?',
+        [rows, fields] = await pool.execute('SELECT * FROM `accounts` WHERE `username` = ? AND `password` = ?',
             [username, hash]);
     } catch(error){
         return next(error);
@@ -153,7 +189,7 @@ router.get("/api/users/:username", async (req, res, next) => {
     // Query DB for user
     let rows, fields;
     try{
-        [rows, fields] = await pool.execute('SELECT * FROM `account` WHERE `username` = ?',
+        [rows, fields] = await pool.execute('SELECT * FROM `accounts` WHERE `username` = ?',
             [req.params.username]);
     } catch(error){
         return next(error);
