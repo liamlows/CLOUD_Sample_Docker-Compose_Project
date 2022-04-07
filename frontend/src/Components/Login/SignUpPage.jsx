@@ -9,7 +9,7 @@ export const SignUpPage = ({ currUser, setCurrUser }) => {
     const navigate = useNavigate();
 
     const clickAddAccount = () => {
-        if (username && password && firstName && lastName && email && school) {
+        if (username && password && firstName && lastName && email) {
             registerAccount({ "username": username, "password": password, "firstName": firstName, "lastName": lastName, "email": email, "school": school})
                 .then(response => {
                     if(response.success === 1){
@@ -22,7 +22,7 @@ export const SignUpPage = ({ currUser, setCurrUser }) => {
                     }
                 });
         }
-        else if(!username || !password || !firstName || !lastName || !email || !school){
+        else if(!username || !password || !firstName || !lastName || !email){
             window.alert("Please fill out all fields");
         }
         else{
