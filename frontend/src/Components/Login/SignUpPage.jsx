@@ -9,8 +9,8 @@ export const SignUpPage = ({ currUser, setCurrUser }) => {
     const navigate = useNavigate();
 
     const clickAddAccount = () => {
-        if (username && password && firstName && lastName && email) {
-            registerAccount({ "username": username, "password": password, "firstName": firstName, "lastName": lastName, "email": email })
+        if (username && password && firstName && lastName && email && school) {
+            registerAccount({ "username": username, "password": password, "firstName": firstName, "lastName": lastName, "email": email, "school": school})
                 .then(response => {
                     if(response.success === 1){
                         getAccountbyUsername(response.username)
@@ -22,7 +22,7 @@ export const SignUpPage = ({ currUser, setCurrUser }) => {
                     }
                 });
         }
-        else if(!username || !password || !firstName || !lastName || !email){
+        else if(!username || !password || !firstName || !lastName || !email || !school){
             window.alert("Please fill out all fields");
         }
         else{
@@ -41,12 +41,17 @@ export const SignUpPage = ({ currUser, setCurrUser }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [accountType, setAccountType] = useState('');
+    const [school, setSchool] = useState('');
     const [accountTypes] = useState([
         "Student",
         "Teacher"
     ]);
 
-    const [account, setAccount] = useState([]);
+    const [schools] = useState([
+        "Yuh",
+        "Mega Yuh"
+    ]);
+
 
     // const mergeAccount = delta => setAccount({ ...account, ...delta });
 
@@ -78,6 +83,10 @@ export const SignUpPage = ({ currUser, setCurrUser }) => {
                 options={accountTypes}
                 value={accountType}
                 setValue={setAccountType} />
+            <SelectField label="School"
+                options={schools}
+                value={school}
+                setValue={setSchool} />
             <button
                 type="button"
                 onClick={() => clickAddAccount()}
