@@ -1,4 +1,5 @@
 import React from 'react';
+import '../node_modules/bootstrap/dist/css/bootstrap.css';
 import {  Route, Routes } from 'react-router-dom';
 import './App.css';
 import { CreateAccount, LoginPage } from "./login";
