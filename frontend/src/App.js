@@ -12,6 +12,8 @@ import { HomeView } from './Components/LoggedIn/HomeView';
 import { AccountInfo } from './Components/Profiles/AccountInfo';
 import Cookies from 'js-cookie';
 import { getAccountbyUsername } from './APIFolder/loginApi';
+import { UserSearch } from './Components/Profiles/UserSearch';
+import { FriendsList } from './Components/Profiles/FriendsList';
 
 // React functional component
 function App() {
@@ -22,24 +24,24 @@ function App() {
   // USE localhost OR ec2_url ACCORDING TO ENVIRONMENT
   const url = ec2 ? ec2_url : 'localhost'
 
-  useEffect( () => {
+  useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
 
     let username = Cookies.get("username");
 
-    if(username){
+    if (username) {
       getAccountbyUsername(username)
-          .then(account => {
-            if(account){
-              setCurrUser(account);
-            }
-            else{
-              console.log("User is null after request");
-              setCurrUser('');
-            }
-          })
+        .then(account => {
+          if (account) {
+            setCurrUser(account);
+          }
+          else {
+            console.log("User is null after request");
+            setCurrUser('');
+          }
+        })
     }
-    else{
+    else {
       setCurrUser('');
     }
   }, [])
@@ -99,9 +101,10 @@ function App() {
           {/* TODO: Account Settings (Probably later on) */}
 
 
-
+          <Route path="/users/:username/friends" element={<FriendsList currUser={currUser} setCurrUser={setCurrUser} setLoadedUser={setloadedProfile} />} />
+          <Route path="/users" element={<UserSearch currUser={currUser} setCurrUser={setCurrUser} setLoadedUser={setloadedProfile} />} />
           <Route path='/signUp' element={<SignUpPage currUser={currUser} setCurrUser={x => setCurrUser(x)} />} />
-          <Route path="/users/:username" element={<Profile currUser={currUser} loadedProfile={loadedProfile}/>} />
+          <Route path="/users/:username" element={<Profile currUser={currUser} loadedProfile={loadedProfile} />} />
           <Route path="/accounts/:username" element={<AccountInfo currUser={currUser} setCurrUser={x => setCurrUser(x)} />} />
         </Routes>
       </BrowserRouter>
