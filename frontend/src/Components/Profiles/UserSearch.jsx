@@ -17,6 +17,7 @@ export const UserSearch = ({ currUser, setCurrUser, setLoadedUser, }) => {
     const [username, setUsername] = useState('');
 
     const goToProfile = profile => {
+        // console.log(profile);
         setLoadedUser(profile);
         navigate(`/users/${profile.username}`);
     }
@@ -70,7 +71,7 @@ export const UserSearch = ({ currUser, setCurrUser, setLoadedUser, }) => {
                     <td>{profile.firstName}</td>
                     <td>{profile.lastName}</td>
                     <td className="ts-2">0</td>
-                    <td><button type="button" className="btn btn-secondary" onClick={profile => goToProfile(profile)}>View Profile</button></td>
+                    <td><button type="button" className="btn btn-secondary" onClick={() => goToProfile(profile)}>View Profile</button></td>
                 </tr>)}
             </tbody>
         </table>
