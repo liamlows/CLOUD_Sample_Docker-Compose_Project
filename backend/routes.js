@@ -1,6 +1,7 @@
 const pool = require('./db')
 const express = require('express');
 const User = require('./models/users');
+const UserController = require('./controllers/users');
 
 /**
  * https://expressjs.com/en/guide/routing.html#express-router
@@ -12,9 +13,23 @@ const User = require('./models/users');
 
 module.exports = function routes(app, logger) {
   // GET /
-  app.get('/', (req, res) => {
-    res.status(200).send('Hello world!');
-  });
+  // app.get('/', (req, res) => {
+  //   res.status(200).send('Hello world!');
+  // });
+
+  app.post('/admin', async (req, res, next) => {
+    try {
+        const body = req.body;
+        
+        const result = await UserController.authenticateAdmin(body.email, body.password);
+        res.status(201).json(result);
+    } catch (err) {
+        console.error('Failed to authenticate admin:', err);
+        res.status(500).json({ message: err.toString() });
+    }
+
+    next();
+})
 
   app.get('/current', async (req, res, next) => {
     try {
@@ -30,7 +45,7 @@ module.exports = function routes(app, logger) {
   app.post('/user', async (req, res, next) => {
     try {
         console.log(req.body);
-        const result = await User.createNewUser(req.body.email, req.body.user, req.body.password);
+        const result = await User.createNewUser(req.body.username, req.body.email, req.body.name, req.body.password);
         res.status(201).send(result);
     } catch (err) {
         console.error('Failed to create new user:', err);
@@ -72,7 +87,7 @@ module.exports = function routes(app, logger) {
 
       app.post('/auth', async (req, res, next) => {
         try {
-            const result = await req.models.user.authenticateUser(req.body.email, req.body.password);
+            const result = await User.authenticateUser(req.body.email, req.body.password);
             res.status(201).send(result);
         } catch (err) {
             console.error('Failed to authenticate user:', err);

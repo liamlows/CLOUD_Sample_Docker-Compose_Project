@@ -3,14 +3,14 @@ const bcrypt = require('bcryptjs');
 
 const USER_TABLE = 'user';
 
-const createNewUser = async (username, email, password) => {
+const createNewUser = async (username, email, name, password) => {
     console.log('Raw password:', password);
-    const salt = await bcrypt.genSalt(10);
+    const salt = bcrypt.genSaltSync(1);
     console.log('Password salt', salt);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const hashedPassword = bcrypt.hashSync(password, salt);
     console.log('Hashed password', hashedPassword);
 
-    const query = knex(USER_TABLE).insert({username, email, password: hashedPassword });
+    const query = knex(USER_TABLE).insert({username, email, name, password: hashedPassword });
     console.log('Raw query for createNewUser:', query.toString());
     const result = await query;
 
@@ -31,7 +31,10 @@ const authenticateUser = async (email, password) => {
         return false;
     }
     const user = users[0];
+    console.log("User = ", user);
     const validPassword = await bcrypt.compare(password, user.password);
+
+    console.log('Results of password authentication: ', validPassword);
     if (validPassword) {
         return true;
     }
