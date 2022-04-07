@@ -48,9 +48,26 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
         navigate(`accounts/${currUser.username}`);
     }
 
-    if(!currUser)
-    {
-        navigate('/');
+    if (!currUser) {
+        let username = Cookies.get("username");
+
+    if (username) {
+      getAccountbyUsername(username)
+        .then(account => {
+          if (account) {
+            setCurrUser(account);
+          }
+          else {
+            console.log("User is null after request");
+            setCurrUser('');
+          }
+        })
+    }
+    else {
+      setCurrUser('');
+      navigate('/');
+    }
+        
     }
 
 
@@ -64,38 +81,58 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
     // NOTE - IN FUTURE ADD BUTTON TO SEND FRIEND REQUEST...ONLY IF FUNCTIONALITY IS IMPLEMENTED
 
     return <section className="userProfile">
-        <LoggedInResponsiveAppBar 
-            pages={pages} 
-            settings={settings} 
-            signOut={() => signOut()} 
-            username={currUser.username} 
-            profileNav={() => profileNav()} 
+        <LoggedInResponsiveAppBar
+            pages={pages}
+            settings={settings}
+            signOut={() => signOut()}
+            username={currUser.username}
+            profileNav={() => profileNav()}
             account={() => accountNav()} />
-        {currUser.username === loadedProfile.username && editMode === true && <div>
-            <h1>{loadedProfile.username}'s Profile</h1>
-            <TextField label="First Name :" value={account.firstName} setValue={x => changeFirstName(x)} />
-            <TextField label="Last Name :" value={account.lastName} setValue={x => changeLastName(x)} />
-            {/* <TextField label="Email :" value={account.email} setValue={x => changeEmail(x)} /> */}
-            <button onClick={() => doneEditing()}>Save</button>
-        </div>}
-        {currUser.username === loadedProfile.username && editMode === false && <div>
-            <h1>{loadedProfile.username}'s Profile</h1>
-            <h2>First Name :</h2>
-            <p>{loadedProfile.firstName}</p>
-            <h2>Last Name :</h2>
-            <p>{loadedProfile.lastName}</p>
-            {/* <h2>Email :</h2>
+
+        {/* Viewing own profile (EDITING) */}
+        {currUser.username === loadedProfile.username && editMode === true &&
+            <div className="container border-0 mt-5">
+                <h1>{loadedProfile.username}'s Profile</h1>
+                <TextField label="First Name :" value={account.firstName} setValue={x => changeFirstName(x)} />
+                <TextField label="Last Name :" value={account.lastName} setValue={x => changeLastName(x)} />
+                {/* <TextField label="Email :" value={account.email} setValue={x => changeEmail(x)} /> */}
+                <button onClick={() => doneEditing()}>Save</button>
+            </div>}
+
+        {/* Viewing own profile (NOT EDITING) */}
+        {currUser.username === loadedProfile.username && editMode === false &&
+            <div className="container border-0 mt-5 bg-secondary">
+                <p className="float-start col-4 fs-2 mt-2">{loadedProfile.username}'s Profile</p>
+                <div className="clearfix"></div>
+                <div className="row">
+                    <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3" alt="" />
+                    
+                        <div className="col-3 row">
+                            <p className="fs-2">First Name :</p>
+                            <p className="fs-3">{loadedProfile.firstName}</p>
+                        </div>
+                        <div className="col-3 fs-2 row">
+                            <p className="fs-2">Last Name :</p>
+                            <p className="fs-3">{loadedProfile.lastName}</p>
+                        </div>
+                    
+                </div>
+                {/* <h2>Email :</h2>
             <p>{account.email}</p> */}
-            <button onClick={() => startEditing()}>Edit Profile</button>
-        </div>}
-        {currUser.username !== loadedProfile.username && <div>
-            <h1>{loadedProfile.username}'s Profile</h1>
-            <h2>First Name :</h2>
-            <p>{loadedProfile.firstName}</p>
-            <h2>Last Name :</h2>
-            <p>{loadedProfile.lastName}</p>
-            {/* <h2>Email :</h2>
+
+                <button onClick={() => startEditing()}>Edit Profile</button>
+            </div>}
+
+        {/* Viewing profile besides your own */}
+        {currUser.username !== loadedProfile.username &&
+            <div className="container border-0 mt-5">
+                <h1>{loadedProfile.username}'s Profile</h1>
+                <h2>First Name :</h2>
+                <p>{loadedProfile.firstName}</p>
+                <h2>Last Name :</h2>
+                <p>{loadedProfile.lastName}</p>
+                {/* <h2>Email :</h2>
             <p>{loadedProfile.email}</p> */}
-        </div>}
+            </div>}
     </section>
 }
