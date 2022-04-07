@@ -37,6 +37,9 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
         setEditMode(false);
 
     }
+    const cancel = () => {
+        setEditMode(false);
+    }
     const signOut = () => {
         console.log("Logging out");
         logout().then(() => setCurrUser(''));
@@ -92,11 +95,45 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
         {/* Viewing own profile (EDITING) */}
         {currUser.username === loadedProfile.username && editMode === true &&
             <div className="container border-0 mt-5">
-                <h1>{loadedProfile.username}'s Profile</h1>
-                <TextField label="First Name :" value={account.firstName} setValue={x => changeFirstName(x)} />
-                <TextField label="Last Name :" value={account.lastName} setValue={x => changeLastName(x)} />
-                {/* <TextField label="Email :" value={account.email} setValue={x => changeEmail(x)} /> */}
-                <button onClick={() => doneEditing()}>Save</button>
+                <div className="row bg-light">
+                    <img src="https://via.placeholder.com/300x300" className="float-start col-2 m-3 m-5" alt="" />
+                    <div className="col-9 float-start mt-5">
+                        <table className='table float-start'>
+                            <thead>
+                                <th className="col-3 fs-3 mt-5 text-start">{loadedProfile.username}</th>
+                                <th className="col-1">
+                                    <button className="btn btn-light" onClick={() => startEditing()}>Edit Profile</button>
+                                </th>
+                            </thead>
+                            <tbody>
+                                <tr className="border-0">
+                                    <td className="col-3 fs-6 text-start border-0">
+                                        <TextField label="First Name :" value={account.firstName} setValue={x => changeFirstName(x)} />
+                                    </td>
+                                </tr>
+                                <tr className="border-0">
+                                    <td className="col-3 fs-6 text-start border-0">
+
+                                        <TextField label="Last Name :" value={account.lastName} setValue={x => changeLastName(x)} />
+                                    </td>
+                                </tr>
+                                {/* <tr>
+                                    <td>
+                                    <TextField label="Email :" value={account.email} setValue={x => changeEmail(x)} />
+                                    </td>
+                                </tr> */}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div className="row mb-3">
+                        <div className="col-6">
+                            <button type="button" className="btn btn-secondary col-3 contained m-1 float-end" onClick={() => cancel()}>Cancel</button>
+                        </div>
+                        <div className="col-6">
+                            <button type="button" className="btn btn-success col-3 contained m-1 float-start" onClick={() => doneEditing()}>Save</button>
+                        </div>
+                    </div>
+                </div>
             </div>}
 
         {/* Viewing own profile (NOT EDITING) */}
