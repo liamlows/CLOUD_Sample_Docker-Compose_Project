@@ -103,39 +103,47 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
         {currUser.username === loadedProfile.username && editMode === false &&
             <div className="container border-0 mt-5">
                 <div className="row bg-light">
-                <img src="https://via.placeholder.com/300x300" className="float-start col-2 m-3 m-5" alt="" />
-                <div className="col-9 float-start mt-5">
-                    <table className='table float-start'>
-                        <thead>
-                            <th className="col-3 fs-3 mt-5 text-start">{loadedProfile.username}</th>
-                            <th className="col-1">
-                                <button className="btn btn-light" onClick={() => startEditing()}>Edit Profile</button>
-                            </th>
-                        </thead>
-                        <tbody>
-                            <td className="col-3 fs-6 text-start">{loadedProfile.firstName} {loadedProfile.lastName}</td>
-                        </tbody>
-                {/* <h2>Email :</h2>
-            <p>{account.email}</p> */}
-
-                    </table>
+                    <img src="https://via.placeholder.com/300x300" className="float-start col-2 m-3 m-5" alt="" />
+                    <div className="col-9 float-start mt-5">
+                        <table className='table float-start'>
+                            <thead>
+                                <th className="col-3 fs-3 mt-5 text-start">{loadedProfile.username}</th>
+                                <th className="col-1">
+                                    <button className="btn btn-light" onClick={() => startEditing()}>Edit Profile</button>
+                                </th>
+                            </thead>
+                            <tbody>
+                                <td className="col-3 fs-6 text-start">
+                                    <span className="p-0 text-capitalize">{loadedProfile.firstName} </span><span className="p-0 text-capitalize" >{loadedProfile.lastName}</span>
+                                </td>
+                                {/* <h2>Email :</h2>
+                            <p>{account.email}</p> */}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                </div>
-
-
-
             </div>}
 
         {/* Viewing profile besides your own */}
         {currUser.username !== loadedProfile.username &&
             <div className="container border-0 mt-5">
-                <h1>{loadedProfile.username}'s Profile</h1>
-                <h2>First Name :</h2>
-                <p>{loadedProfile.firstName}</p>
-                <h2>Last Name :</h2>
-                <p>{loadedProfile.lastName}</p>
-                {/* <h2>Email :</h2>
-            <p>{loadedProfile.email}</p> */}
+                <div className="row bg-light">
+                    <img src="https://via.placeholder.com/300x300" className="float-start col-2 m-3 m-5" alt="" />
+                    <div className="col-9 float-start mt-5">
+                        <table className='table float-start'>
+                            <thead>
+                                <th className="col-3 fs-3 mt-5 text-start">{loadedProfile.username}</th>
+                            </thead>
+                            <tbody>
+                                <td className="col-3 fs-6 text-start">
+                                    <span className="p-0 text-capitalize">{loadedProfile.firstName} </span><span className="p-0 text-capitalize" >{loadedProfile.lastName}</span>
+                                </td>
+                                {/* <h2>Email :</h2>
+                        <p>{account.email}</p> */}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>}
     </section>
 }
