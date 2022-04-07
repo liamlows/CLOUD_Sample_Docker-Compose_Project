@@ -101,7 +101,7 @@ function App() {
 
 
           <Route path='/signUp' element={<SignUpPage currUser={currUser} setCurrUser={x => setCurrUser(x)} />} />
-          <Route path="/users/:username" element={<Profile currUser={currUser} />} />
+          <Route path="/users/:username" element={<Profile currUser={currUser} loadedProfile={loadedProfile}/>} />
           <Route path="/accounts/:username" element={<AccountInfo currUser={currUser} setCurrUser={x => setCurrUser(x)} />} />
         </Routes>
       </BrowserRouter>
