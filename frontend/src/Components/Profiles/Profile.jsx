@@ -1,4 +1,4 @@
-import { updateAccountbyId, getAccountbyUsername, logout } from "../../APIFolder/loginApi";
+import { getAccountbyUsername, logout, updateAccountbyUsername } from "../../APIFolder/loginApi";
 import { TextField } from "../common";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
@@ -12,30 +12,32 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
     const [editMode, setEditMode] = useState(false);
 
     //Doesn't currently know what info to get from the database
-    const [account, setAccount] = useState(currUser)
+    const [account, setAccount] = useState('')
     const [loadedProfile, setLoadedProfile] = useState('')
 
     // const username = Cookies.get("username");
 
     useEffect(() => {
-        // window.location.reload(false);
-        // console.log(loadedProfile.username);
+        getAccountbyUsername(location.pathname.substring(7, location.pathname.length)).then(response => setLoadedProfile(response))
     }, [editMode]);
 
     if (!loadedProfile) {
         // get the account from the username
-        getAccountbyUsername(location.pathname.substring(7, location.pathname.length)).then(response => setLoadedProfile(response))
+        
         return <>Loading...</>
     }
     const startEditing = () => {
+        changeAccount({...currUser});
         setEditMode(true);
-
-
     }
     const doneEditing = () => {
-        // updateAccountbyId(account).then(setCurrUser(account));
-        setEditMode(false);
-
+        
+        if (account.firstName && account.lastName) {
+            updateAccountbyUsername(account).then(setEditMode(false));
+        }
+        else {
+            window.alert("Please fill out both fields");
+        }
     }
     const cancel = () => {
         setEditMode(false);
@@ -74,9 +76,7 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
     }
 
 
-    const changeFirstName = delta => setAccount({ ...account, ...delta });
-    const changeLastName = delta => setAccount({ ...account, ...delta });
-    const changeEmail = delta => setAccount({ ...account, ...delta });
+    const changeAccount = delta => setAccount({ ...account, ...delta });
     // Basically check if user is the same user as the loaded profile.
     // If so then allow them to edit with the edit button at the end (this edit button will update the database once done)
     // If not then display the profile without the edit buttons.
@@ -108,13 +108,13 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
                             <tbody>
                                 <tr className="border-0">
                                     <td className="col-3 fs-6 text-start border-0">
-                                        <TextField label="First Name :" value={account.firstName} setValue={x => changeFirstName(x)} />
+                                        <TextField label="First Name :" value={account.firstName} setValue={firstName => changeAccount({firstName})} />
                                     </td>
                                 </tr>
                                 <tr className="border-0">
                                     <td className="col-3 fs-6 text-start border-0">
 
-                                        <TextField label="Last Name :" value={account.lastName} setValue={x => changeLastName(x)} />
+                                        <TextField label="Last Name :" value={account.lastName} setValue={lastName => changeAccount({lastName})} />
                                     </td>
                                 </tr>
                                 {/* <tr>
