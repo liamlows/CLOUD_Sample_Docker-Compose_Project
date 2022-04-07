@@ -13,6 +13,10 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link, useLocation } from 'react-router-dom';
 import "./ResponsiveAppBar.css";
+import AccessibilityTwoToneIcon from '@mui/icons-material/AccessibilityTwoTone';
+import PeopleTwoToneIcon from '@mui/icons-material/PeopleTwoTone';
+import HomeIcon from '@mui/icons-material/Home';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, username, profileNav, accountNav }) => {
   const location = useLocation();
@@ -36,7 +40,7 @@ export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, username, p
   };
 
   return (
-    <AppBar position="static" sx={{background:'black'}}>
+    <AppBar position="static" sx={{ background: 'black' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -78,68 +82,81 @@ export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, username, p
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page.label} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page.label}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
-          >
-            LOGO
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page.label}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page.label}
-              </Button>
-            ))}
-          </Box>
+                <div key={page.label}>
+                  {page.route === '/users/:username/friends' && <MenuItem key={page.label} component={Link} to={`/users/${username}/friends`} onClick={handleCloseNavMenu}>
+                    <PeopleTwoToneIcon sx={{ background: 'white' }} />
+                    <Typography textAlign="center">{page.label}</Typography>
+                  </MenuItem>}
+                  {page.route === '/classes' && <MenuItem key={page.label} component={Link} to={`users/${username}/classes`} onClick={handleCloseNavMenu}>
+                    <ShoppingCartIcon sx={{ background: 'white' }} />
 
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                {/* changed Alt to account. Dont know what that did, but may need to pass in username */}
-                <Avatar alt='Account' src="" /> 
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
+
+                    <Typography textAlign="center">{page.label}</Typography>
+                  </MenuItem>}
+
+                  {page.route === '/' && <MenuItem key={page.label} component={Link} to={'/'} onClick={handleCloseNavMenu}>
+                    <HomeIcon sx={{ background: 'white' }} />
+                    <Typography textAlign="center">{page.label}</Typography>
+                  </MenuItem>}
+            </div>
+              ))}
+          </Menu>
+        </Box>
+        <Typography
+          variant="h6"
+          noWrap
+          component="div"
+          sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
+        >
+          LOGO
+        </Typography>
+        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          {pages.map((page) => (
+            <Button
+              key={page.label}
+              onClick={handleCloseNavMenu}
+              sx={{ my: 2, color: 'white', display: 'block' }}
             >
-              {settings.map((setting) => (
-                  <div key={setting.label}>
-                    {setting.route === '/users' && <MenuItem textAlign="center" component={Link} to={`${setting.route}/${username}`} onClick={profileNav}>{setting.label}</MenuItem>}
-                    {setting.route === '/accounts' && <MenuItem textAlign="center" component={Link} to={`${setting.route}/${username}`} onClick={accountNav}>{setting.label}</MenuItem>}
-                    {setting.route === '/signout' && <MenuItem textAlign="center" component={Link} to={location.pathname} onClick={signOut}>{setting.label}</MenuItem>}
-                  </div>
-              ))}
+              {page.label}
+            </Button>
+          ))}
+        </Box>
 
-            </Menu>
-          </Box>
-        </Toolbar>
-      </Container>
-    </AppBar>
+        <Box sx={{ flexGrow: 0 }}>
+          <Tooltip title="Open settings">
+            <AccessibilityTwoToneIcon onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              {/* changed Alt to account. Dont know what that did, but may need to pass in username */}
+            </AccessibilityTwoToneIcon>
+          </Tooltip>
+          <Menu
+            sx={{ mt: '45px' }}
+            id="menu-appbar"
+            anchorEl={anchorElUser}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={Boolean(anchorElUser)}
+            onClose={handleCloseUserMenu}
+          >
+            {settings.map((setting) => (
+              <div key={setting.label}>
+                {setting.route === '/users' && <MenuItem textAlign="center" component={Link} to={`${setting.route}/${username}`} onClick={profileNav}>{setting.label}</MenuItem>}
+                {setting.route === '/accounts' && <MenuItem textAlign="center" component={Link} to={`${setting.route}/${username}`} onClick={accountNav}>{setting.label}</MenuItem>}
+                {setting.route === '/signout' && <MenuItem textAlign="center" component={Link} to={location.pathname} onClick={signOut}>{setting.label}</MenuItem>}
+              </div>
+            ))}
+
+          </Menu>
+        </Box>
+      </Toolbar>
+    </Container>
+    </AppBar >
   );
 };
 export default LoggedInResponsiveAppBar;
