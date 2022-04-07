@@ -51,23 +51,23 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
     if (!currUser) {
         let username = Cookies.get("username");
 
-    if (username) {
-      getAccountbyUsername(username)
-        .then(account => {
-          if (account) {
-            setCurrUser(account);
-          }
-          else {
-            console.log("User is null after request");
+        if (username) {
+            getAccountbyUsername(username)
+                .then(account => {
+                    if (account) {
+                        setCurrUser(account);
+                    }
+                    else {
+                        console.log("User is null after request");
+                        setCurrUser('');
+                    }
+                })
+        }
+        else {
             setCurrUser('');
-          }
-        })
-    }
-    else {
-      setCurrUser('');
-      navigate('/');
-    }
-        
+            navigate('/');
+        }
+
     }
 
 
@@ -101,26 +101,29 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
 
         {/* Viewing own profile (NOT EDITING) */}
         {currUser.username === loadedProfile.username && editMode === false &&
-            <div className="container border-0 mt-5 bg-secondary">
-                <p className="float-start col-4 fs-2 mt-2">{loadedProfile.username}'s Profile</p>
-                <div className="clearfix"></div>
-                <div className="row">
-                    <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3" alt="" />
-                    
-                        <div className="col-3 row">
-                            <p className="fs-2">First Name :</p>
-                            <p className="fs-3">{loadedProfile.firstName}</p>
-                        </div>
-                        <div className="col-3 fs-2 row">
-                            <p className="fs-2">Last Name :</p>
-                            <p className="fs-3">{loadedProfile.lastName}</p>
-                        </div>
-                    
-                </div>
+            <div className="container border-0 mt-5">
+                <div className="row bg-light">
+                <img src="https://via.placeholder.com/300x300" className="float-start col-2 m-3 m-5" alt="" />
+                <div className="col-9 float-start mt-5">
+                    <table className='table float-start'>
+                        <thead>
+                            <th className="col-3 fs-3 mt-5 text-start">{loadedProfile.username}</th>
+                            <th className="col-1">
+                                <button className="btn btn-light" onClick={() => startEditing()}>Edit Profile</button>
+                            </th>
+                        </thead>
+                        <tbody>
+                            <td className="col-3 fs-6 text-start">{loadedProfile.firstName} {loadedProfile.lastName}</td>
+                        </tbody>
                 {/* <h2>Email :</h2>
             <p>{account.email}</p> */}
 
-                <button onClick={() => startEditing()}>Edit Profile</button>
+                    </table>
+                </div>
+                </div>
+
+
+
             </div>}
 
         {/* Viewing profile besides your own */}
