@@ -13,13 +13,41 @@ PUT /users/:username/student
 PUT /users/:username/role
     Assigns role ID for the account.
 
+GET /users/:username/status
+
  */
 
 async function findRole(roleType, schoolId, courseId){
     let rows, fields;
-    [rows, fields] = await pool.execute('SELECT * FROM `roles` WHERE `role_type` = ? AND `school_id` = ? AND `course_id` = ?',
-        [roleType, schoolId, courseId]);
+
+    if(schoolId && courseId){
+        [rows, fields] = await pool.execute('SELECT * FROM `roles` WHERE `role_type` = ? AND `school_id` = ? AND `course_id` = ?',
+            [roleType, schoolId, courseId]);
+    }
+    else if(schoolId) {
+        [rows, fields] = await pool.execute('SELECT * FROM `roles` WHERE `role_type` = ? AND `school_id` = ? AND `course_id` IS NULL',
+            [roleType, schoolId,]);
+    }
+    else if(courseId) {
+        console.log("Must specify school when using course ID for role.");
+        return [];
+    }
+    else {
+        [rows, fields] = await pool.execute('SELECT * FROM `roles` WHERE `role_type` = ? AND `school_id` IS NULL AND `course_id` IS NULL',
+            [roleType, ]);
+    }
+
     return rows;
+}
+
+async function getGlobalAdminRole(){
+    let roles = await findRole(util.ADMIN_ROLE_TYPE, null, null);
+    if (!roles.length) {
+        await createRole(util.ADMIN_ROLE_TYPE, null, null);
+        roles = await findRole(util.ADMIN_ROLE_TYPE, null, null);
+    }
+
+    return roles[0]["role_id"];
 }
 
 async function createRole(roleType, schoolId, courseId){
@@ -31,19 +59,6 @@ async function createRole(roleType, schoolId, courseId){
     }
 
     return true;
-}
-
-async function createGlobalAdminRole(){
-    return await createRole(util.ADMIN_ROLE_TYPE, null, null);
-}
-
-
-async function createSchoolAdminRole(schoolId){
-    return await createRole(util.ADMIN_ROLE_TYPE, schoolId, null);
-}
-
-async function createTARole(schoolId, courseId){
-    return await createRole(util.TA_ROLE_TYPE, schoolId, courseId);
 }
 
 
@@ -61,7 +76,8 @@ router.post("/api/account/register", async (req, res, next) => {
     // Optional parameters
     let firstName = req.body.firstName;
     let lastName = req.body.lastName;
-    let schoolId = req.body.schoolId;
+    let schoolId = undefined; // req.body.schoolId;
+    let roleId;
 
     if (firstName === undefined){
         firstName = "";
@@ -72,6 +88,14 @@ router.post("/api/account/register", async (req, res, next) => {
 
     if(schoolId === undefined) {
         schoolId = null;
+    }
+
+    if(schoolId === null){
+        try {
+            roleId = await getGlobalAdminRole();
+        } catch(error) {
+            return next(error);
+        }
     }
 
     // Hash password
@@ -111,8 +135,8 @@ router.post("/api/account/register", async (req, res, next) => {
 
     // Insert new account into DB
     try {
-        await pool.execute('INSERT INTO `accounts`(username, password, first_name, last_name, school_id) VALUES (?, ?, ?, ?, ?)',
-            [username, hash, firstName, lastName, schoolId]);
+        await pool.execute('INSERT INTO `accounts`(username, password, first_name, last_name, school_id, role_id) VALUES (?, ?, ?, ?, ?, ?)',
+            [username, hash, firstName, lastName, schoolId, roleId]);
     } catch (error) {
         return next(error);
     }

@@ -42,16 +42,16 @@ CREATE TABLE `db`.`roles` (
     `role_id` SERIAL,
     `role_type` ENUM('student', 'ta', 'professor', 'admin') DEFAULT 'student',
     `course_id` BIGINT UNSIGNED,
-    'school_id' BIGINT UNSIGNED,
+    `school_id` BIGINT UNSIGNED,
     PRIMARY KEY (`role_id`),
-    FOREIGN KEY (`course_id`) REFERENCES  course(`course_id`),
-    FOREIGN KEY ('school_id') REFERENCES school('school_id')
+    FOREIGN KEY (`course_id`) REFERENCES  courses(`course_id`),
+    FOREIGN KEY (`school_id`) REFERENCES schools(`school_id`)
 );
 
 -- ACCOUNT TABLE
 CREATE TABLE `db`.`accounts` (
     `account_id` SERIAL,
-    `username` UNIQUE VARCHAR(100) NOT NULL,
+    `username` VARCHAR(100) NOT NULL,
     `password` VARCHAR(255) NOT NULL,
     `first_name` VARCHAR(255) NOT NULL,
     `last_name` VARCHAR(255) NOT NULL,
@@ -62,14 +62,14 @@ CREATE TABLE `db`.`accounts` (
     `offline_mode` BOOLEAN NOT NULL DEFAULT 0,
     `email` VARCHAR(255),
     PRIMARY KEY (`account_id`),
-    FOREIGN KEY (`school_id`) REFERENCES school_id(`school_id`),
-    FOREIGN KEY (`role_id`) REFERENCES course_roles(`role_id`)
+    FOREIGN KEY (`school_id`) REFERENCES schools(`school_id`),
+    FOREIGN KEY (`role_id`) REFERENCES roles(`role_id`)
 );
 
 
 CREATE TABLE `db`.`friendships` (
     `friend_a` BIGINT UNSIGNED,
-    'friend_b' BIGINT UNSIGNED,
+    `friend_b` BIGINT UNSIGNED,
     `friendship_time` DATETIME DEFAULT NOW(),
     PRIMARY KEY (`friend_a`, `friend_b`),
     FOREIGN KEY (`friend_a`) REFERENCES accounts(`account_id`),
@@ -87,7 +87,7 @@ CREATE TABLE `db`.`friend_requests` (
     `timestamp` DATETIME DEFAULT NOW(),
     PRIMARY KEY (`requester_id`, `requested_id`),
     FOREIGN KEY (`requester_id`) REFERENCES accounts(`account_id`),
-    FOREIGN KEY (`requested_id`) REFERENCES accounts(`account_id`),
+    FOREIGN KEY (`requested_id`) REFERENCES accounts(`account_id`)
 );
 
 
@@ -96,7 +96,7 @@ CREATE TABLE `db`.`announcements` (
     `author_id` BIGINT UNSIGNED,
     `school_id` BIGINT UNSIGNED,
     `timestamp` DATETIME DEFAULT NOW(),
-    PRIMARY KEY (`announcement_id`)
+    PRIMARY KEY (`announcement_id`),
     FOREIGN KEY (`author_id`) REFERENCES accounts(`account_id`),
     FOREIGN KEY (`school_id`) REFERENCES schools(`school_id`)
 );
@@ -109,7 +109,7 @@ CREATE TABLE `db`.`enrollments` (
     `course_id` BIGINT UNSIGNED NOT NULL,
     PRIMARY KEY (`account_id`, `course_id`),
     FOREIGN KEY (`account_id`) REFERENCES accounts(`account_id`),
-    FOREIGN KEY (`course_id`) REFERENCES course(`course_id`)
+    FOREIGN KEY (`course_id`) REFERENCES courses(`course_id`)
 );
 
 
@@ -120,7 +120,7 @@ CREATE TABLE `db`.`waitlists` (
     `timestamp` DATETIME NOT NULL,
     PRIMARY KEY (`account_id`, `course_id`),
     FOREIGN KEY (`account_id`) REFERENCES  accounts(`account_id`),
-    FOREIGN KEY (`course_id`) REFERENCES course(`course_id`)
+    FOREIGN KEY (`course_id`) REFERENCES courses(`course_id`)
 );
 
 
