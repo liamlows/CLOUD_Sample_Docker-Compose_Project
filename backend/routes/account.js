@@ -174,4 +174,17 @@ router.get("/api/users/:username", async (req, res, next) => {
     }).send();
 });
 
-    module.exports = router;
+router.get("/api/users/", async (req, res, next) => {
+    // Query DB for user
+    let rows, fields;
+    try{
+        [rows, fields] = await pool.execute('SELECT username, first_name, last_name, student_id FROM `account`');
+    } catch(error){
+        return next(error);
+    }
+
+    res.status(200).json(rows).send();
+});
+
+
+module.exports = router;
