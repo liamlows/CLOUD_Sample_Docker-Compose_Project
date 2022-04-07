@@ -23,7 +23,6 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
 
     if (!loadedProfile) {
         // get the account from the username
-        
         return <>Loading...</>
     }
     const startEditing = () => {
@@ -70,6 +69,7 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
         }
         else {
             setCurrUser('');
+            window.alert("Please sign in to view profiles");
             navigate('/');
         }
 
