@@ -8,7 +8,7 @@ import { TextField } from "../common";
 import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 
 
-export const UserSearch = ({ currUser, setCurrUser, setLoadedUser, }) => {
+export const UserSearch = ({ currUser, setCurrUser}) => {
 
     const navigate = useNavigate();
     // const [allProfiles, setProfiles] = useState(undefined);
@@ -17,8 +17,7 @@ export const UserSearch = ({ currUser, setCurrUser, setLoadedUser, }) => {
     const [username, setUsername] = useState('');
 
     const goToProfile = profile => {
-        // console.log(profile);
-        setLoadedUser(profile);
+
         navigate(`/users/${profile.username}`);
     }
 
