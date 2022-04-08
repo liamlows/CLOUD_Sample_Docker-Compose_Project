@@ -5,6 +5,9 @@ import Cookies from "js-cookie";
 import { useLocation, useNavigate } from "react-router-dom";
 import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 import CircleIcon from '@mui/icons-material/Circle';
+import Check from "@mui/icons-material/Check";
+import Add from "@mui/icons-material/Add";
+import { Button } from "@mui/material";
 
 export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
 
@@ -13,9 +16,11 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
     const [editMode, setEditMode] = useState(false);
 
     //Doesn't currently know what info to get from the database
-    const [account, setAccount] = useState('')
-    const [loadedProfile, setLoadedProfile] = useState('')
-    const [online, setOnline] = useState('')
+    const [account, setAccount] = useState('');
+    const [loadedProfile, setLoadedProfile] = useState('');
+    const [online, setOnline] = useState('');
+    const [friend, setFriend] = useState(false);
+    const [sentRequest, setRequest] = useState(false);
 
     // const username = Cookies.get("username");
 
@@ -28,11 +33,11 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
         return <>Loading...</>
     }
     const startEditing = () => {
-        changeAccount({...currUser});
+        changeAccount({ ...currUser });
         setEditMode(true);
     }
     const doneEditing = () => {
-        
+
         if (account.firstName && account.lastName) {
             updateAccountbyUsername(account).then(setEditMode(false));
         }
@@ -98,28 +103,29 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
         {/* Viewing own profile (EDITING) */}
         {currUser.username === loadedProfile.username && editMode === true &&
             <div className="container border-0 mt-5">
-                <div className="row bg-light">
-                    <img src="https://via.placeholder.com/300x300" className="float-start col-2 m-3 m-5" alt="" />
-                    <div className="col-9 float-start mt-5">
+                <div className="row bg-light pb-4">
+                    <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3 mt-5 pb-5" alt="" />
+                    <div className="col-7 float-start mt-5">
                         <table className='table float-start'>
                             <thead>
-                                <th className="col-3 fs-3 mt-5 text-start">{loadedProfile.username}</th>
-                                {online && <th className="col-1"><CircleIcon sx={{background:'green'}} /></th>}
-                                {!online && <th className="col-1"><CircleIcon sx={{background:'red'}} /></th>}
+                                {online && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
+                                {!online && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
+                                <th className="float-start col-3 fs-3 mt-2 text-start"><span className="text-start p-0">{loadedProfile.username}</span></th>
+
                                 <th className="col-1">
-                                    <button className="btn btn-light" onClick={() => startEditing()}>Edit Profile</button>
+                                    <button type="button" className="btn btn-light" onClick={() => startEditing()}>Edit Profile</button>
                                 </th>
                             </thead>
                             <tbody>
                                 <tr className="border-0">
                                     <td className="col-3 fs-6 text-start border-0">
-                                        <TextField label="First Name :" value={account.firstName} setValue={firstName => changeAccount({firstName})} />
+                                        <TextField label="First Name :" value={account.firstName} setValue={firstName => changeAccount({ firstName })} />
                                     </td>
                                 </tr>
                                 <tr className="border-0">
                                     <td className="col-3 fs-6 text-start border-0">
 
-                                        <TextField label="Last Name :" value={account.lastName} setValue={lastName => changeAccount({lastName})} />
+                                        <TextField label="Last Name :" value={account.lastName} setValue={lastName => changeAccount({ lastName })} />
                                     </td>
                                 </tr>
                                 {/* <tr>
@@ -132,10 +138,10 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
                     </div>
                     <div className="row mb-3">
                         <div className="col-6">
-                            <button type="button" className="btn btn-secondary col-3 contained m-1 float-end" onClick={() => cancel()}>Cancel</button>
+                            <button type="button" className="btn btn-secondary col-4 contained m-1 float-end" onClick={() => cancel()}>Cancel</button>
                         </div>
                         <div className="col-6">
-                            <button type="button" className="btn btn-success col-3 contained m-1 float-start" onClick={() => doneEditing()}>Save</button>
+                            <button type="button" className="btn btn-success col-4 contained m-1 float-start" onClick={() => doneEditing()}>Save</button>
                         </div>
                     </div>
                 </div>
@@ -144,16 +150,16 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
         {/* Viewing own profile (NOT EDITING) */}
         {currUser.username === loadedProfile.username && editMode === false &&
             <div className="container border-0 mt-5">
-                <div className="row bg-light">
-                    <img src="https://via.placeholder.com/300x300" className="float-start col-2 m-3 m-5" alt="" />
-                    <div className="col-9 float-start mt-5">
+                <div className="row bg-light pb-4">
+                    <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3 mt-5" alt="" />
+                    <div className="col-7 float-start mt-5">
                         <table className='table float-start'>
                             <thead>
-                                <th className="col-3 fs-3 mt-5 text-start">{loadedProfile.username}</th>
-                                {online && <th className="col-1"><CircleIcon sx={{background:'green'}} /></th>}
-                                {!online && <th className="col-1"><CircleIcon sx={{background:'red'}} /></th>}
+                                {online && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
+                                {!online && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
+                                <th className="float-start col-3 fs-3 mt-2 text-start">{loadedProfile.username}</th>
                                 <th className="col-1">
-                                    <button className="btn btn-light" onClick={() => startEditing()}>Edit Profile</button>
+                                    <button type="button" className="btn btn-light" onClick={() => startEditing()}>Edit Profile</button>
                                 </th>
                             </thead>
                             <tbody>
@@ -171,14 +177,31 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
         {/* Viewing profile besides your own */}
         {currUser.username !== loadedProfile.username &&
             <div className="container border-0 mt-5">
-                <div className="row bg-light">
-                    <img src="https://via.placeholder.com/300x300" className="float-start col-2 m-3 m-5" alt="" />
-                    <div className="col-9 float-start mt-5">
+                <div className="row bg-light pb-4">
+                    <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3 mt-5" alt="" />
+                    <div className="col-7 float-start mt-5">
                         <table className='table float-start'>
                             <thead>
-                                <th className="col-3 fs-3 mt-5 text-start">{loadedProfile.username}</th>
-                                {online && <th className="col-1"><CircleIcon sx={{background:'green'}} /></th>}
-                                {!online && <th className="col-1"><CircleIcon sx={{background:'red'}} /></th>}
+                                {online && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
+                                {!online && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
+                                <th className="float-start col-3 fs-3 mt-2 text-start">{loadedProfile.username}</th>
+                                {!friend && sentRequest && <th className="col-1 pb-2">
+                                    <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Add Friend </Button>
+                                </th>}
+                                {!friend && !sentRequest && <th className="col-1 pb-2">
+                                    <Button variant="contained" className="bg-success" onClick={() => console.log(" ")} endIcon={<Add />}>Add Friend </Button>
+                                </th>}
+                                {friend &&
+                                    <div className="float-end col-2 mb-1 mt-2">
+                                        <div className="clearfix p-0"></div>
+                                        <th className="col-1 rounded bg-success border-0 p-1">
+                                            <div className="bg-success text-white">
+                                                Friends <Check className='mb-1 m-1 mt-0' />
+                                            </div>
+                                        </th>
+                                    </div>
+                                }
+
                             </thead>
                             <tbody>
                                 <td className="col-3 fs-6 text-start">
