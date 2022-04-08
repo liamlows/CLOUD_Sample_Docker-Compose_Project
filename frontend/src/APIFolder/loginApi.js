@@ -69,5 +69,10 @@ export const getStatusByUsername = async (username) => {
     return res.data;
 }
 
+export const sendFriendRequest = async (username) => {
+    const res = await axios.post(`http://loacalhost:8000/api/friends/add`, username);
+    return res.data;
+}
+
 
 // export const 
