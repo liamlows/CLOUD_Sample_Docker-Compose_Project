@@ -101,7 +101,11 @@ function App() {
           {/* TODO: Account Settings (Probably later on) */}
 
 
-          <Route path="/users/:username/friends" element={<FriendsList currUser={currUser} setCurrUser={setCurrUser}/>} />
+          <Route path="/users/:username/friends" element={<FriendsList 
+            currUser={currUser} 
+            setCurrUser={setCurrUser} 
+            pages={loggedInPages}
+            settings={settings}/>} />
 
           <Route path="/users" element={<UserSearch 
             currUser={currUser} 
@@ -115,6 +119,7 @@ function App() {
             setCurrUser={x => setCurrUser(x)}
             pages={loggedInPages}
             settings={settings}/>} />
+            
           <Route path="/accounts/:username" element={<AccountInfo currUser={currUser} setCurrUser={x => setCurrUser(x)} />} />
         </Routes>
       </BrowserRouter>
