@@ -38,7 +38,7 @@ export const UserSearch = ({ currUser, setCurrUser}) => {
     }
 
     if (!profiles) {
-        getProfiles().then(response => setProfiles(response) && console.log("recieved users info"));
+        getProfiles().then(response => setProfiles(response));
         return <>Loading...</>
     }
 
