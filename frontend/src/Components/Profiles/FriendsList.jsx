@@ -2,22 +2,19 @@ import AddIcon from '@mui/icons-material/Add';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export const FriendsList = ({ currUser, setCurrUser, setLoadedUser }) => {
+export const FriendsList = ({ currUser, setCurrUser}) => {
 
     const navigate = useNavigate();
     const [friends, setFriends] = useState([]);
 
     const [username, setUsername] = useState(undefined);
 
-    const goToProfile = profile => {
-        setLoadedUser(profile);
-        // navigate(`/users/${profile.username}`);
-    }
-
     const addFriend = () => {
         // navigate(`/users/${currUser.username}/friends`);
     }
-
+    const goToProfile = (friend) => {
+        navigate(`/users/${friend.username}`);
+    }
     useEffect(() => {
         // getFriends(currUser.username).then(response => { setFriends(response))
     }, []);
@@ -34,16 +31,24 @@ export const FriendsList = ({ currUser, setCurrUser, setLoadedUser }) => {
             <div className='clearfix'></div>
         </div>
         <div className='border-top mb-3'></div>
-        {friends.length > 0 
+        {friends.length > 0
             && <table>
                 <thead>
-                    <tr>
-                        <th>
+                    {friends.map(friend => {
+                        <tr key={friend.username}>
+                            <td>{friend.username}</td>
+                            <td>{friend.firstName}</td>
+                            <td>{friend.lastName}</td>
+                            <td>
+                                <button type="button" 
+                                    className="btn btn-secondary" 
+                                    onClick={() => goToProfile(friend)}>View Profile</button>
+                                </td>
+                        </tr>
+                        })}
 
-                        </th>
-                    </tr>
                 </thead>
             </table>}
-            {friends.length === 0 && <h2>You have no friends</h2>}
+        {friends.length === 0 && <h2>You have no friends</h2>}
     </div>
 }
