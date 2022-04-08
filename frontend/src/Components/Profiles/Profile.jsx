@@ -1,4 +1,4 @@
-import { getAccountbyUsername, logout, updateAccountbyUsername } from "../../APIFolder/loginApi";
+import { getAccountbyUsername, getStatusByUsername, logout, updateAccountbyUsername } from "../../APIFolder/loginApi";
 import { TextField } from "../common";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";

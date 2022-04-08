@@ -62,6 +62,16 @@ async function createRole(roleType, schoolId, courseId){
 }
 
 
+async function updateLoginStatus(username) {
+    await pool.execute('UPDATE `accounts` SET `last_logged_in` = ?, `logged_in` = 1 WHERE `username` = ?',
+        [new Date(), username]);
+}
+
+async function updateLogoutStatus(username) {
+    await pool.execute('UPDATE `accounts` SET `logged_in` = 0 WHERE `username` = ?',
+        [username]);
+}
+
 // POST /account/register
 router.post("/api/account/register", async (req, res, next) => {
     let username = req.body.username;
@@ -194,6 +204,12 @@ router.post("/api/account/login", async (req, res, next) => {
     res.cookie('username', username);
     res.cookie('studentId', studentId);
 
+    try {
+        await updateLoginStatus(username);
+    } catch(error) {
+        return next(error);
+    }
+
     res.json({success: 1, error: "", username: username}).send();
 });
 
@@ -201,7 +217,17 @@ router.post("/api/account/login", async (req, res, next) => {
 // GET /account/logout
 router.get("/api/account/logout", async (req, res, next) => {
     // Clear the login session.
+
+    let username = req.session.username;
+
     res.cookie('username', "");
+
+    try {
+        await updateLogoutStatus(username);
+    } catch(error) {
+        return next(error);
+    }
+
     req.session.destroy((err) => {
         if(err) return next(err);
         res.status(200).send();
@@ -238,12 +264,32 @@ router.get("/api/users/", async (req, res, next) => {
     // Query DB for user
     let rows, fields;
     try{
-        [rows, fields] = await pool.execute('SELECT username, first_name, last_name, student_id FROM `account`');
+        [rows, fields] = await pool.execute('SELECT username, first_name, last_name, student_id FROM `accounts`');
     } catch(error){
         return next(error);
     }
 
     res.status(200).json(rows).send();
+});
+
+router.get("/api/users/:username/status/", async (req, res, next) => {
+    // Query DB for user
+    let rows, fields;
+    try{
+        [rows, fields] = await pool.execute(
+            'SELECT username, last_logged_in, logged_in FROM `accounts` WHERE `username` = ?',
+            [req.params.username]);
+    } catch(error){
+        return next(error);
+    }
+
+    if(rows.length === 0){
+        res.status(404).send();
+        return;
+    }
+
+    let user = rows[0];
+    res.status(200).json(user).send();
 });
 
 

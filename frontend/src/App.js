@@ -50,8 +50,9 @@ function App() {
 
   //Nav bar now made available from all views (at least thats the goal)
   const [loggedInPages] = useState([
+    { label: 'Dashboard', route: `/` },
     { label: 'Classes', route: `/classes` },
-    { label: 'Dashboard', route: `/` }
+    { label: 'Friends', route: `/users/:username/friends` },
   ]);
   const [basePages] = useState([
     { label: 'Info', route: `/info` },
