@@ -1,4 +1,4 @@
-import { accordionActionsClasses } from "@mui/material";
+import { accordionActionsClasses, Button } from "@mui/material";
 import { useEffect } from "react";
 import { useState } from "react"
 import { findDOMNode } from "react-dom";
@@ -6,6 +6,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { getProfiles } from "../../APIFolder/loginApi"
 import { TextField } from "../common";
 import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 
 export const UserSearch = ({ currUser, setCurrUser}) => {
@@ -70,7 +71,11 @@ export const UserSearch = ({ currUser, setCurrUser}) => {
                     <td>{profile.firstName}</td>
                     <td>{profile.lastName}</td>
                     <td className="ts-2">0</td>
-                    <td><button type="button" className="btn btn-secondary" onClick={() => goToProfile(profile)}>View Profile</button></td>
+                    <td><Button variant="contained" className="btn btn-secondary"  onClick={() => goToProfile(profile)}>Add Friend</Button></td>
+                    {/* Need to add functionality to disable this if already friends ^ */}
+
+                    <td><Button variant="contained" className="btn btn-secondary" endIcon={<ArrowForwardIcon/>} onClick={() => goToProfile(profile)}>View Profile</Button></td>
+                    
                 </tr>)}
             </tbody>
         </table>
