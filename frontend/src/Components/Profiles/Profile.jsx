@@ -8,6 +8,7 @@ import CircleIcon from '@mui/icons-material/Circle';
 import Check from "@mui/icons-material/Check";
 import Add from "@mui/icons-material/Add";
 import { Button } from "@mui/material";
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
 export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
 
@@ -176,41 +177,49 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
 
         {/* Viewing profile besides your own */}
         {currUser.username !== loadedProfile.username &&
-            <div className="container border-0 mt-5">
-                <div className="row bg-light pb-4">
-                    <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3 mt-5" alt="" />
-                    <div className="col-7 float-start mt-5">
-                        <table className='table float-start'>
-                            <thead>
-                                {online && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
-                                {!online && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
-                                <th className="float-start col-3 fs-3 mt-2 text-start">{loadedProfile.username}</th>
-                                {!friend && sentRequest && <th className="col-1 pb-2">
-                                    <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Add Friend </Button>
-                                </th>}
-                                {!friend && !sentRequest && <th className="col-1 pb-2">
-                                    <Button variant="contained" className="bg-success" onClick={() => console.log(" ")} endIcon={<Add />}>Add Friend </Button>
-                                </th>}
-                                {friend &&
-                                    <div className="float-end col-2 mb-1 mt-2">
-                                        <div className="clearfix p-0"></div>
-                                        <th className="col-1 rounded bg-success border-0 p-1">
-                                            <div className="bg-success text-white">
-                                                Friends <Check className='mb-1 m-1 mt-0' />
-                                            </div>
-                                        </th>
-                                    </div>
-                                }
+            <div>
+                <div className="row">
+                <div className="col-3 float-end">
+                    <Button variant="contained" className="m-3" onClick={() => navigate('/users')} startIcon={<KeyboardBackspaceIcon />}>Return to Search</Button>
+                </div>
+                </div>
+                <div className="clearfix p-0"></div>
+                <div className="container border-0 mt-3">
+                    <div className="row bg-light pb-4">
+                        <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3 mt-5" alt="" />
+                        <div className="col-7 float-start mt-5">
+                            <table className='table float-start'>
+                                <thead>
+                                    {online && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
+                                    {!online && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
+                                    <th className="float-start col-3 fs-3 mt-2 text-start">{loadedProfile.username}</th>
+                                    {!friend && sentRequest && <th className="col-1 pb-2">
+                                        <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Add Friend </Button>
+                                    </th>}
+                                    {!friend && !sentRequest && <th className="col-1 pb-2">
+                                        <Button variant="contained" className="bg-success" onClick={() => console.log(" ")} endIcon={<Add />}>Add Friend </Button>
+                                    </th>}
+                                    {friend &&
+                                        <div className="float-end col-2 mb-1 mt-2">
+                                            <div className="clearfix p-0"></div>
+                                            <th className="col-1 rounded bg-success border-0 p-1">
+                                                <div className="bg-success text-white">
+                                                    Friends <Check className='mb-1 m-1 mt-0' />
+                                                </div>
+                                            </th>
+                                        </div>
+                                    }
 
-                            </thead>
-                            <tbody>
-                                <td className="col-3 fs-6 text-start">
-                                    <span className="p-0 text-capitalize">{loadedProfile.firstName} </span><span className="p-0 text-capitalize" >{loadedProfile.lastName}</span>
-                                </td>
-                                {/* <h2>Email :</h2>
+                                </thead>
+                                <tbody>
+                                    <td className="col-3 fs-6 text-start">
+                                        <span className="p-0 text-capitalize">{loadedProfile.firstName} </span><span className="p-0 text-capitalize" >{loadedProfile.lastName}</span>
+                                    </td>
+                                    {/* <h2>Email :</h2>
                         <p>{account.email}</p> */}
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>}
