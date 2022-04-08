@@ -74,7 +74,7 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
                         setCurrUser('');
                     }
                 });
-            getStatusByUsername(username).then(status => setOnline(status));
+            getStatusByUsername(username).then(status => console.log(status) && setOnline(status));
         }
         else {
             setCurrUser('');
