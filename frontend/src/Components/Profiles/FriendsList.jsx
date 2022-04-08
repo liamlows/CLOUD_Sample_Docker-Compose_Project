@@ -1,8 +1,11 @@
 import AddIcon from '@mui/icons-material/Add';
+import { Button } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { logout } from '../../APIFolder/loginApi';
+import LoggedInResponsiveAppBar from '../common/LoggedInResponsiveAppBar';
 
-export const FriendsList = ({ currUser, setCurrUser}) => {
+export const FriendsList = ({ currUser, setCurrUser, pages, settings }) => {
 
     const navigate = useNavigate();
     const [friends, setFriends] = useState([]);
@@ -24,10 +27,34 @@ export const FriendsList = ({ currUser, setCurrUser}) => {
     //     return <>Loading...</>
     // }
 
+    const signOut = () => {
+        console.log("Logging out");
+        logout().then(() => setCurrUser(''));
+    }
+    const profileNav = () => {
+        navigate(`users/${currUser.username}`);
+    }
+    const accountNav = () => {
+        navigate(`accounts/${currUser.username}`);
+    }
+
     return <div>
+        <LoggedInResponsiveAppBar
+            pages={pages}
+            settings={settings}
+            signOut={() => signOut()}
+            username={currUser.username}
+            profileNav={() => profileNav()}
+            account={() => accountNav()} />
+
         <div className='container border-0 mb-3'>
             <h1 className='mt-3 col-6 float-start '>Friends List <span className='text-secondary'>(0)</span></h1>
-            <button type='button' className='btn btn-success float-end fs-4 col-3 m-3'><AddIcon sx={{ color: 'white' }} />Add Friend</button>
+            <Button variant="contained" 
+                className='bg-success float-end fs-4 col-3 m-3' 
+                onClick={() => navigate('/users')} 
+                endIcon={<AddIcon />}>
+                    Add Friend
+            </Button>
             <div className='clearfix'></div>
         </div>
         <div className='border-top mb-3'></div>
