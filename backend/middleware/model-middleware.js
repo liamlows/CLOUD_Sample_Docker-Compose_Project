@@ -1,5 +1,8 @@
+const Bid = require('../models/users');
+const Contract = require('../models/users');
+const Land = require('../models/users');
+const Review = require('../models/users');
 const User = require('../models/users');
-
 /**
  * This middleware function is meant to be registered BEFORE the route handlers (see index.js)
  * This sets up a connection to the database. We modify the request object by tacking on the
@@ -15,11 +18,17 @@ const createModelsMiddleware = async (req, res, next) => {
         land: new Land(DBQuery, disconnect),
         review: new Review(DBQuery, disconnect),
         user: new User(DBQuery, disconnect)
-
     }
+    next();
+}
+
+const disconnectFromDatababaseMiddleware = (req, res, next) => {
+    console.log('Disconnecting from the database');
+    req.disconnect();
     next();
 }
 
 module.exports = {
     createModelsMiddleware,
+    disconnectFromDatababaseMiddleware
 }
