@@ -11,6 +11,14 @@ const createModelsMiddleware = async (req, res, next) => {
     console.log('Creating models in middleware');
     req.models = {
         user: User,
+<<<<<<< Updated upstream
+=======
+        bid: new Bid(DBQuery, disconnect),
+        contract: new Contract(DBQuery, disconnect),
+        land: new Land(DBQuery, disconnect),
+        review: new Review(DBQuery, disconnect),
+        user: new User(DBQuery, disconnect)
+>>>>>>> Stashed changes
     }
     next();
 }
