@@ -9,7 +9,7 @@ import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 
-export const UserSearch = ({ currUser, setCurrUser}) => {
+export const UserSearch = ({ currUser, setCurrUser }) => {
 
     const navigate = useNavigate();
     // const [allProfiles, setProfiles] = useState(undefined);
@@ -26,15 +26,15 @@ export const UserSearch = ({ currUser, setCurrUser}) => {
         navigate(`/users/${currUser.username}/friends`);
     }
 
-    useEffect(() => {}, [username]);
+    useEffect(() => { }, [username]);
 
     const find = profile => {
         let x = profile.username
         // console.log(typeof(x))
-        if(x.search(username) !==-1){return true;}
-        else{return false;}
+        if (x.search(username) !== -1) { return true; }
+        else { return false; }
 
-        
+
         // console.log(x.search(username));
     }
 
@@ -66,16 +66,29 @@ export const UserSearch = ({ currUser, setCurrUser}) => {
             </thead>
             <tbody>
                 {profiles && profiles.map(profile => find(profile) && <tr key={profile.username} className="container">
-                    
+
                     <td>{profile.username}</td>
                     <td>{profile.firstName}</td>
                     <td>{profile.lastName}</td>
                     <td className="ts-2">0</td>
-                    <td><Button variant="contained" className="btn btn-secondary"  onClick={() => goToProfile(profile)}>Add Friend</Button></td>
+                    <td>
+                        <Button variant="contained"
+                            className="btn btn-secondary"
+                            onClick={() => goToProfile(profile)}>
+                            Add Friend
+                        </Button>
+                    </td>
                     {/* Need to add functionality to disable this if already friends ^ */}
 
-                    <td><Button variant="contained" className="btn btn-secondary" endIcon={<ArrowForwardIcon/>} onClick={() => goToProfile(profile)}>View Profile</Button></td>
-                    
+                    <td>
+                        <Button variant="contained"
+                            className="btn btn-secondary"
+                            endIcon={<ArrowForwardIcon />}
+                            onClick={() => goToProfile(profile)}>
+                            View Profile
+                        </Button>
+                    </td>
+
                 </tr>)}
             </tbody>
         </table>
