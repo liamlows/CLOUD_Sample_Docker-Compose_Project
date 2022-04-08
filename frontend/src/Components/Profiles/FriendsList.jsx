@@ -2,13 +2,13 @@ import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { logout } from '../../APIFolder/loginApi';
+import { getFriends, logout } from '../../APIFolder/loginApi';
 import LoggedInResponsiveAppBar from '../common/LoggedInResponsiveAppBar';
 
 export const FriendsList = ({ currUser, setCurrUser, pages, settings }) => {
 
     const navigate = useNavigate();
-    const [friends, setFriends] = useState([]);
+    const [friends, setFriends] = useState(undefined);
 
     const [username, setUsername] = useState(undefined);
 
@@ -19,13 +19,12 @@ export const FriendsList = ({ currUser, setCurrUser, pages, settings }) => {
         navigate(`/users/${friend.username}`);
     }
     useEffect(() => {
-        // getFriends(currUser.username).then(response => { setFriends(response))
     }, []);
 
-    // if (!friends) {
-    //     getProfiles().then(response => { setProfiles(response) })
-    //     return <>Loading...</>
-    // }
+    if (!friends) {
+        getFriends().then(response => {setFriends(response)});
+        return <>Loading...</>
+    }
 
     const signOut = () => {
         console.log("Logging out");
