@@ -3,10 +3,11 @@ import { useEffect } from "react";
 import { useState } from "react"
 import { findDOMNode } from "react-dom";
 import { Navigate, useNavigate } from "react-router-dom";
-import { getProfiles } from "../../APIFolder/loginApi"
+import { getFriendRequests, getProfiles, sendFriendRequest } from "../../APIFolder/loginApi"
 import { TextField } from "../common";
 import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import Add from "@mui/icons-material/Add";
 
 
 export const UserSearch = ({ currUser, setCurrUser }) => {
@@ -39,7 +40,29 @@ export const UserSearch = ({ currUser, setCurrUser }) => {
     }
 
     if (!profiles) {
-        getProfiles().then(response => setProfiles(response));
+        getProfiles().then(response => setProfiles(response)).then(() => {
+            const friendRequests = getFriendRequests();
+            for (const profile in profiles) {
+                console.log(profile);
+                for (const request in friendRequests) {
+                    if (request.requester_id === currUser.id || request.requeste_id === currUser.id) {
+                        if (request.requester_id === currUser.id && (request.status === -1 || request.status === 0)) {
+                            profile.status = 1;
+                        }
+                        else if (request.requested_id === currUser.id && request.status === -1) {
+                            profile.status = 2;
+                        }
+                        else if (request.status === 1) {
+                            profile.status = 3;
+                        }
+                    }
+                    else {
+                        profile.status = 0;
+                    }
+                }
+            }
+        }
+        );
         return <>Loading...</>
     }
 
@@ -65,19 +88,31 @@ export const UserSearch = ({ currUser, setCurrUser }) => {
                 </tr>
             </thead>
             <tbody>
-                {profiles && profiles.map(profile => find(profile) && <tr key={profile.username} className="container">
+                {profiles && profiles.map(profile => !profile.status === 3 && find(profile) && <tr key={profile.username} className="container">
 
                     <td>{profile.username}</td>
                     <td>{profile.firstName}</td>
                     <td>{profile.lastName}</td>
                     <td className="ts-2">0</td>
-                    <td>
+                    {/* <td>
                         <Button variant="contained"
                             className="btn btn-secondary"
-                            onClick={() => goToProfile(profile)}>
+                            onClick={() => sendFriendRequest(profile.id)}>
                             Add Friend
                         </Button>
-                    </td>
+                    </td> */}
+
+
+                    {profile.status === 2 && <td className="col-1 pb-2">
+                        <Button variant="contained" className="primary" endIcon={<Add />}>Accept Request</Button>
+                    </td>}
+                    {profile.status === 1 && <td className="col-1 pb-2">
+                        <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Add Friend </Button>
+                    </td>}
+                    {profile.status=== 0 && <td className="col-1 pb-2">
+                        <Button variant="contained" className="bg-success" onClick={() => sendFriendRequest(profile.id)} endIcon={<Add />}>Add Friend </Button>
+                    </td>}
+
                     {/* Need to add functionality to disable this if already friends ^ */}
 
                     <td>
