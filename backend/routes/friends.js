@@ -83,12 +83,17 @@ POST /api/friends/requests/
 
 Creates a new friend request if possible. Requires being logged in.
 */
-
 router.post("/requests/", async (req, res, next) => {
     let targetId = req.body.targetId;
     if(targetId === undefined) {
         res.status(400).send();
-        return next();
+        return;
+    }
+
+    // Ensure we cannot friend ourselves.
+    if(targetId === req.session.accountId){
+        res.status(400).send();
+        return;
     }
 
     // Check if we already have an outgoing request.
@@ -134,8 +139,6 @@ Accepts or denies the friend request, where otherAccountId is the other user tha
 Requires being logged in.
 
 */
-
-
 router.put("/requests/:otherId", async (req, res, next) => {
     let otherId = req.params.otherId;
     let accepted = req.body.status;
