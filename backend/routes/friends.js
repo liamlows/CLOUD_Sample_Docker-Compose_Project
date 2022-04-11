@@ -194,4 +194,33 @@ router.put("/requests/:otherId", async (req, res, next) => {
     return res.status(200).send();
 });
 
+/*
+DELETE /api/friends/:friendId
+ */
+router.delete("/:friendId", async (req, res, next) => {
+    let userId = req.session.accountId;
+    let friendId = req.params.friendId;
+
+    let friend_a;
+    let friend_b;
+    if(userId < friendId){
+        friend_a = userId;
+        friend_b = friendId;
+    }
+    else {
+        friend_a = friendId;
+        friend_b = userId;
+    }
+
+    try {
+        await pool.execute(
+            'DELETE FROM `friendships` WHERE (`friend_a` = ? AND `friend_b` = ?)',
+            [friend_a, friend_b]);
+    } catch (error) {
+        return next(error);
+    }
+
+    res.status(200).send();
+});
+
 module.exports = router;
