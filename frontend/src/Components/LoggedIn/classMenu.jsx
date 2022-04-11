@@ -1,4 +1,4 @@
-import classTable from "./classTable";
+import {ClassTable} from "./classTable";
 export const classMenu = () => {
 
     /**interface Column {
@@ -46,7 +46,7 @@ const columns = [
     //TODO: put nav bar in, data intergration
     return <div>
         
-        <classTable rows = {rows} columns = {columns}></classTable>
+        <ClassTable rows = {rows} columns = {columns}/>
      </div>
 };
 
