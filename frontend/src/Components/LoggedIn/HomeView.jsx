@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 import { useState } from "react";
 import { getAccountbyUsername, logout } from "../../APIFolder/loginApi";
 import { useEffect } from "react";
+import {ClassMenu} from "classMenu"
 
 export const HomeView = ({ currUser, setCurrUser, pages, settings}) => {
 
@@ -47,5 +48,6 @@ export const HomeView = ({ currUser, setCurrUser, pages, settings}) => {
             profileNav={() => profileNav()} 
             account={() => accountNav()} />
         {/* <h1 className="mb-4">Welcome {account.firstName}</h1> */}
+        <ClassMenu />
     </div>
 }
