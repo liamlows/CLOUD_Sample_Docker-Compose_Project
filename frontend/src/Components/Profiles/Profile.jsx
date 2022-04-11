@@ -1,4 +1,4 @@
-import { getAccountbyUsername, getStatusByUsername, logout, updateAccountbyUsername } from "../../APIFolder/loginApi";
+import { getAccountbyUsername, getFriendRequests, getStatusByUsername, logout, updateAccountbyUsername } from "../../APIFolder/loginApi";
 import { TextField } from "../common";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
@@ -27,7 +27,20 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
     // const username = Cookies.get("username");
 
     useEffect(() => {
-        getAccountbyUsername(location.pathname.substring(7, location.pathname.length)).then(response => setLoadedProfile(response))
+        getAccountbyUsername(location.pathname.substring(7, location.pathname.length))
+        .then(response => setLoadedProfile(response))
+        .then(() => {
+            getFriendRequests().then( (requests) => {
+                for(const request in requests){
+                    if (request.requester_id === currUser.id || request.requeste_id === currUser.id) {
+                        if(request.status === 1){setFriend(1); break;}
+                        if(request.status===0){setSentRequest(1); break;}
+                        else if(request.requester_id === currUser.id && request.status === -1){setSentRequest(1); setRecieveRequest(0); break;}
+                        else if(request.requested_id === currUser.id && request.status === -1){setSentRequest(0); setRecieveRequest(1); break;}
+                    }
+                }
+            })
+        })
     }, [editMode]);
 
     if (!loadedProfile) {
