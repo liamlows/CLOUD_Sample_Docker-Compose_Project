@@ -21,7 +21,8 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
     const [loadedProfile, setLoadedProfile] = useState('');
     const [online, setOnline] = useState('');
     const [friend, setFriend] = useState(false);
-    const [sentRequest, setRequest] = useState(false);
+    const [sentRequest, setSentRequest] = useState(false);
+    const [recieveRequest, setRecieveRequest] = useState(false);
 
     // const username = Cookies.get("username");
 
@@ -193,6 +194,9 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
                                     {online && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
                                     {!online && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
                                     <th className="float-start col-3 fs-3 mt-2 text-start">{loadedProfile.username}</th>
+                                    {!friend && recieveRequest && <th className="col-1 pb-2">
+                                        <Button variant="contained" className="primary" endIcon={<Add />}>Accept Request</Button>
+                                    </th>}
                                     {!friend && sentRequest && <th className="col-1 pb-2">
                                         <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Add Friend </Button>
                                     </th>}

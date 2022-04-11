@@ -79,7 +79,7 @@ export const FriendsList = ({ currUser, setCurrUser, pages, settings }) => {
                 className='bg-success float-end fs-4 col-3 m-3'
                 onClick={() => navigate('/users')}
                 endIcon={<AddIcon />}>
-                Add Friend
+                Add A Friend
             </Button>
             <div className='clearfix'></div>
         </div>
