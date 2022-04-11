@@ -147,6 +147,20 @@ router.put("/requests/:otherId", async (req, res, next) => {
         return next();
     }
 
+    // Check if the friend request has already been accepted or denied.
+    try {
+        let friend_request = await findRequest(otherId, req.session.accountId);
+
+        if(friend_request.status !== -1){
+            res.status(403).send();
+            return next();
+        }
+
+    } catch (error) {
+        return next(error);
+    }
+
+
     try {
         // Update the request.
         await pool.execute(
