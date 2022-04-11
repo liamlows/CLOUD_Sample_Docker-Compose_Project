@@ -73,10 +73,10 @@ export const sendFriendRequest = async (id) => {
     return res.data;
 }
 
-export const sendFriendRequests = async () => {
-    const res = await axios.post(`http://loacalhost:8000/api/friends/requests`);
-    return res.data;
-}
+// export const sendFriendRequests = async () => {
+//     const res = await axios.post(`http://loacalhost:8000/api/friends/requests`);
+//     return res.data;
+// }
 
 export const getFriends = async () => {
     const res = await axios.post(`http://loacalhost:8000/api/friends`);
