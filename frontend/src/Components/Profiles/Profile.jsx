@@ -1,4 +1,4 @@
-import { getAccountbyUsername, getFriendRequests, getStatusByUsername, logout, updateAccountbyUsername } from "../../APIFolder/loginApi";
+import { getAccountbyUsername, getFriendRequests, getStatusByUsername, logout, sendFriendRequest, updateAccountbyUsername } from "../../APIFolder/loginApi";
 import { TextField } from "../common";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
@@ -10,7 +10,7 @@ import Add from "@mui/icons-material/Add";
 import { Button } from "@mui/material";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
-export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
+export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated}) => {
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -41,7 +41,7 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
                 }
             })
         })
-    }, [editMode]);
+    }, [editMode, sentRequest, friend, recieveRequest]);
 
     if (!loadedProfile) {
         // get the account from the username
@@ -65,7 +65,10 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
     }
     const signOut = () => {
         console.log("Logging out");
-        logout().then(() => setCurrUser(''));
+        logout().then(() => {
+            navigate('/');
+            setCurrUser('');
+        });
     }
     const profileNav = () => {
         navigate(`users/${currUser.username}`);
@@ -92,10 +95,16 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
         }
         else {
             setCurrUser('');
-            window.alert("Please sign in to view profiles");
+            setNavigated(true);
             navigate('/');
         }
 
+    }
+
+    const sendFriendRequestFunc = () => {
+        console.log("sending friend request");
+        sendFriendRequest(loadedProfile.id);
+        setSentRequest(1);
     }
 
 
@@ -214,7 +223,7 @@ export const Profile = ({ currUser, setCurrUser, pages, settings }) => {
                                         <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Add Friend </Button>
                                     </th>}
                                     {!friend && !sentRequest && <th className="col-1 pb-2">
-                                        <Button variant="contained" className="bg-success" onClick={() => console.log(" ")} endIcon={<Add />}>Add Friend </Button>
+                                        <Button variant="contained" className="bg-success" onClick={() => sendFriendRequestFunc()} endIcon={<Add />}>Add Friend </Button>
                                     </th>}
                                     {friend &&
                                         <div className="float-end col-2 mb-1 mt-2">
