@@ -60,7 +60,7 @@ export const getProfiles = async () => {
 }
 
 export const getStatusByUsername = async (username) => {
-    const res = await axios.get(`http://localhost:8000/api/users/${username}`);
+    const res = await axios.get(`http://localhost:8000/api/users/${username}/status`);
     if(res.status !== 200){
         console.log("Couldn't find user status");
         return null;
