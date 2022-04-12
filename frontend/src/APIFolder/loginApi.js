@@ -89,6 +89,6 @@ export const getFriendRequests = async () => {
     return res.data;
 }
 
-export const acceptOrDenyFriendRequest = async (id, status) => {
+export const handleFriendRequest = async (id, status) => {
     const res = await axios.put(`http://loacalhost:8000/api/friends/requests/${id}`, {status: status});
 }
