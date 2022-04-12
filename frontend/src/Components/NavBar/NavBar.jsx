@@ -15,8 +15,10 @@ import './NavBar.css';
 import { Link, NavLink } from 'react-router-dom';
 
 const pages = [
+  { display: "Dashboard", path: "/dashboard" },
   { display: "Feed", path: "/feed" },
-  { display: "My Farm", path: "/myfarm" },];
+  { display: "My Farm", path: "/myfarm" },
+];
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
@@ -81,9 +83,9 @@ export const NavBar = () => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center"> <NavLink to={page.path} activeClassName="text-dark">{page.display}</NavLink></Typography>
+              {pages.map((page,index) => (
+                <MenuItem key={index} onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center"> <NavLink to={page.path} >{page.display}</NavLink></Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -97,12 +99,12 @@ export const NavBar = () => {
             LOGO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <NavLink to={page.path} activeClassName="navbar-selected">
-                <Button
-                  key={page}
+            {pages.map((page, index) => (
+              <NavLink key={index} to={page.path} >
+                <Button 
+                  
                   onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
+                  sx={{ my: 2, color: 'inherit', display: 'block' }}
                 >
                   {page.display}
                 </Button>

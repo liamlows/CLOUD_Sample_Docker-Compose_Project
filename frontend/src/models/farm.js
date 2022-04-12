@@ -1,8 +1,8 @@
-export class item {
+export class farm {
     constructor(name, description, image, farmId, ownerId, dateFounded, items){
-        this.name = name;
-        this.description = description;
-        this.image = image;
+        this.farmName = name;
+        this.farmDescription = description;
+        this.farmImage = image;
         this.items = items;
         this.farmId = farmId;
         this.ownerId = ownerId;

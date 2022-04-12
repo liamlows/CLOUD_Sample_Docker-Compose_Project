@@ -6,7 +6,7 @@ import {
   Route,
   useParams,
   Navigate
-} from "react-router-dom";
+} from 'react-router-dom';
 
 import axios from 'axios';
 import { NavBar } from './Components/NavBar/NavBar';
@@ -17,18 +17,23 @@ import FarmPage from './Components/FarmPage/FarmPage';
 import { UserContext } from './Components/userContext';
 import { ProtectedRoute } from './Components/ProtectedRoute';
 import { SignUp } from './Components/SignUp/SignUp';
+import Dashboard from './Components/Dashboard/Dashboard';
 
 // React functional component
 function App () {
   // state for storage of the information on the webpage of forms and list, uses hooks
-  const[user,setUser]=useState({user: "token"});
+  const[user,setUser]=useState({user: {
+    userToken:"Token",
+    isFarmer: true,
+    username: "bob"
+  }});
 
   const logout=()=>{
-    console.log("logout");
+    console.log('logout');
   }
   useEffect(() => {
 
-    // let use = window.localStorage.getItem("userData");
+    // let use = window.localStorage.getItem('userData');
 
     // if(uer){
     //   setUser({userData: user, logout: logout});
@@ -41,16 +46,19 @@ function App () {
       <Router>
               <NavBar />
               <Routes>
-                  <Route exact path="/" element={<Home/>}/>
-                  <Route path="/login" element={<Login/>}/>
-                  <Route path="/signup" element={<SignUp/>}/>
+                  <Route exact path='/' element={<Home/>}/>
+                  <Route path='/dashboard' element={<ProtectedRoute/>}>
+                      <Route path='/dashboard' element={<Dashboard/>}/>
+                  </Route>
+                  <Route path='/login' element={<Login/>}/>
+                  <Route path='/signup' element={<SignUp/>}/>
                   <Route path='/feed' element={<ProtectedRoute/>}>
-                      <Route path="/feed" element={<Feed/>}/>
+                      <Route path='/feed' element={<Feed/>}/>
                   </Route>
                   <Route path='/farm/:id' element={<ProtectedRoute/>}>
                     <Route path='/farm/:id' element={<FarmPage/>}/>
                   </Route>
-                  <Route path='*' element={<Navigate to="/" replace />}/>
+                  <Route path='*' element={<Navigate to='/' replace />}/>
               </Routes>
         </Router>
     </UserContext.Provider>

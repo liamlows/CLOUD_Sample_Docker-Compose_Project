@@ -2,8 +2,8 @@
     height: 100px;
 }
 #item-card-description{
-    height: 2rem;
     
+    flex-grow: 1;
     text-overflow: ellipsis;
     width: 200px;
     display: block;

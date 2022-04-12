@@ -4,7 +4,7 @@
 #farm-img{
 
 }
-@media screen and (max-width:600px) {
+@media screen and (max-width:599px) {
     .farm-description {
         display: none;
     }

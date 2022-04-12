@@ -1,0 +1,27 @@
+#feed{
+    display:flex;
+}
+.feed-search-container{
+   background-color: rgba(255, 200, 200, 0.281);
+   padding-top: 8px;
+   padding-left: 8px;
+   padding-right: 8px;
+   max-width: 30%;
+}
+.farm-page-farms{
+    margin-left: 4px;
+}
+@media screen and (max-width:900px) {
+   
+    #feed{
+        display:inline;
+        grid-template-columns: none;
+        
+    }
+    .feed-search-container{
+        max-width: 100%;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+}
