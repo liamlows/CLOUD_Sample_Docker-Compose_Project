@@ -41,6 +41,7 @@ export const FriendsList = ({ currUser, setCurrUser, pages, settings, setNavigat
                 navigate('/');
             }
         }
+        getFriends().then(response => { setFriends(response) });
     }, [currUser]);
 
     if (!friends) {
