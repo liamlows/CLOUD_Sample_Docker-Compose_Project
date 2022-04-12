@@ -3,14 +3,15 @@ import { useEffect } from "react";
 import { useState } from "react"
 import { findDOMNode } from "react-dom";
 import { Navigate, useNavigate } from "react-router-dom";
-import { getFriendRequests, getProfiles, sendFriendRequest } from "../../APIFolder/loginApi"
+import { getAccountbyUsername, getFriendRequests, getProfiles, logout, sendFriendRequest } from "../../APIFolder/loginApi"
 import { TextField } from "../common";
 import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Add from "@mui/icons-material/Add";
+import Cookies from "js-cookie";
 
 
-export const UserSearch = ({ currUser, setCurrUser }) => {
+export const UserSearch = ({ currUser, setCurrUser, pages, settings, setNavigated }) => {
 
     const navigate = useNavigate();
     // const [allProfiles, setProfiles] = useState(undefined);
@@ -27,7 +28,40 @@ export const UserSearch = ({ currUser, setCurrUser }) => {
         navigate(`/users/${currUser.username}/friends`);
     }
 
-    useEffect(() => { }, [username]);
+    useEffect(() => {
+        if (!currUser) {
+            let username = Cookies.get("username");
+            if (username) {
+                getAccountbyUsername(username)
+                    .then(account => {
+                        if (account) {
+                            setCurrUser(account);
+                        }
+                        else {
+                            console.log("User is null after request");
+                            setCurrUser('');
+                        }
+                    });
+            }
+            else {
+                setCurrUser('');
+                window.alert("Please sign in to view friends");
+                navigate('/');
+            }
+        }
+    }, [currUser]);  
+
+    const signOut = () => {
+        console.log("Logging out");
+        logout().then(() => setCurrUser(''));
+        navigate('/');
+    }
+    const profileNav = () => {
+        navigate(`users/${currUser.username}`);
+    }
+    const accountNav = () => {
+        navigate(`accounts/${currUser.username}`);
+    }
 
     const find = profile => {
         let x = profile.username
@@ -67,7 +101,14 @@ export const UserSearch = ({ currUser, setCurrUser }) => {
     }
 
     return <div>
-        {/* <LoggedInResponsiveAppBar/> To implement */}
+        <LoggedInResponsiveAppBar
+            pages={pages}
+            settings={settings}
+            signOut={() => signOut()}
+            username={currUser.username}
+            profileNav={() => profileNav()}
+            account={() => accountNav()} />
+
         <div className="container border-0 mt-3">
             <button type="button" className="float-end btn btn-success mt-3" onClick={goToFriendsList}>Friends List</button>
             <div className="container border-0 col-3 float-start">
