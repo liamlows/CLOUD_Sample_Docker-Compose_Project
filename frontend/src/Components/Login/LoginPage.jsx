@@ -6,13 +6,16 @@ import Cookies from 'js-cookie';
 import { getAccountbyUsername, logIntoAccount } from "../../APIFolder/loginApi";
 
 
-export const LoginPage = ({ currUser, setCurrUser }) => {
+export const LoginPage = ({ currUser, setCurrUser, setNavigated}) => {
     const navigate = useNavigate();
     const checkIfLoginSucc = (response) => {
         if (response.success === 1) {
             getAccountbyUsername(response.username)
                 .then(user => user && setCurrUser(user))
-                .then(() => navigate('/'));
+                .then(() => {
+                    setNavigated(false);
+                    navigate('/')
+                });
 
         } else {
             window.alert("Password for given username is incorrect");

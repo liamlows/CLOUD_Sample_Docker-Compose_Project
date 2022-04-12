@@ -30,6 +30,7 @@ function App() {
     let username = Cookies.get("username");
 
     if (username) {
+      setNavigated(false);
       getAccountbyUsername(username)
         .then(account => {
           if (account) {
@@ -100,7 +101,8 @@ function App() {
           {/* TODO: Make home page nicer and more professional. */}
           <Route path='/login' element={<LoginPage 
             currUser={currUser} 
-            setCurrUser={x => setCurrUser(x)} />} />
+            setCurrUser={x => setCurrUser(x)} 
+            setNavigated={x => setNavigated(x)}/>} />
 
           {/* <Route path='/loggedIn' element={<LoggedIn />} /> */}
           {/* TODO: Classes tab */}
@@ -129,7 +131,8 @@ function App() {
 
           <Route path='/signUp' element={<SignUpPage 
             currUser={currUser} 
-            setCurrUser={x => setCurrUser(x)} />} />
+            setCurrUser={x => setCurrUser(x)} 
+            setNavigated={x => setNavigated(x)}/>} />
 
           <Route path="/users/:username" element={<Profile 
             currUser={currUser} 
