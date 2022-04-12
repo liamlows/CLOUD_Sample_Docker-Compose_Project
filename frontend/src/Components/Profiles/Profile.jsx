@@ -10,7 +10,7 @@ import Add from "@mui/icons-material/Add";
 import { Button } from "@mui/material";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
-export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated}) => {
+export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated }) => {
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -19,28 +19,42 @@ export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated})
     //Doesn't currently know what info to get from the database
     const [account, setAccount] = useState('');
     const [loadedProfile, setLoadedProfile] = useState('');
-    const [online, setOnline] = useState('');
+    
     const [friend, setFriend] = useState(false);
     const [sentRequest, setSentRequest] = useState(false);
     const [recieveRequest, setRecieveRequest] = useState(false);
 
-    // const username = Cookies.get("username");
+    const username = Cookies.get("username");
+    const [online, setOnline] = useState(undefined);
+
+    const changeLoadedProfile = (delta) => { setLoadedProfile({ ...loadedProfile, ...delta }) }
 
     useEffect(() => {
+        getStatusByUsername(username).then((status) => { setOnline(status.logged_in); console.log("online = "+online) })
         getAccountbyUsername(location.pathname.substring(7, location.pathname.length))
-        .then(response => setLoadedProfile(response))
-        .then(() => {
-            getFriendRequests().then( (requests) => {
-                for(const request in requests){
-                    if (request.requester_id === currUser.id || request.requeste_id === currUser.id) {
-                        if(request.status === 1){setFriend(1); break;}
-                        if(request.status===0){setSentRequest(1); break;}
-                        else if(request.requester_id === currUser.id && request.status === -1){setSentRequest(1); setRecieveRequest(0); break;}
-                        else if(request.requested_id === currUser.id && request.status === -1){setSentRequest(0); setRecieveRequest(1); break;}
-                    }
-                }
+            .then(response => {
+                // console.log("Response = ");
+                // console.log(response);
+                changeLoadedProfile({ ...response });
+                // console.log(loadedProfile)
+
             })
-        })
+            .then(() => {
+
+                getFriendRequests().then((requests) => {
+                    console.log(requests);
+                    for (const request in requests) {
+                        console.log(request)
+                        if (request.requester_id === currUser.id || request.requeste_id === currUser.id) {
+                            if (request.status === 1) { setFriend(1); break; }
+                            if (request.status === 0) { setSentRequest(1); break; }
+                            else if (request.requester_id === currUser.id && request.status === -1) { setSentRequest(1); setRecieveRequest(0); break; }
+                            else if (request.requested_id === currUser.id && request.status === -1) { setSentRequest(0); setRecieveRequest(1); break; }
+                        }
+                    }
+                })
+            })
+        
     }, [editMode, sentRequest, friend, recieveRequest]);
 
     if (!loadedProfile) {
@@ -53,7 +67,7 @@ export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated})
     }
     const doneEditing = () => {
 
-        if (account.firstName && account.lastName) {
+        if (account.first_name && account.last_name) {
             updateAccountbyUsername(account).then(setEditMode(false));
         }
         else {
@@ -91,7 +105,7 @@ export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated})
                         setCurrUser('');
                     }
                 });
-            getStatusByUsername(username).then(status => console.log(status) && setOnline(status));
+                
         }
         else {
             setCurrUser('');
@@ -109,6 +123,7 @@ export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated})
 
 
     const changeAccount = delta => setAccount({ ...account, ...delta });
+
     // Basically check if user is the same user as the loaded profile.
     // If so then allow them to edit with the edit button at the end (this edit button will update the database once done)
     // If not then display the profile without the edit buttons.
@@ -132,8 +147,8 @@ export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated})
                     <div className="col-7 float-start mt-5">
                         <table className='table float-start'>
                             <thead>
-                                {online && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
-                                {!online && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
+                                {online=== 1 && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
+                                {online=== 0 && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
                                 <th className="float-start col-3 fs-3 mt-2 text-start"><span className="text-start p-0">{loadedProfile.username}</span></th>
 
                                 <th className="col-1">
@@ -143,13 +158,13 @@ export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated})
                             <tbody>
                                 <tr className="border-0">
                                     <td className="col-3 fs-6 text-start border-0">
-                                        <TextField label="First Name :" value={account.firstName} setValue={firstName => changeAccount({ firstName })} />
+                                        <TextField label="First Name :" value={account.first_name} setValue={first_name => changeAccount({ first_name })} />
                                     </td>
                                 </tr>
                                 <tr className="border-0">
                                     <td className="col-3 fs-6 text-start border-0">
 
-                                        <TextField label="Last Name :" value={account.lastName} setValue={lastName => changeAccount({ lastName })} />
+                                        <TextField label="Last Name :" value={account.last_name} setValue={last_name => changeAccount({ last_name })} />
                                     </td>
                                 </tr>
                                 {/* <tr>
@@ -179,8 +194,8 @@ export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated})
                     <div className="col-7 float-start mt-5">
                         <table className='table float-start'>
                             <thead>
-                                {online && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
-                                {!online && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
+                                {online=== 1 && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
+                                {online=== 0 && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
                                 <th className="float-start col-3 fs-3 mt-2 text-start">{loadedProfile.username}</th>
                                 <th className="col-1">
                                     <button type="button" className="btn btn-light" onClick={() => startEditing()}>Edit Profile</button>
@@ -188,7 +203,7 @@ export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated})
                             </thead>
                             <tbody>
                                 <td className="col-3 fs-6 text-start">
-                                    <span className="p-0 text-capitalize">{loadedProfile.firstName} </span><span className="p-0 text-capitalize" >{loadedProfile.lastName}</span>
+                                    <span className="p-0 text-capitalize">{loadedProfile.first_name} </span><span className="p-0 text-capitalize" >{loadedProfile.last_name}</span>
                                 </td>
                                 {/* <h2>Email :</h2>
                             <p>{account.email}</p> */}
@@ -202,9 +217,9 @@ export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated})
         {currUser.username !== loadedProfile.username &&
             <div>
                 <div className="row">
-                <div className="col-3 float-end">
-                    <Button variant="contained" className="m-3" onClick={() => navigate('/users')} startIcon={<KeyboardBackspaceIcon />}>Return to Search</Button>
-                </div>
+                    <div className="col-3 float-end">
+                        <Button variant="contained" className="m-3" onClick={() => navigate('/users')} startIcon={<KeyboardBackspaceIcon />}>Return to Search</Button>
+                    </div>
                 </div>
                 <div className="clearfix p-0"></div>
                 <div className="container border-0 mt-3">
@@ -213,8 +228,8 @@ export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated})
                         <div className="col-7 float-start mt-5">
                             <table className='table float-start'>
                                 <thead>
-                                    {online && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
-                                    {!online && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
+                                    {online=== 1 && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
+                                    {online=== 0 && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
                                     <th className="float-start col-3 fs-3 mt-2 text-start">{loadedProfile.username}</th>
                                     {!friend && recieveRequest && <th className="col-1 pb-2">
                                         <Button variant="contained" className="primary" endIcon={<Add />}>Accept Request</Button>
@@ -239,7 +254,7 @@ export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated})
                                 </thead>
                                 <tbody>
                                     <td className="col-3 fs-6 text-start">
-                                        <span className="p-0 text-capitalize">{loadedProfile.firstName} </span><span className="p-0 text-capitalize" >{loadedProfile.lastName}</span>
+                                        <span className="p-0 text-capitalize">{loadedProfile.first_name} </span><span className="p-0 text-capitalize" >{loadedProfile.last_name}</span>
                                     </td>
                                     {/* <h2>Email :</h2>
                         <p>{account.email}</p> */}
