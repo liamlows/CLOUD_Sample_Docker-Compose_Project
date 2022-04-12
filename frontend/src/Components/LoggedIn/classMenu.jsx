@@ -1,4 +1,4 @@
-import {ClassTable} from "./stickyTable";
+import {StickyTable} from "./stickyTable";
 export const ClassMenu = () => {
     /**interface Column {
     id: 'Class' | 'ID' | 'Professor' | 'Days' | 'Time';
