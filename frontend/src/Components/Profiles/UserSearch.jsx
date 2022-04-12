@@ -45,16 +45,18 @@ export const UserSearch = ({ currUser, setCurrUser, pages, settings, setNavigate
             }
             else {
                 setCurrUser('');
-                window.alert("Please sign in to view friends");
+                setNavigated(true);
                 navigate('/');
             }
         }
-    }, [currUser]);  
+    }, [currUser]);
 
     const signOut = () => {
         console.log("Logging out");
-        logout().then(() => setCurrUser(''));
-        navigate('/');
+        logout().then(() => {
+            navigate('/');
+            setCurrUser('');
+        });
     }
     const profileNav = () => {
         navigate(`users/${currUser.username}`);
@@ -150,7 +152,7 @@ export const UserSearch = ({ currUser, setCurrUser, pages, settings, setNavigate
                     {profile.status === 1 && <td className="col-1 pb-2">
                         <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Add Friend </Button>
                     </td>}
-                    {profile.status=== 0 && <td className="col-1 pb-2">
+                    {profile.status === 0 && <td className="col-1 pb-2">
                         <Button variant="contained" className="bg-success" onClick={() => sendFriendRequest(profile.id)} endIcon={<Add />}>Add Friend </Button>
                     </td>}
 

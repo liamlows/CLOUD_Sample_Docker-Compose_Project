@@ -37,7 +37,7 @@ export const FriendsList = ({ currUser, setCurrUser, pages, settings, setNavigat
             }
             else {
                 setCurrUser('');
-                window.alert("Please sign in to view friends");
+                setNavigated(true);
                 navigate('/');
             }
         }
@@ -48,12 +48,14 @@ export const FriendsList = ({ currUser, setCurrUser, pages, settings, setNavigat
         return <>Loading...</>
     }
 
-    
+
 
     const signOut = () => {
         console.log("Logging out");
-        logout().then(() => setCurrUser(''));
-        navigate('/');
+        logout().then(() => {
+            navigate('/');
+            setCurrUser('');
+        });
     }
     const profileNav = () => {
         navigate(`users/${currUser.username}`);
@@ -62,7 +64,7 @@ export const FriendsList = ({ currUser, setCurrUser, pages, settings, setNavigat
         navigate(`accounts/${currUser.username}`);
     }
 
-    
+
 
     return <div>
         <LoggedInResponsiveAppBar
