@@ -1,5 +1,7 @@
 import {StickyTable} from "./stickyTable";
+
 export const ClassMenu = () => {
+
     /**interface Column {
     id: 'Class' | 'ID' | 'Professor' | 'Days' | 'Time';
     label: string;
@@ -40,8 +42,18 @@ const columnsMenu = [
       format: (value) => value.toFixed(2),
     },
   ];
+
+  allCourses = getAllCourses();
+  
+
+ /* function createData(course){
+    return { course.className, course.id, course.professor, course.days, course.times };
+  }*/
+
   const rowsMenu = [
     //TODO: Insert Data
+    //getAllCourses();
+    
 ];
 
     //TODO: put nav bar in, data intergration

@@ -79,5 +79,15 @@ export const getAllCourses = async() => {
     return res.data;
 }
 
+export const getCourse = async (course) => {
+    //TODO: is this right???
+    const res = await axios.get('http://localhost:8000/api/courses/${course}');
+    if(res.status !== 200){
+        console.log("Couldn't find courses");
+        return null;
+    }
+    return res.data;
+}
+
 /**TODO: professor call?, indivual course call */
 // export const 

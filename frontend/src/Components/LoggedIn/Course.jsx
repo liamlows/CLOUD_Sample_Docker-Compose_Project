@@ -4,18 +4,17 @@ import React from "react";
 import Button from "@mui/material/Button";
 
 {/* TODO: path to each profile unqiue to each user**/}
-export const Profile = () => {
+export const CourseProfile = ({course}) => {
+    //TODO: Navbar
+
     return <section id="profile">
-        <GenericButton label="Classes" click="/loggedIn" />
-        <GenericButton label="Sign Out" click="/" />
-        <GenericButton label="Profile" click="/profile" />
-        {/* TODO:  add actual stuff from table*/}
-        <h1>Course Name</h1>
-        <p>Course Description</p>
-        <p>Professor</p>
-        <p>Time</p>
-        <p>Average</p>
-        {/* TODO:  add button to add to schedule*/}
+        
+        <h1>{course.className}</h1>
+        <p>{course.description}</p>
+        <p onclick={()=>navigate(`/users/${course.professor}`)}>{course.professor}</p> 
+        <p>{course.time}</p>
+        <p>{course.average}</p>
+        {/* TODO:  add button to add to schedule, maybe add div for the link?*/}
 
     </section>
 }
