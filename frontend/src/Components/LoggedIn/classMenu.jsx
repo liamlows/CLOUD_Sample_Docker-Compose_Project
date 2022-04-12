@@ -1,4 +1,5 @@
 import {StickyTable} from "./stickyTable";
+import { getAllCourses } from "../../APIFolder/loginApi";
 
 export const ClassMenu = () => {
 
@@ -42,23 +43,21 @@ const columnsMenu = [
       format: (value) => value.toFixed(2),
     },
   ];
-
-  allCourses = getAllCourses();
   
-
- /* function createData(course){
-    return { course.className, course.id, course.professor, course.days, course.times };
-  }*/
-
-  const rowsMenu = [
-    //TODO: Insert Data
-    //getAllCourses();
-    
-];
+  
+  function createData(courses){
+    var rowsMenu = [];
+    for(var index = 0; index < courses.length; index++){
+      rowsMenu[index] = splitData(courses.index);
+    }
+    return rowsMenu;
+  }
+  function splitData(course){
+    return (course.className, course.id, course.professor, course.days, course.time);
+  }
 
     //TODO: put nav bar in, data intergration
     return <div>
-        <StickyTable rows = {rowsMenu} columns = {columnsMenu}/>
+        <StickyTable rows = {createData({getAllCourses})} columns = {columnsMenu}/>
      </div>
 };
-
