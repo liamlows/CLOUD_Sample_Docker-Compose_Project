@@ -7,7 +7,7 @@ import LoggedInResponsiveAppBar from '../common/LoggedInResponsiveAppBar';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Cookies from 'js-cookie';
 
-export const FriendsList = ({ currUser, setCurrUser, pages, settings }) => {
+export const FriendsList = ({ currUser, setCurrUser, pages, settings, setNavigated }) => {
 
     const navigate = useNavigate();
     const [friends, setFriends] = useState([]);
