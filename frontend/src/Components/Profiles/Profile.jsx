@@ -30,7 +30,7 @@ export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated }
     const changeLoadedProfile = (delta) => { setLoadedProfile({ ...loadedProfile, ...delta }) }
 
     useEffect(() => {
-        getStatusByUsername(username).then((status) => { setOnline(status.logged_in); console.log("online = "+online) })
+        
         getAccountbyUsername(location.pathname.substring(7, location.pathname.length))
             .then(response => {
                 // console.log("Response = ");
@@ -59,6 +59,7 @@ export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated }
 
     if (!loadedProfile) {
         // get the account from the username
+        getStatusByUsername(username).then((status) => { setOnline(!!status.logged_in); console.log("online = "+online) })
         return <>Loading...</>
     }
     const startEditing = () => {
@@ -147,8 +148,8 @@ export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated }
                     <div className="col-7 float-start mt-5">
                         <table className='table float-start'>
                             <thead>
-                                {online=== 1 && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
-                                {online=== 0 && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
+                                {online&& <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
+                                {online&& <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
                                 <th className="float-start col-3 fs-3 mt-2 text-start"><span className="text-start p-0">{loadedProfile.username}</span></th>
 
                                 <th className="col-1">
@@ -194,8 +195,8 @@ export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated }
                     <div className="col-7 float-start mt-5">
                         <table className='table float-start'>
                             <thead>
-                                {online=== 1 && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
-                                {online=== 0 && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
+                                {online === true && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
+                                {online === false && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
                                 <th className="float-start col-3 fs-3 mt-2 text-start">{loadedProfile.username}</th>
                                 <th className="col-1">
                                     <button type="button" className="btn btn-light" onClick={() => startEditing()}>Edit Profile</button>
@@ -228,8 +229,8 @@ export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated }
                         <div className="col-7 float-start mt-5">
                             <table className='table float-start'>
                                 <thead>
-                                    {online=== 1 && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
-                                    {online=== 0 && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
+                                {online === true && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
+                                {online === false && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
                                     <th className="float-start col-3 fs-3 mt-2 text-start">{loadedProfile.username}</th>
                                     {!friend && recieveRequest && <th className="col-1 pb-2">
                                         <Button variant="contained" className="primary" endIcon={<Add />}>Accept Request</Button>
