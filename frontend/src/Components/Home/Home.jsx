@@ -1,7 +1,10 @@
-const Home = () =>{
-    return(<div id="#Farm-Page">
-                Home
-            </div>
-        )
+
+export const Home = () => {
+    return (
+        <>
+            <h1>Farm Finders</h1>
+            
+        </>
+    
+    )
 }
-export default Home;

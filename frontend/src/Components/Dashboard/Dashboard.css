@@ -1,0 +1,8 @@
+.dashboard{
+    padding:1rem;
+}
+.dashboard-orders{
+    display:flex;
+    flex-direction: column;
+    gap:4px;
+}

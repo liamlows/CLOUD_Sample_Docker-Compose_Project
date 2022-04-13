@@ -1,0 +1,6 @@
+.title-and-image{
+    display:flex;
+    flex-direction: column;
+    min-height: 300px;
+    flex-grow: 1;
+}

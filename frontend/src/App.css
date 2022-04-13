@@ -21,3 +21,8 @@
 .App-link {
   color: #09d3ac;
 }
+a{
+  color: white ;
+  text-decoration: none !important;
+}
+

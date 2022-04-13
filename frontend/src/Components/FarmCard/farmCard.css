@@ -1,0 +1,15 @@
+.farm-description{
+
+}
+#farm-img{
+
+}
+@media screen and (max-width:599px) {
+    .farm-description {
+        display: none;
+    }
+    #farm-img{
+        
+    }
+    
+}

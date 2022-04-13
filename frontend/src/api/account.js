@@ -4,7 +4,7 @@ import apiURL from "./APIURL"
 const apiEndpoint = apiURL + "accounts"
 
 
-export const login = (userdata) => new Promise((resolve,reject)=>{
+export const login = (userdata) => new Promise((resolve, reject)=>{
             axios.post(`${apiEndpoint}/login`, userdata)
             .then(res => {
                 resolve(res);
