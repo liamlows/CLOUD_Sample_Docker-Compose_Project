@@ -60,3 +60,6 @@
 .setColor {
   color: rgb(88, 21, 128);
 }
+.nftLink {
+  text-decoration: none;
+}

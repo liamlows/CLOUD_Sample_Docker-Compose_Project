@@ -9,6 +9,7 @@ import { Profile } from "./profile/Profile";
 import { Messages } from "./messages/Messages";
 import { Search } from "./search/Search";
 import { Notifications } from "./notifications/Notifications";
+import { EditProfile } from './profile/EditProfile';
 
 // React functional component
 function App () {
@@ -23,6 +24,7 @@ function App () {
       <Route exact path="/messages" element={<Messages/>} />
       <Route exact path="/search" element={<Search/>} />
       <Route exact path="/notifications" element={<Notifications/>} />
+      <Route exact path="/edit-profile" element={<EditProfile/>} />
     </Routes>
 </div>
     );
