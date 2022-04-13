@@ -1,6 +1,11 @@
-a{
+.navbar a{
   text-decoration: none;
-  color:white;
+  color:white ;
+}
+
+.navbar a:hover{
+  
+  color:rgb(189, 233, 178) ;
 }
 
 .active{

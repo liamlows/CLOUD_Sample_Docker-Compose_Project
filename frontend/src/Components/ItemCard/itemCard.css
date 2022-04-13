@@ -4,8 +4,6 @@
 #item-card-description{
     
     flex-grow: 1;
-    text-overflow: ellipsis;
-    width: 200px;
     display: block;
     overflow: hidden
 }

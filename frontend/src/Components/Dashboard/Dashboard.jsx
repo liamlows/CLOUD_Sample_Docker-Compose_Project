@@ -15,25 +15,30 @@ const Dashboard = () => {
     ])
 
     const [events, setEvents] = useState ([
-        new event("Horse backriding party", "Bring your whole family to ride horses >:)!!!!",1,"Yellow Mountain Farm", 1, FarmImg)
+        new event("Horse backriding party", "Bring your whole family !",1,"Yellow Mountain Farm", 1, FarmImg),
+        new event("BIG BANG BOOM BASS = ", "Big ol bag lala palozaoza im just making up words here to test stuff with variable length",1,"Yellow Mountain Farm", 1, FarmImg),
+        new event("Horse backriding party forever and ever", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime, eligendi molestiae deleniti labore maiores placeat cupiditate ut, minus necessitatibus ducimus porro beatae quod vel eaque mollitia iste itaque ipsam? Rem?",1,"Yellow Mountain Farm", 1, FarmImg),
+        new event("Horse backriding party", "Bring your wholedddddddddddddd family to omg help wtf lmfao skjdlfaj; sjkdf;ajsd ;lksad ride horses >:)!!!!",1,"Yellow Mountain Farm", 1, FarmImg),
     ])
     return (
-        <div>
-            <Typography>Orders</Typography>
+        <div className='dashboard'>
+            <Typography mb={2}>Orders</Typography>
             <Divider />
-            
-            {
-                orders.map((order)=>{
-                    return <OrderExpandable key={order.orderId} 
-                                           {...order}/>
-                })
-            }
+            <div className="dashboard-orders">
+                
+                {
+                    orders.map((order)=>{
+                        return <OrderExpandable key={order.orderId}
+                                               {...order}/>
+                    })
+                }
+            </div>
             <Divider />
             <Typography mt={4}>My RSVP'D Events</Typography>
-            <Grid container >
+            <Grid container spacing={3} >
                 {
                     events.map((event)=>{
-                        return <Grid item md={3}>
+                        return <Grid item sm={6} md={3}>
                             <EventCard key={event.eventId} {...event}/>
                         </Grid>
                     })

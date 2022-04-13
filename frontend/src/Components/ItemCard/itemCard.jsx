@@ -15,21 +15,24 @@ export const ItemCard = ({ name, description, image, price, stock, farmId, addTe
     return (
     
         <Card variant="outlined" sx={{ height:"100%", display:"flex",flexDirection:"column",justifyContent:"space-between"}} >
-            <Typography gutterBottom variant="h6" component="div" align="center" flexGrow={1}>
+            <Typography gutterBottom variant="h6" component="div" align="center" whiteSpace={"nowrap"} overflow="hidden" width="100%" textOverflow={"ellipsis"}>
                 {name}
             </Typography>
 
-            <CardMedia align="center" sx={{marginTop:"12px"}}>
+            <CardMedia align="center" sx={{marginTop:"12px"}} >
                 <img src={image} id="item-card-image" />
             </CardMedia>
             
-            <CardContent sx={{textAlign:["center","left"]}}>
+            <CardContent sx={{textAlign:["center","left"], flexGrow:1 }}>
                     <div id="item-card-description">
                         <Typography variant="h6" color="text.secondary">
                             {description}
                         </Typography>
                     </div>
-                    <div id="item-card-price">
+            </CardContent>
+
+            <CardContent sx={{textAlign:["center","left"]}}>
+            <div id="item-card-price">
                         <Typography variant="h3" color="text.primary" sx={{m:.5}}>
                             {`$${price}`}
                         </Typography>
@@ -37,7 +40,6 @@ export const ItemCard = ({ name, description, image, price, stock, farmId, addTe
                     <Typography variant="h6" color="text.secondary">
                         {`Stock: ${stock}`}
                     </Typography>
-                
             </CardContent>
            
             <CardActions>

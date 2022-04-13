@@ -14,10 +14,11 @@ import { Home } from './Components/Home/Home';
 import { Feed } from './Components/Feed/Feed';
 import Login from './Components/Login/Login';
 import FarmPage from './Components/FarmPage/FarmPage';
-import { UserContext } from './Components/userContext';
-import { ProtectedRoute } from './Components/ProtectedRoute';
+import { UserContext, UserProvider } from './Components/userContext';
+import { ProtectedContent, ProtectedRoute } from './Components/ProtectedContent';
 import { SignUp } from './Components/SignUp/SignUp';
 import Dashboard from './Components/Dashboard/Dashboard';
+import { PROTECTED_ROUTES } from './Components/ProtectedRoutes';
 
 // React functional component
 function App () {
@@ -42,26 +43,28 @@ function App () {
   },[])
 
   return (
-    <UserContext.Provider value={user}>
+    <UserProvider>
       <Router>
               <NavBar />
               <Routes>
                   <Route exact path='/' element={<Home/>}/>
-                  <Route path='/dashboard' element={<ProtectedRoute/>}>
-                      <Route path='/dashboard' element={<Dashboard/>}/>
-                  </Route>
+                  
                   <Route path='/login' element={<Login/>}/>
                   <Route path='/signup' element={<SignUp/>}/>
-                  <Route path='/feed' element={<ProtectedRoute/>}>
-                      <Route path='/feed' element={<Feed/>}/>
-                  </Route>
-                  <Route path='/farm/:id' element={<ProtectedRoute/>}>
-                    <Route path='/farm/:id' element={<FarmPage/>}/>
-                  </Route>
+                  {
+                    PROTECTED_ROUTES.map((route, index)=>{
+                      return <Route path={route.path} 
+                                      element={<ProtectedContent> {route.element} </ProtectedContent>}
+                                      key={index}>
+                                      {route.children}
+                              </Route>
+
+                    })
+                  }
                   <Route path='*' element={<Navigate to='/' replace />}/>
               </Routes>
         </Router>
-    </UserContext.Provider>
+    </UserProvider>
   )
 }
 

@@ -42,7 +42,7 @@ export const FarmCard = ({ farm }) => {
                     {
                         farm.items.map((item, index) => {
                             return index < 6 ? 
-                            <Grid item xs={6} sm={4} md={2} lg={2} key={index} maxWidth={["100%"]}>
+                            <Grid item xs={6} sm={4} md={3} lg={3} key={index}>
                                 <ItemCard name={item.name}
                                     description={item.description}
                                     image={item.image}

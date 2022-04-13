@@ -15,7 +15,7 @@ export const SignUp = () => {
         <div className="login-container">
             <div className="text-center fs-3 fw-bold mb-4">Sign up</div>
 
-            <div className="row mb-4">
+            <div className="row mb-4 align-items-end">
                     <div className="col">
                         <label htmlFor="firstName">First Name</label>
                         <input type="text"
@@ -35,7 +35,7 @@ export const SignUp = () => {
                                onChange={e => setLastName(e.target.value)} />
                     </div>
                 </div>
-                <div className="row mb-4">
+                <div className="row mb-4 align-items-end">
                     <div className="col">
                         <label htmlFor="user">Username</label>
                         <input type="text"
@@ -55,7 +55,7 @@ export const SignUp = () => {
                                onChange={e => setEmail(e.target.value)} />
                     </div>
                 </div>
-                <div className="row">
+                <div className="row align-items-end">
                     <div className="col">
                         <label htmlFor="rPassword">Password</label>
                         <input type="password"

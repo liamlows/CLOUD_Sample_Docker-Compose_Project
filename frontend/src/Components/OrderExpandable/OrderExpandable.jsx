@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './OrderExpandable.css';
 import { AiOutlineArrowDown } from 'react-icons/ai';
 import Collapsible from 'react-collapsible';
 import { UserContext } from '../userContext';
 
 const OrderExpandable = ({ orderId, buyerName, farmName, orderDate, itemsPurchased, fulfilled }) => {
+    const userContext = useContext(UserContext);
     return (
         <div>
             <Collapsible trigger={<span>Order #{orderId} <AiOutlineArrowDown className='Collapsible__triggericon' /></span>}>
@@ -34,18 +35,12 @@ const OrderExpandable = ({ orderId, buyerName, farmName, orderDate, itemsPurchas
                         fulfilled ? 'Completed' : 'Pending'
                     }
                 </div>
-                <UserContext.Consumer>
-                {
-                     
-                         ({user}) => {
-                             return user.isFarmer ? 
+                
+                {             
+                     userContext.userData.isFarmer ? 
                              fulfilled ? null : <button className='btn btn-success float-end mb-4'>Mark as complete</button> : null
-                         }
-                         
-                     
-                    
                 }
-                </UserContext.Consumer>
+                
             </Collapsible>
         </div>
     );

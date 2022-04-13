@@ -95,28 +95,31 @@ export const Feed = () => {
             <div className="feed-search-container">
                 <p className='fs-4'>Search</p>
                 <Grid container rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                    <Grid item xs={5} sm={4} md={11}>
+                    <Grid item xs={5} sm={4} md={12}>
                         <TextField
                             id='outlined-basc'
                             label='Farm name'
                             variant='filled'
+                            fullWidth
                             value={searchParams.farmName}
                             onChange={(e) => handleSearchChange({ farmName: e.target.value })} />
                     </Grid>
-                    <Grid item xs={5} sm={4} md={11}>
+                    <Grid item xs={5} sm={4} md={12}>
                         <TextField
                         id='outlined-basc'
                         label='Item name'
                         variant='filled'
+                        fullWidth
                         value={searchParams.itemName}
                         
                         onChange={(e) => handleSearchChange({ itemName: e.target.value })} />
                     </Grid>
-                    <Grid item xs={6} sm={2} md={11}>
+                    <Grid item xs={6} sm={2} md={12}>
                         <TextField
-                            id="outlined-select-currency"
+                            id="Price"
                             select
                             label="Price"
+                            width={"100%"}
                             value={searchParams.priceOption ? searchParams.priceOption : 0}
                             onChange={(e) => handlePriceSearchChange(e.target.value)}>
                             {priceSearchOptions.map((option) => (

@@ -1,12 +1,13 @@
 #feed{
-    display:flex;
+    display:grid;
+    grid-template-columns: 20% 80%;
 }
 .feed-search-container{
    background-color: rgba(255, 200, 200, 0.281);
    padding-top: 8px;
    padding-left: 8px;
    padding-right: 8px;
-   max-width: 30%;
+   width: 100%;
 }
 .farm-page-farms{
     margin-left: 4px;
@@ -19,7 +20,7 @@
         
     }
     .feed-search-container{
-        max-width: 100%;
+        width: 100%;
         padding-left: 16px;
         padding-right: 16px;
     }

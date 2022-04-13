@@ -1,45 +1,8 @@
-.Collapsible {
-    background-color: rgb(255, 255, 255);
-    max-width: 90%;
-    box-shadow: 0 2px 3px #888;
+.dashboard{
+    padding:1rem;
 }
-
-.Collapsible__contentInner {
-    padding: 10px;
-    
-    border-top: 0;
+.dashboard-orders{
+    display:flex;
+    flex-direction: column;
+    gap:4px;
 }
-.Collapsible__contentInner p {
-    margin-bottom: 10px;
-    font-size: 14px;
-    line-height: 20px;
-}
-.Collapsible__contentInner p:last-child {
-    margin-bottom: 0;
-}
-.Collapsible__trigger {
-    display: block;
-    font-weight: 400;
-    text-decoration: none;
-    position: relative;
-    border: 1px solid white;
-    padding: 10px;
-    background: rgb(204, 204, 204);
-    color: black;
-}
-.Collapsible__triggericon{
-    
-    position: absolute;
-    right: 10px;
-    top: 15px;
-    display: block;
-    transition: transform 300ms;
-}
-.Collapsible__trigger.is-open svg {
-    transform: rotateZ(180deg);
-}
-.Collapsible__trigger.is-disabled {
-    opacity: 0.5;
-    background-color: grey;
-}
-
