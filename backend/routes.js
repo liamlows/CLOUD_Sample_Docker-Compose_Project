@@ -3,6 +3,7 @@ const express = require('express');
 const User = require('./models/users');
 const UserController = require('./controllers/users');
 
+
 /**
  * https://expressjs.com/en/guide/routing.html#express-router
  * 
@@ -17,7 +18,7 @@ module.exports = function routes(app, logger) {
   //   res.status(200).send('Hello world!');
   // });
 
-  app.post('/admin', async (req, res, next) => {
+  app.post('/authadmin', async (req, res, next) => {
     try {
         const body = req.body;
         
@@ -42,7 +43,7 @@ module.exports = function routes(app, logger) {
     }
   });
 
-  app.post('/user', async (req, res, next) => {
+  app.post('/create_user', async (req, res, next) => {
     try {
         console.log(req.body);
         const result = await User.createNewUser(req.body.username, req.body.email, req.body.name, req.body.password);

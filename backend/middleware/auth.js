@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-const accessTokenSecret = 'gui-db-123';
+const accessTokenSecret = process.env.TOKEN;
 
 const authenticateJWT = (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -9,7 +9,7 @@ const authenticateJWT = (req, res, next) => {
     return res.sendStatus(401);
   }
 
-  const token = authHeader.split(" ")[1];
+  const token = authHeader.split(".")[1];
 
   jwt.verify(token, accessTokenSecret, (err, user) => {
     if (err) {
@@ -28,7 +28,7 @@ const authenticateWithClaims = (claims) => (req, res, next) => {
     return res.sendStatus(401);
   }
 
-  const token = authHeader.split(" ")[1];
+  const token = authHeader.split(".")[1];
 
   jwt.verify(token, accessTokenSecret, (err, user) => {
     if (err) {

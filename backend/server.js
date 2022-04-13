@@ -30,7 +30,8 @@ app.use(cors({
 app.use(ExpressAPILogMiddleware(logger, { request: true }));
 const { authenticateJWT, authenticateWithClaims } = require('./middleware/auth');
 
-// app.use('/users', authenticateJWT, usersRoutes);
+app.use('/users', authenticateJWT, routes);
+app.use('/admin', authenticateWithClaims(['admin']), routes);
 
 app.get('/health', (request, response, next) => {
   const responseBody = { status: 'up', port };
