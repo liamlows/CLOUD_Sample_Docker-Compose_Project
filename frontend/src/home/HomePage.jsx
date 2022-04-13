@@ -6,7 +6,7 @@ export const HomePage = () => {
         <h1 className="header-align-center">Discover, collect, and sell extra ordinary NFTs</h1>
             <div className="container mt-4 d-flex">
                 <div className="card mt-4s" onClick={()=>alert("Go to product detail")}>
-                    <img className="card-img-top" src="https://5.imimg.com/data5/GV/NJ/MY-20565232/modern-art-paintings-250x250.jpg"></img>
+                    <img className="card-img-top" src="	https://5.imimg.com/data5/GV/NJ/MY-20565232/modern-art-paintings-250x250.jpg"></img>
                         <div className="card-body">
                             <h5 className="card-title">Art title</h5>
                             <p className="card-text">Author</p>
