@@ -1,0 +1,35 @@
+.container {
+    padding-left: 2rem;
+  }
+
+p {
+    text-align: center;
+}
+
+.createLink {
+    color:rgb(28, 146, 146);
+    text-decoration: none;
+}
+
+.imgLink{
+    text-decoration: none;
+}
+
+.post {
+    width: 13rem;
+    height: 13rem;
+    padding: 2rem;
+    border:2px solid #fff;
+  -moz-box-shadow: 10px 10px 5px #ccc;
+  -webkit-box-shadow: 10px 10px 5px #ccc;
+  box-shadow: 10px 10px 5px #ccc;
+  -moz-border-radius:25px;
+  -webkit-border-radius:25px;
+  border-radius:25px;
+}
+
+.addIcon {
+    position:fixed;
+    bottom:0;
+    right:0;
+}
