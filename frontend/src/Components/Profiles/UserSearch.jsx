@@ -1,14 +1,17 @@
-import { accordionActionsClasses } from "@mui/material";
+import { accordionActionsClasses, Button } from "@mui/material";
 import { useEffect } from "react";
 import { useState } from "react"
 import { findDOMNode } from "react-dom";
 import { Navigate, useNavigate } from "react-router-dom";
-import { getProfiles } from "../../APIFolder/loginApi"
+import { getAccountbyUsername, getFriendRequests, getProfiles, logout, sendFriendRequest } from "../../APIFolder/loginApi"
 import { TextField } from "../common";
 import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import Add from "@mui/icons-material/Add";
+import Cookies from "js-cookie";
 
 
-export const UserSearch = ({ currUser, setCurrUser}) => {
+export const UserSearch = ({ currUser, setCurrUser, pages, settings, setNavigated }) => {
 
     const navigate = useNavigate();
     // const [allProfiles, setProfiles] = useState(undefined);
@@ -25,25 +28,89 @@ export const UserSearch = ({ currUser, setCurrUser}) => {
         navigate(`/users/${currUser.username}/friends`);
     }
 
-    useEffect(() => {}, [username]);
+    useEffect(() => {
+        if (!currUser) {
+            let username = Cookies.get("username");
+            if (username) {
+                getAccountbyUsername(username)
+                    .then(account => {
+                        if (account) {
+                            setCurrUser(account);
+                        }
+                        else {
+                            console.log("User is null after request");
+                            setCurrUser('');
+                        }
+                    });
+            }
+            else {
+                setCurrUser('');
+                setNavigated(true);
+                navigate('/');
+            }
+        }
+    }, [currUser]);
+
+    const signOut = () => {
+        console.log("Logging out");
+        logout().then(() => {
+            navigate('/');
+            setCurrUser('');
+        });
+    }
+    const profileNav = () => {
+        navigate(`users/${currUser.username}`);
+    }
+    const accountNav = () => {
+        navigate(`accounts/${currUser.username}`);
+    }
 
     const find = profile => {
         let x = profile.username
         // console.log(typeof(x))
-        if(x.search(username) !==-1){return true;}
-        else{return false;}
+        if (x.search(username) !== -1) { return true; }
+        else { return false; }
 
-        
+
         // console.log(x.search(username));
     }
 
     if (!profiles) {
-        getProfiles().then(response => setProfiles(response) && console.log("recieved users info"));
+        getProfiles().then(response => setProfiles(response)).then(() => {
+            const friendRequests = getFriendRequests();
+            for (const profile in profiles) {
+                console.log(profile);
+                for (const request in friendRequests) {
+                    if (request.requester_id === currUser.id || request.requeste_id === currUser.id) {
+                        if (request.requester_id === currUser.id && (request.status === -1 || request.status === 0)) {
+                            profile.status = 1;
+                        }
+                        else if (request.requested_id === currUser.id && request.status === -1) {
+                            profile.status = 2;
+                        }
+                        else if (request.status === 1) {
+                            profile.status = 3;
+                        }
+                    }
+                    else {
+                        profile.status = 0;
+                    }
+                }
+            }
+        }
+        );
         return <>Loading...</>
     }
 
     return <div>
-        {/* <LoggedInResponsiveAppBar/> To implement */}
+        <LoggedInResponsiveAppBar
+            pages={pages}
+            settings={settings}
+            signOut={() => signOut()}
+            username={currUser.username}
+            profileNav={() => profileNav()}
+            account={() => accountNav()} />
+
         <div className="container border-0 mt-3">
             <button type="button" className="float-end btn btn-success mt-3" onClick={goToFriendsList}>Friends List</button>
             <div className="container border-0 col-3 float-start">
@@ -64,13 +131,42 @@ export const UserSearch = ({ currUser, setCurrUser}) => {
                 </tr>
             </thead>
             <tbody>
-                {profiles && profiles.map(profile => find(profile) && <tr key={profile.username} className="container">
-                    
+                {profiles && profiles.map(profile => !profile.status === 3 && find(profile) && <tr key={profile.username} className="container">
+
                     <td>{profile.username}</td>
                     <td>{profile.firstName}</td>
                     <td>{profile.lastName}</td>
                     <td className="ts-2">0</td>
-                    <td><button type="button" className="btn btn-secondary" onClick={() => goToProfile(profile)}>View Profile</button></td>
+                    {/* <td>
+                        <Button variant="contained"
+                            className="btn btn-secondary"
+                            onClick={() => sendFriendRequest(profile.id)}>
+                            Add Friend
+                        </Button>
+                    </td> */}
+
+
+                    {profile.status === 2 && <td className="col-1 pb-2">
+                        <Button variant="contained" className="primary" endIcon={<Add />}>Accept Request</Button>
+                    </td>}
+                    {profile.status === 1 && <td className="col-1 pb-2">
+                        <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Add Friend </Button>
+                    </td>}
+                    {profile.status === 0 && <td className="col-1 pb-2">
+                        <Button variant="contained" className="bg-success" onClick={() => sendFriendRequest(profile.id)} endIcon={<Add />}>Add Friend </Button>
+                    </td>}
+
+                    {/* Need to add functionality to disable this if already friends ^ */}
+
+                    <td>
+                        <Button variant="contained"
+                            className="btn btn-secondary"
+                            endIcon={<ArrowForwardIcon />}
+                            onClick={() => goToProfile(profile)}>
+                            View Profile
+                        </Button>
+                    </td>
+
                 </tr>)}
             </tbody>
         </table>

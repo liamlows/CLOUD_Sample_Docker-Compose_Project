@@ -51,7 +51,6 @@ export const updateAccountbyUsername = async (account) => {
 }
 
 export const getProfiles = async () => {
-
     const res = await axios.get('http://localhost:8000/api/users');
     if(res.status !== 200){
         console.log("Couldn't find users");
@@ -61,7 +60,7 @@ export const getProfiles = async () => {
 }
 
 export const getStatusByUsername = async (username) => {
-    const res = await axios.get(`http://localhost:8000/api/users/${username}`);
+    const res = await axios.get(`http://localhost:8000/api/users/${username}/status`);
     if(res.status !== 200){
         console.log("Couldn't find user status");
         return null;
@@ -69,5 +68,27 @@ export const getStatusByUsername = async (username) => {
     return res.data;
 }
 
+export const sendFriendRequest = async (id) => {
+    const res = await axios.post(`http://loacalhost:8000/api/friends/requests`, id);
+    return res.data;
+}
+
+// export const sendFriendRequests = async () => {
+//     const res = await axios.post(`http://loacalhost:8000/api/friends/requests`);
+//     return res.data;
+// }
+
+export const getFriends = async () => {
+    const res = await axios.post(`http://loacalhost:8000/api/friends`);
+    return res.data;
+}
 
 // export const 
+export const getFriendRequests = async () => {
+    const res = await axios.get(`http://loacalhost:8000/api/friends/requests`);
+    return res.data;
+}
+
+export const handleFriendRequest = async (id, status) => {
+    const res = await axios.put(`http://loacalhost:8000/api/friends/requests/${id}`, {status: status});
+}

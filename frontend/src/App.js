@@ -30,6 +30,7 @@ function App() {
     let username = Cookies.get("username");
 
     if (username) {
+      setNavigated(false);
       getAccountbyUsername(username)
         .then(account => {
           if (account) {
@@ -39,14 +40,21 @@ function App() {
             console.log("User is null after request");
             setCurrUser('');
           }
+          setCName(' ');
         })
     }
     else {
       setCurrUser('');
+      setCName(' ');
     }
   }, [])
 
   const [currUser, setCurrUser] = useState('')
+  const [cName, setCName ] = useState('dn');
+
+  //using to alert when navigated back to home page ( for when not signed in as user)
+  const [ navigated, setNavigated] = useState(false);
+
 
   //Nav bar now made available from all views (at least thats the goal)
   const [loggedInPages] = useState([
@@ -66,8 +74,9 @@ function App() {
     { label: 'Logout', route: '/signout' }
   ]);
 
+  //Turns out im dumb and should have done this while loading all along
   return (
-    <div className="App" >
+    <div className={`App ${cName}`} >
       <BrowserRouter>
         <Routes>
 
@@ -79,16 +88,21 @@ function App() {
           check what type of user when loading and return different based on which type user is...Seems decently simple to implement */}
 
           {/* TODO: Integrate Material UI */}
-          <Route path='/' element={<Base currUser={currUser}
+          <Route path='/' element={<Base 
+            currUser={currUser}
             setCurrUser={x => setCurrUser(x)}
             basePages={basePages}
             loggedInPages={loggedInPages}
-            settings={settings} />} />
+            settings={settings} 
+            navigated={navigated}/>} />
 
           {/* TODO: MAKE HOME NOT ACCESSABLE IF USER IS NOT LOGGED IN */}
 
           {/* TODO: Make home page nicer and more professional. */}
-          <Route path='/login' element={<LoginPage currUser={currUser} setCurrUser={x => setCurrUser(x)} />} />
+          <Route path='/login' element={<LoginPage 
+            currUser={currUser} 
+            setCurrUser={x => setCurrUser(x)} 
+            setNavigated={x => setNavigated(x)}/>} />
 
           {/* <Route path='/loggedIn' element={<LoggedIn />} /> */}
           {/* TODO: Classes tab */}
@@ -101,21 +115,36 @@ function App() {
           {/* TODO: Account Settings (Probably later on) */}
 
 
-          <Route path="/users/:username/friends" element={<FriendsList currUser={currUser} setCurrUser={setCurrUser}/>} />
+          <Route path="/users/:username/friends" element={<FriendsList 
+            currUser={currUser} 
+            setCurrUser={x => setCurrUser(x)}
+            pages={loggedInPages}
+            settings={settings}
+            setNavigated={x => setNavigated(x)}/>} />
 
           <Route path="/users" element={<UserSearch 
             currUser={currUser} 
-            setCurrUser={setCurrUser} 
+            setCurrUser={x => setCurrUser(x)}
             pages={loggedInPages}
-            settings={settings}/>} />
+            settings={settings}
+            setNavigated={x => setNavigated(x)}/>} />
 
-          <Route path='/signUp' element={<SignUpPage currUser={currUser} setCurrUser={x => setCurrUser(x)} />} />
+          <Route path='/signUp' element={<SignUpPage 
+            currUser={currUser} 
+            setCurrUser={x => setCurrUser(x)} 
+            setNavigated={x => setNavigated(x)}/>} />
+
           <Route path="/users/:username" element={<Profile 
             currUser={currUser} 
             setCurrUser={x => setCurrUser(x)}
             pages={loggedInPages}
-            settings={settings}/>} />
-          <Route path="/accounts/:username" element={<AccountInfo currUser={currUser} setCurrUser={x => setCurrUser(x)} />} />
+            settings={settings}
+            setNavigated={x => setNavigated(x)}/>} />
+            
+          <Route path="/accounts/:username" element={<AccountInfo 
+            currUser={currUser} 
+            setCurrUser={x => setCurrUser(x)}
+            setNavigated={x => setNavigated(x)} />} />
         </Routes>
       </BrowserRouter>
     </div>

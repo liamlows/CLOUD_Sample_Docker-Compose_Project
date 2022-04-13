@@ -6,6 +6,7 @@ const pool = require("./db");
 const cors = require('cors');
 const { log, ExpressAPILogMiddleware } = require('@rama41222/node-logger');
 const routes = require('./routes');
+const util = require('./util');
 
 // set up some configs for express.
 const config = {
@@ -62,12 +63,16 @@ app.use(session({
 
 //include routes
 const account = require('./routes/account');
+const friends = require('./routes/friends');
 const courses = require('./routes/courses');
 const enrollments = require('./routes/enrollments');
 const roles = require('./routes/roles');
 const schools = require('./routes/schools');
 const students = require('./routes/students');
 app.use('/', account);
+
+app.use('/api/friends', friends);
+
 app.use('/courses', courses);
 app.use('/enrollments', enrollments);
 app.use('/roles', roles);

@@ -4,6 +4,7 @@ const pool = require('../db');
 const secret = 'not-a-secret';
 const crypto = require('crypto');
 const util = require('../util');
+const {getUsernameFromId} = require("../util");
 
 /* TODO
 
@@ -16,6 +17,21 @@ PUT /users/:username/role
 GET /users/:username/status
 
  */
+
+
+async function findRoleById(roleId) {
+    let rows, fields;
+
+    [rows, fields] = await pool.execute('SELECT * FROM `roles` WHERE `role_id` = ?',
+        [roleId, ]);
+
+    if(rows.length){
+        return rows[0];
+    }
+    else {
+        return undefined;
+    }
+}
 
 async function findRole(roleType, schoolId, courseId){
     let rows, fields;
@@ -62,12 +78,12 @@ async function createRole(roleType, schoolId, courseId){
 }
 
 
-async function updateLoginStatus(username) {
+async function setStatusOnline(username) {
     await pool.execute('UPDATE `accounts` SET `last_logged_in` = ?, `logged_in` = 1 WHERE `username` = ?',
         [new Date(), username]);
 }
 
-async function updateLogoutStatus(username) {
+async function setStatusOffline(username) {
     await pool.execute('UPDATE `accounts` SET `logged_in` = 0 WHERE `username` = ?',
         [username]);
 }
@@ -193,19 +209,25 @@ router.post("/api/account/login", async (req, res, next) => {
     }
 
     let user = rows[0];
-    let studentId = -1;
-    if(user.studentId){
-        studentId = user.studentId;
+    let accountId = user.account_id ? user.account_id : -1;
+    let roleType = "";
+
+    if(user.role_id) {
+        let role = findRoleById(user.role_id);
+        if(role)
+            roleType = role.role_type;
     }
 
     // This initializes the login session.
+    req.session.accountId = user.account_id;
     req.session.username = username;
-    req.session.studentId = studentId;
+    req.session.roleType = roleType;
     res.cookie('username', username);
-    res.cookie('studentId', studentId);
+    res.cookie('roleType', roleType);
+    res.cookie('accountId', accountId);
 
     try {
-        await updateLoginStatus(username);
+        await setStatusOnline(username);
     } catch(error) {
         return next(error);
     }
@@ -223,7 +245,7 @@ router.get("/api/account/logout", async (req, res, next) => {
     res.cookie('username', "");
 
     try {
-        await updateLogoutStatus(username);
+        await setStatusOffline(username);
     } catch(error) {
         return next(error);
     }
@@ -235,11 +257,33 @@ router.get("/api/account/logout", async (req, res, next) => {
 });
 
 
+router.get("/api/username/:id", async (req, res, next) => {
+
+    let accountId = parseInt(req.params.id);
+
+    if(isNaN(accountId)){
+        res.status(404).send();
+        return next();
+    }
+
+    let username = await getUsernameFromId(accountId);
+
+    if(username === undefined) {
+        res.status(404).send();
+        return next();
+    }
+    res.status(200).json({accountId: accountId, username: username}).send();
+});
+
+
+
 router.get("/api/users/:username", async (req, res, next) => {
     // Query DB for user
+
     let rows, fields;
     try{
-        [rows, fields] = await pool.execute('SELECT * FROM `accounts` WHERE `username` = ?',
+        [rows, fields] = await pool.execute(
+            'SELECT username, first_name, last_name, account_id FROM `accounts` WHERE `username` = ?',
             [req.params.username]);
     } catch(error){
         return next(error);
@@ -251,20 +295,14 @@ router.get("/api/users/:username", async (req, res, next) => {
     }
 
     let user = rows[0];
-
-    res.status(200).json({
-        username: user.username,
-        firstName: user.first_name,
-        lastName: user.last_name,
-        studentId: user.student_id
-    }).send();
+    res.status(200).json(user).send();
 });
 
 router.get("/api/users/", async (req, res, next) => {
     // Query DB for user
     let rows, fields;
     try{
-        [rows, fields] = await pool.execute('SELECT username, first_name, last_name, student_id FROM `accounts`');
+        [rows, fields] = await pool.execute('SELECT username, first_name, last_name, account_id FROM `accounts`');
     } catch(error){
         return next(error);
     }

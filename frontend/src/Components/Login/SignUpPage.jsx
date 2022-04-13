@@ -5,7 +5,7 @@ import { getAccountbyUsername, registerAccount } from "../../APIFolder/loginApi"
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
-export const SignUpPage = ({ currUser, setCurrUser }) => {
+export const SignUpPage = ({ currUser, setCurrUser, setNavigated}) => {
     const navigate = useNavigate();
 
     const clickAddAccount = () => {
@@ -15,7 +15,10 @@ export const SignUpPage = ({ currUser, setCurrUser }) => {
                     if(response.success === 1){
                         getAccountbyUsername(response.username)
                             .then(user => user && setCurrUser(user))
-                            .then(() => navigate('/'));
+                            .then(() => {
+                                setNavigated(false);
+                                navigate('/');
+                            });
                     }
                     else {
                         window.alert(`Failed to Sign Up. ${response.error}`);
