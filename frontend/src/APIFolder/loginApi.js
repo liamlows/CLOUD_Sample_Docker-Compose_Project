@@ -73,7 +73,7 @@ export const getStatusByUsername = async (username) => {
 
 export const sendFriendRequest = async (targetId) => {
     console.log("Sending Friend Request")
-    const res = await axios.post(`${BACKEND_ENDPOINT}/api/friends/requests`, targetId);
+    const res = await axios.post(`${BACKEND_ENDPOINT}/api/friends/requests`, { targetId: targetId });
     return res.data;
 }
 
