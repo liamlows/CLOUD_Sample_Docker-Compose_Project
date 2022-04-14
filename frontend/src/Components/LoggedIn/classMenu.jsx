@@ -36,12 +36,19 @@ const columnsMenu = [
       format: (value) => value.toLocaleString('en-US'),
     },
     {
-      id: 'Time',
-      label: 'Time',
+      id: 'StartTime',
+      label: 'Start Time',
       minWidth: 170,
       align: 'right',
       format: (value) => value.toFixed(2),
     },
+    {
+      id: 'EndTime',
+      label: 'End Time',
+      minWidth: 170,
+      align: 'right',
+      format: (value) => value.toFixed(2),
+    }
   ];
   
   
@@ -53,7 +60,7 @@ const columnsMenu = [
     return rowsMenu;
   }
   function splitData(course){
-    return (course.className, course.id, course.professor, course.days, course.time);
+    return (course.className, course.id, course.professor, course.days, course.start_time, course.end_time);
   }
 
     //TODO: put nav bar in, data intergration

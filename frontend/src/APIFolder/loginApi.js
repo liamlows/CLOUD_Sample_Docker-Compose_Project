@@ -79,7 +79,7 @@ export const getAllCourses = async() => {
     return res.data;
 }
 
-export const getCourse = async (course) => {
+export const getCourse = async (courseID) => {
     //TODO: is this right???
     const res = await axios.get('http://localhost:8000/api/courses/${course}');
     if(res.status !== 200){
@@ -91,3 +91,5 @@ export const getCourse = async (course) => {
 
 /**TODO: professor call?, indivual course call */
 // export const 
+
+// api/users/professors/
