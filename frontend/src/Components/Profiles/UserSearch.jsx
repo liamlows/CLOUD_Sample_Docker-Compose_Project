@@ -18,6 +18,7 @@ export const UserSearch = ({ currUser, setCurrUser, pages, settings, setNavigate
     const [profiles, setProfiles] = useState([]);
 
     const [username, setUsername] = useState('');
+    const [dummy, setDummy] = useState(0);
 
 
     const goToProfile = profile => {
@@ -71,7 +72,7 @@ export const UserSearch = ({ currUser, setCurrUser, pages, settings, setNavigate
             }
             );
         });
-    }, []);
+    }, [dummy]);
 
     if (!currUser) {
         let username = Cookies.get("username");
@@ -187,13 +188,13 @@ export const UserSearch = ({ currUser, setCurrUser, pages, settings, setNavigate
 
 
                     {profile.status === 2 && <td className="col-1 pb-2">
-                        <Button variant="contained" className="primary" onClick={() => handleFriendRequest(profile.account_id, 1)} endIcon={<Add />}>Accept Request</Button>
+                        <Button variant="contained" className="primary" onClick={() => {handleFriendRequest(profile.account_id, 1);setDummy(dummy+1)}} endIcon={<Add />}>Accept Request</Button>
                     </td>}
                     {profile.status === 1 && <td className="col-1 pb-2">
                         <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Add Friend </Button>
                     </td>}
                     {profile.status === 0 && <td className="col-1 pb-2">
-                        <Button variant="contained" className="bg-success" onClick={() => {sendFriendRequest(profile.account_id)}} endIcon={<Add />}>Add Friend </Button>
+                        <Button variant="contained" className="bg-success" onClick={() => {sendFriendRequest(profile.account_id);setDummy(dummy+1)}} endIcon={<Add />}>Add Friend </Button>
                     </td>}
 
                     {/* Need to add functionality to disable this if already friends ^ */}
