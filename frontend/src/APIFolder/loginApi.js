@@ -69,7 +69,8 @@ export const getStatusByUsername = async (username) => {
 }
 
 export const sendFriendRequest = async (id) => {
-    const res = await axios.post(`http://loacalhost:8000/api/friends/requests`, id);
+    console.log("Sending Friend Resquest")
+    const res = await axios.post(`http://localhost:8000/api/friends/requests`, id);
     return res.data;
 }
 
@@ -79,16 +80,16 @@ export const sendFriendRequest = async (id) => {
 // }
 
 export const getFriends = async () => {
-    const res = await axios.post(`http://loacalhost:8000/api/friends`);
+    const res = await axios.get(`http://localhost:8000/api/friends`);
     return res.data;
 }
 
 // export const 
 export const getFriendRequests = async () => {
-    const res = await axios.get(`http://loacalhost:8000/api/friends/requests`);
+    const res = await axios.get(`http://localhost:8000/api/friends/requests`);
     return res.data;
 }
 
 export const handleFriendRequest = async (id, status) => {
-    const res = await axios.put(`http://loacalhost:8000/api/friends/requests/${id}`, {status: status});
+    const res = await axios.put(`http://localhost:8000/api/friends/requests/${id}`, {status: status});
 }
