@@ -16,7 +16,7 @@ async function isUserAuthenticated(req, res, next){
         return next();
     }
     else{
-        res.status(401).send();
+        res.sendStatus(401);
     }
 }
 
@@ -25,7 +25,7 @@ async function isUserAdmin(req, res, next) {
         return next();
     }
     else {
-        res.status(403).next();
+        res.sendStatus(403);
     }
 }
 

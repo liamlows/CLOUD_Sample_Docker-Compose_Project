@@ -34,18 +34,21 @@ router.get("/:id", async (req, res, next) => {
     }
 
     if(rows.length){
-        res.status(200).json(rows[0]).send();
+        res.status(200).json(rows[0]);
     }
     else{
-        return res.status(404).send();
+        res.status(404);
     }
+
+    next();
 });
 
 // PUT /schools/:id
 // Updates an existing school in the database. Requires an admin role.
 router.put("/:id", async (req, res, next) => {
     // TODO
-    res.status(404).send();
+    res.status(404);
+    next();
 });
 
 module.exports = router;

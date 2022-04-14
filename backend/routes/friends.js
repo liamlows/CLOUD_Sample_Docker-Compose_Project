@@ -61,6 +61,7 @@ router.get("/", async (req, res, next) => {
         return next(error);
     }
     res.status(200).json(friends);
+    next();
 });
 
 /*
@@ -76,6 +77,7 @@ router.get("/requests/", async (req, res, next) => {
         return next(error);
     }
     res.status(200).json(requests);
+    next();
 });
 
 /*
@@ -83,12 +85,15 @@ POST /api/friends/requests/
 
 Creates a new friend request if possible. Requires being logged in.
 */
-
 router.post("/requests/", async (req, res, next) => {
     let targetId = req.body.targetId;
     if(targetId === undefined) {
-        res.status(400).send();
-        return next();
+        return res.sendStatus(400);
+    }
+
+    // Ensure we cannot friend ourselves.
+    if(targetId === req.session.accountId){
+        return res.sendStatus(400);
     }
 
     // Check if we already have an outgoing request.
@@ -98,8 +103,8 @@ router.post("/requests/", async (req, res, next) => {
         request = await findRequest(req.session.accountId, targetId);
 
         if(request){
-            res.status(200).send({success: 0, error: "You already have an outgoing request to this user."})
-            return;
+            res.status(200).json({success: 0, error: "You already have an outgoing request to this user."})
+            return next();
         }
 
     } catch(error) { return next(error); }
@@ -109,8 +114,8 @@ router.post("/requests/", async (req, res, next) => {
         request = await findRequest(targetId, req.session.accountId);
 
         if(request){
-            res.status(200).send({success: 0, error: "You already have an incoming request to this user."})
-            return;
+            res.status(200).json({success: 0, error: "You already have an incoming request to this user."})
+            return next();
         }
 
     } catch(error) { return next(error); }
@@ -122,9 +127,10 @@ router.post("/requests/", async (req, res, next) => {
             [req.session.accountId, targetId]);
     } catch(error) { return next(error); }
 
-    res.status(200).send({
+    res.status(200).json({
         success: 1, error: ""
-    })
+    });
+    next();
 });
 
 /*
@@ -134,15 +140,25 @@ Accepts or denies the friend request, where otherAccountId is the other user tha
 Requires being logged in.
 
 */
-
-
 router.put("/requests/:otherId", async (req, res, next) => {
     let otherId = req.params.otherId;
     let accepted = req.body.status;
     if(accepted !== 0 && accepted !== 1) {
-        res.status(400).send();
-        return next();
+        return res.sendStatus(400);
     }
+
+    // Check if the friend request has already been accepted or denied.
+    try {
+        let friend_request = await findRequest(otherId, req.session.accountId);
+
+        if(friend_request.status !== -1){
+            return res.sendStatus(403);
+        }
+
+    } catch (error) {
+        return next(error);
+    }
+
 
     try {
         // Update the request.
@@ -174,7 +190,38 @@ router.put("/requests/:otherId", async (req, res, next) => {
         return next(error);
     }
 
-    return res.status(200).send();
+    res.status(200);
+    next();
+});
+
+/*
+DELETE /api/friends/:friendId
+ */
+router.delete("/:friendId", async (req, res, next) => {
+    let userId = req.session.accountId;
+    let friendId = req.params.friendId;
+
+    let friend_a;
+    let friend_b;
+    if(userId < friendId){
+        friend_a = userId;
+        friend_b = friendId;
+    }
+    else {
+        friend_a = friendId;
+        friend_b = userId;
+    }
+
+    try {
+        await pool.execute(
+            'DELETE FROM `friendships` WHERE (`friend_a` = ? AND `friend_b` = ?)',
+            [friend_a, friend_b]);
+    } catch (error) {
+        return next(error);
+    }
+
+    res.status(200);
+    next();
 });
 
 module.exports = router;
