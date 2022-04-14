@@ -88,11 +88,13 @@ Creates a new friend request if possible. Requires being logged in.
 router.post("/requests/", async (req, res, next) => {
     let targetId = req.body.targetId;
     if(targetId === undefined) {
+        console.log("targetId is undefined");
         return res.sendStatus(400);
     }
 
     // Ensure we cannot friend ourselves.
     if(targetId === req.session.accountId){
+        console.log("targetId is the same as user");
         return res.sendStatus(400);
     }
 
