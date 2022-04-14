@@ -2,10 +2,13 @@ import axios from 'axios';
 axios.defaults.withCredentials = true
 
 
+const BACKEND_ENDPOINT = "http://localhost:8000";
+
+
 export const registerAccount = async (credentials) =>  {
     console.log("Registering...");
 
-    const res = await axios.post('http://localhost:8000/api/account/register', credentials);
+    const res = await axios.post(`${BACKEND_ENDPOINT}/api/account/register`, credentials);
     if(res.status !== 200){
         console.log(`Couldn't register. ${res.status}`)
         return null;
@@ -15,7 +18,7 @@ export const registerAccount = async (credentials) =>  {
 
 export const logIntoAccount = async (credentials) => {
     console.log("Logging in...");
-    const res = await axios.post('http://localhost:8000/api/account/login', credentials);
+    const res = await axios.post(`${BACKEND_ENDPOINT}/api/account/login`, credentials);
     if(res.status !== 200){
         console.log(`Couldn't log in. ${res.status}`)
         return null;
@@ -25,7 +28,7 @@ export const logIntoAccount = async (credentials) => {
 
 export const logout = async () => {
     try {
-        const res = await axios.get('http://localhost:8000/api/account/logout');
+        const res = await axios.get(`${BACKEND_ENDPOINT}/api/account/logout`);
     } catch(e) {
         console.log(`Failed to logout.: ${e}`)
     }
@@ -36,7 +39,7 @@ export const getAccountbyUsername = async (username) => {
         return null;
     }
 
-    const res = await axios.get(`http://localhost:8000/api/users/${username}`);
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/users/${username}`);
     if(res.status !== 200){
         console.log(`Couldn't find user: ${username}`)
         return null;
@@ -47,11 +50,11 @@ export const getAccountbyUsername = async (username) => {
 
 //Still work in progress. Account editing is not fully implemented
 export const updateAccountbyUsername = async (account) => {
-    return axios.put(`http://localhost:8000/api/users/${account.username}`, account);
+    return axios.put(`${BACKEND_ENDPOINT}/api/users/${account.username}`, account);
 }
 
 export const getProfiles = async () => {
-    const res = await axios.get('http://localhost:8000/api/users');
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/users`);
     if(res.status !== 200){
         console.log("Couldn't find users");
         return null;
@@ -60,7 +63,7 @@ export const getProfiles = async () => {
 }
 
 export const getStatusByUsername = async (username) => {
-    const res = await axios.get(`http://localhost:8000/api/users/${username}/status`);
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/users/${username}/status`);
     if(res.status !== 200){
         console.log("Couldn't find user status");
         return null;
@@ -69,7 +72,7 @@ export const getStatusByUsername = async (username) => {
 }
 
 export const sendFriendRequest = async (id) => {
-    const res = await axios.post(`http://loacalhost:8000/api/friends/requests`, id);
+    const res = await axios.post(`${BACKEND_ENDPOINT}/api/friends/requests`, id);
     return res.data;
 }
 
@@ -79,16 +82,16 @@ export const sendFriendRequest = async (id) => {
 // }
 
 export const getFriends = async () => {
-    const res = await axios.post(`http://loacalhost:8000/api/friends`);
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/friends`);
     return res.data;
 }
 
 // export const 
 export const getFriendRequests = async () => {
-    const res = await axios.get(`http://loacalhost:8000/api/friends/requests`);
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/friends/requests`);
     return res.data;
 }
 
 export const handleFriendRequest = async (id, status) => {
-    const res = await axios.put(`http://loacalhost:8000/api/friends/requests/${id}`, {status: status});
+    const res = await axios.put(`${BACKEND_ENDPOINT}/api/friends/requests/${id}`, {status: status});
 }
