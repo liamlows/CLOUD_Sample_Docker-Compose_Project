@@ -167,7 +167,6 @@ router.post("/api/account/register", async (req, res, next) => {
     }
 
     res.status(200).json({success: 1, error: ""});
-    next();
 });
 
 
@@ -232,7 +231,6 @@ router.post("/api/account/login", async (req, res, next) => {
     }
 
     res.json({success: 1, error: "", username: username});
-    next();
 });
 
 
@@ -270,7 +268,6 @@ router.get("/api/username/:id", async (req, res, next) => {
         return res.sendStatus(404);
     }
     res.status(200).json({accountId: accountId, username: username});
-    next();
 });
 
 
