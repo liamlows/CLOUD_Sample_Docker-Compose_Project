@@ -1,44 +1,53 @@
-//This is for when users first log in.
-
+// Library Imports
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
+
+// Component Imports
 import { LoggedInResponsiveAppBar } from "../common/LoggedInResponsiveAppBar";
-import Cookies from "js-cookie";
-import { useState } from "react";
+
+// Method Imports
 import { getAccountbyUsername, logout } from "../../APIFolder/loginApi";
-import { useEffect } from "react";
 
-export const HomeView = ({ currUser, setCurrUser, pages, settings}) => {
-
+export const HomeView = (props) => {
+    // Navigate Object
     const navigate = useNavigate();
 
+    // Component Variables
+    const [account, setAccount] = useState(JSON.parse(localStorage.getItem("currUser")));
+
+    // Initial Load
     useEffect(() => {
-        if (currUser === '') {
+        console.log("Loading HomeView...");
+        if (!localStorage.getItem("currUser")) {
+            window.alert("Sign in to view the home view");
             navigate('/');
         }
-    }, [currUser]);
+        else
+            getAccountbyUsername(account.username).then(x => setAccount(x));
+    }, []);
 
+    // Conditions
+
+    // Component Methods
     const signOut = () => {
-        logout().then(() =>setCurrUser(''));
+        logout().then(() => localStorage.setItem("currUser", ""));
     }
     const profileNav = () => {
-
-        navigate(`users/${currUser.username}`);
+        navigate(`users/${account.username}`);
     }
     const accountNav = () => {
-
-        navigate(`accounts/${currUser.username}`);
+        navigate(`accounts/${account.username}`);
     }
 
+    // HTML
     return <div>
-        <LoggedInResponsiveAppBar 
-            pages={pages} 
-            settings={settings} 
-            signOut={() => signOut()} 
-            username={currUser.username} 
-            profileNav={() => profileNav()} 
-            account={() => accountNav()} />
+        <LoggedInResponsiveAppBar
+            pages={props.loggedInPages}
+            settings={props.settings}
+            signOut={() => signOut()}
+            username={account.username}
+            profileNav={() => profileNav()}
+            accountNav={() => accountNav()} />
         <div className="col-6 p-0"><div className="col-1 p-0"></div><h1 className="col-6 mt-4 fs-2">Welcome {currUser.firstName}</h1></div>
         <div className="clearfix p-0"></div>
         <div className="row mt-5 m-3">

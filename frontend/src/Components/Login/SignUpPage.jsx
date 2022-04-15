@@ -1,62 +1,77 @@
-import { PasswordField, SelectField, TextField } from "../common";
-import { useState } from "react";
-import { GenericButton } from "../common/GenericButton";
-import { getAccountbyUsername, registerAccount } from "../../APIFolder/loginApi";
+// Library Imports
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
 
-export const SignUpPage = ({ currUser, setCurrUser, setNavigated}) => {
+// Component Imports
+import { PasswordField, SelectField, TextField } from "../common";
+
+// Method Imports
+import { getAccountbyUsername, registerAccount } from "../../APIFolder/loginApi";
+
+export const SignUpPage = (props) => {
+    // Navigate Object
     const navigate = useNavigate();
 
-    const clickAddAccount = () => {
-        if (username && password && firstName && lastName && email) {
-            registerAccount({ "username": username, "password": password, "firstName": firstName, "lastName": lastName, "email": email, "school": school})
-                .then(response => {
-                    if(response.success === 1){
-                        getAccountbyUsername(response.username)
-                            .then(user => user && setCurrUser(user))
-                            .then(() => {
-                                setNavigated(false);
-                                navigate('/');
-                            });
-                    }
-                    else {
-                        window.alert(`Failed to Sign Up. ${response.error}`);
-                    }
-                });
-        }
-        else if(!username || !password || !firstName || !lastName || !email){
-            window.alert("Please fill out all fields");
-        }
-        else{
-            window.alert("Username is already taken");
-        }
-    }
-
-    //prevents a logged in user from signing up
-    if (currUser !== '') {
-        navigate('/');
-    }
-
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [school, setSchool] = useState('');
+    // Component Variables
+    const [account, setAccount] = useState(undefined);
+    const [username, setUsername] = useState(undefined);
+    const [password, setPassword] = useState(undefined);
+    const [firstName, setFirstName] = useState(undefined);
+    const [lastName, setLastName] = useState(undefined);
+    const [email, setEmail] = useState(undefined);
+    const [school, setSchool] = useState(undefined);
     const [accountTypes] = useState([
         "Student",
         "Teacher"
     ]);
-
     const [schools] = useState([
         "Yuh",
         "Mega Yuh"
     ]);
 
+    // Initial Load
+    useEffect(() => {
+        if (!!localStorage.getItem("currUser"))
+            navigate('/');
+    });
 
-    // const mergeAccount = delta => setAccount({ ...account, ...delta });
+    // Conditions
 
+    // Component Methods
+    const clickAddAccount = () => {
+        if (username && password && firstName && lastName && email) {
+            var temp = {
+                "username": username, 
+                "password": password,
+                "firstName": firstName,
+                "lastName": lastName,
+                "email": email,
+                "school": school
+            };
+            registerAccount(temp)
+                .then(res => {
+                    if (res.success !== 1) {
+                        window.alert(`Failed to Sign Up. ${res.error}`);
+                    }
+                    else {
+                        getAccountbyUsername(res.username)
+                            .then(x => {
+                                setAccount(x);
+                                localStorage.setItem("currUser", JSON.stringify(x));
+                                navigate('/');
+                            });
+                    }
+                })
+        }
+        else if (!username || !password || !firstName || !lastName || !email) {
+            window.alert("Please fill out all fields");
+        }
+        else {
+            window.alert("Username is already taken");
+        }
+    }
+
+    // HTML
     return <section id="loginView">
         <h1>Sign Up</h1>
         <form className="container">
@@ -92,8 +107,6 @@ export const SignUpPage = ({ currUser, setCurrUser, setNavigated}) => {
                 color="success">
                 Sign Up
             </button>
-
         </form>
-
-    </section>;
+    </section>
 }
