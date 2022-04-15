@@ -1,4 +1,4 @@
-import { getAccountbyUsername, getFriendRequests, getStatusByUsername, logout, sendFriendRequest, updateAccountbyUsername } from "../../APIFolder/loginApi";
+import { getAccountbyUsername, getFriendRequests, getStatusByUsername, handleFriendRequest, logout, sendFriendRequest, updateAccountbyUsername } from "../../APIFolder/loginApi";
 import { TextField } from "../common";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
@@ -26,6 +26,7 @@ export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated }
 
     const username = Cookies.get("username");
     const [online, setOnline] = useState(undefined);
+    const [hasStatus, setHasStatus] = useState(false);
 
     const changeLoadedProfile = (delta) => { setLoadedProfile({ ...loadedProfile, ...delta }) }
 
@@ -38,21 +39,6 @@ export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated }
                 changeLoadedProfile({ ...response });
                 // console.log(loadedProfile)
 
-            })
-            .then(() => {
-
-                getFriendRequests().then((requests) => {
-                    console.log(requests);
-                    for (const request in requests) {
-                        console.log(request)
-                        if (request.requester_id === currUser.id || request.requeste_id === currUser.id) {
-                            if (request.status === 1) { setFriend(1); break; }
-                            if (request.status === 0) { setSentRequest(1); break; }
-                            else if (request.requester_id === currUser.id && request.status === -1) { setSentRequest(1); setRecieveRequest(0); break; }
-                            else if (request.requested_id === currUser.id && request.status === -1) { setSentRequest(0); setRecieveRequest(1); break; }
-                        }
-                    }
-                })
             })
         
     }, [editMode, sentRequest, friend, recieveRequest]);
@@ -92,6 +78,25 @@ export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated }
         navigate(`accounts/${currUser.username}`);
     }
 
+    if(loadedProfile.account_id !== currUser.account_id && !hasStatus)
+    {
+        setHasStatus(true);
+        console.log(hasStatus);
+        getFriendRequests().then((response) => {
+            let requests = [...response.incoming, ...response.outgoing];
+
+            for (const request in requests) {
+                if(requests[request].status === -1){console.log(loadedProfile.account_id,requests[request].requested_id, requests[request].requester_id)}
+                if (requests[request].requester_id === loadedProfile.account_id || requests[request].requested_id === loadedProfile.account_id) {
+                    if (requests[request].status === 1) { setFriend(1); break; }
+                    if (requests[request].status === 0) { console.log("Not Friends"); setSentRequest(1); break; }
+                    if (requests[request].requester_id === loadedProfile.account_id && requests[request].status === -1) { console.log("Already sent");setSentRequest(1); setRecieveRequest(0);console.log(recieveRequest,sentRequest); break; }
+                    if (requests[request].requested_id === loadedProfile.account_id && requests[request].status === -1) { console.log("Recieved one");setSentRequest(0); setRecieveRequest(1);console.log(recieveRequest,sentRequest); break; }
+                }
+            }
+        })
+    }
+
     if (!currUser) {
         let username = Cookies.get("username");
 
@@ -118,10 +123,13 @@ export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated }
 
     const sendFriendRequestFunc = () => {
         console.log("sending friend request");
-        sendFriendRequest(loadedProfile.id);
-        setSentRequest(1);
+        sendFriendRequest(loadedProfile.id).then(() => {setHasStatus(false)})
     }
 
+    const handleFriendRequestFunc = () => {
+        console.log("handling");
+        handleFriendRequest(loadedProfile.id, 1).then(() => {setHasStatus(false)})
+    }
 
     const changeAccount = delta => setAccount({ ...account, ...delta });
 
@@ -232,13 +240,13 @@ export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated }
                                 {online === true && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
                                 {online === false && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
                                     <th className="float-start col-3 fs-3 mt-2 text-start">{loadedProfile.username}</th>
-                                    {!friend && recieveRequest && <th className="col-1 pb-2">
-                                        <Button variant="contained" className="primary" endIcon={<Add />}>Accept Request</Button>
+                                    {!friend && recieveRequest===1 && <th className="col-1 pb-2">
+                                        <Button variant="contained" className="primary" onClick={() => {handleFriendRequestFunc()}} endIcon={<Add />}>Accept Request</Button>
                                     </th>}
-                                    {!friend && sentRequest && <th className="col-1 pb-2">
+                                    {!friend && sentRequest===1 && <th className="col-1 pb-2">
                                         <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Add Friend </Button>
                                     </th>}
-                                    {!friend && !sentRequest && <th className="col-1 pb-2">
+                                    {!friend && sentRequest===0 && recieveRequest !== 1 && <th className="col-1 pb-2">
                                         <Button variant="contained" className="bg-success" onClick={() => sendFriendRequestFunc()} endIcon={<Add />}>Add Friend </Button>
                                     </th>}
                                     {friend &&
