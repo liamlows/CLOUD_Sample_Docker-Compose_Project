@@ -95,4 +95,5 @@ export const getFriendRequests = async () => {
 
 export const handleFriendRequest = async (id, status) => {
     const res = await axios.put(`${BACKEND_ENDPOINT}/api/friends/requests/${id}`, {status: status});
+    return;
 }
