@@ -61,7 +61,6 @@ router.get("/", async (req, res, next) => {
         return next(error);
     }
     res.status(200).json(friends);
-    next();
 });
 
 /*
@@ -77,7 +76,6 @@ router.get("/requests/", async (req, res, next) => {
         return next(error);
     }
     res.status(200).json(requests);
-    next();
 });
 
 /*
@@ -133,7 +131,6 @@ router.post("/requests/", async (req, res, next) => {
     res.status(200).json({
         success: 1, error: ""
     });
-    next();
 });
 
 /*
@@ -196,7 +193,6 @@ router.put("/requests/:otherId", async (req, res, next) => {
     }
 
     res.sendStatus(200);
-    //next();
 });
 
 /*
@@ -225,8 +221,7 @@ router.delete("/:friendId", async (req, res, next) => {
         return next(error);
     }
 
-    res.status(200);
-    next();
+    res.sendStatus(200);
 });
 
 module.exports = router;

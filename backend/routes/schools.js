@@ -39,8 +39,6 @@ router.get("/:id", async (req, res, next) => {
     else{
         res.status(404);
     }
-
-    next();
 });
 
 // PUT /schools/:id
@@ -48,7 +46,6 @@ router.get("/:id", async (req, res, next) => {
 router.put("/:id", async (req, res, next) => {
     // TODO
     res.status(404);
-    next();
 });
 
 module.exports = router;
