@@ -61,7 +61,6 @@ router.get("/", async (req, res, next) => {
         return next(error);
     }
     res.status(200).json(friends);
-    next();
 });
 
 /*
@@ -77,7 +76,6 @@ router.get("/requests/", async (req, res, next) => {
         return next(error);
     }
     res.status(200).json(requests);
-    next();
 });
 
 /*
@@ -87,12 +85,15 @@ Creates a new friend request if possible. Requires being logged in.
 */
 router.post("/requests/", async (req, res, next) => {
     let targetId = req.body.targetId;
+    console.log(targetId);
     if(targetId === undefined) {
+        console.log("targetId is undefined");
         return res.sendStatus(400);
     }
 
     // Ensure we cannot friend ourselves.
     if(targetId === req.session.accountId){
+        console.log("targetId is the same as user");
         return res.sendStatus(400);
     }
 
@@ -123,14 +124,13 @@ router.post("/requests/", async (req, res, next) => {
 
     // Insert the new request into the database.
     try {
-        await pool.execute('INSERT INTO `friend_requests`(requester_id, requested_id) VALUES (?, ?)',
+        await pool.execute('INSERT INTO `friend_requests` (requester_id, requested_id) VALUES (?, ?)',
             [req.session.accountId, targetId]);
     } catch(error) { return next(error); }
 
     res.status(200).json({
         success: 1, error: ""
     });
-    next();
 });
 
 /*
@@ -151,7 +151,9 @@ router.put("/requests/:otherId", async (req, res, next) => {
     try {
         let friend_request = await findRequest(otherId, req.session.accountId);
 
-        if(friend_request.status !== -1){
+        if (!friend_request)
+            console.log("friend request does not exist");
+        else if(friend_request.status !== -1){
             return res.sendStatus(403);
         }
 
@@ -190,8 +192,7 @@ router.put("/requests/:otherId", async (req, res, next) => {
         return next(error);
     }
 
-    res.status(200);
-    next();
+    res.sendStatus(200);
 });
 
 /*
@@ -220,8 +221,7 @@ router.delete("/:friendId", async (req, res, next) => {
         return next(error);
     }
 
-    res.status(200);
-    next();
+    res.sendStatus(200);
 });
 
 module.exports = router;

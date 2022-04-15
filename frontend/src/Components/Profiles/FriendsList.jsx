@@ -10,45 +10,45 @@ import Cookies from 'js-cookie';
 export const FriendsList = ({ currUser, setCurrUser, pages, settings, setNavigated }) => {
 
     const navigate = useNavigate();
-    const [friends, setFriends] = useState([]);
+    const [friends, setFriends] = useState(false);
 
-    const [username, setUsername] = useState(undefined);
-
-    const addFriend = () => {
-        // navigate(`/users/${currUser.username}/friends`);
-    }
     const goToProfile = (friend) => {
         navigate(`/users/${friend.username}`);
     }
     useEffect(() => {
-        if (!currUser) {
-            let username = Cookies.get("username");
-            if (username) {
-                getAccountbyUsername(username)
-                    .then(account => {
-                        if (account) {
-                            setCurrUser(account);
-                        }
-                        else {
-                            console.log("User is null after request");
-                            setCurrUser('');
-                        }
-                    });
-            }
-            else {
-                setCurrUser('');
-                setNavigated(true);
-                navigate('/');
-            }
-        }
-        getFriends().then(response => { setFriends(response) });
+        getFriends().then(response => { friendsSetter(response) });
     }, [currUser]);
 
+    const friendsSetter = new_friends =>
+    {
+        console.log(new_friends);
+        setFriends(new_friends);
+    }
+
     if (!friends) {
-        getFriends().then(response => { setFriends(response) });
         return <>Loading...</>
     }
 
+    if (!currUser) {
+        let username = Cookies.get("username");
+        if (username) {
+            getAccountbyUsername(username)
+                .then(account => {
+                    if (account) {
+                        setCurrUser(account);
+                    }
+                    else {
+                        console.log("User is null after request");
+                        setCurrUser('');
+                    }
+                });
+        }
+        else {
+            setCurrUser('');
+            setNavigated(true);
+            navigate('/');
+        }
+    }
 
 
     const signOut = () => {
@@ -87,6 +87,7 @@ export const FriendsList = ({ currUser, setCurrUser, pages, settings, setNavigat
             <div className='clearfix'></div>
         </div>
         <div className='border-top mb-3'></div>
+        {console.log(friends)}
         {friends.length > 0
             && <table>
                 <thead>

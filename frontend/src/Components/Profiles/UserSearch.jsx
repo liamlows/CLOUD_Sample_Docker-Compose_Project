@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useState } from "react"
 import { findDOMNode } from "react-dom";
 import { Navigate, useNavigate } from "react-router-dom";
-import { getAccountbyUsername, getFriendRequests, getProfiles, logout, sendFriendRequest } from "../../APIFolder/loginApi"
+import { getAccountbyUsername, getFriendRequests, getProfiles, handleFriendRequest, logout, sendFriendRequest } from "../../APIFolder/loginApi"
 import { TextField } from "../common";
 import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -14,10 +14,12 @@ import Cookies from "js-cookie";
 export const UserSearch = ({ currUser, setCurrUser, pages, settings, setNavigated }) => {
 
     const navigate = useNavigate();
-    // const [allProfiles, setProfiles] = useState(undefined);
-    const [profiles, setProfiles] = useState(undefined);
+
+    const [profiles, setProfiles] = useState([]);
 
     const [username, setUsername] = useState('');
+    const [dummy, setDummy] = useState(0);
+
 
     const goToProfile = profile => {
 
@@ -29,27 +31,80 @@ export const UserSearch = ({ currUser, setCurrUser, pages, settings, setNavigate
     }
 
     useEffect(() => {
-        if (!currUser) {
-            let username = Cookies.get("username");
-            if (username) {
-                getAccountbyUsername(username)
-                    .then(account => {
-                        if (account) {
-                            setCurrUser(account);
+        console.log("running");
+        // setProfiles(false);
+        let dummy = [];
+        console.log("INITIAL TYPE", typeof (dummy));
+        getProfiles().then(response => {
+            console.log("Getting requests")
+            // setProfiles(response);
+            getFriendRequests().then(FRresponse => {
+                let friendRequests = [...FRresponse.incoming, ...FRresponse.outgoing];
+                // console.log(friendRequests);
+                let status = [];
+                for (const profile in response) {
+                    // if(response[profile].account_id === currUser.account_id){continue;}
+                    // console.log(response[profile])
+                    status[profile] = 0; //auto value, aka display add friend button
+                    for (const request in friendRequests) {
+                        if (friendRequests[request].requester_id === response[profile].account_id
+                            || friendRequests[request].requested_id === response[profile].account_id) {
+
+                            if (friendRequests[request].requester_id === currUser.account_id
+                                && (friendRequests[request].status === -1
+                                    || friendRequests[request].status === 0)) {
+
+                                status[profile] = 1; //display disabled button
+                            }
+                            else if (friendRequests[request].requested_id === currUser.account_id
+                                && friendRequests[request].status === -1) {
+
+                                status[profile] = 2; //display accept request button
+                            }
+                            else if (friendRequests[request].status === 1) {
+
+                                status[profile] = 3; //display friend tag
+                            }
                         }
-                        else {
-                            console.log("User is null after request");
-                            setCurrUser('');
-                        }
-                    });
+                    }
+                }
+                addStatusToProfiles(response, status);
             }
-            else {
-                setCurrUser('');
-                setNavigated(true);
-                navigate('/');
-            }
+            );
+        });
+    }, [dummy]);
+
+    if (!currUser) {
+        let username = Cookies.get("username");
+        if (username) {
+            getAccountbyUsername(username)
+                .then(account => {
+                    if (account) {
+                        setCurrUser(account);
+                    }
+                    else {
+                        console.log("User is null after request");
+                        setCurrUser('');
+                    }
+                });
         }
-    }, [currUser]);
+        else {
+            setCurrUser('');
+            setNavigated(true);
+            navigate('/');
+        }
+    }
+
+
+    const addStatusToProfiles = (dummy, statuses) => {
+        console.log("Adding status to profile")
+        let profiles2 = [];
+        for (const profile in dummy) {
+            profiles2.push({ ...dummy[profile], status: statuses[profile] });
+        }
+        setProfiles(profiles2);
+    }
+
 
     const signOut = () => {
         console.log("Logging out");
@@ -65,79 +120,67 @@ export const UserSearch = ({ currUser, setCurrUser, pages, settings, setNavigate
         navigate(`accounts/${currUser.username}`);
     }
 
-    const find = profile => {
-        let x = profile.username
-        // console.log(typeof(x))
-        if (x.search(username) !== -1) { return true; }
-        else { return false; }
+    const displayUser = (profile) => {
 
-
-        // console.log(x.search(username));
-    }
-
-    if (!profiles) {
-        getProfiles().then(response => setProfiles(response)).then(() => {
-            const friendRequests = getFriendRequests();
-            for (const profile in profiles) {
-                console.log(profile);
-                for (const request in friendRequests) {
-                    if (request.requester_id === currUser.id || request.requeste_id === currUser.id) {
-                        if (request.requester_id === currUser.id && (request.status === -1 || request.status === 0)) {
-                            profile.status = 1;
-                        }
-                        else if (request.requested_id === currUser.id && request.status === -1) {
-                            profile.status = 2;
-                        }
-                        else if (request.status === 1) {
-                            profile.status = 3;
-                        }
-                    }
-                    else {
-                        profile.status = 0;
-                    }
-                }
-            }
+        if (profile.status == 3) {
+            console.log("already friends");
+            return false;
         }
-        );
-        return <>Loading...</>
+        if (profile.account_id === currUser.account_id) {
+            return false;
+        }
+        return true;
+
+    }
+    const readyToDisplay = () =>
+    {
+        if(profiles !== undefined && profiles[0] !== undefined && profiles[0].status !== undefined)
+        {
+            return true;
+        }
+        return false;
     }
 
-    return <div>
-        <LoggedInResponsiveAppBar
-            pages={pages}
-            settings={settings}
-            signOut={() => signOut()}
-            username={currUser.username}
-            profileNav={() => profileNav()}
-            account={() => accountNav()} />
+    if (readyToDisplay()) {
 
-        <div className="container border-0 mt-3">
-            <button type="button" className="float-end btn btn-success mt-3" onClick={goToFriendsList}>Friends List</button>
-            <div className="container border-0 col-3 float-start">
-                <TextField label="Search by Username" value={username} setValue={setUsername} />
+        return <div>
+            <LoggedInResponsiveAppBar
+                pages={pages}
+                settings={settings}
+                signOut={() => signOut()}
+                username={currUser.username}
+                profileNav={() => profileNav()}
+                account={() => accountNav()} />
+
+            <div className="container border-0 mt-3">
+                <button type="button" className="float-end btn btn-success mt-3" onClick={goToFriendsList}>Friends List</button>
+                <div className="container border-0 col-3 float-start">
+                    <TextField label="Search by Username" value={username} setValue={setUsername} />
+                </div>
+                <div className="clearfix"></div>
             </div>
-            <div className="clearfix"></div>
-        </div>
 
-        {/* TODO: Want to implement virtulized table eventually but regular table for now */}
-        <table className="table">
-            <thead>
-                <tr>
-                    <th>Username</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Friend Count</th>
-                    <th className="col-2"></th>
-                </tr>
-            </thead>
-            <tbody>
-                {profiles && profiles.map(profile => !profile.status === 3 && find(profile) && <tr key={profile.username} className="container">
+            {/* TODO: Want to implement virtulized table eventually but regular table for now */}
+            <table className="table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Friend Count</th>
+                        <th className="col-2"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {console.log("RENDER", typeof (profiles))}
+                    {profiles.map((profile, idx) => {
+                        return (displayUser(profile) && <tr key={idx} className="container">
 
-                    <td>{profile.username}</td>
-                    <td>{profile.firstName}</td>
-                    <td>{profile.lastName}</td>
-                    <td className="ts-2">0</td>
-                    {/* <td>
+                            <td>{profile.username}</td>
+                            <td>{profile.first_name}</td>
+                            <td>{profile.last_name}</td>
+                            <td className="ts-2">0</td>
+                            {/* <td>
                         <Button variant="contained"
                             className="btn btn-secondary"
                             onClick={() => sendFriendRequest(profile.id)}>
@@ -146,30 +189,35 @@ export const UserSearch = ({ currUser, setCurrUser, pages, settings, setNavigate
                     </td> */}
 
 
-                    {profile.status === 2 && <td className="col-1 pb-2">
-                        <Button variant="contained" className="primary" endIcon={<Add />}>Accept Request</Button>
-                    </td>}
-                    {profile.status === 1 && <td className="col-1 pb-2">
-                        <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Add Friend </Button>
-                    </td>}
-                    {profile.status === 0 && <td className="col-1 pb-2">
-                        <Button variant="contained" className="bg-success" onClick={() => sendFriendRequest(profile.id)} endIcon={<Add />}>Add Friend </Button>
-                    </td>}
+                            {profile.status === 2 && <td className="col-1 pb-2">
+                                <Button variant="contained" className="primary" onClick={() => { handleFriendRequest(profile.account_id, 1).then(setDummy(dummy + 1)) }} endIcon={<Add />}>Accept Request</Button>
+                            </td>}
+                            {profile.status === 1 && <td className="col-1 pb-2">
+                                <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Add Friend </Button>
+                            </td>}
+                            {profile.status === 0 && <td className="col-1 pb-2">
+                                <Button variant="contained" className="bg-success" onClick={() => { sendFriendRequest(profile.account_id).then(setDummy(dummy + 1)) }} endIcon={<Add />}>Add Friend </Button>
+                            </td>}
 
-                    {/* Need to add functionality to disable this if already friends ^ */}
+                            {/* Need to add functionality to disable this if already friends ^ */}
 
-                    <td>
-                        <Button variant="contained"
-                            className="btn btn-secondary"
-                            endIcon={<ArrowForwardIcon />}
-                            onClick={() => goToProfile(profile)}>
-                            View Profile
-                        </Button>
-                    </td>
+                            <td>
+                                <Button variant="contained"
+                                    className="btn btn-secondary"
+                                    endIcon={<ArrowForwardIcon />}
+                                    onClick={() => goToProfile(profile)}>
+                                    View Profile
+                                </Button>
+                            </td>
 
-                </tr>)}
-            </tbody>
-        </table>
-    </div>
+                        </tr>)
+                    })}
+                </tbody>
+            </table>
+        </div>
 
+    }
+    else{
+        return <>Loading...</>
+    }
 }
