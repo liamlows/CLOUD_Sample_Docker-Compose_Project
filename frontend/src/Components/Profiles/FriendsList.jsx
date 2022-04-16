@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import Cookies from 'js-cookie';
 
 // Component Imports
 import LoggedInResponsiveAppBar from '../common/LoggedInResponsiveAppBar';
@@ -22,6 +21,10 @@ export const FriendsList = (props) => {
 
     // Initial Load
     useEffect(() => {
+        if (JSON.stringify(account) === "{}") {
+            navigate('/');
+            props.setNavigated(true);
+        }
         getFriends().then(res => { friendsSetter(res); });
     }, []);
 
@@ -53,6 +56,7 @@ export const FriendsList = (props) => {
         navigate(`accounts/${account.username}`);
     }
 
+    // HTML
     return <div>
         <LoggedInResponsiveAppBar
             pages={props.pages}
@@ -77,7 +81,7 @@ export const FriendsList = (props) => {
         {friends.length > 0
             && <table>
                 <thead>
-                    {friends.map(friend => {
+                    {friends.map(friend => 
                         <tr key={friend.username}>
                             <td>{friend.username}</td>
                             <td>{friend.firstName}</td>
@@ -92,7 +96,7 @@ export const FriendsList = (props) => {
                                 </Button>
                             </td>
                         </tr>
-                    })}
+                    )}
 
                 </thead>
             </table>}

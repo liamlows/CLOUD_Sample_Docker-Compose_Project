@@ -51,6 +51,7 @@ function App() {
   // Initial Load
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    localStorage.setItem("currUser", "{}");
 
     let username = Cookies.get("username");
 
@@ -60,19 +61,19 @@ function App() {
         .then(account => {
           if (account) {
             console.log("account found");
-            console.log(x);
-            localStorage.setItem("currUser", JSOn.stringify(x));
+            console.log(account);
+            localStorage.setItem("currUser", JSON.stringify(account));
           }
           else {
             console.log("User is null after request");
-            localStorage.setItem("currUser", "");
+            localStorage.setItem("currUser", "{}");
           }
           setCName(' ');
         })
     }
     else {
       console.log("No cookie");
-      localStorage.setItem("currUser", "");
+      localStorage.setItem("currUser", "{}");
       setCName(' ');
     }
   }, []);
@@ -114,15 +115,11 @@ function App() {
 
 
           <Route path="/users/:username/friends" element={<FriendsList 
-            currUser={currUser} 
-            setCurrUser={x => setCurrUser(x)}
             pages={loggedInPages}
             settings={settings}
             setNavigated={x => setNavigated(x)}/>} />
 
           <Route path="/users" element={<UserSearch 
-            currUser={currUser} 
-            setCurrUser={x => setCurrUser(x)}
             pages={loggedInPages}
             settings={settings}
             setNavigated={x => setNavigated(x)}/>} />
@@ -136,8 +133,6 @@ function App() {
             setNavigated={x => setNavigated(x)}/>} />
             
           <Route path="/accounts/:username" element={<AccountInfo 
-            currUser={currUser} 
-            setCurrUser={x => setCurrUser(x)}
             setNavigated={x => setNavigated(x)} />} />
         </Routes>
       </BrowserRouter>

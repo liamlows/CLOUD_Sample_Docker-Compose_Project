@@ -31,8 +31,10 @@ export const SignUpPage = (props) => {
 
     // Initial Load
     useEffect(() => {
-        if (!!localStorage.getItem("currUser"))
+        if (localStorage.getItem("currUser") !== "{}") {
             navigate('/');
+            props.setNavigated(true);
+        }
     });
 
     // Conditions

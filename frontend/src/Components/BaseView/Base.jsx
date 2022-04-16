@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 // Component Imports
 import { HomeView } from "../LoggedIn/HomeView"
 import { BaseResponsiveAppBar } from "../common/BaseResponsiveAppBar"
+import ErrorSnackBar from "./ErrorSnackBar"
 
 // Method Imports
 
@@ -33,8 +34,8 @@ export const Base = (props) => {
 
     // HTML
     return <section className="baseView">
-        {navigated && <ErrorSnackBar></ErrorSnackBar>}
-        {!localStorage.getItem("currUser") && <div>
+        {props.navigated && <ErrorSnackBar></ErrorSnackBar>}
+        {localStorage.getItem("currUser") === "{}" && <div>
             <BaseResponsiveAppBar 
                 pages={props.basePages}
                 signIn={() => onSignIn()}
@@ -43,6 +44,6 @@ export const Base = (props) => {
             <h2 className="">This is the base page to be updated with logo and stuff</h2>
         </div>}
         {/*if the user is logged in*/}
-        {!!localStorage.getItem("currUser") && <HomeView {...props} />}
+        {localStorage.getItem("currUser") !== "{}" && <HomeView {...props} />}
     </section>
 }

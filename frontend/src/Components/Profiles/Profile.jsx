@@ -1,6 +1,6 @@
 // Libary Imports
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import CircleIcon from '@mui/icons-material/Circle';
 import Cookies from "js-cookie";
 import { Button } from "@mui/material";
@@ -13,7 +13,7 @@ import { TextField } from "../common";
 import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 
 // Method Imports
-import { getFriendRequests, getStatusByUsername, handleFriendRequest, logout, sendFriendRequest, updateAccountbyUsername } from "../../APIFolder/loginApi";
+import { getFriendRequests, getStatusByUsername, getAccountbyUsername, handleFriendRequest, logout, sendFriendRequest, updateAccountbyUsername } from "../../APIFolder/loginApi";
 
 export const Profile = (props) => {
     // Navigate Object
@@ -25,10 +25,11 @@ export const Profile = (props) => {
     const [online, setOnline] = useState(false);
     const [reload, setReload] = useState(false);
 
+    // Initial Load
     useEffect(() => {
         let status = 0;
 
-        if (!account) {
+        if (account === {}) {
             window.alert("Please log in to view profiles");
             navigate('/');
             props.setNavigated(true);
@@ -42,7 +43,7 @@ export const Profile = (props) => {
                 let frReq = [...res.incoming, ...res.outgoing];
 
                 // loop through each request
-                for (const req in friendRequests) {
+                for (const req in frReq) {
                     // check if the request is to the current user
                     if (frReq[req].requester_id === account.account_id) {
                         // if the friend request has not been accepted
@@ -75,8 +76,30 @@ export const Profile = (props) => {
                 addStatusToAccount(status);
             });
         }
-    }, [editMode, reload]);
+    }, [editMode, reload, account]);
 
+    // Conditions
+    if (JSON.stringify(account) === "{}") {
+        let username = Cookies.get("username");
+        if (username) {
+            getAccountbyUsername(username)
+                .then(account => {
+                    if (account) {
+                        localStorage.setItem("currUser", JSON.stringify(account));
+                        setAccount(account);
+                    }
+                    else {
+                        console.log("User is null after request");
+                    }
+                });
+        }
+        else {
+            props.setNavigated(true);
+            navigate('/');
+        }
+    }
+
+    // Component Methods
     const addStatusToAccount = (status) => {
         console.log("Adding status to account");
         setAccount({ ...account, status: status });
@@ -87,6 +110,7 @@ export const Profile = (props) => {
         setEditMode(true);
         changeAccount({ ...account });
     }
+
     const doneEditing = () => {
         if (account.first_name && account.last_name) {
             updateAccountbyUsername(account).then(setEditMode(false));
@@ -96,19 +120,23 @@ export const Profile = (props) => {
             window.alert("Please fill out both fields");
         }
     }
+
     const cancel = () => {
         setEditMode(false);
     }
+
     const signOut = () => {
         console.log("Logging out");
         logout().then(() => {
             navigate('/');
-            localStorage.setItem("currUser", "")
+            localStorage.setItem("currUser", "{}")
         });
     }
+
     const profileNav = () => {
         navigate(`users/${account.username}`);
     }
+
     const accountNav = () => {
         navigate(`accounts/${account.username}`);
     }
@@ -136,8 +164,8 @@ export const Profile = (props) => {
     if (account && account.status !== undefined) {
         return <section className="userProfile">
             <LoggedInResponsiveAppBar
-                pages={pages}
-                settings={settings}
+                pages={props.pages}
+                settings={props.settings}
                 signOut={() => signOut()}
                 username={account.username}
                 profileNav={() => profileNav()}

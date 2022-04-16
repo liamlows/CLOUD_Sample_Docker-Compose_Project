@@ -19,7 +19,8 @@ export const LoginPage = (props) => {
 
     // Initial Load
     useEffect(() => {
-        if (!!JSON.parse(localStorage.getItem("currUser")));
+        console.log(localStorage.getItem("currUser"));
+        if (localStorage.getItem("currUser") !== "{}");
             navigate('/');
     });
 

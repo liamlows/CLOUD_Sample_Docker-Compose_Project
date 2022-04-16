@@ -1,6 +1,7 @@
 // Library Imports
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 // Component Imports
 import { LoggedInResponsiveAppBar } from "../common/LoggedInResponsiveAppBar";
@@ -18,19 +19,33 @@ export const HomeView = (props) => {
     // Initial Load
     useEffect(() => {
         console.log("Loading HomeView...");
-        if (!localStorage.getItem("currUser")) {
-            window.alert("Sign in to view the home view");
-            navigate('/');
-        }
-        else
-            getAccountbyUsername(account.username).then(x => setAccount(x));
     }, []);
 
+    console.log(account);
+
     // Conditions
+    if (JSON.stringify(account) === "{}") {
+        let username = Cookies.get("username");
+        if (username) {
+            getAccountbyUsername(username)
+                .then(account => {
+                    if (account) {
+                        localStorage.setItem("currUser", JSON.stringify(account));
+                        setAccount(account);
+                    }
+                    else {
+                        console.log("User is null after request");
+                    }
+                });
+        }
+        else {
+            navigate('/');
+        }
+    }
 
     // Component Methods
     const signOut = () => {
-        logout().then(() => localStorage.setItem("currUser", ""));
+        logout().then(() => localStorage.setItem("currUser", "{}"));
     }
     const profileNav = () => {
         navigate(`users/${account.username}`);
@@ -48,7 +63,7 @@ export const HomeView = (props) => {
             username={account.username}
             profileNav={() => profileNav()}
             accountNav={() => accountNav()} />
-        <div className="col-6 p-0"><div className="col-1 p-0"></div><h1 className="col-6 mt-4 fs-2">Welcome {currUser.firstName}</h1></div>
+        <div className="col-6 p-0"><div className="col-1 p-0"></div><h1 className="col-6 mt-4 fs-2">Welcome {account.firstName}</h1></div>
         <div className="clearfix p-0"></div>
         <div className="row mt-5 m-3">
             <div className="col-6 border p-5">
