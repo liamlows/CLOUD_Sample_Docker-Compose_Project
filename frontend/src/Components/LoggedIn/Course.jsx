@@ -16,6 +16,8 @@ export const CourseProfile = ({course}) => {
         <p>{course.average}</p>
          {/* TODO:  make badge for seats*/}
         <p>{course.seatsTaken}/{course.maxSeats}</p>
+        <h3>Waitlist: </h3>
+        {/* TODO:  <p>{course.fufillments}</p>*/}
         {/* TODO:  add button to add to schedule, maybe add div for the link?*/}
 
     </section>
