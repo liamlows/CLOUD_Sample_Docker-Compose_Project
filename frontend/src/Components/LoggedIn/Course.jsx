@@ -14,6 +14,8 @@ export const CourseProfile = ({course}) => {
         <p onclick={()=>navigate(`/users/${course.professor}`)}>{course.professor}</p> 
         <p>{course.time}</p>
         <p>{course.average}</p>
+         {/* TODO:  make badge for seats*/}
+        <p>{course.seatsTaken}/{course.maxSeats}</p>
         {/* TODO:  add button to add to schedule, maybe add div for the link?*/}
 
     </section>

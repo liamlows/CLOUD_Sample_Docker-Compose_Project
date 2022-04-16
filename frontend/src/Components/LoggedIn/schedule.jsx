@@ -2,6 +2,7 @@
     Component to show a student's schedule
 */
 import { StickyTable } from "./stickyTable"
+import {GenericButton} from "./Components/common/GenericButton"
 
 export const Schedule = ({studentID}) => {
 
@@ -35,7 +36,8 @@ export const Schedule = ({studentID}) => {
           minWidth: 170,
           align: 'right',
           format: (value) => value.toFixed(2),
-        }
+        },
+        { id: 'Grade', label: 'Grade', minWidth: 170 }
       ];
 
       function createData(courses){
@@ -51,9 +53,9 @@ export const Schedule = ({studentID}) => {
 
 
 // <StickyTable rows = {createData({studentID.courses})} columns = {columnsMenu}/>
-    return <section id="profile">{
-       
+    return <section id="profile">
        <h1>Student needs courses </h1>
-}
+       <GenericButton label= "import courses"/>
+       <GenericButton label= "hide courses"/>
     </section>
 }
