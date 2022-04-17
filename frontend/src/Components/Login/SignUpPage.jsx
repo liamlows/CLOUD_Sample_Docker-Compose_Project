@@ -58,7 +58,6 @@ export const SignUpPage = (props) => {
                     else {
                         getAccountbyUsername(res.username)
                             .then(x => {
-                                setAccount(x);
                                 localStorage.setItem("currUser", JSON.stringify(x));
                                 navigate('/');
                             });

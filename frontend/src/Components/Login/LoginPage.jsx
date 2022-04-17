@@ -20,8 +20,10 @@ export const LoginPage = (props) => {
     // Initial Load
     useEffect(() => {
         console.log(localStorage.getItem("currUser"));
-        if (localStorage.getItem("currUser") !== "{}");
-            navigate('/');
+        if (localStorage.getItem("currUser") !== "{}") {
+            console.log("User exists");
+            navigate('/'); 
+        }
     });
 
     // Conditions
@@ -39,6 +41,7 @@ export const LoginPage = (props) => {
             window.alert("Password or username is incorrect");
         }
         else {
+            console.log("logging in now...");
             getAccountbyUsername(res.username)
                 .then(x => {
                     localStorage.setItem("currUser", JSON.stringify(x));

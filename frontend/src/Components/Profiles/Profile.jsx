@@ -35,7 +35,7 @@ export const Profile = (props) => {
             props.setNavigated(true);
         }
         else {
-            getStatusByUsername(account.username).then(status => setOnline(!!status.logged_in));
+            getStatusByUsername(account.username).then((status) => setOnline(!!status.logged_in));
             
             // get the table of friend requests
             getFriendRequests().then(res => {
@@ -76,7 +76,7 @@ export const Profile = (props) => {
                 addStatusToAccount(status);
             });
         }
-    }, [editMode, reload, account]);
+    }, [editMode, reload]);
 
     // Conditions
     if (JSON.stringify(account) === "{}") {
@@ -160,8 +160,9 @@ export const Profile = (props) => {
     // If so then allow them to edit with the edit button at the end (this edit button will update the database once done)
     // If not then display the profile without the edit buttons.
 
+    console.log("Account before if statement", account);
     // NOTE - IN FUTURE ADD BUTTON TO SEND FRIEND REQUEST...ONLY IF FUNCTIONALITY IS IMPLEMENTED
-    if (account && account.status !== undefined) {
+    if (JSON.stringify(account) !== "{}" && account.status !== undefined) {
         return <section className="userProfile">
             <LoggedInResponsiveAppBar
                 pages={props.pages}
@@ -298,4 +299,5 @@ export const Profile = (props) => {
                 </div>}
         </section>
     }
+    return <></>;
 }

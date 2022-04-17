@@ -25,7 +25,10 @@ export const FriendsList = (props) => {
             navigate('/');
             props.setNavigated(true);
         }
-        getFriends().then(res => { friendsSetter(res); });
+        getFriends().then(res => { 
+            console.log(res);
+            setFriends(res);
+        });
     }, []);
 
     // Conditions
@@ -34,10 +37,6 @@ export const FriendsList = (props) => {
     }
 
     // Component Methods
-    const friendsSetter = (new_friends) => {
-        console.log(new_friends);
-        setFriends(new_friends);
-    }
     const goToProfile = (friend) => {
         navigate(`/users/${friend.username}`);
     }

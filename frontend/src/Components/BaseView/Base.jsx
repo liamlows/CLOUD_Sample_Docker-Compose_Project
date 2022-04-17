@@ -29,7 +29,7 @@ export const Base = (props) => {
     }
     const onSignUp = () => {
         console.log("signing up");
-        navigate('/signUp');
+        navigate('/signup');
     }
 
     // HTML
