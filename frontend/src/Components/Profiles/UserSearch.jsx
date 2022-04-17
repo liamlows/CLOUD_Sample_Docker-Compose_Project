@@ -34,38 +34,40 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
                 let frReq = [...frRes.incoming, ...frRes.outgoing];
                 let status = [];
                 // loop through each request
-                for (const req in frReq) {
-                    // check if the request is to the current user
-                    if (frReq[req].requester_id === account.account_id) {
-                        // if the friend request has not been accepted
-                        if (frReq[req].status === -1 || frReq[req].status === 0) {
-                            status = 2; // display accept request button
-                            console.log("changing status to a 2", status);
+                for (const profile in res) {
+                    for (const req in frReq) {
+                        // check if the request is to the current user
+                        if (frReq[req].requester_id === account.account_id) {
+                            // if the friend request has not been accepted
+                            if (frReq[req].status === -1 || frReq[req].status === 0) {
+                                status[profile] = 2; // display accept request button
+                                console.log("changing status to a 2", status);
+                            }
+                            // if the request has been accepted
+                            else if (frReq[req].status === 1) {
+                                status[profile] = 3; // display friend tag
+                                console.log("changing status to a 3", status);
+                            }
                         }
-                        // if the request has been accepted
-                        else if (frReq[req].status === 1) {
-                            status = 3; // display friend tag
-                            console.log("changing status to a 3", status);
-                        }
-                    }
-                    // check if the request is from the user
-                    else if (frReq[req].requested_id === account.account_id) {
-                        // if the request has not been accepted
-                        if (frReq[req].status === -1 || frReq[req].status === 0) {
-                            status = 1; // display disabled button
-                            console.log("changing status to a 1", status);
-                        }
-                        // if the request has been accepted
-                        else if (frReq[req].status === 1) {
-                            status = 3; // display friend tag
-                            console.log("changing status to a 3", status);
+                        // check if the request is from the user
+                        else if (frReq[req].requested_id === account.account_id) {
+                            // if the request has not been accepted
+                            if (frReq[req].status === -1 || frReq[req].status === 0) {
+                                status[profile] = 1; // display disabled button
+                                console.log("changing status to a 1", status);
+                            }
+                            // if the request has been accepted
+                            else if (frReq[req].status === 1) {
+                                status[profile] = 3; // display friend tag
+                                console.log("changing status to a 3", status);
+                            }
                         }
                     }
                 }
                 addStatusToProfiles(res, status);
             });
         });
-    }, [dummy, account]);
+    }, [dummy]);
 
     // Conditions
     if (JSON.stringify(account) === "{}") {
@@ -103,7 +105,9 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
         for (const profile in dummy) {
             profiles2.push({ ...dummy[profile], status: statuses[profile] });
         }
+        console.log("profiles2", profiles2);
         setProfiles(profiles2);
+        console.log("profiles after set", profiles);
     }
 
 
@@ -135,8 +139,8 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
 
     }
 
-    const readyToDisplay = () =>
-    {
+    const readyToDisplay = () =>{
+        console.log("profiles", profiles);
         if(profiles !== undefined && profiles[0] !== undefined && profiles[0].status !== undefined)
         {
             return true;
