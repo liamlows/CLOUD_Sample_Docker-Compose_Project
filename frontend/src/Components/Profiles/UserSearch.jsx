@@ -40,7 +40,7 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
                         if (frReq[req].requester_id === account.account_id) {
                             // if the friend request has not been accepted
                             if (frReq[req].status === -1 || frReq[req].status === 0) {
-                                status[profile] = 2; // display accept request button
+                                status[profile] = 1; // display accept request button
                                 console.log("changing status to a 2", status);
                             }
                             // if the request has been accepted
@@ -53,7 +53,7 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
                         else if (frReq[req].requested_id === account.account_id) {
                             // if the request has not been accepted
                             if (frReq[req].status === -1 || frReq[req].status === 0) {
-                                status[profile] = 1; // display disabled button
+                                status[profile] = 2; // display disabled button
                                 console.log("changing status to a 1", status);
                             }
                             // if the request has been accepted
@@ -181,7 +181,7 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
                 <tbody>
                     {console.log("RENDER", typeof (profiles))}
                     {profiles.map((profile, idx) => {
-                        return (displayUser(profile) && <tr key={idx} className="container">
+                        return (/*displayUser(profile) && */<tr key={idx} className="container">
 
                             <td>{profile.username}</td>
                             <td>{profile.first_name}</td>
