@@ -30,8 +30,6 @@ export const Profile = (props) => {
 
     // Initial Load
     useEffect(() => {
-        if (JSON.stringify(account) === "{}")
-            setAccount(JSON.parse(localStorage.getItem("currUser")));
         let status = 0;
 
         if (localStorage.getItem("currUser") === "{}") {
@@ -40,6 +38,9 @@ export const Profile = (props) => {
             props.setNavigated(true);
         }
         else {
+            if (JSON.stringify(account) === "{}")
+                setAccount(JSON.parse(localStorage.getItem("currUser")));
+
             getStatusByUsername(location.pathname.substring(7, location.pathname.length)).then((status) => setOnline(!!status.logged_in));
             
             getAccountbyUsername(location.pathname.substring(7, location.pathname.length)).then(loaded => {
@@ -110,9 +111,11 @@ export const Profile = (props) => {
 
     // Component Methods
     const addStatusToAccount = (status, loaded) => {
-        console.log("Adding status to account");
-        setAccount({ ...loaded, status: status });
-        console.log(account);
+        if (account.status !== status) {
+            console.log("Adding status to account");
+            setAccount({ ...loaded, status: status });
+            console.log(account);
+        }
     }
 
     const startEditing = () => {
