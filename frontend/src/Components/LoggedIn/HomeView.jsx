@@ -14,11 +14,12 @@ export const HomeView = (props) => {
     const navigate = useNavigate();
 
     // Component Variables
-    const [account, setAccount] = useState(JSON.parse(localStorage.getItem("currUser")));
+    const [account, setAccount] = useState('');
 
     // Initial Load
     useEffect(() => {
         console.log("Loading HomeView...");
+        setAccount(JSON.parse(localStorage.getItem("currUser")))
     }, []);
 
     console.log(account);
