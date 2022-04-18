@@ -35,7 +35,6 @@ export const Profile = (props) => {
         if (localStorage.getItem("currUser") === "{}") {
             window.alert("Please log in to view profiles");
             navigate('/');
-            props.setNavigated(true);
         }
         else {
             if (JSON.stringify(account) === "{}")
@@ -81,12 +80,16 @@ export const Profile = (props) => {
                 }).then(() => {
                     if (account.account_id !== JSON.parse(localStorage.getItem("currUser")).account_id) {
                         console.log(status, loaded);
-                        addStatusToAccount(status, loaded);
+                        if (account.status !== status) {
+                            console.log("Adding status to account");
+                            setAccount({ ...loaded, status: status });
+                            console.log(account);
+                        }
                     }
                 });
             });
         }
-    }, [editMode, reload, account]);
+    }, [editMode, reload, account, location.pathname ]);
 
     // Conditions
     if (JSON.stringify(account) === "{}") {
@@ -110,14 +113,6 @@ export const Profile = (props) => {
     }
 
     // Component Methods
-    const addStatusToAccount = (status, loaded) => {
-        if (account.status !== status) {
-            console.log("Adding status to account");
-            setAccount({ ...loaded, status: status });
-            console.log(account);
-        }
-    }
-
     const startEditing = () => {
         setEditMode(true);
         changeAccount({ ...account });
