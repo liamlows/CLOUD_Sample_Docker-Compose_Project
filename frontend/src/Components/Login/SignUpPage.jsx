@@ -11,9 +11,10 @@ import { getAccountbyUsername, registerAccount } from "../../APIFolder/loginApi"
 export const SignUpPage = (props) => {
     // Navigate Object
     const navigate = useNavigate();
+    if (localStorage.getItem("currUser") === null)
+        localStorage.setItem("currUser", "{}");
 
     // Component Variables
-    const [account, setAccount] = useState(undefined);
     const [username, setUsername] = useState(undefined);
     const [password, setPassword] = useState(undefined);
     const [firstName, setFirstName] = useState(undefined);

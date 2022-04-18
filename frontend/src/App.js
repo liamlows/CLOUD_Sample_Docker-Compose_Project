@@ -41,7 +41,7 @@ function App() {
     //Add more paths here if you want more?
   ]);
   const [settings] = useState([
-    // {label: 'Public Profile', route: `/users/${account.id}` }, Keep out until have an account id confirmed
+    // { label: 'Public Profile', route: `/users/${account.id}` }, Keep out until have an account id confirmed
     // { label: 'Account', route: `/accounts/${account.id}` }, 
     { label: 'Public Profile', route: `/users` },
     { label: 'Account', route: `/accounts` },
@@ -52,6 +52,7 @@ function App() {
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     localStorage.setItem("currUser", "{}");
+    console.log("Initial State Set");
 
     let username = Cookies.get("username");
 

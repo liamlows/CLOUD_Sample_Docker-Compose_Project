@@ -12,15 +12,18 @@ import { getAccountbyUsername, logout } from "../../APIFolder/loginApi";
 export const HomeView = (props) => {
     // Navigate Object
     const navigate = useNavigate();
+    if (localStorage.getItem("currUser") === null)
+        localStorage.setItem("currUser", "{}");
 
     // Component Variables
-    const [account, setAccount] = useState('');
+    const [account, setAccount] = useState({});
 
     // Initial Load
     useEffect(() => {
+        if (JSON.stringify(account) === "{}")
+            setAccount(JSON.parse(localStorage.getItem("currUser")));
         console.log("Loading HomeView...");
-        setAccount(JSON.parse(localStorage.getItem("currUser")))
-    }, []);
+    }, [account]);
 
     console.log(account);
 

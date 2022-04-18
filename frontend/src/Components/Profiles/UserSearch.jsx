@@ -17,9 +17,11 @@ import { getAccountbyUsername, getFriendRequests, getProfiles, handleFriendReque
 export const UserSearch = ({ pages, settings, setNavigated }) => {
     // Navigate Object
     const navigate = useNavigate();
+    if (localStorage.getItem("currUser") === null)
+        localStorage.setItem("currUser", "{}");
 
     // Component Variables
-    const [account, setAccount] = useState(JSON.parse(localStorage.getItem("currUser")));
+    const [account, setAccount] = useState({});
     const [profiles, setProfiles] = useState([]);
     const [username, setUsername] = useState('');
     const [dummy, setDummy] = useState(0);
@@ -35,12 +37,13 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
                 let status = [];
                 // loop through each request
                 for (const profile in res) {
+                    status[profile] = 0;
                     for (const req in frReq) {
                         // check if the request is to the current user
-                        if (frReq[req].requester_id === account.account_id) {
+                        if (frReq[req].requested_id === res[profile].account_id) {
                             // if the friend request has not been accepted
                             if (frReq[req].status === -1 || frReq[req].status === 0) {
-                                status[profile] = 1; // display accept request button
+                                status[profile] = 2; // display accept request button
                                 console.log("changing status to a 2", status);
                             }
                             // if the request has been accepted
@@ -50,10 +53,10 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
                             }
                         }
                         // check if the request is from the user
-                        else if (frReq[req].requested_id === account.account_id) {
+                        else if (frReq[req].requester_id === res[profile].account_id) {
                             // if the request has not been accepted
                             if (frReq[req].status === -1 || frReq[req].status === 0) {
-                                status[profile] = 2; // display disabled button
+                                status[profile] = 1; // display disabled button
                                 console.log("changing status to a 1", status);
                             }
                             // if the request has been accepted
@@ -105,9 +108,7 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
         for (const profile in dummy) {
             profiles2.push({ ...dummy[profile], status: statuses[profile] });
         }
-        console.log("profiles2", profiles2);
         setProfiles(profiles2);
-        console.log("profiles after set", profiles);
     }
 
 
@@ -181,7 +182,7 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
                 <tbody>
                     {console.log("RENDER", typeof (profiles))}
                     {profiles.map((profile, idx) => {
-                        return (/*displayUser(profile) && */<tr key={idx} className="container">
+                        return (<tr key={idx} className="container">
 
                             <td>{profile.username}</td>
                             <td>{profile.first_name}</td>
@@ -206,7 +207,9 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
                                 <Button variant="contained" className="bg-success" onClick={() => { sendFriendRequest(profile.account_id).then(setDummy(dummy + 1)) }} endIcon={<Add />}>Add Friend </Button>
                             </td>}
 
-                            {/* Need to add functionality to disable this if already friends ^ */}
+                            {!displayUser(profile) && <td className="col-1 pb-2">
+                                <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Already Friends </Button>
+                            </td>}
 
                             <td>
                                 <Button variant="contained"

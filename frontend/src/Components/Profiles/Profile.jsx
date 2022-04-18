@@ -1,6 +1,6 @@
 // Libary Imports
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import CircleIcon from '@mui/icons-material/Circle';
 import Cookies from "js-cookie";
 import { Button } from "@mui/material";
@@ -18,65 +18,74 @@ import { getFriendRequests, getStatusByUsername, getAccountbyUsername, handleFri
 export const Profile = (props) => {
     // Navigate Object
     const navigate = useNavigate();
+    const location = useLocation();
+    if (localStorage.getItem("currUser") === null)
+        localStorage.setItem("currUser", "{}");
 
     // Component Variables
-    const [account, setAccount] = useState(JSON.parse(localStorage.getItem("currUser")));
+    const [account, setAccount] = useState({});
     const [editMode, setEditMode] = useState(false);
     const [online, setOnline] = useState(false);
     const [reload, setReload] = useState(false);
 
     // Initial Load
     useEffect(() => {
+        if (JSON.stringify(account) === "{}")
+            setAccount(JSON.parse(localStorage.getItem("currUser")));
         let status = 0;
 
-        if (account === {}) {
+        if (localStorage.getItem("currUser") === "{}") {
             window.alert("Please log in to view profiles");
             navigate('/');
             props.setNavigated(true);
         }
         else {
-            getStatusByUsername(account.username).then((status) => setOnline(!!status.logged_in));
+            getStatusByUsername(location.pathname.substring(7, location.pathname.length)).then((status) => setOnline(!!status.logged_in));
             
-            // get the table of friend requests
-            getFriendRequests().then(res => {
-                // convert it to an array
-                let frReq = [...res.incoming, ...res.outgoing];
+            getAccountbyUsername(location.pathname.substring(7, location.pathname.length)).then(loaded => {
+                // get the table of friend requests
+                getFriendRequests().then(res => {
+                    // convert it to an array
+                    let frReq = [...res.incoming, ...res.outgoing];
 
-                // loop through each request
-                for (const req in frReq) {
-                    // check if the request is to the current user
-                    if (frReq[req].requester_id === account.account_id) {
-                        // if the friend request has not been accepted
-                        if (frReq[req].status === -1 || frReq[req].status === 0) {
-                            status = 2; // display accept request button
-                            console.log("changing status to a 2", status);
+                    // loop through each request
+                    for (const req in frReq) {
+                        // check if the request is to the current user
+                        if (frReq[req].requested_id === loaded.account_id) {
+                            // if the friend request has not been accepted
+                            if (frReq[req].status === -1 || frReq[req].status === 0) {
+                                status = 2; // display accept request button
+                                console.log("changing status to a 2", status);
+                            }
+                            // if the request has been accepted
+                            else if (frReq[req].status === 1) {
+                                status = 3; // display friend tag
+                                console.log("changing status to a 3", status);
+                            }
                         }
-                        // if the request has been accepted
-                        else if (frReq[req].status === 1) {
-                            status = 3; // display friend tag
-                            console.log("changing status to a 3", status);
+                        // check if the request is from the user
+                        else if (frReq[req].requester_id === loaded.account_id) {
+                            // if the request has not been accepted
+                            if (frReq[req].status === -1 || frReq[req].status === 0) {
+                                status = 1; // display disabled button
+                                console.log("changing status to a 1", status);
+                            }
+                            // if the request has been accepted
+                            else if (frReq[req].status === 1) {
+                                status = 3; // display friend tag
+                                console.log("changing status to a 3", status);
+                            }
                         }
                     }
-                    // check if the request is from the user
-                    else if (frReq[req].requested_id === account.account_id) {
-                        // if the request has not been accepted
-                        if (frReq[req].status === -1 || frReq[req].status === 0) {
-                            status = 1; // display disabled button
-                            console.log("changing status to a 1", status);
-                        }
-                        // if the request has been accepted
-                        else if (frReq[req].status === 1) {
-                            status = 3; // display friend tag
-                            console.log("changing status to a 3", status);
-                        }
+                }).then(() => {
+                    if (account.account_id !== JSON.parse(localStorage.getItem("currUser")).account_id) {
+                        console.log(status, loaded);
+                        addStatusToAccount(status, loaded);
                     }
-                }
-            }).then(() => {
-                console.log(status, account);
-                addStatusToAccount(status);
+                });
             });
         }
-    }, [editMode, reload]);
+    }, [editMode, reload, account]);
 
     // Conditions
     if (JSON.stringify(account) === "{}") {
@@ -100,9 +109,9 @@ export const Profile = (props) => {
     }
 
     // Component Methods
-    const addStatusToAccount = (status) => {
+    const addStatusToAccount = (status, loaded) => {
         console.log("Adding status to account");
-        setAccount({ ...account, status: status });
+        setAccount({ ...loaded, status: status });
         console.log(account);
     }
 

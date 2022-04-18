@@ -12,6 +12,8 @@ import ErrorSnackBar from "./ErrorSnackBar"
 export const Base = (props) => {
     // Navigate Object
     const navigate = useNavigate();
+    if (localStorage.getItem("currUser") === null)
+        localStorage.setItem("currUser", "{}");
 
     // Component Variables
 
