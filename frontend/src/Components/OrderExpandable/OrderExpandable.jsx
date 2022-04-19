@@ -25,7 +25,7 @@ const OrderExpandable = ({ orderId, buyerName, farmName, orderDate, itemsPurchas
                     <span>Items Purchased: </span>
                     {
                         itemsPurchased.map((item) => {
-                            return item.name;
+                            return item.name + " (" + item.stock+")";
                         })
                     }
                 </div>

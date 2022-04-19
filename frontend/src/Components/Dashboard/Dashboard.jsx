@@ -15,10 +15,10 @@ const Dashboard = () => {
     ])
 
     const [events, setEvents] = useState ([
-        new event("Horse backriding party", "Bring your whole family !",1,"Yellow Mountain Farm", 1, FarmImg),
-        new event("BIG BANG BOOM BASS = ", "Big ol bag lala palozaoza im just making up words here to test stuff with variable length",1,"Yellow Mountain Farm", 1, FarmImg),
-        new event("Horse backriding party forever and ever", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime, eligendi molestiae deleniti labore maiores placeat cupiditate ut, minus necessitatibus ducimus porro beatae quod vel eaque mollitia iste itaque ipsam? Rem?",1,"Yellow Mountain Farm", 1, FarmImg),
-        new event("Horse backriding party", "Bring your wholedddddddddddddd family to omg help wtf lmfao skjdlfaj; sjkdf;ajsd ;lksad ride horses >:)!!!!",1,"Yellow Mountain Farm", 1, FarmImg),
+        new event("Horse backriding party", "Bring your whole family !",1,"Yellow Mountain Farm", 1, "https://upload.wikimedia.org/wikipedia/commons/4/48/GGF_Race5.jpg"),
+        new event("BIG BANG BOOM BASS = ", "Big ol bag lala palozaoza im just making up words here to test stuff with variable length",1,"Yellow Mountain Farm", 1, "https://i.cbc.ca/1.6165805.1630877196!/fileImage/httpImage/lawn-tractor-races.jpg"),
+        new event("Horse backriding party forever and ever", "Loreeat cupiditate ut, minus necessit cupiditate ut, minus necessit cupiditate ut, minus necessit cupiditate ut, minus necessita quod vel eaque mollitia iste itaque ipsam? Rem?",1,"Yellow Mountain Farm", 1, FarmImg),
+        
     ])
     return (
         <div className='dashboard'>
@@ -34,11 +34,11 @@ const Dashboard = () => {
                 }
             </div>
             <Divider />
-            <Typography mt={4}>My RSVP'D Events</Typography>
-            <Grid container spacing={3} >
+            <Typography mt={4} mb={4}>My RSVP'D Events</Typography>
+            <Grid container spacing={3} sx={{width:["100%","95%"]}}>
                 {
                     events.map((event)=>{
-                        return <Grid item sm={6} md={3}>
+                        return <Grid item sm={6} md={4} lg={3} width="100%">
                             <EventCard key={event.eventId} {...event}/>
                         </Grid>
                     })

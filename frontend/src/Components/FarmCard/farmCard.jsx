@@ -1,11 +1,19 @@
 import { Grid, Typography } from '@mui/material';
-import * as React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import AddItemToCartDialog from '../AddItemToCartDialog/AddItemToCartDialog';
 import { ItemCard } from '../ItemCard/itemCard';
 
 import './farmCard.css'
-export const FarmCard = ({ farm }) => {
+export const FarmCard = ({ farm, itemsPerFarm }) => {
+    const[showAddItemDialog, setShowAddItemDialog] = useState();
+    const[addItemDetails, setAddItemDetails] = useState();
 
+
+    const handleSetItem = (item) =>{
+        setShowAddItemDialog(true);
+        setAddItemDetails(item)
+    }
     return (
         <>
             <div className="text-center fs-4 fw-bold mb-3">{farm.farmName}</div>
@@ -41,19 +49,25 @@ export const FarmCard = ({ farm }) => {
                 >
                     {
                         farm.items.map((item, index) => {
-                            return index < 6 ? 
-                            <Grid item xs={6} sm={4} md={3} lg={3} key={index}>
+                            return index < itemsPerFarm ? 
+                            <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
                                 <ItemCard name={item.name}
                                     description={item.description}
                                     image={item.image}
                                     price={item.price}
                                     stock={item.stock}
-                                    addText={"Add to cart"} />
+                                    addText={"Add to cart"} 
+                                    action={item=> handleSetItem(item)}/>
                             </Grid> : null
                         })
                     }
                 </Grid>
             </Grid>
+            {showAddItemDialog && <AddItemToCartDialog 
+                                open={showAddItemDialog}
+                                setOpen={setShowAddItemDialog}
+                                {...addItemDetails}/>}
+
         </>
     )
 }
