@@ -9,11 +9,12 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Checkmark from '../../images/green-checkmark.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 const AddItemToCartDialog = ({ open, setOpen, name, description, stock, image, farmId }) => {
     const [quantity, setQuantity] = useState(1);
     const [processing, setProcessing] = useState(false);
     const [completed, setCompleted] = useState(false);
+    const navigate = useNavigate();
     const timer = useRef();
     const timer2 = useRef();
     useEffect(() => {
@@ -40,7 +41,9 @@ const AddItemToCartDialog = ({ open, setOpen, name, description, stock, image, f
 
 
     }
-
+    const handleCartRedirect = () =>{
+        navigate("/cart");
+    }
     const handleQuantity = (num) => {
         if (num == 0 || num < 0) {
             setQuantity("");
@@ -58,8 +61,8 @@ const AddItemToCartDialog = ({ open, setOpen, name, description, stock, image, f
                         <DialogTitle sx={{ textAlign: "center", fontWeight: "Bold" }}>Item added</DialogTitle>
                         <img id="add-item-success-icon" src={Checkmark}></img>
                         <DialogActions>
-                            <Button onClick={handleClose}>Continue Shopping</Button>
-                            <Button onClick={handleSubmit}><Link to='/cart'>View Cart</Link></Button>
+                            <Button variant="outlined" onClick={handleClose}>Continue Shopping</Button>
+                            <Button variant="outlined" onClick={handleCartRedirect}>View Cart</Button>
                         </DialogActions>
                     </Dialog>
                 </> : <CircularProgress color="inherit" />
@@ -70,14 +73,14 @@ const AddItemToCartDialog = ({ open, setOpen, name, description, stock, image, f
     return (
         <div>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle sx={{ textAlign: "center", fontWeight: "Bold" }}>Add Item To Your Farm</DialogTitle>
+                <DialogTitle sx={{ textAlign: "center", fontWeight: "Bold" }}>Adding To Cart</DialogTitle>
                 <DialogTitle sx={{ textAlign: "center", paddingTop: "4px", paddingBottom: "4px" }}>{name}</DialogTitle>
                 <DialogContent>
                     <DialogContent sx={{ display: "flex", justifyContent: "center", padding: 0, margin: ["24px 0", "24px"] }}>
                         <img src={image} id="add-item-img" />
                     </DialogContent>
                     <Typography>{description}</Typography>
-                    <Typography fontWeight={"bold"} sx={{ margin: ".5rem 0" }}> Avaliable stock: {stock}</Typography>
+                    <Typography fontWeight={"bold"} sx={{ margin: "1rem 0" }}> Avaliable stock: {stock}</Typography>
                     <TextField
                         sx={{ maxWidth: "125px" }}
                         id="quantity"

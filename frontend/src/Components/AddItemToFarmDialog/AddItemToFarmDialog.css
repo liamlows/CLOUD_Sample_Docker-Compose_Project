@@ -1,10 +1,13 @@
 #add-item-success-icon{
     width:50%;
+    min-width: 100px;
     max-width: 250px;
     max-height: 50%;
+    display: block;
+    margin: 0 auto;
 }
 #add-item-img{
     
-    max-height: 300px;
+    max-height: 250px;
     width:100%;
 }
