@@ -26,6 +26,7 @@ export const CourseProfile = ({course}) => {
         {/* TODO:  add button to add to schedule, maybe add div for the link?
             add wait list notification, success, etc. 
         */}
+        <GenericButton label= "Add Course to Schedule"/>
 
     </section>
 }

@@ -29,6 +29,7 @@ export const StickyTable = (rows, columns) => {
             <TableContainer sx={{ maxHeight: 440 }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
+                        {/**onclick={()=>navigate(`/courses/${row.id}`)} */}
                         <TableRow>
                             {columns.map((column) => (
                                 <TableCell
@@ -46,7 +47,8 @@ export const StickyTable = (rows, columns) => {
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row) => {
                                 return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.code} onclick={()=>navigate(`/courses/${row.id}`)}>
+                                         {/**onclick={()=>navigate(`/courses/${row.id}`)} might not work*/}
                                         {columns.map((column) => {
                                             const value = row[column.id];
                                             return (
