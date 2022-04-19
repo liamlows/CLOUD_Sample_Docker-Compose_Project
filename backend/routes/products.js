@@ -26,10 +26,10 @@ router.put('/'), async (req, res) =>{
 
 })
 
-router.delete('/', async (req, res) =>{
-
+router.delete('/:product_id', async (req, res) =>{
     try{
-
+        const result = await Product.deleteProduct(req.params.product_id);
+        res.status(204).json(result);
     }catch (err){
         console.error('Failed to delete product:', err);
         res.status(500).json({message: err.toString()});
