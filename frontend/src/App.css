@@ -26,3 +26,18 @@ a{
   text-decoration: none !important;
 }
 
+body{
+  
+}
+#root{
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  
+}
+#root > *{
+  width: 100%;
+}
+#root > :nth-child(2){
+  max-width: 3000px;
+}

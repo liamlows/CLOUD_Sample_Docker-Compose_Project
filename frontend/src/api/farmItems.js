@@ -1,7 +1,7 @@
 // This is used to edit the items belonging to farms
 
 import apiURL from "./APIURL"
-
+import axios from "axios"
 const apiEndpoint = apiURL + "farms"
 const apiConfig = {
     headers: {
@@ -20,9 +20,9 @@ export const getFarmItems = (farmId, params) => {
     }
     axios.get(`${apiEndpoint}/${farmId}/items`, _apiConfig)
 }
-//MAke sure the farmer can't add the same item twice, it hsould update stock ?
-export const addItemToFarm = (farmId, itemId) => {
-    axios.post(`${apiEndpoint}/${farmId}/items`, {farmId, itemId}, apiConfig)
+
+export const addItemToFarm = (farmId, itemDetails) => {
+    axios.post(`${apiEndpoint}/${farmId}/items`, {farmId, itemDetails}, apiConfig)
 }
 export const editFarmItem = (farmId, itemId, data) => {
     axios.patch(`${apiEndpoint}/${farmId}/items/${itemId}`, {farmId, itemId, data}, apiConfig)
