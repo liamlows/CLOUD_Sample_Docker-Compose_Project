@@ -217,11 +217,52 @@ router.delete("/:friendId", async (req, res, next) => {
         await pool.execute(
             'DELETE FROM `friendships` WHERE (`friend_a` = ? AND `friend_b` = ?)',
             [friend_a, friend_b]);
+
+        let [rows, fields] = await pool.execute(
+            'SELECT * FROM friend_requests WHERE (`requested_id` = ? AND `requester_id` = ?) OR (`requested_id` = ? AND `requester_id` = ?) LIMIT 1',
+            [userId, friendId, friendId, userId]);
+
+        if(rows.length !== 0){
+            // Set the friend request status to rejected.
+            let req = rows[0];
+
+            await pool.execute(
+                'UPDATE friend_requests SET `status` = 0 WHERE (`requested_id` = ? AND `requester_id` = ?)',
+                [req.requested_id, req.requester_id]);
+        }
+
     } catch (error) {
         return next(error);
     }
 
+
+
     res.sendStatus(200);
+});
+
+
+/*
+GET /api/friends/status/:friendId
+ */
+router.get("/status/:friendId", async (req, res, next) => {
+    let userId = req.session.accountId;
+    let friendId = req.params.friendId;
+
+    let rows, _;
+    try{
+        [rows, _] = await pool.execute(
+            'SELECT * FROM friend_requests WHERE (`requested_id` = ? AND `requester_id` = ?) OR (`requested_id` = ? AND `requester_id` = ?) LIMIT 1',
+            [userId, friendId, friendId, userId]);
+    } catch(error) {
+        return next(error);
+    }
+
+    if(rows.length === 0) {
+        res.sendStatus(404);
+    }
+    else {
+        res.status(200).json(rows[0]);
+    }
 });
 
 module.exports = router;
