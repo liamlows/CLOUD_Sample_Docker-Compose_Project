@@ -124,9 +124,9 @@ INSERT INTO requests(request_id, request_type, product_id, farmer_id) VALUE
 ('','BUY','','');
 
 /*3.3   Edit BUY request   */
-UPDATE requests
-SET product_count = ''
-WHERE request_id = '';
+# UPDATE requests
+# SET product_count = ''
+# WHERE request_id = '';
 
 UPDATE requests
 SET product_id = ''
