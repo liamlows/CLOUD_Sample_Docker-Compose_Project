@@ -5,6 +5,7 @@ import { Button } from "@mui/material";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Add from "@mui/icons-material/Add";
 import Cookies from "js-cookie";
+import ClearIcon from '@mui/icons-material/Clear';
 
 // Component Imports
 import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
@@ -40,7 +41,7 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
                     status[profile] = 0;
                     for (const req in frReq) {
                         // check if the request is to the current user
-                        if (frReq[req].requested_id === res[profile].account_id) {
+                        if (frReq[req].requester_id === res[profile].account_id) {
                             // if the friend request has not been accepted
                             if (frReq[req].status === -1 || frReq[req].status === 0) {
                                 status[profile] = 2; // display accept request button
@@ -53,7 +54,7 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
                             }
                         }
                         // check if the request is from the user
-                        else if (frReq[req].requester_id === res[profile].account_id) {
+                        else if (frReq[req].requested_id === res[profile].account_id) {
                             // if the request has not been accepted
                             if (frReq[req].status === -1 || frReq[req].status === 0) {
                                 status[profile] = 1; // display disabled button
@@ -140,10 +141,9 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
 
     }
 
-    const readyToDisplay = () =>{
+    const readyToDisplay = () => {
         console.log("profiles", profiles);
-        if(profiles !== undefined && profiles[0] !== undefined && profiles[0].status !== undefined)
-        {
+        if (profiles !== undefined && profiles[0] !== undefined && profiles[0].status !== undefined) {
             return true;
         }
         return false;
@@ -175,19 +175,17 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
                         <th>Username</th>
                         <th>First Name</th>
                         <th>Last Name</th>
-                        <th>Friend Count</th>
                         <th className="col-2"></th>
                     </tr>
                 </thead>
                 <tbody>
                     {console.log("RENDER", typeof (profiles))}
                     {profiles.map((profile, idx) => {
-                        return (<tr key={idx} className="container">
+                        return (displayUser(profile) && <tr key={idx} className="container">
 
                             <td>{profile.username}</td>
                             <td>{profile.first_name}</td>
                             <td>{profile.last_name}</td>
-                            <td className="ts-2">0</td>
                             {/* <td>
                         <Button variant="contained"
                             className="btn btn-secondary"
@@ -196,24 +194,27 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
                         </Button>
                     </td> */}
 
+                            <td className="col-3 pb-2">
+                                {profile.status === 2 &&
+                                    <Button variant="contained" className="bg-primary col-7 m-1 mt-0 mb-0" onClick={() => { handleFriendRequest(profile.account_id, 1).then(setDummy(dummy + 1)) }} endIcon={<Add />}>Accept Request</Button>
+                                }
+                                {profile.status === 2 &&
+                                    <Button variant="contained" className="bg-danger col-2" onClick={() => { handleFriendRequest(profile.account_id, 0).then(setDummy(dummy + 1)) }}><ClearIcon /></Button>
+                                }
+                                {profile.status === 1 &&
+                                    <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Sent Request</Button>
+                                }
+                                {profile.status === 0 &&
+                                    <Button variant="contained" className="bg-success" onClick={() => { sendFriendRequest(profile.account_id).then(setDummy(dummy + 1)) }} endIcon={<Add />}>Add Friend </Button>
+                                }
 
-                            {profile.status === 2 && <td className="col-1 pb-2">
-                                <Button variant="contained" className="primary" onClick={() => { handleFriendRequest(profile.account_id, 1).then(setDummy(dummy + 1)) }} endIcon={<Add />}>Accept Request</Button>
-                            </td>}
-                            {profile.status === 1 && <td className="col-1 pb-2">
-                                <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Add Friend </Button>
-                            </td>}
-                            {profile.status === 0 && <td className="col-1 pb-2">
-                                <Button variant="contained" className="bg-success" onClick={() => { sendFriendRequest(profile.account_id).then(setDummy(dummy + 1)) }} endIcon={<Add />}>Add Friend </Button>
-                            </td>}
-
-                            {!displayUser(profile) && <td className="col-1 pb-2">
+                                {/* {!displayUser(profile) && <td className="col-1 pb-2">
                                 <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Already Friends </Button>
-                            </td>}
-
+                            </td>} */}
+                            </td>
                             <td>
                                 <Button variant="contained"
-                                    className="btn btn-secondary"
+                                    className="btn bg-secondary"
                                     endIcon={<ArrowForwardIcon />}
                                     onClick={() => goToProfile(profile)}>
                                     View Profile
