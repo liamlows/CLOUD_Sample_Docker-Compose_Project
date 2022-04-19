@@ -89,6 +89,17 @@ export const getCourse = async (courseID) => {
     return res.data;
 }
 
+export const addCourse = async (course, account) =>  {
+    console.log("Adding..");
+
+    const res = await axios.post('http://localhost:8000/api/users/${username}`/courses/${course}', courseID, account);
+    if(res.status !== 200){
+       // console.log(`Couldn't register. ${res.status}`)
+        return null;
+    }
+    return res.data;
+};
+
 /**TODO: professor call?, indivual course call */
 // export const 
 
