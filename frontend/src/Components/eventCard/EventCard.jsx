@@ -6,20 +6,24 @@ import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions } from '@mui/material';
 import { createTheme, responsiveFontSizes, ThemeProvider, styled } from '@mui/material/styles';
 import './EventCard.css';
-const EventCard = ({ name, description, eventId, farmName, farmId, image }) => {
+import { Link } from 'react-router-dom';
+const EventCard = ({ name, description, eventId, farmName, farmId, image, time, date, hideButton }) => {
+
+    const fDate = new Date(date + " " + time);
+    console.log(fDate);
     return (
-        <Card variant="outlined" sx={{ height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" }} >
+        <Card variant="outlined" sx={{ height: "100%", width: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", boxShadow: "2px 2px 7px #888" }} >
             <CardMedia alignItems="center">
-                <img src={image} id="event-card-image" />
+                <Link to={`/event/${eventId}`}><img src={image} id="event-card-image" /></Link>
             </CardMedia>
-            
-            <CardContent sx={{ textAlign: ["left"], flexGrow: 1, height: "fit-content", display:"flex", flexDirection: 'column', justifyContent:"space-between" }} >
-                <div>
+
+            <CardContent sx={{ textAlign: ["left"], width: "100%", flexGrow: 1, height: "fit-content", display: "flex", flexDirection: 'column', justifyContent: "space-between" }} >
+                <div style={{ width: "100%" }}>
                     <Typography gutterBottom variant="h5" component="div" align="start" >
                         {name}
                     </Typography>
-                    <Typography variant="h6" color="text.secondary">
-                        {description}
+                    <Typography variant="h6" color="text.secondary"><div id="event-card-description">
+                        {description}</div>
                     </Typography>
                 </div>
                 <div>
@@ -27,16 +31,23 @@ const EventCard = ({ name, description, eventId, farmName, farmId, image }) => {
                         Location: {farmName}
                     </Typography>
                     <Typography gutterBottom variant="h7" component="div" fontWeight="600" align="start" >
-                        Time: 2:00pm
+                        Date: {fDate.toLocaleString('en-US',{
+                            year: 'numeric',
+                            month: 'numeric',
+                            day:'numeric',
+                            hour: 'numeric',
+                            minute: 'numeric',
+                            hour12: true
+                        })}
                     </Typography>
-                    
+
                 </div>
             </CardContent>
 
             <CardActions>
-                <Button variant="contained" size="small" color="primary" fullWidth sx={{ padding: [2, 2, 1] }}>
+                {!hideButton && <Button variant="contained" size="small" color="primary" fullWidth sx={{ padding: [2, 2, 1] }}>
                     {"Unsubscribe"}
-                </Button>
+                </Button>}
             </CardActions>
         </Card >
     );

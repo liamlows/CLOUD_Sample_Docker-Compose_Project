@@ -18,7 +18,7 @@ import { UserContext } from '../userContext';
 const pages = [
   { display: "Dashboard", path: "/dashboard" },
   { display: "Feed", path: "/feed" },
-  { display: "My Farm", path: "/myfarm" },
+  { display: "My Farm", path: "/add" },
 ];
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -51,9 +51,9 @@ export const NavBar = () => {
   }
   console.log(userContext.userData)
   return (
-    <nav className="navbar">
+    <nav className="main-navbar">
       <AppBar position="static">
-        <Container maxWidth="xl">
+        <Container maxWidth="3000px">
           <Toolbar disableGutters>
             <Typography
               variant="h6"
