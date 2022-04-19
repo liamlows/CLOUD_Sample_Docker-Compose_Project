@@ -6,7 +6,26 @@ module.exports = function routes(app, logger) {
   app.get('/', (req, res) => {
     res.status(200).send('Go to 0.0.0.0:3000.');
   });
-  app.post('/api/account/register', (req, res) => { 
+
+
+  const verifyJWT = (req, res, next) => {
+    const token = req.headers["x-access-token"];
+    if(!token) {
+      res.send("No JWT Token");
+    } else {
+      jwt.verify(token, process.env.JWTSECRET, (err, decoded)=>{
+        if(err){
+          res.json({auth: false, message:"Failed to authenticated"})
+        } else {
+          console.log("authenticated");
+          res.locals.token = decoded;
+          next();
+        }
+      });
+    }
+  }
+  
+  app.post('/api/accounts/register', (req, res) => { 
     let user = req.body.rUser.trim();
     let email = req.body.email.trim();
     let password = req.body.rPassword;
@@ -39,9 +58,10 @@ module.exports = function routes(app, logger) {
       });
     }
 });
-  app.post('/api/account/login', (req, res) => {
+  app.post('/api/accounts/login', (req, res) => {
     // obtain a connection from our pool of connections
-    console.log(req?.body);
+    let username = req.body.user;
+    let password = req.body.password;
     pool.getConnection(function (err, connection){
       if (err){
         console.log(connection);
@@ -50,7 +70,7 @@ module.exports = function routes(app, logger) {
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
         // if there is no issue obtaining a connection, execute query
-        connection.query('SELECT id, username, password from `db`.`user` where username=?;',[req.body.user], function (err, rows, fields) {
+        connection.query('SELECT id, username, password from `db`.`user` where username=?;',[username], function (err, rows, fields) {
           if (err) { 
             // if there is an error with the query, release the connection instance and log the error
             connection.release()
@@ -62,11 +82,11 @@ module.exports = function routes(app, logger) {
                   res.status(401).send('Username not registered');
                 } else {
                     //if there is no error, check if passwords match
-                      if(rows[0].password === req.body.password) {
+                      if(rows[0].password === password) {
                         console.log("Successful login");
                         const id = rows[0].id;
                         const username = rows[0].username;
-                        const token = jwt.sign({id: id, username: username },"supersecretkeythatprotectsus",{expiresIn:60*60});
+                        const token = jwt.sign({id: id, username: username },process.env.JWTSECRET,{expiresIn:60*60});
                         res.status(200).send({userToken: token});
                       } else {
                       console.log("failed login")
@@ -78,14 +98,11 @@ module.exports = function routes(app, logger) {
       }
     });
   });
-  app.post('/api/farm', (req, res) => {
+  app.get('/api/farms/:id', (req, res) => {
+    const id = req.params.id;
     // obtain a connection from our pool of connections
-    let token;
-    console.log(req.body);
-      token = jwt.verify(req.body.userToken,"supersecretkeythatprotectsus");
-    
-    console.log(token);
-    pool.getConnection(function (err, connection){
+    console.log(id);
+    pool.getConnection(function (err, connection) {
       if (err){
         console.log(connection);
         // if there is an issue obtaining a connection, release the connection instance and log the error
@@ -93,7 +110,7 @@ module.exports = function routes(app, logger) {
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
         // if there is no issue obtaining a connection, execute query
-        connection.query('select description from Farm where id = ?;',[token.id], function (err, rows, fields) {
+        connection.query('select description from Farm where id = ?;',[id], function (err, rows, fields) {
           if (err) { 
             // if there is an error with the query, release the connection instance and log the error
             connection.release()
@@ -112,7 +129,32 @@ module.exports = function routes(app, logger) {
       }
     });
   });
-  
+
+  app.put('/api/farms/description', verifyJWT, (req, res) => {
+    // obtain a connection from our pool of connections
+    console.log(res.locals)
+    const id = res.locals.token.id;
+    console.log("whoo");
+    const newDesc = req.body.newDescription;
+    pool.getConnection(function (err, connection){
+      if (err){
+        console.log(connection);
+        // if there is an issue obtaining a connection, release the connection instance and log the error
+        logger.error('Problem obtaining MySQL connection', err)
+        res.status(400).send('Problem obtaining MySQL connection'); 
+      } else {
+        // if there is no issue obtaining a connection, execute query
+        connection.query('UPDATE Farm set description = ? where id = ?;',[newDesc, id], function (err, rows, fields) {
+          if (err) { 
+            console.log(err);
+          } else {
+            res.status(200).json(newDesc);
+          }
+        });
+      }
+    });
+  });
+   
   // POST /reset
   app.post('/reset', (req, res) => {
     // obtain a connection from our pool of connections

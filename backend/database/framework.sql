@@ -1,18 +1,18 @@
 -- create database db
-CREATE DATABASE lab;
+CREATE DATABASE db;
 
 -- use newly create database
---USE db;
+USE db;
 
 
 
-------------------------USERS PARTIES----------------------------
+/*------------------------USERS PARTIES----------------------------*/
 
 CREATE TABLE farmer (
-    farmer_id VARCHAR(50),  PRIMARY KEY(farmer_id),
+    farmer_id VARCHAR(50) AUTO_INCREMENT,  PRIMARY KEY(farmer_id),
     first_name VARCHAR(50),
     last_name VARCHAR(50),
-    --website VARCHAR(50)
+    /*--website VARCHAR(50)*/
     farm_name VARCHAR(50),
     farm_description VARCHAR(50),
     farm_picture_link VARCHAR(50),
@@ -41,18 +41,28 @@ CREATE TABLE customer(
 );
 
 
-------------------------APP CAPABILITIES----------------------------
+/*------------------------APP CAPABILITIES----------------------------*/
 
 CREATE TABLE requests(
     request_id VARCHAR(50),
-    request_type VARCHAR(50),   --buy or sell
+    request_type VARCHAR(50),
     product_id VARCHAR(50), FOREIGN KEY (product_id) REFERENCES product(product_id),
+    product_count INT,
+    farmer_id VARCHAR(50), FOREIGN KEY (farmer_id) REFERENCES product(farmer_id)
+
+);
+DROP TABLE  requests;
+
+CREATE TABLE cart(
+    product_id VARCHAR(50), FOREIGN KEY (product_id) REFERENCES product(product_id),
+    product_count INT,
     farmer_id VARCHAR(50), FOREIGN KEY (farmer_id) REFERENCES product(farmer_id)
 
 );
 
-CREATE TABLE cart(
+CREATE TABLE customer_inventory(
     product_id VARCHAR(50), FOREIGN KEY (product_id) REFERENCES product(product_id),
+    product_count INT,
     farmer_id VARCHAR(50), FOREIGN KEY (farmer_id) REFERENCES product(farmer_id)
 
 );
@@ -68,6 +78,7 @@ CREATE TABLE product(
     product_id VARCHAR(50),  PRIMARY KEY(product_id),
     product_name VARCHAR(50),
     product_price VARCHAR(50),
+    product_stock INTEGER,
     product_description VARCHAR(50),
     farmer_id VARCHAR(50), FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id),
     farm_name VARCHAR(50), FOREIGN KEY (farm_name) REFERENCES farmer(farm_name)

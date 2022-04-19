@@ -13,7 +13,7 @@ router.post('/', async (req, res) =>{
         console.error('Failed to create new product:', err);
         res.status(500).json({message: err.toString()});
     }
-    next();
+
 })
 
 router.put('/'), async (req, res) =>{
@@ -23,10 +23,11 @@ router.put('/'), async (req, res) =>{
         console.error('Failed to update new product:', err);
         res.status(500).json({message: err.toString()});
     }
-    next();
+
 })
 
 router.delete('/', async (req, res) =>{
+
     try{
 
     }catch (err){

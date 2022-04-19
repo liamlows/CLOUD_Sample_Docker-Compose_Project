@@ -1,0 +1,21 @@
+#event-card-image{
+    width: 100%;
+    height: 250px;
+}
+#event-card-description{
+    width: 100%; 
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;  
+    overflow: hidden;
+    margin-bottom: 24px;
+}
+
+@media screen and (max-width:600px) {
+
+    #event-card-description{
+    
+        -webkit-line-clamp: 3;
+        
+    }
+}

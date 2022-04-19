@@ -36,7 +36,7 @@ MYSQL_CLOUD_HOST=
 ```
 
 ## MySQL setup
-Once you have set up you mysql database on a DBaaS provider like AWS RDS or GCloud CloudSQL, ensure that the database is publicly accessible on the port you used in setup (usually 3306). Then access the database and run the commands provided in `./backend/mysql_setup.sql`. 
+Once you have set up you mysql database on a DBaaS provider like AWS RDS or GCloud CloudSQL, ensure that the database is publicly accessible on the port you used in setup (usually 3306). Then access the database and run the commands provided in `./backend/framework.sql`.
 
 Once you have run those commands, in `./backend/.env` add all the values that you were provided. Specifically the host, user, pass, and port of the database.
 

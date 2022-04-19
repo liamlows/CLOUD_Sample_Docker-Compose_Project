@@ -4,8 +4,13 @@ const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const cors = require('cors');
 const { log, ExpressAPILogMiddleware } = require('@rama41222/node-logger');
-// const mysqlConnect = require('./db');
-const routes = require('./routes');
+const mysqlConnect = require('./db');
+
+//route handlers
+const routes = require('./routes/routes');
+
+//middle ware
+
 
 // set up some configs for express.
 const config = {
@@ -22,10 +27,16 @@ const logger = log({ console: true, file: false, label: config.name });
 
 // specify middleware to use
 app.use(bodyParser.json());
-app.use(cors({
-  origin: '*'
-}));
+app.use(cors({origin: '*'}));
 app.use(ExpressAPILogMiddleware(logger, { request: true }));
+
+//health route
+app.get('/health', (request, response, next) => {
+  const responseBody = { status: 'up', port };
+  response.json(responseBody);
+
+  next();
+});
 
 //include routes
 routes(app, logger);

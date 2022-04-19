@@ -1,94 +1,73 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useParams,
+  Navigate
+} from 'react-router-dom';
+
 import axios from 'axios';
+import { NavBar } from './Components/NavBar/NavBar';
+import { Home } from './Components/Home/Home';
+import { Feed } from './Components/Feed/Feed';
 import Login from './Components/Login/Login';
 import FarmPage from './Components/FarmPage/FarmPage';
-import { AccountEditor } from './account/AccountEditor';
+import { UserContext, UserProvider } from './Components/userContext';
+import { ProtectedContent, ProtectedRoute } from './Components/ProtectedContent';
+import { SignUp } from './Components/SignUp/SignUp';
+import Dashboard from './Components/Dashboard/Dashboard';
+import { PROTECTED_ROUTES } from './Components/ProtectedRoutes';
+
 // React functional component
-function App () {
+function App() {
   // state for storage of the information on the webpage of forms and list, uses hooks
-  const [number, setNumber] = useState("")
-  const [values, setValues] = useState([])
+  const [user, setUser] = useState({
+    user: {
+      userToken: "Token",
+      isFarmer: true,
+      username: "bob"
+    }
+  });
 
-  // ENTER YOUR EC2 PUBLIC IP/URL HERE
-  const ec2_url = ''
-  // CHANGE THIS TO TRUE IF HOSTING ON EC2, MAKE SURE TO ADD IP/URL ABOVE
-  const ec2 = false;
-  // USE localhost OR ec2_url ACCORDING TO ENVIRONMENT
-  const url = ec2 ? ec2_url : 'localhost'
-
-  // handle input field state change
-  const handleChange = (e) => {
-    setNumber(e.target.value);
+  const logout = () => {
+    console.log('logout');
   }
-
-  const fetchBase = () => {
-    axios.get(`http://${url}:8000/`).then((res)=>{
-      alert(res.data);
-    })
-  }
-
-  // fetches vals of db via GET request
-  const fetchVals = () => {
-    axios.get(`http://${url}:8000/values`).then(
-      res => {
-        const values = res.data.data;
-        console.log(values);
-        setValues(values)
-    }).catch(err => {
-      console.log(err)
-    });
-  }
-
-  // handle input form submission to backend via POST request
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    let prod = number * number;
-    axios.post(`http://${url}:8000/multplynumber`, {product: prod}).then(res => {
-      console.log(res);
-      fetchVals();
-    }).catch(err => {
-      console.log(err)
-    });;
-    setNumber("");
-  }
-
-  // handle intialization and setup of database table, can reinitialize to wipe db
-  const reset = () => {
-    axios.post(`http://${url}:8000/reset`).then(res => {
-      console.log(res);
-      fetchVals();
-    }).catch(err => {
-      console.log(err)
-    });;
-  }
-
-  // tell app to fetch values from db on first load (if initialized)
-  // the comment below silences an error that doesn't matter.=
   useEffect(() => {
-    fetchVals();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    // let use = window.localStorage.getItem('userData');
+
+    // if(uer){
+    //   setUser({userData: user, logout: logout});
+    // }
+
   }, [])
 
   return (
-    <div className="App">
-      <header className="App-header">
-        
-        <Login/>
-        <FarmPage/>
-        <button onClick={fetchBase} style={{marginBottom: '1rem'}}> {`GET: http://${url}:8000/`} </button>
-        <button onClick={reset}> Reset DB </button>
-        <form onSubmit={handleSubmit}>
-          <input type="text" value={number} onChange={handleChange}/>
-          <br/>
-          <input type="submit" value="Submit" />
-        </form>
-        <ul>
-          { values.map((value, i) => <li key={i}>{value.value}</li>) }
-        </ul>
-      </header>
-    </div>
-  );
+    <UserProvider>
+      <Router>
+        <NavBar />
+        <Routes>
+          <Route exact path='/' element={<Home />} />
+
+          <Route path='/login' element={<Login />} />
+          <Route path='/signup' element={<SignUp />} />
+          {
+            PROTECTED_ROUTES.map((route, index) => {
+              return <Route path={route.path}
+                element={<ProtectedContent> {route.element} </ProtectedContent>}
+                key={index}>
+                {route.children}
+              </Route>
+
+            })
+          }
+          <Route path='*' element={<Navigate to='/' replace />} />
+        </Routes>
+      </Router>
+    </UserProvider>
+  )
 }
 
 export default App;

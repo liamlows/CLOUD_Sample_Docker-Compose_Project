@@ -1,0 +1,19 @@
+.dashboard{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    width:100%;
+    padding:1rem;
+    max-width: 3000px;
+}
+.dashboard > *{
+   
+    width:100%;
+    
+    
+}
+.dashboard-orders{
+    display:flex;
+    flex-direction: column;
+    gap:4px;
+}
