@@ -10,7 +10,7 @@ const apiConfig = {
 
 }
 
-//MAke sure the farmer can't add the same item twice, it hsould update stock ?
+
 
 
 export const getFarmItems = (farmId, params) => {
@@ -20,7 +20,7 @@ export const getFarmItems = (farmId, params) => {
     }
     axios.get(`${apiEndpoint}/${farmId}/items`, _apiConfig)
 }
-
+//MAke sure the farmer can't add the same item twice, it hsould update stock ?
 export const addItemToFarm = (farmId, itemId) => {
     axios.post(`${apiEndpoint}/${farmId}/items`, {farmId, itemId}, apiConfig)
 }

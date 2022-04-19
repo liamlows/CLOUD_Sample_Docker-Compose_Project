@@ -21,15 +21,17 @@ import Dashboard from './Components/Dashboard/Dashboard';
 import { PROTECTED_ROUTES } from './Components/ProtectedRoutes';
 
 // React functional component
-function App () {
+function App() {
   // state for storage of the information on the webpage of forms and list, uses hooks
-  const[user,setUser]=useState({user: {
-    userToken:"Token",
-    isFarmer: true,
-    username: "bob"
-  }});
+  const [user, setUser] = useState({
+    user: {
+      userToken: "Token",
+      isFarmer: true,
+      username: "bob"
+    }
+  });
 
-  const logout=()=>{
+  const logout = () => {
     console.log('logout');
   }
   useEffect(() => {
@@ -40,30 +42,30 @@ function App () {
     //   setUser({userData: user, logout: logout});
     // }
 
-  },[])
+  }, [])
 
   return (
     <UserProvider>
       <Router>
-              <NavBar />
-              <Routes>
-                  <Route exact path='/' element={<Home/>}/>
-                  
-                  <Route path='/login' element={<Login/>}/>
-                  <Route path='/signup' element={<SignUp/>}/>
-                  {
-                    PROTECTED_ROUTES.map((route, index)=>{
-                      return <Route path={route.path} 
-                                      element={<ProtectedContent> {route.element} </ProtectedContent>}
-                                      key={index}>
-                                      {route.children}
-                              </Route>
+        <NavBar />
+        <Routes>
+          <Route exact path='/' element={<Home />} />
 
-                    })
-                  }
-                  <Route path='*' element={<Navigate to='/' replace />}/>
-              </Routes>
-        </Router>
+          <Route path='/login' element={<Login />} />
+          <Route path='/signup' element={<SignUp />} />
+          {
+            PROTECTED_ROUTES.map((route, index) => {
+              return <Route path={route.path}
+                element={<ProtectedContent> {route.element} </ProtectedContent>}
+                key={index}>
+                {route.children}
+              </Route>
+
+            })
+          }
+          <Route path='*' element={<Navigate to='/' replace />} />
+        </Routes>
+      </Router>
     </UserProvider>
   )
 }
