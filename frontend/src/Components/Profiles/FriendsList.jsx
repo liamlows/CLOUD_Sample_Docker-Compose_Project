@@ -44,7 +44,7 @@ export const FriendsList = (props) => {
     const signOut = () => {
         console.log("Logging out");
         logout().then(() => {
-            localStorage.setItem("currUser", "");
+            localStorage.setItem("currUser", "{}")
             navigate('/');
         });
     }
