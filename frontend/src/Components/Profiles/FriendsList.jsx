@@ -1,78 +1,67 @@
-import AddIcon from '@mui/icons-material/Add';
-import { Button } from '@mui/material';
-import { useEffect, useState } from 'react';
+// Library Imports
+import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import { getAccountbyUsername, getFriends, logout } from '../../APIFolder/loginApi';
-import LoggedInResponsiveAppBar from '../common/LoggedInResponsiveAppBar';
+import { Button } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import Cookies from 'js-cookie';
 
-export const FriendsList = ({ currUser, setCurrUser, pages, settings, setNavigated }) => {
+// Component Imports
+import LoggedInResponsiveAppBar from '../common/LoggedInResponsiveAppBar';
 
+// Method Imports
+import { getFriends, logout } from '../../APIFolder/loginApi';
+
+export const FriendsList = (props) => {
+    // Navigate Object
     const navigate = useNavigate();
+
+    // Component Variables
+    const [account, setAccount] = useState(JSON.parse(localStorage.getItem("currUser")));
     const [friends, setFriends] = useState(false);
 
-    const goToProfile = (friend) => {
-        navigate(`/users/${friend.username}`);
-    }
+    // Initial Load
     useEffect(() => {
-        getFriends().then(response => { friendsSetter(response) });
-    }, [currUser]);
+        if (JSON.stringify(account) === "{}") {
+            navigate('/');
+            props.setNavigated(true);
+        }
+        getFriends().then(res => { 
+            console.log(res);
+            setFriends(res);
+        });
+    }, []);
 
-    const friendsSetter = new_friends =>
-    {
-        console.log(new_friends);
-        setFriends(new_friends);
-    }
-
+    // Conditions
     if (!friends) {
         return <>Loading...</>
     }
 
-    if (!currUser) {
-        let username = Cookies.get("username");
-        if (username) {
-            getAccountbyUsername(username)
-                .then(account => {
-                    if (account) {
-                        setCurrUser(account);
-                    }
-                    else {
-                        console.log("User is null after request");
-                        setCurrUser('');
-                    }
-                });
-        }
-        else {
-            setCurrUser('');
-            setNavigated(true);
-            navigate('/');
-        }
+    // Component Methods
+    const goToProfile = (friend) => {
+        navigate(`/users/${friend.username}`);
     }
-
 
     const signOut = () => {
         console.log("Logging out");
         logout().then(() => {
+            localStorage.setItem("currUser", "{}")
             navigate('/');
-            setCurrUser('');
         });
     }
     const profileNav = () => {
-        navigate(`users/${currUser.username}`);
+        navigate(`users/${account.username}`);
     }
     const accountNav = () => {
-        navigate(`accounts/${currUser.username}`);
+        navigate(`accounts/${account.username}`);
     }
 
-
-
+    // HTML
     return <div>
         <LoggedInResponsiveAppBar
-            pages={pages}
-            settings={settings}
+            pages={props.pages}
+            settings={props.settings}
             signOut={() => signOut()}
-            username={currUser.username}
+            username={account.username}
             profileNav={() => profileNav()}
             account={() => accountNav()} />
 
@@ -91,7 +80,7 @@ export const FriendsList = ({ currUser, setCurrUser, pages, settings, setNavigat
         {friends.length > 0
             && <table>
                 <thead>
-                    {friends.map(friend => {
+                    {friends.map(friend => 
                         <tr key={friend.username}>
                             <td>{friend.username}</td>
                             <td>{friend.firstName}</td>
@@ -106,7 +95,7 @@ export const FriendsList = ({ currUser, setCurrUser, pages, settings, setNavigat
                                 </Button>
                             </td>
                         </tr>
-                    })}
+                    )}
 
                 </thead>
             </table>}

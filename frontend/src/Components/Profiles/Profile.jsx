@@ -1,152 +1,162 @@
-import { getAccountbyUsername, getFriendRequests, getStatusByUsername, handleFriendRequest, logout, sendFriendRequest, updateAccountbyUsername } from "../../APIFolder/loginApi";
-import { TextField } from "../common";
+// Libary Imports
 import { useEffect, useState } from "react";
-import Cookies from "js-cookie";
 import { useLocation, useNavigate } from "react-router-dom";
-import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 import CircleIcon from '@mui/icons-material/Circle';
+import Cookies from "js-cookie";
+import { Button } from "@mui/material";
 import Check from "@mui/icons-material/Check";
 import Add from "@mui/icons-material/Add";
-import { Button } from "@mui/material";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
-export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated }) => {
+// Component Imports
+import { TextField } from "../common";
+import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 
-    const location = useLocation();
+// Method Imports
+import { getFriendRequests, getStatusByUsername, getAccountbyUsername, handleFriendRequest, logout, sendFriendRequest, updateAccountbyUsername } from "../../APIFolder/loginApi";
+
+export const Profile = (props) => {
+    // Navigate Object
     const navigate = useNavigate();
+    const location = useLocation();
+    if (localStorage.getItem("currUser") === null)
+        localStorage.setItem("currUser", "{}");
+
+    // Component Variables
+    const [account, setAccount] = useState({});
     const [editMode, setEditMode] = useState(false);
-
-    //Doesn't currently know what info to get from the database
-    const [account, setAccount] = useState('');
-    const [loadedProfile, setLoadedProfile] = useState('');
-
-
-
-    const username = Cookies.get("username");
-    const [online, setOnline] = useState(undefined);
+    const [online, setOnline] = useState(false);
     const [reload, setReload] = useState(false);
 
+    // Initial Load
     useEffect(() => {
+        let status = 0;
 
-        getAccountbyUsername(location.pathname.substring(7, location.pathname.length))
-            .then(response => {
-                let status = 0; //auto value, aka display add friend button
+        if (localStorage.getItem("currUser") === "{}") {
+            window.alert("Please log in to view profiles");
+            navigate('/');
+        }
+        else {
+            if (JSON.stringify(account) === "{}")
+                setAccount(JSON.parse(localStorage.getItem("currUser")));
 
-                getFriendRequests().then(FRresponse => {
-                    // console.log(FRresponse);
-                    let friendRequests = [...FRresponse.incoming, ...FRresponse.outgoing];
-                    // console.log(friendRequests);
-                    for (const request in friendRequests) {
-                        
-                        if (friendRequests[request].requester_id === response.account_id
-                            || friendRequests[request].requested_id === response.account_id) {
-                            console.log("in the big if",friendRequests[request])
-                            // console.log(currUser.account_id)
-                            if (friendRequests[request].requested_id === response.account_id
-                                && (friendRequests[request].status === -1
-                                    || friendRequests[request].status === 0)) {
+            getStatusByUsername(location.pathname.substring(7, location.pathname.length)).then((status) => setOnline(!!status.logged_in));
+            
+            getAccountbyUsername(location.pathname.substring(7, location.pathname.length)).then(loaded => {
+                // get the table of friend requests
+                getFriendRequests().then(res => {
+                    // convert it to an array
+                    let frReq = [...res.incoming, ...res.outgoing];
 
-                                status = 1; //display disabled button
-                                console.log("chnaging status to a 1", status);
+                    // loop through each request
+                    for (const req in frReq) {
+                        // check if the request is to the current user
+                        if (frReq[req].requested_id === loaded.account_id) {
+                            // if the friend request has not been accepted
+                            if (frReq[req].status === -1 || frReq[req].status === 0) {
+                                status = 2; // display accept request button
+                                console.log("changing status to a 2", status);
                             }
-                            if (friendRequests[request].requester_id === response.account_id
-                                && friendRequests[request].status === -1) {
-                                    console.log("status = 2")
-                                status = 2; //display accept request button
-                                console.log("chnaging status to a 2", status);
+                            // if the request has been accepted
+                            else if (frReq[req].status === 1) {
+                                status = 3; // display friend tag
+                                console.log("changing status to a 3", status);
                             }
-                            if (friendRequests[request].status === 1) {
-                                status = 3; //display friend tag
-                                console.log("chnaging status to a 3", status);
+                        }
+                        // check if the request is from the user
+                        else if (frReq[req].requester_id === loaded.account_id) {
+                            // if the request has not been accepted
+                            if (frReq[req].status === -1 || frReq[req].status === 0) {
+                                status = 1; // display disabled button
+                                console.log("changing status to a 1", status);
+                            }
+                            // if the request has been accepted
+                            else if (frReq[req].status === 1) {
+                                status = 3; // display friend tag
+                                console.log("changing status to a 3", status);
                             }
                         }
                     }
                 }).then(() => {
+                    if (account.account_id !== JSON.parse(localStorage.getItem("currUser")).account_id) {
+                        console.log(status, loaded);
+                        if (account.status !== status) {
+                            console.log("Adding status to account");
+                            setAccount({ ...loaded, status: status });
+                            console.log(account);
+                        }
+                    }
+                });
+            });
+        }
+    }, [editMode, reload, account, location.pathname ]);
 
-                    console.log(status, response);
-                    addStatusToLoadedUser(status, response);
-                })
-            })
-
-
-    }, [editMode, reload]);
-
-    const addStatusToLoadedUser = (status, response) => {
-        console.log("Adding status to LoadedUser");
-        setLoadedProfile({ ...response, status: status });
-        console.log(loadedProfile);
+    // Conditions
+    if (JSON.stringify(account) === "{}") {
+        let username = Cookies.get("username");
+        if (username) {
+            getAccountbyUsername(username)
+                .then(account => {
+                    if (account) {
+                        localStorage.setItem("currUser", JSON.stringify(account));
+                        setAccount(account);
+                    }
+                    else {
+                        console.log("User is null after request");
+                    }
+                });
+        }
+        else {
+            props.setNavigated(true);
+            navigate('/');
+        }
     }
 
-    if (!loadedProfile) {
-        // get the account from the username
-        getStatusByUsername(username).then((status) => { setOnline(!!status.logged_in); console.log("online = " + online) })
-        return <>Loading...</>
-    }
+    // Component Methods
     const startEditing = () => {
-        changeAccount({ ...currUser });
         setEditMode(true);
+        changeAccount({ ...account });
     }
-    const doneEditing = () => {
 
+    const doneEditing = () => {
         if (account.first_name && account.last_name) {
             updateAccountbyUsername(account).then(setEditMode(false));
+            localStorage.setItem("currUser", JSON.stringify(account));
         }
         else {
             window.alert("Please fill out both fields");
         }
     }
+
     const cancel = () => {
         setEditMode(false);
     }
+
     const signOut = () => {
         console.log("Logging out");
         logout().then(() => {
             navigate('/');
-            setCurrUser('');
+            localStorage.setItem("currUser", "{}")
         });
     }
+
     const profileNav = () => {
-        navigate(`users/${currUser.username}`);
+        navigate(`users/${account.username}`);
     }
+
     const accountNav = () => {
-        navigate(`accounts/${currUser.username}`);
-    }
-
-    // 
-
-    if (!currUser) {
-        let username = Cookies.get("username");
-
-        if (username) {
-            getAccountbyUsername(username)
-                .then(account => {
-                    if (account) {
-                        setCurrUser(account);
-                    }
-                    else {
-                        console.log("User is null after request");
-                        setCurrUser('');
-                    }
-                });
-
-        }
-        else {
-            setCurrUser('');
-            setNavigated(true);
-            navigate('/');
-        }
-
+        navigate(`accounts/${account.username}`);
     }
 
     const sendFriendRequestFunc = () => {
         console.log("sending friend request");
-        sendFriendRequest(loadedProfile.id)
+        sendFriendRequest(account.account_id)
         setReload(!reload)
     }
 
     const handleFriendRequestFunc = () => {
         console.log("handling");
-        handleFriendRequest(loadedProfile.account_id, 1)
+        handleFriendRequest(account.account_id, 1)
         setReload(!reload)
     }
 
@@ -157,19 +167,20 @@ export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated }
     // If so then allow them to edit with the edit button at the end (this edit button will update the database once done)
     // If not then display the profile without the edit buttons.
 
+    console.log("Account before if statement", account);
     // NOTE - IN FUTURE ADD BUTTON TO SEND FRIEND REQUEST...ONLY IF FUNCTIONALITY IS IMPLEMENTED
-    if (loadedProfile && loadedProfile.status !== undefined) {
+    if (JSON.stringify(account) !== "{}" && account.status !== undefined) {
         return <section className="userProfile">
             <LoggedInResponsiveAppBar
-                pages={pages}
-                settings={settings}
+                pages={props.pages}
+                settings={props.settings}
                 signOut={() => signOut()}
-                username={currUser.username}
+                username={account.username}
                 profileNav={() => profileNav()}
                 account={() => accountNav()} />
 
             {/* Viewing own profile (EDITING) */}
-            {currUser.username === loadedProfile.username && editMode === true &&
+            {JSON.parse(localStorage.getItem("currUser")).username === account.username && editMode === true &&
                 <div className="container border-0 mt-5">
                     <div className="row bg-light pb-4">
                         <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3 mt-5 pb-5" alt="" />
@@ -178,7 +189,7 @@ export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated }
                                 <thead>
                                     {online && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
                                     {online && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
-                                    <th className="float-start col-3 fs-3 mt-2 text-start"><span className="text-start p-0">{loadedProfile.username}</span></th>
+                                    <th className="float-start col-3 fs-3 mt-2 text-start"><span className="text-start p-0">{account.username}</span></th>
 
                                     <th className="col-1">
                                         <button type="button" className="btn btn-light" onClick={() => startEditing()}>Edit Profile</button>
@@ -216,7 +227,7 @@ export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated }
                 </div>}
 
             {/* Viewing own profile (NOT EDITING) */}
-            {currUser.username === loadedProfile.username && editMode === false &&
+            {JSON.parse(localStorage.getItem("currUser")).username === account.username && editMode === false &&
                 <div className="container border-0 mt-5">
                     <div className="row bg-light pb-4">
                         <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3 mt-5" alt="" />
@@ -225,14 +236,14 @@ export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated }
                                 <thead>
                                     {online === true && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
                                     {online === false && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
-                                    <th className="float-start col-3 fs-3 mt-2 text-start">{loadedProfile.username}</th>
+                                    <th className="float-start col-3 fs-3 mt-2 text-start">{account.username}</th>
                                     <th className="col-1">
                                         <button type="button" className="btn btn-light" onClick={() => startEditing()}>Edit Profile</button>
                                     </th>
                                 </thead>
                                 <tbody>
                                     <td className="col-3 fs-6 text-start">
-                                        <span className="p-0 text-capitalize">{loadedProfile.first_name} </span><span className="p-0 text-capitalize" >{loadedProfile.last_name}</span>
+                                        <span className="p-0 text-capitalize">{account.first_name} </span><span className="p-0 text-capitalize" >{account.last_name}</span>
                                     </td>
                                     {/* <h2>Email :</h2>
                             <p>{account.email}</p> */}
@@ -243,7 +254,7 @@ export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated }
                 </div>}
 
             {/* Viewing profile besides your own */}
-            {currUser.username !== loadedProfile.username &&
+            {JSON.parse(localStorage.getItem("currUser")).username !== account.username &&
                 <div>
                     <div className="row">
                         <div className="col-3 float-end">
@@ -259,17 +270,17 @@ export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated }
                                     <thead>
                                         {online === true && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
                                         {online === false && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
-                                        <th className="float-start col-3 fs-3 mt-2 text-start">{loadedProfile.username}</th>
-                                        {loadedProfile.status === 2 && <th className="col-1 pb-2">
+                                        <th className="float-start col-3 fs-3 mt-2 text-start">{account.username}</th>
+                                        {account.status === 2 && <th className="col-1 pb-2">
                                             <Button variant="contained" className="bg-primary" onClick={() => { handleFriendRequestFunc() }} endIcon={<Add />}>Accept Request</Button>
                                         </th>}
-                                        {loadedProfile.status === 1 && <th className="col-1 pb-2">
+                                        {account.status === 1 && <th className="col-1 pb-2">
                                             <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Add Friend </Button>
                                         </th>}
-                                        {loadedProfile.status === 0 && <th className="col-1 pb-2">
+                                        {account.status === 0 && <th className="col-1 pb-2">
                                             <Button variant="contained" className="bg-success" onClick={() => sendFriendRequestFunc()} endIcon={<Add />}>Add Friend </Button>
                                         </th>}
-                                        {loadedProfile.status === 3 &&
+                                        {account.status === 3 &&
                                             <div className="float-end col-2 mb-1 mt-2">
                                                 <div className="clearfix p-0"></div>
                                                 <th className="col-1 rounded bg-success border-0 p-1">
@@ -283,7 +294,7 @@ export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated }
                                     </thead>
                                     <tbody>
                                         <td className="col-3 fs-6 text-start">
-                                            <span className="p-0 text-capitalize">{loadedProfile.first_name} </span><span className="p-0 text-capitalize" >{loadedProfile.last_name}</span>
+                                            <span className="p-0 text-capitalize">{account.first_name} </span><span className="p-0 text-capitalize" >{account.last_name}</span>
                                         </td>
                                         {/* <h2>Email :</h2>
                         <p>{account.email}</p> */}
@@ -295,4 +306,5 @@ export const Profile = ({ currUser, setCurrUser, pages, settings, setNavigated }
                 </div>}
         </section>
     }
+    return <></>;
 }

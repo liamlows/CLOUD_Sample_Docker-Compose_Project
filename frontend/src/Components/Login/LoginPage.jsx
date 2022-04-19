@@ -1,38 +1,58 @@
-import { PasswordField, TextField } from "../common";
-import { useState } from "react";
-import { GenericButton } from "../common/GenericButton";
+// Library Imports
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Cookies from 'js-cookie';
+
+// Component Imports
+import { PasswordField, TextField } from "../common";
+import { GenericButton } from "../common/GenericButton"
+
+// Method Imports
 import { getAccountbyUsername, logIntoAccount } from "../../APIFolder/loginApi";
 
-
-export const LoginPage = ({ currUser, setCurrUser, setNavigated}) => {
+export const LoginPage = (props) => {
+    // Navigate Object
     const navigate = useNavigate();
-    const checkIfLoginSucc = (response) => {
-        if (response.success === 1) {
-            getAccountbyUsername(response.username)
-                .then(user => user && setCurrUser(user))
-                .then(() => {
-                    setNavigated(false);
-                    navigate('/')
-                });
+    if (localStorage.getItem("currUser") === null)
+        localStorage.setItem("currUser", "{}");
 
-        } else {
-            window.alert("Password for given username is incorrect");
-        };
-    }
-
-    //will prevent someone from logging in if they are currently logged in
-    if (!currUser === '') {
-        navigate('/');
-    }
-
-    const login = (username, password) => {
-        logIntoAccount({ "username": username, "password": password }).then(response => checkIfLoginSucc(response)).catch();
-    }
+    // Component Variables
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
+    // Initial Load
+    useEffect(() => {
+        console.log(localStorage.getItem("currUser"));
+        if (localStorage.getItem("currUser") !== "{}") {
+            console.log("User exists");
+            navigate('/'); 
+        }
+    });
+
+    // Conditions
+
+    // Component Methods
+    const login = () => {
+        var credentials = {
+            "username": username,
+            "password": password
+        };
+        logIntoAccount(credentials).then(res => checkIfLoginSucc(res)).catch();
+    }
+    const checkIfLoginSucc = (res) => {
+        if (res.success !== 1) {
+            window.alert("Password or username is incorrect");
+        }
+        else {
+            console.log("logging in now...");
+            getAccountbyUsername(res.username)
+                .then(x => {
+                    localStorage.setItem("currUser", JSON.stringify(x));
+                    navigate('/');
+                });
+        }
+    }
+
+    // HTML
     return <section id="loginView">
         <h1>Login</h1>
         <form className="container">
@@ -48,7 +68,7 @@ export const LoginPage = ({ currUser, setCurrUser, setNavigated}) => {
 
             <button
                 type="button"
-                onClick={() => login(username, password)}
+                onClick={() => login()}
                 variant="contained"
                 color="success">
                 Login
@@ -57,6 +77,5 @@ export const LoginPage = ({ currUser, setCurrUser, setNavigated}) => {
             <p className="mb-0">or</p>
             <GenericButton label="Sign Up" click="/signUp" />
         </form>
-
-    </section>;
+    </section>
 }
