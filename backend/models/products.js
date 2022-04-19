@@ -8,6 +8,12 @@ const createNewProduct = async (product_id, product_name, product_price, product
     return query;
 }
 
+const deleteProduct = async (product_id){
+    const query = knex(PRODUCT_TABLE).where('product_id', product_id).del();
+    return query;
+}
+
 module.exports = {
-    createNewProduct
+    createNewProduct,
+    deleteProduct
 };
