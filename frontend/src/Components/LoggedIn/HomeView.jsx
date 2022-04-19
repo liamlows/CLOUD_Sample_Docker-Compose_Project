@@ -49,7 +49,11 @@ export const HomeView = (props) => {
 
     // Component Methods
     const signOut = () => {
-        logout().then(() => localStorage.setItem("currUser", "{}"));
+        console.log("Logging out");
+        logout().then(() => {
+            localStorage.setItem("currUser", "{}")
+            navigate('/');
+        });
     }
     const profileNav = () => {
         navigate(`users/${account.username}`);
