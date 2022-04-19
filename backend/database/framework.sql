@@ -78,6 +78,7 @@ CREATE TABLE product(
     product_id VARCHAR(50),  PRIMARY KEY(product_id),
     product_name VARCHAR(50),
     product_price VARCHAR(50),
+    product_stock INTEGER,
     product_description VARCHAR(50),
     farmer_id VARCHAR(50), FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id),
     farm_name VARCHAR(50), FOREIGN KEY (farm_name) REFERENCES farmer(farm_name)
