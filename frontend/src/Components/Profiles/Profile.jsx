@@ -7,13 +7,15 @@ import { Button } from "@mui/material";
 import Check from "@mui/icons-material/Check";
 import Add from "@mui/icons-material/Add";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+import ClearIcon from '@mui/icons-material/Clear';
 
 // Component Imports
 import { TextField } from "../common";
 import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 
+
 // Method Imports
-import { getFriendRequests, getStatusByUsername, getAccountbyUsername, handleFriendRequest, logout, sendFriendRequest, updateAccountbyUsername } from "../../APIFolder/loginApi";
+import { getFriendRequests, getStatusByUsername, getAccountbyUsername, handleFriendRequest, logout, sendFriendRequest, updateAccountbyUsername, getFriendRequest } from "../../APIFolder/loginApi";
 
 export const Profile = (props) => {
     // Navigate Object
@@ -41,42 +43,44 @@ export const Profile = (props) => {
                 setAccount(JSON.parse(localStorage.getItem("currUser")));
 
             getStatusByUsername(location.pathname.substring(7, location.pathname.length)).then((status) => setOnline(!!status.logged_in));
-            
+
             getAccountbyUsername(location.pathname.substring(7, location.pathname.length)).then(loaded => {
                 // get the table of friend requests
-                getFriendRequests().then(res => {
+                getFriendRequest(loaded.account_id).then(res => {
                     // convert it to an array
-                    let frReq = [...res.incoming, ...res.outgoing];
-
-                    // loop through each request
-                    for (const req in frReq) {
-                        // check if the request is to the current user
-                        if (frReq[req].requested_id === loaded.account_id) {
-                            // if the friend request has not been accepted
-                            if (frReq[req].status === -1 || frReq[req].status === 0) {
-                                status = 2; // display accept request button
-                                console.log("changing status to a 2", status);
-                            }
-                            // if the request has been accepted
-                            else if (frReq[req].status === 1) {
-                                status = 3; // display friend tag
-                                console.log("changing status to a 3", status);
-                            }
+                    if (res.requester_id === loaded.account_id) {
+                        // if the friend request has not been accepted
+                        if (res.status === -1) {
+                            status = 2; // display accept request button
+                            console.log("changing status to a 2", status);
                         }
-                        // check if the request is from the user
-                        else if (frReq[req].requester_id === loaded.account_id) {
-                            // if the request has not been accepted
-                            if (frReq[req].status === -1 || frReq[req].status === 0) {
-                                status = 1; // display disabled button
-                                console.log("changing status to a 1", status);
-                            }
-                            // if the request has been accepted
-                            else if (frReq[req].status === 1) {
-                                status = 3; // display friend tag
-                                console.log("changing status to a 3", status);
-                            }
+                        // if the request has been accepted
+                        else if (res.status === 1) {
+                            status = 3; // display friend tag
+                            console.log("changing status to a 3", status);
                         }
                     }
+                    // check if the request is from the user
+                    else if (res.requested_id === loaded.account_id) {
+                        // if the request has not been accepted
+                        if (res.status === -1) {
+                            status = 1; // display disabled button
+                            console.log("changing status to a 1", status);
+                        }
+                        // if the request has been accepted
+                        else if (res.status === 1) {
+                            status = 3; // display friend tag
+                            console.log("changing status to a 3", status);
+                        }
+                    }
+                    else {
+                        status = 4;
+                    }
+                }).catch(code => {
+                    if (code === 404) {
+                        status = 0;
+                    }
+
                 }).then(() => {
                     if (account.account_id !== JSON.parse(localStorage.getItem("currUser")).account_id) {
                         console.log(status, loaded);
@@ -87,9 +91,9 @@ export const Profile = (props) => {
                         }
                     }
                 });
-            });
+            })
         }
-    }, [editMode, reload, account, location.pathname ]);
+    }, [editMode, reload, account, location.pathname]);
 
     // Conditions
     if (JSON.stringify(account) === "{}") {
@@ -135,8 +139,8 @@ export const Profile = (props) => {
     const signOut = () => {
         console.log("Logging out");
         logout().then(() => {
-            navigate('/');
             localStorage.setItem("currUser", "{}")
+            navigate('/');
         });
     }
 
@@ -154,9 +158,9 @@ export const Profile = (props) => {
         setReload(!reload)
     }
 
-    const handleFriendRequestFunc = () => {
+    const handleFriendRequestFunc = (bool) => {
         console.log("handling");
-        handleFriendRequest(account.account_id, 1)
+        handleFriendRequest(account.account_id, bool)
         setReload(!reload)
     }
 
@@ -271,13 +275,14 @@ export const Profile = (props) => {
                                         {online === true && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
                                         {online === false && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
                                         <th className="float-start col-3 fs-3 mt-2 text-start">{account.username}</th>
-                                        {account.status === 2 && <th className="col-1 pb-2">
-                                            <Button variant="contained" className="bg-primary" onClick={() => { handleFriendRequestFunc() }} endIcon={<Add />}>Accept Request</Button>
+                                        {account.status === 2 && <th className="col-2 pb-2">
+                                            <Button variant="contained" className="bg-primary" onClick={() => { handleFriendRequestFunc(1) }} endIcon={<Add />}>Accept Request</Button>
+                                            <Button variant="contained" className="bg-danger col-2" onClick={() => { handleFriendRequest(0) }}><ClearIcon /></Button>
                                         </th>}
-                                        {account.status === 1 && <th className="col-1 pb-2">
+                                        {account.status === 1 && <th className="col-2 pb-2">
                                             <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Add Friend </Button>
                                         </th>}
-                                        {account.status === 0 && <th className="col-1 pb-2">
+                                        {account.status === 0 && <th className="col-2 pb-2">
                                             <Button variant="contained" className="bg-success" onClick={() => sendFriendRequestFunc()} endIcon={<Add />}>Add Friend </Button>
                                         </th>}
                                         {account.status === 3 &&
