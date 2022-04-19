@@ -1,5 +1,5 @@
 -- create database db
-CREATE DATABASE lab;
+CREATE DATABASE db;
 
 -- use newly create database
 USE db;
