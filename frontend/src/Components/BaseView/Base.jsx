@@ -1,33 +1,51 @@
-import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { HomeView } from "../LoggedIn/HomeView";
-import BaseResponsiveAppBar from "../common/BaseResponsiveAppBar";
-import ErrorSnackBar from "./ErrorSnackBar";
+// Library Imports
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-export const Base = ({ currUser, setCurrUser, basePages, loggedInPages, settings, navigated}) => {
+// Component Imports
+import { HomeView } from "../LoggedIn/HomeView"
+import { BaseResponsiveAppBar } from "../common/BaseResponsiveAppBar"
+import ErrorSnackBar from "./ErrorSnackBar"
 
+// Method Imports
+
+export const Base = (props) => {
+    // Navigate Object
     const navigate = useNavigate();
-    const location = useLocation();
+    if (localStorage.getItem("currUser") === null)
+        localStorage.setItem("currUser", "{}");
 
+    // Component Variables
+
+    // Initial Load
+    useEffect(() => {
+        console.log("Loading Base...");
+    }, [props.account])
+
+    // Conditions
+
+    // Component Methods
     const onSignIn = () => {
-        console.log("doing sign in");
+        console.log("signing in");
         navigate('/login');
     }
-
     const onSignUp = () => {
-        console.log("doing sign up");
-        navigate('/signUp');
+        console.log("signing up");
+        navigate('/signup');
     }
 
+    // HTML
     return <section className="baseView">
-        {navigated && <ErrorSnackBar></ErrorSnackBar>}
-        {currUser === '' && <div>
-            <BaseResponsiveAppBar pages={basePages}
-                                  signIn={() => onSignIn()}
-                                  signUp={() => onSignUp()} />
+        {props.navigated && <ErrorSnackBar></ErrorSnackBar>}
+        {localStorage.getItem("currUser") === "{}" && <div>
+            <BaseResponsiveAppBar 
+                pages={props.basePages}
+                signIn={() => onSignIn()}
+                signUp={() => onSignUp()} />
             <h1 className="mb-4">Welcome</h1>
             <h2 className="">This is the base page to be updated with logo and stuff</h2>
         </div>}
-        {currUser !== '' && <HomeView currUser={currUser} setCurrUser={x => setCurrUser(x)} pages={loggedInPages} settings={settings} />}
+        {/*if the user is logged in*/}
+        {localStorage.getItem("currUser") !== "{}" && <HomeView {...props} />}
     </section>
 }
