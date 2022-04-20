@@ -15,7 +15,7 @@ import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 
 
 // Method Imports
-import { getFriendRequests, getStatusByUsername, getAccountbyUsername, handleFriendRequest, logout, sendFriendRequest, updateAccountbyUsername, getFriendRequest } from "../../APIFolder/loginApi";
+import { getFriendRequests, getStatusByUsername, getAccountbyUsername, handleFriendRequest, logout, sendFriendRequest, updateAccountbyUsername, getFriendRequest, getFriendsClasses } from "../../APIFolder/loginApi";
 
 export const Profile = (props) => {
     // Navigate Object
@@ -29,6 +29,7 @@ export const Profile = (props) => {
     const [editMode, setEditMode] = useState(false);
     const [online, setOnline] = useState(false);
     const [reload, setReload] = useState(false);
+    const [classes, setClasses] = useState([]);
 
     // Initial Load
     useEffect(() => {
@@ -59,6 +60,10 @@ export const Profile = (props) => {
                             status = 3; // display friend tag
                             console.log("changing status to a 3", status);
                         }
+                        else if (res.status === 0) {
+                            status = 4;
+                            console.log("changing status to a 4", status);
+                        }
                     }
                     // check if the request is from the user
                     else if (res.requested_id === loaded.account_id) {
@@ -72,9 +77,10 @@ export const Profile = (props) => {
                             status = 3; // display friend tag
                             console.log("changing status to a 3", status);
                         }
-                    }
-                    else {
-                        status = 4;
+                        else if (res.status === 0) {
+                            status = 4;
+                            console.log("changing status to a 4", status);
+                        }
                     }
                 }).catch(code => {
                     if (code === 404) {
@@ -90,10 +96,17 @@ export const Profile = (props) => {
                             console.log(account);
                         }
                     }
+                }).then(() => {
+                    if (status === 3) {
+                        getFriendsClasses().then(res => {
+                            setClasses(...res);
+                        })
+                    }
                 });
             })
         }
     }, [editMode, reload, account, location.pathname]);
+
 
     // Conditions
     if (JSON.stringify(account) === "{}") {
@@ -165,7 +178,6 @@ export const Profile = (props) => {
     }
 
     const changeAccount = delta => setAccount({ ...account, ...delta });
-
 
     // Basically check if user is the same user as the loaded profile.
     // If so then allow them to edit with the edit button at the end (this edit button will update the database once done)
@@ -280,7 +292,10 @@ export const Profile = (props) => {
                                             <Button variant="contained" className="bg-danger col-2" onClick={() => { handleFriendRequest(0) }}><ClearIcon /></Button>
                                         </th>}
                                         {account.status === 1 && <th className="col-2 pb-2">
-                                            <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Add Friend </Button>
+                                            <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Request Sent</Button>
+                                        </th>}
+                                        {account.status === 4 && <th className="col-2 pb-2">
+                                            <Button variant="contained" disabled endIcon={<ClearIcon color='disabled' />}>Redacted</Button>
                                         </th>}
                                         {account.status === 0 && <th className="col-2 pb-2">
                                             <Button variant="contained" className="bg-success" onClick={() => sendFriendRequestFunc()} endIcon={<Add />}>Add Friend </Button>
@@ -309,6 +324,21 @@ export const Profile = (props) => {
                         </div>
                     </div>
                 </div>}
+
+            {classes.length !== 0 && <div>
+                <h1>Classes</h1>
+                <table>
+                    <tbody>
+                        {classes.map((clss, idx) => {
+
+                            <tr key={clss.name} className="container">
+                                
+                            </tr>
+
+                        })}
+                    </tbody>
+                </table>
+            </div>}
         </section>
     }
     return <></>;
