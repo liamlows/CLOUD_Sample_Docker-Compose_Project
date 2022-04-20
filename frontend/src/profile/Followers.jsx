@@ -10,7 +10,7 @@ export const Followers = () => {
         <Stack justifyContent="center" alignItems="center" spacing={2}>
             <div className="item">
                 <Stack direction = "row" spacing={40}>
-                    <Avatar sx={{ height: '2rem', width: '2rem'}}/>
+                    <Avatar sx={{ height: '3rem', width: '3rem'}}/>
                     <h6><Link to='/theirUser' className='createLink'>Username</Link><br/> <p>Name</p></h6>
                     <Button color="secondary" onClick={() => {alert('User removed');}} variant="outlined">
                         Remove
@@ -19,7 +19,7 @@ export const Followers = () => {
             </div>
             <div className="item">
                 <Stack direction = "row" spacing={40}>
-                    <Avatar sx={{ height: '2rem', width: '2rem'}}/>
+                    <Avatar sx={{ height: '3rem', width: '3rem'}}/>
                     <h6><Link to='/theirUser' className='createLink'>Username</Link><br/> <p>Name</p></h6>
                     <Button color="secondary" onClick={() => {alert('User removed');}} variant="outlined">
                         Remove
@@ -28,7 +28,7 @@ export const Followers = () => {
             </div>
             <div className="item">
                 <Stack direction = "row" spacing={40}>
-                    <Avatar sx={{ height: '2rem', width: '2rem'}}/>
+                    <Avatar sx={{ height: '3rem', width: '3rem'}}/>
                     <h6><Link to='/theirUser' className='createLink'>Username</Link><br/> <p>Name</p></h6>
                     <Button color="secondary" onClick={() => {alert('User removed');}} variant="outlined">
                         Remove
