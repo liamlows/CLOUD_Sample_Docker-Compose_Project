@@ -123,7 +123,7 @@ export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, username, p
                 {page.route === '/classes' && <Button
                   key={page.label}
                   component={Link}
-                  to={`users/${username}/classes`}
+                  to={`/classes`}
                   onClick={handleCloseNavMenu}
                   sx={{ my: 2, color: 'white', display: 'block' }}
                 >
