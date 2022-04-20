@@ -50,7 +50,7 @@ export const getAccountbyUsername = async (username) => {
 
 //Still work in progress. Account editing is not fully implemented
 export const updateAccountbyUsername = async (account) => {
-    return axios.put(`${BACKEND_ENDPOINT}/api/users/${account.username}`, account);
+    return axios.put(`${BACKEND_ENDPOINT}/api/account`, {account: account} );
 }
 
 export const getProfiles = async () => {
@@ -84,6 +84,7 @@ export const sendFriendRequest = async (targetId) => {
 
 export const getFriends = async () => {
     const res = await axios.get(`${BACKEND_ENDPOINT}/api/friends`);
+    console.log(res)
     return res.data;
 }
 
@@ -99,6 +100,11 @@ export const handleFriendRequest = async (id, status) => {
 }
 
 export const getFriendRequest = async (id) => {
-    const res = await axios.get(`${BACKEND_ENDPOINT}/api/friends/requests/status/${id}`);
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/friends/status/${id}`);
+    return res.data;
+}
+
+export const getFriendsClasses = async (id) => {
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/enrollments/${id}`);
     return res.data;
 }
