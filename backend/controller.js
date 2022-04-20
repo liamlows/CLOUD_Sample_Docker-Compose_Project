@@ -13,7 +13,16 @@ function isTableExcluded(tableName) {
 // DEFAULT KEYS FOR THE TABLES
 const key = {
     'school': ['school_id'],
-    'account': ['account_id']
+    'account': ['account_id'],
+    'course_metadata': ['course_meta_id'],
+    'courses': ['course_id'],
+    'roles': ['role_id'],
+    'accounts': ['account_id'],
+    'friendships':['friend_a', 'friend_b'],
+    'friend_requests':['requester_id', 'requested_id'],
+    'announcements': ['announcement_id'],
+    'enrollments': ['account_id', 'course_id'],
+    'waitlists': ['account_id', 'course_id']
   };
   
   // DEFAULT VALS TO CHANGE FOR THE TABLES

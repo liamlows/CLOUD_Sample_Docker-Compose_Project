@@ -14,7 +14,7 @@ router.get('/api/d/:table', async (req, res, next) => {
 
 // Dynamic Post
 // /api/d/{table}/post
-router.post('/api/d/:table/post', async (req, res, next) => {
+router.post('/api/d/:table', async (req, res, next) => {
   try{
     await controller.post(req, res);
   } catch(error){
@@ -24,7 +24,7 @@ router.post('/api/d/:table/post', async (req, res, next) => {
 
 // Dynamic Put
 // /api/d/{table}/{variable}/put
-router.put('/api/d/:table/:variable/put', async (req, res, next) => {
+router.put('/api/d/:table/:variable', async (req, res, next) => {
   try{
     await controller.put(req, res);
   } catch(error){
@@ -34,7 +34,7 @@ router.put('/api/d/:table/:variable/put', async (req, res, next) => {
 
 // Dynamic Delete
 // /api/d/{table}/{variable}/delete
-router.delete('/api/d/:table/:variable/delete', async (req, res, next) => {
+router.delete('/api/d/:table/:variable', async (req, res, next) => {
   try{
     await controller.delete(req, res);
   } catch(error){
