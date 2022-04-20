@@ -10,6 +10,7 @@ import { Messages } from "./messages/Messages";
 import { Search } from "./search/Search";
 import { Notifications } from "./notifications/Notifications";
 import { EditProfile } from './profile/EditProfile';
+import { NFTDetail} from'./home/NFTDetail';
 import { Followers } from './profile/Followers';
 import { Following } from './profile/Following';
 import { ChangePassword } from './profile/ChangePassword';
@@ -29,6 +30,7 @@ function App () {
       <Route exact path="/search" element={<Search/>} />
       <Route exact path="/notifications" element={<Notifications/>} />
       <Route exact path="/edit-profile" element={<EditProfile/>} />
+      <Route exact path="/NFT-details" element={<NFTDetail/>}/>
       <Route exact path="/followers" element={<Followers/>} />
       <Route exact path="/following" element={<Following/>} />
       <Route exact path="/changePw" element={<ChangePassword/>} />

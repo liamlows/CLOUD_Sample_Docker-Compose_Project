@@ -1,0 +1,17 @@
+.container{
+    padding-top: 2rem;
+    display: flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+    justify-content: center;
+ }
+ .NFTInfo{
+     display:flex;
+     flex-direction:column;
+ }
+ .buttonRow{
+    justify-content:space-around;
+ }
+ p {
+    text-align: left;
+}
