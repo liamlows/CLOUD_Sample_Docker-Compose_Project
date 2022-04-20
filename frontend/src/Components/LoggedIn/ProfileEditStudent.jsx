@@ -14,7 +14,6 @@ export const SignUpPage = () => {
         "4th Year",
         "5+ Year",
     ]);
-}
 
 {/* TODO: path to each profile unqiue to each user**/}
 export const Profile = () => {

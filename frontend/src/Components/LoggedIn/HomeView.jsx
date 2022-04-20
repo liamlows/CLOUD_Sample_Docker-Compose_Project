@@ -8,7 +8,6 @@ import Cookies from "js-cookie";
 import { useState } from "react";
 import { getAccountbyUsername, logout } from "../../APIFolder/loginApi";
 import { useEffect } from "react";
-import {ClassMenu} from "./classMenu"
 
 export const HomeView = ({ currUser, setCurrUser, pages, settings}) => {
 
