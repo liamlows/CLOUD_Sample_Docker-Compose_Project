@@ -1,49 +1,104 @@
-import AddIcon from '@mui/icons-material/Add';
-import { useEffect, useState } from 'react';
+// Library Imports
+import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
-export const FriendsList = ({ currUser, setCurrUser, setLoadedUser }) => {
+// Component Imports
+import LoggedInResponsiveAppBar from '../common/LoggedInResponsiveAppBar';
 
+// Method Imports
+import { getFriends, logout } from '../../APIFolder/loginApi';
+
+export const FriendsList = (props) => {
+    // Navigate Object
     const navigate = useNavigate();
-    const [friends, setFriends] = useState([]);
 
-    const [username, setUsername] = useState(undefined);
+    // Component Variables
+    const [account, setAccount] = useState(JSON.parse(localStorage.getItem("currUser")));
+    const [friends, setFriends] = useState(false);
 
-    const goToProfile = profile => {
-        setLoadedUser(profile);
-        // navigate(`/users/${profile.username}`);
-    }
-
-    const addFriend = () => {
-        // navigate(`/users/${currUser.username}/friends`);
-    }
-
+    // Initial Load
     useEffect(() => {
-        // getFriends(currUser.username).then(response => { setFriends(response))
+        if (JSON.stringify(account) === "{}") {
+            navigate('/');
+            props.setNavigated(true);
+        }
+        getFriends().then(res => { 
+            console.log(res);
+            setFriends(res);
+        });
     }, []);
 
-    // if (!friends) {
-    //     getProfiles().then(response => { setProfiles(response) })
-    //     return <>Loading...</>
-    // }
+    // Conditions
+    if (!friends) {
+        return <>Loading...</>
+    }
 
+    // Component Methods
+    const goToProfile = (friend) => {
+        navigate(`/users/${friend.username}`);
+    }
+
+    const signOut = () => {
+        console.log("Logging out");
+        logout().then(() => {
+            localStorage.setItem("currUser", "{}")
+            navigate('/');
+        });
+    }
+    const profileNav = () => {
+        navigate(`users/${account.username}`);
+    }
+    const accountNav = () => {
+        navigate(`accounts/${account.username}`);
+    }
+
+    // HTML
     return <div>
+        <LoggedInResponsiveAppBar
+            pages={props.pages}
+            settings={props.settings}
+            signOut={() => signOut()}
+            username={account.username}
+            profileNav={() => profileNav()}
+            account={() => accountNav()} />
+
         <div className='container border-0 mb-3'>
-            <h1 className='mt-3 col-6 float-start '>Friends List <span className='text-secondary'>(0)</span></h1>
-            <button type='button' className='btn btn-success float-end fs-4 col-3 m-3'><AddIcon sx={{ color: 'white' }} />Add Friend</button>
+            <h1 className='mt-3 col-6 float-start '>Friends List <span className='text-secondary'>({friends.length})</span></h1>
+            <Button variant="contained"
+                className='bg-success float-end fs-4 col-3 m-3'
+                onClick={() => navigate('/users')}
+                endIcon={<AddIcon />}>
+                Add A Friend
+            </Button>
             <div className='clearfix'></div>
         </div>
         <div className='border-top mb-3'></div>
-        {friends.length > 0 
+        {console.log(friends)}
+        {friends.length > 0
             && <table>
-                <thead>
-                    <tr>
-                        <th>
+                <tbody>
+                    {friends.map(friend => 
+                        <tr key={friend.username}>
+                            <td>{friend.username}</td>
+                            <td>{friend.firstName}</td>
+                            <td>{friend.lastName}</td>
 
-                        </th>
-                    </tr>
-                </thead>
+                            <td>
+                                <Button variant="contained"
+                                    className="btn btn-secondary"
+                                    endIcon={<ArrowForwardIcon />}
+                                    onClick={() => goToProfile(friend)}>
+                                    View Profile
+                                </Button>
+                            </td>
+                        </tr>
+                    )}
+
+                </tbody>
             </table>}
-            {friends.length === 0 && <h2>You have no friends</h2>}
+        {friends.length === 0 && <h2>You have no friends</h2>}
     </div>
 }

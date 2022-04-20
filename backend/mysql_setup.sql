@@ -85,6 +85,7 @@ CREATE TABLE `db`.`friend_requests` (
     `requester_id` BIGINT UNSIGNED,
     `requested_id` BIGINT UNSIGNED,
     `timestamp` DATETIME DEFAULT NOW(),
+    `status` INT DEFAULT -1,
     PRIMARY KEY (`requester_id`, `requested_id`),
     FOREIGN KEY (`requester_id`) REFERENCES accounts(`account_id`),
     FOREIGN KEY (`requested_id`) REFERENCES accounts(`account_id`)
