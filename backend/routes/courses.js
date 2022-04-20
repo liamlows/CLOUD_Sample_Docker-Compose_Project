@@ -28,17 +28,6 @@ PUT /courses/metadata/
  */
 
 
-router.get("/metadata", async (req, res, next) => {
-    let rows, fields;
-    try{
-        [rows, fields] = await pool.execute('SELECT * FROM `course_metadata`');
-    } catch(error){
-        return next(error);
-    }
-
-    res.status(200).json(rows);
-});
-
 router.get("/", async (req, res, next) => {
     let rows, fields;
     try{
@@ -60,6 +49,23 @@ router.get("/", async (req, res, next) => {
     res.status(200).json(rows);
 });
 
+
+router.post("/", async (req, res, next) => {
+    let requiredBody = {
+
+    };
+});
+
+router.get("/metadata", async (req, res, next) => {
+    let rows, fields;
+    try{
+        [rows, fields] = await pool.execute('SELECT * FROM `course_metadata`');
+    } catch(error){
+        return next(error);
+    }
+
+    res.status(200).json(rows);
+});
 
 router.post("/metadata", async (req, res, next) => {
     let requiredBody = {

@@ -21,10 +21,8 @@ CREATE TABLE `db`.`course_metadata` (
     `course_name` VARCHAR(255) NOT NULL,
     `department` VARCHAR(255) NOT NULL,
     `description` VARCHAR(1000) NOT NULL,
-    'professor_id' BIGINT UNSIGNED,
     PRIMARY KEY (`course_meta_id`),
-    FOREIGN KEY (`school_id`) REFERENCES schools(`school_id`),
-    FOREIGN KEY ('professor_id') REFERENCES accounts('account_id'),
+    FOREIGN KEY (`school_id`) REFERENCES schools(`school_id`)
 );
 
 -- COURSE TABLE
@@ -35,9 +33,9 @@ CREATE TABLE `db`.`courses` (
     `start_date` DATE NOT NULL,
     `end_date` DATE NOT NULL,
     `canceled` BOOLEAN NOT NULL DEFAULT FALSE,
-    'week_flags' SMALLINT NOT NULL,
-    'start_time' TIME NOT NULL,
-    'end_time' TIME NOT NULL,
+    `week_flags` SMALLINT NOT NULL,
+    `start_time` TIME NOT NULL,
+    `end_time` TIME NOT NULL,
     PRIMARY KEY (`course_id`),
     FOREIGN KEY (`course_meta_id`) REFERENCES course_metadata(`course_meta_id`)
 );
@@ -66,6 +64,7 @@ CREATE TABLE `db`.`accounts` (
     `logged_in` BOOLEAN NOT NULL DEFAULT 0,
     `offline_mode` BOOLEAN NOT NULL DEFAULT 0,
     `email` VARCHAR(255),
+    `bio` VARCHAR(1000),
     PRIMARY KEY (`account_id`),
     FOREIGN KEY (`school_id`) REFERENCES schools(`school_id`),
     FOREIGN KEY (`role_id`) REFERENCES roles(`role_id`)
