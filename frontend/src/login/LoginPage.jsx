@@ -15,7 +15,8 @@ export const LoginPage = () => {
    <br/> <br/> <br/>
    <Button variant="outlined"><Link to='/home' className="createLink">Submit</Link></Button>
    <br/>
-        <h5><Link to='/create' className="createLink">Don't have an account? Click here to make one!</Link></h5>
+   <br/>
+        <h6><Link to='/create' className="createLink">Don't have an account? Click here to make one!</Link></h6>
    </div>
     </div>);
 }
