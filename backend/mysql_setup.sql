@@ -124,10 +124,5 @@ CREATE TABLE `db`.`waitlists` (
     FOREIGN KEY (`course_id`) REFERENCES courses(`course_id`)
 );
 
--- CC REQUIREMENTS TABLE
-CREATE TABLE 'db'.'cc_requirements'(
-    
-);
-
 
 INSERT INTO `roles`(role_type) VALUES('admin');
