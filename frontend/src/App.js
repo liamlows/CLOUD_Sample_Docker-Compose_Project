@@ -1,13 +1,24 @@
-import React, { useEffect, useState } from 'react';
+
+// Library Imports
+import React, { useEffect, useState } from "react";
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Cookies from 'js-cookie';
+
+// Component Imports
 import './App.css';
-import axios from 'axios';
+import { SignUpPage } from './Components/Login/SignUpPage';
+import { LoginPage } from './Components/Login/LoginPage';
+import { Base } from './Components/BaseView/Base';
+import { Profile } from './Components/Profiles/Profile';
+import { AccountInfo } from './Components/Profiles/AccountInfo';
+import { UserSearch } from './Components/Profiles/UserSearch';
+import { FriendsList } from './Components/Profiles/FriendsList';
+
+// Method Imports
+import { getAccountbyUsername } from './APIFolder/loginApi';
 
 // React functional component
-function App () {
-  // state for storage of the information on the webpage of forms and list, uses hooks
-  const [number, setNumber] = useState("")
-  const [values, setValues] = useState([])
-
+function App() {
   // ENTER YOUR EC2 PUBLIC IP/URL HERE
   const ec2_url = ''
   // CHANGE THIS TO TRUE IF HOSTING ON EC2, MAKE SURE TO ADD IP/URL ABOVE
@@ -15,73 +26,117 @@ function App () {
   // USE localhost OR ec2_url ACCORDING TO ENVIRONMENT
   const url = ec2 ? ec2_url : 'localhost'
 
-  // handle input field state change
-  const handleChange = (e) => {
-    setNumber(e.target.value);
-  }
+  // Component Variables
+  const [cName, setCName ] = useState('dn');
+  //using to alert when navigated back to home page ( for when not signed in as user)
+  const [ navigated, setNavigated] = useState(false);
+  //Nav bar now made available from all views (at least thats the goal)
+  const [loggedInPages] = useState([
+    { label: 'Dashboard', route: `/` },
+    { label: 'Classes', route: `/classes` },
+    { label: 'Friends', route: `/users/:username/friends` },
+  ]);
+  const [basePages] = useState([
+    { label: 'Info', route: `/info` },
+    //Add more paths here if you want more?
+  ]);
+  const [settings] = useState([
+    // { label: 'Public Profile', route: `/users/${account.id}` }, Keep out until have an account id confirmed
+    // { label: 'Account', route: `/accounts/${account.id}` }, 
+    { label: 'Public Profile', route: `/users` },
+    { label: 'Account', route: `/accounts` },
+    { label: 'Logout', route: '/signout' }
+  ]);
 
-  const fetchBase = () => {
-    axios.get(`http://${url}:8000/`).then((res)=>{
-      alert(res.data);
-    })
-  }
-
-  // fetches vals of db via GET request
-  const fetchVals = () => {
-    axios.get(`http://${url}:8000/values`).then(
-      res => {
-        const values = res.data.data;
-        console.log(values);
-        setValues(values)
-    }).catch(err => {
-      console.log(err)
-    });
-  }
-
-  // handle input form submission to backend via POST request
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    let prod = number * number;
-    axios.post(`http://${url}:8000/multplynumber`, {product: prod}).then(res => {
-      console.log(res);
-      fetchVals();
-    }).catch(err => {
-      console.log(err)
-    });;
-    setNumber("");
-  }
-
-  // handle intialization and setup of database table, can reinitialize to wipe db
-  const reset = () => {
-    axios.post(`http://${url}:8000/reset`).then(res => {
-      console.log(res);
-      fetchVals();
-    }).catch(err => {
-      console.log(err)
-    });;
-  }
-
-  // tell app to fetch values from db on first load (if initialized)
-  // the comment below silences an error that doesn't matter.=
+  // Initial Load
   useEffect(() => {
-    fetchVals();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    localStorage.setItem("currUser", "{}");
+    console.log("Initial State Set");
 
+    let username = Cookies.get("username");
+
+    if (username) {
+      setNavigated(false);
+      getAccountbyUsername(username)
+        .then(account => {
+          if (account) {
+            console.log("account found");
+            console.log(account);
+            localStorage.setItem("currUser", JSON.stringify(account));
+          }
+          else {
+            console.log("User is null after request");
+            localStorage.setItem("currUser", "{}");
+          }
+          setCName(' ');
+        })
+    }
+    else {
+      console.log("No cookie");
+      localStorage.setItem("currUser", "{}");
+      setCName(' ');
+    }
+  }, []);
+
+  // Conditions
+
+  // Component Methods
+
+  // HTML
   return (
-    <div className="App">
-      <header className="App-header">
-        <button onClick={fetchBase} style={{marginBottom: '1rem'}}> {`GET: http://${url}:8000/`} </button>
-        <button onClick={reset}> Reset DB </button>
-        <form onSubmit={handleSubmit}>
-          <input type="text" value={number} onChange={handleChange}/>
-          <br/>
-          <input type="submit" value="Submit" />
-        </form>
-        <ul>
-          { values.map((value, i) => <li key={i}>{value.value}</li>) }
-        </ul>
-      </header>
+    <div className={`App ${cName}`} >
+      <BrowserRouter>
+        <Routes>
+          {/* TODO: Add nav bar at top to have easy access to tabs??? 
+          Probably Easiest to create react component then add to each view independently.
+          May want to have 3 different nav bars for the different users and 
+          check what type of user when loading and return different based on which type user is...Seems decently simple to implement */}
+
+          {/* TODO: Integrate Material UI */}
+          <Route path='/' element={<Base 
+            basePages={basePages}
+            loggedInPages={loggedInPages}
+            settings={settings} 
+            navigated={navigated}/>} />
+
+          {/* TODO: Make home page nicer and more professional. */}
+          <Route path='/login' element={<LoginPage 
+            setNavigated={x => setNavigated(x)}/>} />
+
+          {/* <Route path='/loggedIn' element={<LoggedIn />} /> */}
+          {/* TODO: Classes tab */}
+          {/* TODO: Go directly to "Classes display" with  */}
+          {/* TODO: When logged in need to be able to view all classes */}
+          {/* TODO: Currently Enrolled classes */}
+
+          {/* TODO: View Profile (Probably later on) */}
+          {/* TODO: Specific Classes (Probably later on) */}
+          {/* TODO: Account Settings (Probably later on) */}
+
+
+          <Route path="/users/:username/friends" element={<FriendsList 
+            pages={loggedInPages}
+            settings={settings}
+            setNavigated={x => setNavigated(x)}/>} />
+
+          <Route path="/users" element={<UserSearch 
+            pages={loggedInPages}
+            settings={settings}
+            setNavigated={x => setNavigated(x)}/>} />
+
+          <Route path='/signup' element={<SignUpPage 
+            setNavigated={x => setNavigated(x)}/>} />
+
+          <Route path="/users/:username" element={<Profile 
+            pages={loggedInPages}
+            settings={settings}
+            setNavigated={x => setNavigated(x)}/>} />
+            
+          <Route path="/accounts/:username" element={<AccountInfo 
+            setNavigated={x => setNavigated(x)} />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
