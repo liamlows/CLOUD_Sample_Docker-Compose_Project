@@ -27,7 +27,8 @@ function App() {
     user: {
       userToken: "Token",
       isFarmer: true,
-      username: "bob"
+      username: "bob",
+      userId: 1,
     }
   });
 
