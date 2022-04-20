@@ -13,6 +13,7 @@ import { EditProfile } from './profile/EditProfile';
 import { Followers } from './profile/Followers';
 import { Following } from './profile/Following';
 import { ChangePassword } from './profile/ChangePassword';
+import { NewPost } from './profile/NewPost';
 
 // React functional component
 function App () {
@@ -31,6 +32,7 @@ function App () {
       <Route exact path="/followers" element={<Followers/>} />
       <Route exact path="/following" element={<Following/>} />
       <Route exact path="/changePw" element={<ChangePassword/>} />
+      <Route exact path="/postPicture" element={<NewPost/>} />
     </Routes>
 </div>
     );
