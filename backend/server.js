@@ -4,8 +4,17 @@ const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const cors = require('cors');
 const { log, ExpressAPILogMiddleware } = require('@rama41222/node-logger');
-// const mysqlConnect = require('./db');
-const routes = require('./routes');
+//const mysqlConnect = require('./db');
+
+//route handlers
+//const routes = require('./routes/routes');
+const usersRoutes = require('./routes/users');
+const userUpdatesRoutes = require('./routes/user_updates');
+const sessionRoutes = require('./routes/session');
+
+//middle ware
+const { createModelsMiddleware } = require('./middleware/model-middleware');
+const { authenticateJWT, authenticateWithClaims } = require('./middleware/auth');
 
 // set up some configs for express.
 const config = {
@@ -27,9 +36,22 @@ app.use(cors({
   origin: '*'
 }));
 app.use(ExpressAPILogMiddleware(logger, { request: true }));
+app.use(createModelsMiddleware);
 
+//health route
+app.get('/health', (request, response, next) => {
+  const responseBody = { status: 'up', port: 8000 };
+  response.json(responseBody);
+
+  next();
+});
 //include routes
-routes(app, logger);
+//app.use('/routes', routes);
+app.use('/login', sessionRoutes);
+app.use('/account', usersRoutes);
+app.use('/settings', authenticateJWT, userUpdatesRoutes);
+//app.use('/customer', authenticateWithClaims(['customer']), usersRoutes);
+//app.use('/farmer', authenticateWithClaims(['farmer']), usersRoutes);
 
 // connecting the express object to listen on a particular port as defined in the config object.
 app.listen(config.port, config.host, (e) => {
