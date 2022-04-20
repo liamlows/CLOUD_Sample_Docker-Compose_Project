@@ -6,6 +6,11 @@ p {
     text-align: center;
 }
 
+span {
+    font-weight: bold;
+    color: rgb(28, 146, 146);
+}
+
 .createLink {
     color:rgb(28, 146, 146);
     text-decoration: none;
@@ -32,4 +37,14 @@ p {
     position:fixed;
     bottom:0;
     right:0;
+}
+
+.editHead {
+    padding-top: 2rem;
+    font-weight: bold;
+    color: rgb(112, 5, 126);
+}
+
+.avatarButton {
+    float: right;
 }
