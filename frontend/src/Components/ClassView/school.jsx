@@ -1,6 +1,10 @@
+import { useEffect } from "react"
+import { getCourse } from "../../APIFolder/loginApi"
+
 export const CourseProfile = ({school}) => {
     //TODO: Navbar
 
+    
     return <section id="profile">
         
         <h1>{school.name}</h1>

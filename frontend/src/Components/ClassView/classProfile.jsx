@@ -10,15 +10,14 @@ import Add from "@mui/icons-material/Add";
 import { Button } from "@mui/material";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
-export const Profile = ({ currUser, setCurrUser, pages, settings, classProfile }) => {
+export const classProfile = ({ currUser, setCurrUser, pages, settings, classProfile }) => {
 
-    const location = useLocation();
     const navigate = useNavigate();
     const [editMode, setEditMode] = useState(false);
 
     //Doesn't currently know what info to get from the database
     const [account, setAccount] = useState('');
-    const [loadedProfile, setLoadedProfile] = useState('');
+    const [loadedClass, setLoadedClass] = useState('');
     const [online, setOnline] = useState('');
     const [friend, setFriend] = useState(false);
     const [sentRequest, setRequest] = useState(false);

@@ -99,7 +99,7 @@ export const getFriends = async () => {
 
 export const getCourse = async (courseID) => {
     //TODO: is this right???
-    const res = await axios.get('http://localhost:8000/api/courses/${course}');
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/courses/${courseID}`);
     if(res.status !== 200){
         console.log("Couldn't find courses");
         return null;
@@ -110,7 +110,7 @@ export const getCourse = async (courseID) => {
 export const addCourse = async (course, account) =>  {
     console.log("Adding..");
 
-    const res = await axios.post('http://localhost:8000/api/users/${username}`/courses/${course}', courseID, account);
+    const res = await axios.post(`${BACKEND_ENDPOINT}/api/users/${account.username}/courses/${course.courseID}`, course.courseID, account);
     if(res.status !== 200){
        // console.log(`Couldn't register. ${res.status}`)
         return null;
@@ -141,3 +141,8 @@ export const getFriendsClasses = async (id) => {
 }
 
 // api/users/professors/
+
+export const getClasses = async () => {
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/classes`);
+    return res.data;
+}
