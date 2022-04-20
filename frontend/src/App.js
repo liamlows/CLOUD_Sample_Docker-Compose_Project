@@ -14,6 +14,9 @@ import Cookies from 'js-cookie';
 import { getAccountbyUsername } from './APIFolder/loginApi';
 import { UserSearch } from './Components/Profiles/UserSearch';
 import { FriendsList } from './Components/Profiles/FriendsList';
+import { ClassMenu } from './Components/ClassView/classMenu';
+import { NoPages } from './Components/NoPages';
+import { addClasses } from './Components/ClassView/addClasses';
 
 // React functional component
 function App() {
@@ -116,6 +119,17 @@ function App() {
             pages={loggedInPages}
             settings={settings}/>} />
           <Route path="/accounts/:username" element={<AccountInfo currUser={currUser} setCurrUser={x => setCurrUser(x)} />} />
+
+
+
+
+
+          {/* Classes loading */}
+          <Route path="/classes" element={<ClassMenu />} />
+          <Route path="/classes/enrollment" element={<addClasses />} />
+
+          <Route path="*" element={<NoPages/>} />
+
         </Routes>
       </BrowserRouter>
     </div>
