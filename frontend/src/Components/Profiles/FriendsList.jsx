@@ -66,7 +66,7 @@ export const FriendsList = (props) => {
             account={() => accountNav()} />
 
         <div className='container border-0 mb-3'>
-            <h1 className='mt-3 col-6 float-start '>Friends List <span className='text-secondary'>(0)</span></h1>
+            <h1 className='mt-3 col-6 float-start '>Friends List <span className='text-secondary'>({friends.length})</span></h1>
             <Button variant="contained"
                 className='bg-success float-end fs-4 col-3 m-3'
                 onClick={() => navigate('/users')}
@@ -79,7 +79,7 @@ export const FriendsList = (props) => {
         {console.log(friends)}
         {friends.length > 0
             && <table>
-                <thead>
+                <tbody>
                     {friends.map(friend => 
                         <tr key={friend.username}>
                             <td>{friend.username}</td>
@@ -97,7 +97,7 @@ export const FriendsList = (props) => {
                         </tr>
                     )}
 
-                </thead>
+                </tbody>
             </table>}
         {friends.length === 0 && <h2>You have no friends</h2>}
     </div>
