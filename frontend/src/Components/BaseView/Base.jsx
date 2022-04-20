@@ -1,16 +1,10 @@
-import { GenericButton } from "../common/GenericButton"
-import ReactDOM from "react-dom";
 import React from "react";
-import Button from "@mui/material/Button";
-import Cookies from "js-cookie";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 import { HomeView } from "../LoggedIn/HomeView";
 import BaseResponsiveAppBar from "../common/BaseResponsiveAppBar";
-import { getAccountbyUsername } from "../../APIFolder/loginApi";
-import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
+import ErrorSnackBar from "./ErrorSnackBar";
 
-export const Base = ({ currUser, setCurrUser, basePages, loggedInPages, settings, loadedProfile, setloadedProfile}) => {
+export const Base = ({ currUser, setCurrUser, basePages, loggedInPages, settings, navigated}) => {
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -26,6 +20,7 @@ export const Base = ({ currUser, setCurrUser, basePages, loggedInPages, settings
     }
 
     return <section className="baseView">
+        {navigated && <ErrorSnackBar></ErrorSnackBar>}
         {currUser === '' && <div>
             <BaseResponsiveAppBar pages={basePages}
                                   signIn={() => onSignIn()}

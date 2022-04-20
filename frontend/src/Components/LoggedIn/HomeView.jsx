@@ -14,18 +14,11 @@ export const HomeView = ({ currUser, setCurrUser, pages, settings}) => {
 
     const navigate = useNavigate();
 
-    const [account, setAccount] = useState(undefined);
-
     useEffect(() => {
         if (currUser === '') {
             navigate('/');
         }
     }, [currUser]);
-
-    if (!account) {
-        setAccount(currUser);
-        // getAccountbyUsername(currUser).then(x => setAccount(x));
-    }
 
     const signOut = () => {
         logout().then(() =>setCurrUser(''));
@@ -47,7 +40,15 @@ export const HomeView = ({ currUser, setCurrUser, pages, settings}) => {
             username={currUser.username} 
             profileNav={() => profileNav()} 
             account={() => accountNav()} />
-        {/* <h1 className="mb-4">Welcome {account.firstName}</h1> */}
-        <ClassMenu />
+        <div className="col-6 p-0"><div className="col-1 p-0"></div><h1 className="col-6 mt-4 fs-2">Welcome {currUser.firstName}</h1></div>
+        <div className="clearfix p-0"></div>
+        <div className="row mt-5 m-3">
+            <div className="col-6 border p-5">
+                Add Classes Here
+            </div>
+            <div className="col-6 border p-5">
+                Add Notifications Here
+            </div>
+        </div>
     </div>
 }
