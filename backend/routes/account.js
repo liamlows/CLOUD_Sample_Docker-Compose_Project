@@ -4,6 +4,7 @@ const pool = require('../db');
 const secret = 'not-a-secret';
 const crypto = require('crypto');
 const util = require('../util');
+const {getUsernameFromId} = require("../util");
 
 /* TODO
 
@@ -16,6 +17,21 @@ PUT /users/:username/role
 GET /users/:username/status
 
  */
+
+
+async function findRoleById(roleId) {
+    let rows, fields;
+
+    [rows, fields] = await pool.execute('SELECT * FROM `roles` WHERE `role_id` = ?',
+        [roleId, ]);
+
+    if(rows.length){
+        return rows[0];
+    }
+    else {
+        return undefined;
+    }
+}
 
 async function findRole(roleType, schoolId, courseId){
     let rows, fields;
@@ -62,12 +78,12 @@ async function createRole(roleType, schoolId, courseId){
 }
 
 
-async function updateLoginStatus(username) {
+async function setStatusOnline(username) {
     await pool.execute('UPDATE `accounts` SET `last_logged_in` = ?, `logged_in` = 1 WHERE `username` = ?',
         [new Date(), username]);
 }
 
-async function updateLogoutStatus(username) {
+async function setStatusOffline(username) {
     await pool.execute('UPDATE `accounts` SET `logged_in` = 0 WHERE `username` = ?',
         [username]);
 }
@@ -79,8 +95,7 @@ router.post("/api/account/register", async (req, res, next) => {
 
     // Check for required parameters
     if(username === undefined || password === undefined){
-        res.status(400).send();
-        return;
+        return res.sendStatus(400);
     }
 
     // Optional parameters
@@ -124,8 +139,8 @@ router.post("/api/account/register", async (req, res, next) => {
 
     if(rows.length !== 0){
         // Account already exists.
-        res.status(200).json({success: 0, error: "An account already exists with that username."}).send();
-        return;
+        res.status(200).json({success: 0, error: "An account already exists with that username."});
+        return next();
     }
 
     if(schoolId !== null){
@@ -138,8 +153,8 @@ router.post("/api/account/register", async (req, res, next) => {
 
         // School does not exist
         if(rows.length === 0){
-            res.status(200).json({success: 0, error: `School with ID ${schoolId} does not exist.`}).send();
-            return;
+            res.status(200).json({success: 0, error: `School with ID ${schoolId} does not exist.`});
+            return next();
         }
     }
 
@@ -151,7 +166,7 @@ router.post("/api/account/register", async (req, res, next) => {
         return next(error);
     }
 
-    res.status(200).json({success: 1, error: ""}).send();
+    res.status(200).json({success: 1, error: ""});
 });
 
 
@@ -162,8 +177,7 @@ router.post("/api/account/login", async (req, res, next) => {
 
     // Check for required parameters
     if(username === undefined || password === undefined){
-        res.status(400).send();
-        return;
+        return res.sendStatus(400);
     }
 
     // Hash password
@@ -185,32 +199,38 @@ router.post("/api/account/login", async (req, res, next) => {
 
     if(rows.length === 0){
         res.json({success: 0, error: "Invalid credentials."}).send();
-        return;
+        return next();
     }
     else if(rows.length > 1){
         res.json({success: 0, error: "Multiple accounts with same credentials"}).send();
-        return;
+        return next();
     }
 
     let user = rows[0];
-    let studentId = -1;
-    if(user.studentId){
-        studentId = user.studentId;
+    let accountId = user.account_id ? user.account_id : -1;
+    let roleType = "";
+
+    if(user.role_id) {
+        let role = findRoleById(user.role_id);
+        if(role)
+            roleType = role.role_type;
     }
 
     // This initializes the login session.
+    req.session.accountId = user.account_id;
     req.session.username = username;
-    req.session.studentId = studentId;
+    req.session.roleType = roleType;
     res.cookie('username', username);
-    res.cookie('studentId', studentId);
+    res.cookie('roleType', roleType);
+    res.cookie('accountId', accountId);
 
     try {
-        await updateLoginStatus(username);
+        await setStatusOnline(username);
     } catch(error) {
         return next(error);
     }
 
-    res.json({success: 1, error: "", username: username}).send();
+    res.json({success: 1, error: "", username: username});
 });
 
 
@@ -223,53 +243,65 @@ router.get("/api/account/logout", async (req, res, next) => {
     res.cookie('username', "");
 
     try {
-        await updateLogoutStatus(username);
+        await setStatusOffline(username);
     } catch(error) {
         return next(error);
     }
 
     req.session.destroy((err) => {
         if(err) return next(err);
-        res.status(200).send();
+        res.sendStatus(200);
     });
 });
 
 
+router.get("/api/username/:id", async (req, res, next) => {
+    let accountId = parseInt(req.params.id);
+
+    if(isNaN(accountId)){
+        return res.sendStatus(404);
+    }
+
+    let username = await getUsernameFromId(accountId);
+
+    if(username === undefined) {
+        return res.sendStatus(404);
+    }
+    res.status(200).json({accountId: accountId, username: username});
+});
+
+
+
 router.get("/api/users/:username", async (req, res, next) => {
     // Query DB for user
+
     let rows, fields;
     try{
-        [rows, fields] = await pool.execute('SELECT * FROM `accounts` WHERE `username` = ?',
+        [rows, fields] = await pool.execute(
+            'SELECT username, first_name, last_name, account_id FROM `accounts` WHERE `username` = ?',
             [req.params.username]);
     } catch(error){
         return next(error);
     }
 
     if(rows.length === 0){
-        res.status(404).send();
-        return;
+        return res.sendStatus(404);
     }
 
     let user = rows[0];
-
-    res.status(200).json({
-        username: user.username,
-        firstName: user.first_name,
-        lastName: user.last_name,
-        studentId: user.student_id
-    }).send();
+    res.status(200).json(user);
 });
 
 router.get("/api/users/", async (req, res, next) => {
     // Query DB for user
     let rows, fields;
     try{
-        [rows, fields] = await pool.execute('SELECT username, first_name, last_name, student_id FROM `accounts`');
+        [rows, fields] = await pool.execute('SELECT username, first_name, last_name, account_id FROM `accounts`');
     } catch(error){
         return next(error);
     }
 
-    res.status(200).json(rows).send();
+    res.status(200).json(rows);
 });
 
 router.get("/api/users/:username/status/", async (req, res, next) => {
@@ -284,12 +316,11 @@ router.get("/api/users/:username/status/", async (req, res, next) => {
     }
 
     if(rows.length === 0){
-        res.status(404).send();
-        return;
+        return res.sendStatus(404);
     }
 
     let user = rows[0];
-    res.status(200).json(user).send();
+    res.status(200).json(user);
 });
 
 

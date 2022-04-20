@@ -1,22 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import './App.css';
-import axios from 'axios';
-import { LoginPage } from './Components/Login/LoginPage';
-// import { LoggedIn } from './LoggedIn/LoggedIn';
-// import { Route } from reactDom;
+
+// Library Imports
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Base } from './Components/BaseView/Base';
-import { SignUpPage } from './Components/Login/SignUpPage';
-import { Profile } from './Components/Profiles/Profile';
-import { HomeView } from './Components/LoggedIn/HomeView';
-import { AccountInfo } from './Components/Profiles/AccountInfo';
 import Cookies from 'js-cookie';
-import { getAccountbyUsername } from './APIFolder/loginApi';
+
+// Component Imports
+import './App.css';
+import { SignUpPage } from './Components/Login/SignUpPage';
+import { LoginPage } from './Components/Login/LoginPage';
+import { Base } from './Components/BaseView/Base';
+import { Profile } from './Components/Profiles/Profile';
+import { AccountInfo } from './Components/Profiles/AccountInfo';
 import { UserSearch } from './Components/Profiles/UserSearch';
 import { FriendsList } from './Components/Profiles/FriendsList';
 import { ClassMenu } from './Components/ClassView/classMenu';
 import { NoPages } from './Components/NoPages';
 import { addClasses } from './Components/ClassView/addClasses';
+
+// Method Imports
+import { getAccountbyUsername } from './APIFolder/loginApi';
 
 // React functional component
 function App() {
@@ -27,30 +29,10 @@ function App() {
   // USE localhost OR ec2_url ACCORDING TO ENVIRONMENT
   const url = ec2 ? ec2_url : 'localhost'
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-
-    let username = Cookies.get("username");
-
-    if (username) {
-      getAccountbyUsername(username)
-        .then(account => {
-          if (account) {
-            setCurrUser(account);
-          }
-          else {
-            console.log("User is null after request");
-            setCurrUser('');
-          }
-        })
-    }
-    else {
-      setCurrUser('');
-    }
-  }, [])
-
-  const [currUser, setCurrUser] = useState('')
-
+  // Component Variables
+  const [cName, setCName ] = useState('dn');
+  //using to alert when navigated back to home page ( for when not signed in as user)
+  const [ navigated, setNavigated] = useState(false);
   //Nav bar now made available from all views (at least thats the goal)
   const [loggedInPages] = useState([
     { label: 'Dashboard', route: `/` },
@@ -62,36 +44,68 @@ function App() {
     //Add more paths here if you want more?
   ]);
   const [settings] = useState([
-    // {label: 'Public Profile', route: `/users/${account.id}` }, Keep out until have an account id confirmed
+    // { label: 'Public Profile', route: `/users/${account.id}` }, Keep out until have an account id confirmed
     // { label: 'Account', route: `/accounts/${account.id}` }, 
     { label: 'Public Profile', route: `/users` },
     { label: 'Account', route: `/accounts` },
     { label: 'Logout', route: '/signout' }
   ]);
 
+  // Initial Load
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    localStorage.setItem("currUser", "{}");
+    console.log("Initial State Set");
+
+    let username = Cookies.get("username");
+
+    if (username) {
+      setNavigated(false);
+      getAccountbyUsername(username)
+        .then(account => {
+          if (account) {
+            console.log("account found");
+            console.log(account);
+            localStorage.setItem("currUser", JSON.stringify(account));
+          }
+          else {
+            console.log("User is null after request");
+            localStorage.setItem("currUser", "{}");
+          }
+          setCName(' ');
+        })
+    }
+    else {
+      console.log("No cookie");
+      localStorage.setItem("currUser", "{}");
+      setCName(' ');
+    }
+  }, []);
+
+  // Conditions
+
+  // Component Methods
+
+  // HTML
   return (
-    <div className="App" >
+    <div className={`App ${cName}`} >
       <BrowserRouter>
         <Routes>
-
-          {/* When clicking on profile have a global hook that gets set to currViewUser  */}
-
           {/* TODO: Add nav bar at top to have easy access to tabs??? 
           Probably Easiest to create react component then add to each view independently.
           May want to have 3 different nav bars for the different users and 
           check what type of user when loading and return different based on which type user is...Seems decently simple to implement */}
 
           {/* TODO: Integrate Material UI */}
-          <Route path='/' element={<Base currUser={currUser}
-            setCurrUser={x => setCurrUser(x)}
+          <Route path='/' element={<Base 
             basePages={basePages}
             loggedInPages={loggedInPages}
-            settings={settings} />} />
-
-          {/* TODO: MAKE HOME NOT ACCESSABLE IF USER IS NOT LOGGED IN */}
+            settings={settings} 
+            navigated={navigated}/>} />
 
           {/* TODO: Make home page nicer and more professional. */}
-          <Route path='/login' element={<LoginPage currUser={currUser} setCurrUser={x => setCurrUser(x)} />} />
+          <Route path='/login' element={<LoginPage 
+            setNavigated={x => setNavigated(x)}/>} />
 
           {/* <Route path='/loggedIn' element={<LoggedIn />} /> */}
           {/* TODO: Classes tab */}
@@ -104,23 +118,24 @@ function App() {
           {/* TODO: Account Settings (Probably later on) */}
 
 
-          <Route path="/users/:username/friends" element={<FriendsList currUser={currUser} setCurrUser={setCurrUser}/>} />
+          <Route path="/users/:username/friends" element={<FriendsList 
+            pages={loggedInPages}
+            settings={settings}
+            setNavigated={x => setNavigated(x)}/>} />
 
           <Route path="/users" element={<UserSearch 
-            currUser={currUser} 
-            setCurrUser={setCurrUser} 
             pages={loggedInPages}
-            settings={settings}/>} />
+            settings={settings}
+            setNavigated={x => setNavigated(x)}/>} />
 
-          <Route path='/signUp' element={<SignUpPage currUser={currUser} setCurrUser={x => setCurrUser(x)} />} />
+          <Route path='/signup' element={<SignUpPage 
+            setNavigated={x => setNavigated(x)}/>} />
+
           <Route path="/users/:username" element={<Profile 
-            currUser={currUser} 
-            setCurrUser={x => setCurrUser(x)}
             pages={loggedInPages}
             settings={settings}/>} />
-          <Route path="/accounts/:username" element={<AccountInfo currUser={currUser} setCurrUser={x => setCurrUser(x)} />} />
-
-
+          <Route path="/accounts/:username" element={<AccountInfo 
+            setNavigated={x => setNavigated(x)} />} />
 
 
 
@@ -129,6 +144,7 @@ function App() {
           <Route path="/classes/enrollment" element={<addClasses />} />
 
           <Route path="*" element={<NoPages/>} />
+
 
         </Routes>
       </BrowserRouter>
