@@ -46,4 +46,45 @@ router.get('/', async (req, res) => {
     }
 })
 
+router.get('/', async(req, res) =>{
+    try{
+        stadiumID: req.query.stadium;
+        lotID: req.query.lot;
+        availability: req.query.available;
+        var isStadium = false;
+        var isLot = false;
+        var isAvailable = false;
+        var result;
+        if(req.query.stadium != undefined){
+            isStadium = true;
+        }
+        if(req.query.lot != undefined){
+            isLot = true;
+        }
+        if(req.query.available != undefined){
+            isAvailable = true;
+        }
+        if(isStadium & isLot & isAvailable){
+            result = await Parking.selectByAll(req.query.stadium, req.query.lot, req.query.available);
+        }else if(isStadium & isLot){
+            result = await Parking.selectStadiumLot(req.query.stadium, req.query.lot);
+        }else if(isStadium & isAvailable){
+            result = await Parking.selectStadiumAvailable(req.query.stadium, req.query.available);
+        }else if(isLot & isAvailable){
+            result = await Parking.selectLotAvailable(req.query.lot, req.query.available);
+        }else if(isStadium){
+            result = await Parking.selectByStadium(req.query.stadium);
+        } else if(isLot){
+            result = await Parking.selectByLot(req.query.lot);
+        }else if(isAvailable){
+            result = await Parking.selectAvailability(req.query.available);
+        }
+
+        res.status(200).json(result);
+    } catch(err){
+        console.error('Failed to create new product:', err);
+        res.status(500).json({message: err.toString()});
+    }
+})
+
 module.exports = router;
