@@ -1,9 +1,11 @@
 
 import { getAllCourses } from "../../APIFolder/loginApi";
+import { removeCourse } from "../../APIFolder/loginApi";
 
-export const ClassMenu = ({ currUser, setCurrUser, pages, settings, setNavigated }) => {
+export const ClassMenu = ({ currUser, setCurrUser, pages, settings, setNavigated, ifDropShow}) => {
       const navigate = useNavigate();
       const [courses, setCourses] = useState(false);
+ /*     const [ifDropShow, setifDropShow] = useState(false);*/
 
       const goToCourse = (course) => {
           navigate(`/users/${course.className}`);
@@ -62,8 +64,17 @@ export const ClassMenu = ({ currUser, setCurrUser, pages, settings, setNavigated
                                 onClick={() => goToCourse(course)}>
                                 View Profile
                             </Button>
-                            {/**TODO: add button to drop course */}
                         </td>
+                        {/**TODO: button to drop course */}
+                        {ifDropShow &&
+                            <td>
+                            <Button variant="contained"
+                                className="btn btn-secondary"
+                                onClick={() => removeCourse(course, currUser)}>
+                                Drop Course
+                            </Button>
+                        </td>
+                        }
                     </tr>
                 })}
 
