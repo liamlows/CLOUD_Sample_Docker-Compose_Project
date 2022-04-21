@@ -62,6 +62,7 @@ export const ClassMenu = ({ currUser, setCurrUser, pages, settings, setNavigated
                                 onClick={() => goToCourse(course)}>
                                 View Profile
                             </Button>
+                            {/**TODO: add button to drop course */}
                         </td>
                     </tr>
                 })}
