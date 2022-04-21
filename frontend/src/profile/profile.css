@@ -16,7 +16,7 @@ p {
     text-decoration: none;
 }
 .postLink {
-    color:purple;
+    color:white;
     text-decoration: none;
 }
 
@@ -46,6 +46,13 @@ p {
     padding-top: 2rem;
     font-weight: bold;
     color: rgb(112, 5, 126);
+}
+
+.followHead {
+    padding-top: 2rem;
+    font-weight: bold;
+    color: rgb(112, 5, 126);
+    text-align: center;
 }
 
 .avatarButton {

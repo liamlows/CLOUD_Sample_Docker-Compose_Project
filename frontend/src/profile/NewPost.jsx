@@ -31,7 +31,7 @@ export const NewPost = () => {
                 />
             </FormControl>
             <br/><br></br>
-            <Button variant="outlined" color="secondary"><Link to='/profile' className="postLink">Post</Link></Button>
+            <Button variant="contained" color="secondary"><Link to='/profile' className="postLink">Post</Link></Button>
             {/* during functionality, show price setter only if toggle is set to true*/}
         </div>
     );

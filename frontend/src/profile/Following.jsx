@@ -1,14 +1,14 @@
-import { Avatar, Stack } from '@mui/material';
+import { Avatar, Divider, Stack } from '@mui/material';
 import Button from '@mui/material/Button';
 import './profile.css'
 import { Link } from 'react-router-dom';
 
 export const Following = () => {
     return (<div className="container">
-        <h4 className= "editHead">Users You're Following</h4>
+        <h4 className="followHead">Users You're Following</h4>
         <br/>
-        <Stack justifyContent="center" alignItems="center" spacing={2}>
-            <div className="item">
+        <Stack justifyContent="center" alignItems="center" width='100%' spacing={2} padding-top="2rem">
+            <div className="item" width='100%'>
                 <Stack direction = "row" spacing={40}>
                     <Avatar sx={{ height: '3rem', width: '3rem'}}/>
                     <h6><Link to='/theirUser' className='createLink'>Username</Link><br/> <p>Name</p></h6>

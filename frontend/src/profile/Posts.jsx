@@ -9,7 +9,10 @@ import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
-import { Grid } from '@mui/material';
+import { Divider, Grid, Stack } from '@mui/material';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -108,34 +111,46 @@ export const Posts = ()=> {
                 </Button>
             </Grid>
         </Grid>
-        
+
       <BootstrapDialog
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
         open={open}
       >
         <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
-          Modal title
+          Username
+         <caption>Date</caption>
         </BootstrapDialogTitle>
+        <img src = "https://cdn.pixabay.com/photo/2017/08/04/17/56/dolomites-2580866__480.jpg" />
         <DialogContent dividers>
+        <IconButton onClick={() => {
+                alert('post liked, change state');
+            }}aria-label="delete">
+            <FavoriteBorderIcon color="secondary" />
+        </IconButton>
+         {/* if liked: <FavoriteIcon color="secondary"/> */}
+         <span> 20 </span>
           <Typography gutterBottom>
-            Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-            dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-            consectetur ac, vestibulum at eros.
+            caption
           </Typography>
           <Typography gutterBottom>
-            Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-            Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
+            For Sale
           </Typography>
           <Typography gutterBottom>
-            Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus
-            magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec
-            ullamcorper nulla non metus auctor fringilla.
+            $$
           </Typography>
+        <Divider/>
+        <h6>Comments</h6>
+        <br/>
+        <Stack direction="row" spacing={20}>
+            <div>Username</div>
+            <div> Comment</div>
+            <div>Date</div>
+        </Stack>
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClose}>
-            Save changes
+            Back
           </Button>
         </DialogActions>
       </BootstrapDialog>
