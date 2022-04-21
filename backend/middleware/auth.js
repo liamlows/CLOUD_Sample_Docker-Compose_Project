@@ -27,6 +27,7 @@ const authenticateWithClaims = (claims) => (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
+    console.log("No authHeader");
     return res.sendStatus(401);
   }
 
@@ -34,7 +35,7 @@ const authenticateWithClaims = (claims) => (req, res, next) => {
 
   jwt.verify(token, accessTokenSecret, (err, user) => {
     if (err) {
-      return res.sendStatus(401);
+      return res.sendStatus(403);
     }
     for (let claim of claims) {
       if (user.claims.includes(claim)) {
@@ -42,7 +43,7 @@ const authenticateWithClaims = (claims) => (req, res, next) => {
         return next();
       }
     }
-    return res.sendStatus(401);
+    return res.sendStatus(404);
   });
 }
 

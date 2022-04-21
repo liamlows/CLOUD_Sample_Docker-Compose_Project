@@ -23,6 +23,7 @@ const app = express();
 const usersRoutes = require('./routes/users');
 const sessionRoutes = require('./routes/session');
 const accountRoutes = require('./routes/account');
+const adminRoutes = require('./routes/admin');
 
 // create a logger object.  Using logger is preferable to simply writing to the console.
 const logger = log({ console: true, file: false, label: config.name });
@@ -40,6 +41,7 @@ app.use('/session', sessionRoutes);
 app.use('/account', accountRoutes);
 
 app.use('/users', authenticateWithClaims(['user']), usersRoutes);
+app.use('/admin', authenticateWithClaims(['admin']), adminRoutes);
 
 
 app.get('/health', (request, response, next) => {

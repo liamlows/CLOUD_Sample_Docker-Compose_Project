@@ -27,6 +27,12 @@ const findUserByEmail = async (email) => {
     return result;
 }
 
+const getAdmin = async (email) => {
+    const query = knex(USER_TABLE).where({ email }).whereRaw('privileges = 2');
+    const result = await query;
+    return result;
+}
+
 // Authenticates user and returns a JWT
 const authenticateUser = async (email, password) => {
     const users = await findUserByEmail(email);
@@ -42,8 +48,12 @@ const authenticateUser = async (email, password) => {
     // If the password is valid, returns a JWT
     if (validPassword) {
         delete user.password;
-        const accessToken = jwt.sign({ ...user, claims: ['user'] }, accessTokenSecret);
-        return accessToken;
+        const admin = await getAdmin(email);
+        if(admin.length === 0){
+            return jwt.sign({ ...user, claims: ['user'] }, accessTokenSecret);
+        } else {
+            return jwt.sign({ ...user, claims: ['admin'] }, accessTokenSecret);
+        }
     // If the password is invalid, logs a relevant error
     } else {
         console.error(`Invalid password.`);
