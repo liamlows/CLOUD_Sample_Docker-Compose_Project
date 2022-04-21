@@ -1,5 +1,4 @@
 const knex = require('../database/knex');
-const bcrypt = require('bcrypt');
 
 //Get all transactions by farmer
 const fetchTransactionsByFarmer = async (email) => {

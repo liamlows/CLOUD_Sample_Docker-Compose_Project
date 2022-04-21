@@ -1,5 +1,4 @@
 const knex = require('../database/knex');
-const bcrypt = require('bcrypt');
 
 const USER_TABLE = 'users';
 //create new user account

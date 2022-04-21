@@ -4,9 +4,8 @@ const router = express.Router();
 //7.1 get transactions by farmer
 router.get('/transactions', async (req, res, next) => {
     try{
-        const user = req.user;
-        result = await req.models.dash.fetchTransactionsByFarmer(user.email);
-
+        const body = req.body;
+        result = await req.models.dash.fetchTransactionsByFarmer(body.email);
         res.status(200).json(result);
     } catch (err) {
         console.error('Failed to get farmer transactions', err);
