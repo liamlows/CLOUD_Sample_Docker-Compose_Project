@@ -36,7 +36,74 @@ export const Profile = (props) => {
     const location = useLocation();
 
     // Initial Load
-    useEffect(() => {}, [editMode, reload]); //lol the useEffect is just here now.
+    useEffect(() => {
+        let status = 0;
+        getStatusByUsername(params.username).then((status) => setOnline(!!status.logged_in));
+
+        getAccountbyUsername(params.username).then(loaded => {
+            // get the table of friend requests
+            if (loaded.username !== JSON.parse(localStorage.getItem("currUser")).username) {
+                getFriendRequest(loaded.account_id).then(res => {
+                    // convert it to an array
+                    if (res.requester_id === loaded.account_id) {
+                        // if the friend request has not been accepted
+                        if (res.status === -1) {
+                            status = 2; // display accept request button
+                            console.log("changing status to a 2", status);
+                        }
+                        // if the request has been accepted
+                        else if (res.status === 1) {
+                            status = 3; // display friend tag
+                            console.log("changing status to a 3", status);
+                        }
+                        else if (res.status === 0) {
+                            status = 4;
+                            console.log("changing status to a 4", status);
+                        }
+                    }
+                    // check if the request is from the user
+                    else if (res.requested_id === loaded.account_id) {
+                        // if the request has not been accepted
+                        if (res.status === -1) {
+                            status = 1; // display disabled button
+                            console.log("changing status to a 1", status);
+                        }
+                        // if the request has been accepted
+                        else if (res.status === 1) {
+                            status = 3; // display friend tag
+                            console.log("changing status to a 3", status);
+                        }
+                        else if (res.status === 0) {
+                            status = 4;
+                            console.log("changing status to a 4", status);
+                        }
+                    }
+                }).catch(code => {
+                    setAccount({ ...loaded, status: 0 });
+
+                }).then(() => {
+                    if (account.account_id !== JSON.parse(localStorage.getItem("currUser")).account_id) {
+                        console.log(status, loaded);
+                        if (account.status !== status) {
+                            console.log("Adding status to account");
+                            setAccount({ ...loaded, status: status });
+                            console.log(account);
+                        }
+                    }
+                }).then(() => {
+                    if (status === 3) {
+                        getFriendsClasses().then(res => {
+                            setClasses(...res);
+                        })
+                    }
+                });
+            }
+            else
+            {
+                console.log("profiles are the same")
+                setAccount({ ...loaded, status: 3 });
+            }})
+    }, [editMode, reload]); //lol the useEffect is just here now.
 
     if (account.username && account.username !== params.username) {
         let status = 0;
@@ -135,13 +202,17 @@ export const Profile = (props) => {
     }
 
     const doneEditing = () => {
+        console.log(pp.name);
+        console.log(pp.type);
+        console.log(pp.size);
         if (account.first_name && account.last_name) {
             if (pp !== undefined) {
                 uploadPP(pp);
                 setPP(undefined);
             }
-            updateAccountbyUsername(account).then(setEditMode(false));
-            localStorage.setItem("currUser", JSON.stringify(account));
+            // updateAccountbyUsername(account).then(setEditMode(false));
+            // localStorage.setItem("currUser", JSON.stringify(account));
+            // window.location.reload();
         }
         else {
             window.alert("Please fill out both fields");
@@ -184,7 +255,7 @@ export const Profile = (props) => {
     const onFileChange = event => {
 
         // Update the state
-        this.setPP(event.target.files[0]);
+        setPP(event.target.files[0]);
 
     };
 

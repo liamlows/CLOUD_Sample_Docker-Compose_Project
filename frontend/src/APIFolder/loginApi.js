@@ -47,18 +47,18 @@ export const getAccountbyUsername = async (username) => {
     return res.data;
 }
 
-export const getAccountbyId = async (id) => {
-    if(id === undefined || id === null){
-        return null;
-    }
-
-    const res = await axios.get(`${BACKEND_ENDPOINT}/api/users/${id}`);
-    if(res.status !== 200){
-        console.log(`Couldn't find user: ${id}`)
-        return null;
-    }
+export const getUsernameById = async (id) => {
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/username/${id}`);
     return res.data;
 }
+
+export const getAccountbyId = async (id) => {
+    let response = null
+    getUsernameById(id).then(res => {
+        getAccountbyUsername(res.username).then(res2 => {response = res2})
+    }).then(() => {
+    return response;
+})}
 
 //Still work in progress. Account editing is not fully implemented
 export const updateAccountbyUsername = async (account) => {
@@ -160,8 +160,15 @@ export const getClasses = async () => {
     return res.data;
 }
 
-export const uploadPP = async () => {
-    const res = await axios.post(`${BACKEND_ENDPOINT}/api/users`);
+export const uploadPP = async (pp) => {
+    console.log(typeof(pp), pp)
+
+    let formData = new FormData();
+    formData.append("image", pp);
+    
+    const res = await axios.put(`${BACKEND_ENDPOINT}/api/account`, formData, { headers:{
+        'Content-Type': "multipart/form-data"
+    }});
     return res.data;
 }
 
