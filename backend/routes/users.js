@@ -6,7 +6,7 @@ router.post('/', async (req, res, next) => {
     try {
         const body = req.body;
         console.log(body);
-        const result = await req.models.user.createNewUser(body.email, body.password, body.type);
+        const result = await req.models.user.createNewUser(body.email, body.password);
         res.status(201).json(result);
     } catch (err) {
         console.error('Failed to create new user:', err);
