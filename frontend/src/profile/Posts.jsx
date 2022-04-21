@@ -119,6 +119,7 @@ export const Posts = ()=> {
       >
         <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
           Username
+         <caption>Date</caption>
         </BootstrapDialogTitle>
         <img src = "https://cdn.pixabay.com/photo/2017/08/04/17/56/dolomites-2580866__480.jpg" />
         <DialogContent dividers>
