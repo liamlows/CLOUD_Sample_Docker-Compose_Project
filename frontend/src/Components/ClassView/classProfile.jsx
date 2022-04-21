@@ -8,6 +8,9 @@ import Check from "@mui/icons-material/Check";
 import Add from "@mui/icons-material/Add";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import ClearIcon from '@mui/icons-material/Clear';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import "./classProfile.css";
+
 
 // Component Imports
 import { TextField } from "../common";
@@ -34,8 +37,9 @@ export const ClassProfile = (props) => {
         course_id: 1
     });
     const [professor, setProfessor] = useState({
-        first_name: "First",
-        last_name: "Last",
+        first_name: "Wes",
+        last_name: "Anderson",
+        username: "wes",
         account_id: 1
     });
     const [tas, setTAs] = useState([
@@ -55,7 +59,8 @@ export const ClassProfile = (props) => {
         if (JSON.stringify(account) === "{}")
             setAccount(JSON.parse(localStorage.getItem("currUser")));
 
-        setAccountType(Cookies.get("account_type"));
+        setAccountType("student");
+        // setAccountType(Cookies.get("account_type"));
         // getCourseById(params.course_id).then(loaded => {
         //     // get the table of friend requests
         //     getCourseRequest(loaded.course_id).then(res => {
@@ -148,19 +153,21 @@ export const ClassProfile = (props) => {
     const canEdit = () => {
         //check if listed as professor or ta for the class
         if (accountType === "admin") {
+            console.log("user is an admin")
             return true;
         }
         if (account.account_id === professor.account_id) {
+            console.log("user is the professor")
             return true;
         }
         for (const ta in tas) {
             if (account.account_id === tas[ta].account_id) {
+                console.log("user is a ta")
                 return true;
             }
         }
         return false;
     }
-
 
     const changeCourse = delta => setCourse({ ...account, ...delta });
 
@@ -170,7 +177,7 @@ export const ClassProfile = (props) => {
 
     console.log("Account before if statement", account);
     // NOTE - IN FUTURE ADD BUTTON TO SEND FRIEND REQUEST...ONLY IF FUNCTIONALITY IS IMPLEMENTED
-    if (JSON.stringify(account) !== "{}" && account.status !== undefined) {
+    if (JSON.stringify(account) !== "{}") {
         return <section className="userProfile">
             <LoggedInResponsiveAppBar
                 pages={props.pages}
@@ -181,13 +188,13 @@ export const ClassProfile = (props) => {
                 account={() => accountNav()} />
 
             {/* Viewing editable class (EDITING) */}
-            {canEdit() && editMode === true &&
+            {canEdit() === true && editMode === true &&
                 <div className="container border-0 mt-5">
-                    <div className="row bg-light pb-4">
-                        <div className="col-7 float-start mt-5">
+                    <div className="row bg-light p-4">
+                        <div className="col-7 float-start mt-1">
                             <table className='table float-start'>
                                 <thead>
-                                    <th className="float-start col-3 fs-3 mt-2 text-start"><span className="text-start p-0">{course.course_name} ({course.course_number})</span></th>
+                                    <th className="float-start col-11 fs-3 mt-2 text-start"><span className="text-start p-0">{course.course_name} ({course.course_number})</span></th>
 
                                     <th className="col-1">
                                         <button type="button" className="btn btn-light" onClick={() => startEditing()}>Edit Course</button>
@@ -201,7 +208,7 @@ export const ClassProfile = (props) => {
                                     </tr>
                                     <tr className="border-0">
                                         <td className="col-3 fs-6 text-start border-0">
-                                            <TextField label="Course Number :" value={course.course_Number} setValue={course_number => changeCourse({ course_number })} />
+                                            <TextField label="Course Number :" value={course.course_number} setValue={course_number => changeCourse({ course_number })} />
                                         </td>
                                     </tr>
                                     <tr>
@@ -224,16 +231,16 @@ export const ClassProfile = (props) => {
                 </div>}
 
             {/* Viewing editable class (NOT EDITING) */}
-            {canEdit() && editMode === false &&
+            {canEdit() === true && editMode === false &&
                 <div className="container border-0 mt-5">
-                    <div className="row bg-light pb-4">
-                        <div className="col-7 float-start mt-5">
+                    <div className="row bg-light p-4">
+                        <div className="col-7 float-start mt-1">
                             <table className='table float-start'>
                                 <thead>
 
-                                    <th className="float-start col-3 fs-3 mt-2 text-start">{account.username}</th>
+                                    <th className="float-start col-11 fs-3 mt-2 text-start">{course.course_name} ({course.course_number})</th>
                                     <th className="col-1">
-                                        <button type="button" className="btn btn-light" onClick={() => startEditing()}>Edit Profile</button>
+                                        <button type="button" className="btn btn-light" onClick={() => startEditing()}>Edit Course</button>
                                     </th>
                                 </thead>
                                 <tbody>
@@ -244,6 +251,30 @@ export const ClassProfile = (props) => {
                             <p>{account.email}</p> */}
                                 </tbody>
                             </table>
+                        </div>
+                        <div className="ProfessorProfile col-5 mt-1 bg-light2">
+                        <table className='table float-start'>
+                                <thead>
+
+                                    <th className="float-start col-11 fs-3 mt-2 text-start">Professor</th>
+                                    <th className="col-1">
+                                    <Button variant="contained"
+                                className="btn bg-secondary"
+                                endIcon={<ArrowForwardIcon />}
+                                onClick={() => navigate(`/users/${professor.username}`)}>
+                                View Profile
+                            </Button>
+                                    </th>
+                                </thead>
+                                <tbody>
+                                    <td className="col-3 fs-6 text-start">
+                                        <span className="p-0 text-capitalize">{professor.first_name} </span><span className="p-0 text-capitalize" >{professor.last_name}</span>
+                                    </td>
+                                    {/* <h2>Email :</h2>
+                            <p>{account.email}</p> */}
+                                </tbody>
+                                </table>
+
                         </div>
                     </div>
                 </div>}
@@ -258,8 +289,8 @@ export const ClassProfile = (props) => {
                     </div>
                     <div className="clearfix p-0"></div>
                     <div className="container border-0 mt-3">
-                        <div className="row bg-light pb-4">
-                            <div className="col-7 float-start mt-5">
+                        <div className="row bg-light p-4">
+                            <div className="col-7 float-start mt-1">
                                 <table className='table float-start'>
                                     <thead>
                                         <th className="float-start col-3 fs-3 mt-2 text-start">{account.username}</th>
