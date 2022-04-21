@@ -47,6 +47,7 @@ export const LoginPage = (props) => {
             getAccountbyUsername(res.username)
                 .then(x => {
                     localStorage.setItem("currUser", JSON.stringify(x));
+                    props.setNavigated(0);
                     navigate('/');
                 });
         }

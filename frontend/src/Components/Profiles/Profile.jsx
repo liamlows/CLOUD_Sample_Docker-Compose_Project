@@ -37,77 +37,72 @@ export const Profile = (props) => {
     useEffect(() => {
         let status = 0;
 
-        if (localStorage.getItem("currUser") === "{}") {
-            window.alert("Please log in to view profiles");
-            navigate('/');
-        }
-        else {
-            if (JSON.stringify(account) === "{}")
-                setAccount(JSON.parse(localStorage.getItem("currUser")));
+        if (JSON.stringify(account) === "{}"){
+            setAccount(JSON.parse(localStorage.getItem("currUser")));}
 
-            getStatusByUsername(params.username).then((status) => setOnline(!!status.logged_in));
+        getStatusByUsername(params.username).then((status) => setOnline(!!status.logged_in));
 
-            getAccountbyUsername(params.username).then(loaded => {
-                // get the table of friend requests
-                getFriendRequest(loaded.account_id).then(res => {
-                    // convert it to an array
-                    if (res.requester_id === loaded.account_id) {
-                        // if the friend request has not been accepted
-                        if (res.status === -1) {
-                            status = 2; // display accept request button
-                            console.log("changing status to a 2", status);
-                        }
-                        // if the request has been accepted
-                        else if (res.status === 1) {
-                            status = 3; // display friend tag
-                            console.log("changing status to a 3", status);
-                        }
-                        else if (res.status === 0) {
-                            status = 4;
-                            console.log("changing status to a 4", status);
-                        }
+        getAccountbyUsername(params.username).then(loaded => {
+            // get the table of friend requests
+            getFriendRequest(loaded.account_id).then(res => {
+                // convert it to an array
+                if (res.requester_id === loaded.account_id) {
+                    // if the friend request has not been accepted
+                    if (res.status === -1) {
+                        status = 2; // display accept request button
+                        console.log("changing status to a 2", status);
                     }
-                    // check if the request is from the user
-                    else if (res.requested_id === loaded.account_id) {
-                        // if the request has not been accepted
-                        if (res.status === -1) {
-                            status = 1; // display disabled button
-                            console.log("changing status to a 1", status);
-                        }
-                        // if the request has been accepted
-                        else if (res.status === 1) {
-                            status = 3; // display friend tag
-                            console.log("changing status to a 3", status);
-                        }
-                        else if (res.status === 0) {
-                            status = 4;
-                            console.log("changing status to a 4", status);
-                        }
+                    // if the request has been accepted
+                    else if (res.status === 1) {
+                        status = 3; // display friend tag
+                        console.log("changing status to a 3", status);
                     }
-                }).catch(code => {
-                    if (code === 404) {
-                        status = 0;
+                    else if (res.status === 0) {
+                        status = 4;
+                        console.log("changing status to a 4", status);
                     }
+                }
+                // check if the request is from the user
+                else if (res.requested_id === loaded.account_id) {
+                    // if the request has not been accepted
+                    if (res.status === -1) {
+                        status = 1; // display disabled button
+                        console.log("changing status to a 1", status);
+                    }
+                    // if the request has been accepted
+                    else if (res.status === 1) {
+                        status = 3; // display friend tag
+                        console.log("changing status to a 3", status);
+                    }
+                    else if (res.status === 0) {
+                        status = 4;
+                        console.log("changing status to a 4", status);
+                    }
+                }
+            }).catch(code => {
+                if (code === 404) {
+                    status = 0;
+                }
 
-                }).then(() => {
-                    if (account.account_id !== JSON.parse(localStorage.getItem("currUser")).account_id) {
-                        console.log(status, loaded);
-                        if (account.status !== status) {
-                            console.log("Adding status to account");
-                            setAccount({ ...loaded, status: status });
-                            console.log(account);
-                        }
+            }).then(() => {
+                if (account.account_id !== JSON.parse(localStorage.getItem("currUser")).account_id) {
+                    console.log(status, loaded);
+                    if (account.status !== status) {
+                        console.log("Adding status to account");
+                        setAccount({ ...loaded, status: status });
+                        console.log(account);
                     }
-                }).then(() => {
-                    if (status === 3) {
-                        getFriendsClasses().then(res => {
-                            setClasses(...res);
-                        })
-                    }
-                });
-            })
-        }
-    }, [editMode, reload, account, location.pathname]);
+                }
+            }).then(() => {
+                if (status === 3) {
+                    getFriendsClasses().then(res => {
+                        setClasses(...res);
+                    })
+                }
+            });
+        })
+
+    }, [editMode, reload, account]);
 
 
     // Conditions
@@ -126,7 +121,8 @@ export const Profile = (props) => {
                 });
         }
         else {
-            props.setNavigated(true);
+            console.log(props)
+            props.setNavigated(1);
             navigate('/');
         }
     }
