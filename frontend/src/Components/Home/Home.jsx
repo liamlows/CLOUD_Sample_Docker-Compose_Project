@@ -21,7 +21,7 @@ export const Home = () => {
                 justifyContent: 'center',
                 pt: 5,
                 width: '100%',
-                fontFamily: 'Open Sans, sans-serif',
+                fontFamily: 'Roboto',
                 maxWidth: 500
             }}>
                 <Typography variant="h1" component="div" gutterBottom>
@@ -29,52 +29,74 @@ export const Home = () => {
                 </Typography>
             </Box>
             <Box sx={{
-                    display: 'flex',
-                }}>
-                <Typography variant="h5" component="div" gutterBottom 
-                sx={{
-                    width: 500,
-                    height: 600,
-                    display: 'flex',
-                    justifyContent: 'center'
-                }}>
+                display: 'flex',
+            }}>
+                <Typography variant="h5" component="div"
+                    sx={{
+                        display: 'flex',
+                        width: '40%',
+                        pl: 10,
+                        justifyContent: 'right'
+                    }}>
                     Farm Finders is an online community where users can sell, buy, and connect with other farmers.
                     It's as easy as 1, 2, 3!
                 </Typography>
-                <Timeline>
-                <TimelineItem>
-                    <TimelineOppositeContent color="text.secondary">
-                        #1
-                    </TimelineOppositeContent>
-                    <TimelineSeparator>
-                        <TimelineDot variant="outlined" color="primary" />
-                        <TimelineConnector />
-                    </TimelineSeparator>
-                    <TimelineContent>Sign Up</TimelineContent>
-                </TimelineItem>
-                <TimelineItem>
-                    <TimelineOppositeContent color="text.secondary">
-                        #2
-                    </TimelineOppositeContent>
-                    <TimelineSeparator>
-                        <TimelineDot variant="outlined" color="primary" />
-                        <TimelineConnector />
-                    </TimelineSeparator>
-                    <TimelineContent>Connect With Other Farmers</TimelineContent>
-                </TimelineItem>
-                <TimelineItem>
-                    <TimelineOppositeContent color="text.secondary">
-                        #3
-                    </TimelineOppositeContent>
-                    <TimelineSeparator>
-                        <TimelineDot variant="outlined" color="primary" />
-                    </TimelineSeparator>
-                    <TimelineContent>Buy, Sell, and RSPV to Farm Events</TimelineContent>
-                </TimelineItem>
-            </Timeline>
+                <Timeline
+                    sx={{
+                        display: 'flex',
+                        width: '10%',
+                        justifyContent: 'left'
+                    }}>
+                    <TimelineItem>
+                        <TimelineOppositeContent color="text.secondary">
+                            #1
+                        </TimelineOppositeContent>
+                        <TimelineSeparator>
+                            <TimelineDot variant="outlined" color="primary" />
+                            <TimelineConnector />
+                        </TimelineSeparator>
+                        <TimelineContent>Sign Up</TimelineContent>
+                    </TimelineItem>
+                    <TimelineItem>
+                        <TimelineOppositeContent color="text.secondary">
+                            #2
+                        </TimelineOppositeContent>
+                        <TimelineSeparator>
+                            <TimelineDot variant="outlined" color="primary" />
+                            <TimelineConnector />
+                        </TimelineSeparator>
+                        <TimelineContent>Connect With Other Farmers</TimelineContent>
+                    </TimelineItem>
+                    <TimelineItem>
+                        <TimelineOppositeContent color="text.secondary">
+                            #3
+                        </TimelineOppositeContent>
+                        <TimelineSeparator>
+                            <TimelineDot variant="outlined" color="primary" />
+                        </TimelineSeparator>
+                        <TimelineContent>Buy, Sell, and RSPV to Farm Events</TimelineContent>
+                    </TimelineItem>
+                </Timeline>
+            </Box>
+            <Box sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                pt: 5,
+                width: '100%',
+                fontFamily: 'Roboto',
+                maxWidth: 500
+            }}>
+                <Typography variant="h1" component="div" gutterBottom>
+                    Welcome To Farm Finders
+                </Typography>
+            </Box>
 
 
-            </Box></>
+
+
+
+
+        </>
 
 
 
