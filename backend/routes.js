@@ -1,3 +1,4 @@
+
 const pool = require('./db')
 
 module.exports = function routes(app, logger) {
@@ -6,16 +7,23 @@ module.exports = function routes(app, logger) {
     res.status(200).send('Go to 0.0.0.0:3000.');
   });
 
-  // POST /reset
-  app.post('/reset', (req, res) => {
-    // obtain a connection from our pool of connections
-    pool.getConnection(function (err, connection){
-      if (err){
-        console.log(connection);
-        // if there is an issue obtaining a connection, release the connection instance and log the error
-        logger.error('Problem obtaining MySQL connection', err)
-        res.status(400).send('Problem obtaining MySQL connection'); 
-      } else {
+
+app.post('/nft', async (req, res, next) => {
+  try {
+      const body = req.body;
+      console.log(body);
+
+      const result = await req.models.nft.createNFT(body.name, body.image_url, body.price, body.description);
+      res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to create new NFT: ", err);
+      // res.status(500).
+  }
+})
+
+};
+=======
         // if there is no issue obtaining a connection, execute query
         connection.query('drop table if exists test_table', function (err, rows, fields) {
           if (err) { 
@@ -96,3 +104,4 @@ module.exports = function routes(app, logger) {
   //   });
   // });
 }
+
