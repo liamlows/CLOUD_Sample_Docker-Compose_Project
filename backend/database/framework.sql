@@ -4,6 +4,8 @@ CREATE DATABASE db;
 -- use newly create database
 USE db;
 
+
+
 -- NEW NEW NEW NEW NEW
 -- USER STORY 1
 CREATE TABLE farmer (
@@ -69,84 +71,47 @@ VALUES
 (2,'Farm show 2','see dogs','charlie3@smu.edu','kirk2@smu.edu'),
 (3,'Farm show 3','see cats','charlie4@smu.edu','kirk1@smu.edu');
 
-<<<<<<< Updated upstream
-/*------------------------USERS PARTIES----------------------------*/
-
-CREATE TABLE farmer (
-    farmer_id VARCHAR(50) AUTO_INCREMENT,  PRIMARY KEY(farmer_id),
-    first_name VARCHAR(50),
-    last_name VARCHAR(50),
-    /*--website VARCHAR(50)*/
-    farm_name VARCHAR(50),
-    farm_description VARCHAR(50),
-    farm_picture_link VARCHAR(50),
-
-    user_login VARCHAR(50),
-    user_password VARCHAR(50)
-
-);
-
-CREATE TABLE consumer(
-    consumer_id VARCHAR(50),  PRIMARY KEY(consumer_id),
-    first_name VARCHAR(50),
-    last_name VARCHAR(50),
-
-    user_login VARCHAR(50),
-    user_password VARCHAR(50)
-);
-
-CREATE TABLE customer(
-    customer_id VARCHAR(50),  PRIMARY KEY(customer_id),
-    first_name VARCHAR(50),
-    last_name VARCHAR(50),
-
-    user_login VARCHAR(50),
-    user_password VARCHAR(50)
-);
-
-
-=======
->>>>>>> Stashed changes
 /*------------------------APP CAPABILITIES----------------------------*/
 
 CREATE TABLE requests(
-    request_id VARCHAR(50),
+    request_id INTEGER NOT NULL AUTO_INCREMENT,
     request_type VARCHAR(50),
-    product_id VARCHAR(50), FOREIGN KEY (product_id) REFERENCES product(product_id),
+    product_id INTEGER NOT NULL, FOREIGN KEY (product_id) REFERENCES product(product_id),
     product_count INT,
-    farmer_id VARCHAR(50), FOREIGN KEY (farmer_id) REFERENCES product(farmer_id)
+    farmer_id INTEGER NOT NULL, FOREIGN KEY (farmer_id) REFERENCES product(farmer_id)
 
 );
 DROP TABLE  requests;
 
 CREATE TABLE cart(
-    product_id VARCHAR(50), FOREIGN KEY (product_id) REFERENCES product(product_id),
-    product_count INT,
-    farmer_id VARCHAR(50), FOREIGN KEY (farmer_id) REFERENCES product(farmer_id)
+    cart_id INTEGER NOT NULL AUTO_INCREMENT, PRIMARY KEY (cart_id),
+    cart_price INTEGER,
+    product_count INTEGER,
+    cart_price INTEGER
 
 );
 
 CREATE TABLE customer_inventory(
-    product_id VARCHAR(50), FOREIGN KEY (product_id) REFERENCES product(product_id),
+    product_id INTEGER NOT NULL, FOREIGN KEY (product_id) REFERENCES product(product_id),
     product_count INT,
-    farmer_id VARCHAR(50), FOREIGN KEY (farmer_id) REFERENCES product(farmer_id)
+    farmer_id INTEGER NOT NULL, FOREIGN KEY (farmer_id) REFERENCES product(farmer_id)
 
 );
 
 CREATE TABLE event(
-    event_id VARCHAR(50),  PRIMARY KEY(event_id),
+    event_id INTEGER NOT NULL AUTO_INCREMENT,  PRIMARY KEY(event_id),
     event_name VARCHAR(50),
     event_description VARCHAR(50),
-    farmer_id VARCHAR(50), FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id)
+    farmer_id INTEGER NOT NULL, FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id)
 );
 
 CREATE TABLE product(
-    product_id VARCHAR(50),  PRIMARY KEY(product_id),
+    product_id INTEGER NOT NULL AUTO_INCREMENT,  PRIMARY KEY(product_id),
     product_name VARCHAR(50) NOT NULL,
     product_price VARCHAR(50) NOT NULL,
     product_stock INTEGER NOT NULL,
     product_category VARCHAR(50) NOT NULL,
     product_description VARCHAR(50),
-    farmer_id VARCHAR(50), FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id),
-    farm_name VARCHAR(50), FOREIGN KEY (farm_name) REFERENCES farmer(farm_name)
+    farm_name VARCHAR(50), FOREIGN KEY (farm_name) REFERENCES farmer(farm_name),
+    cart_id INTEGER NOT NULL, FOREIGN KEY(cart_id) REFERENCES cart(cart_id)
 );
