@@ -169,7 +169,13 @@ export const getCourseById = async (id) => {
     const res = await axios.get(`${BACKEND_ENDPOINT}/api/classes/${id}`);
     return res.data;
 }
-export const getCourseRequest = async (id) => {
+
+export const getEnrollmentRequest = async (id) => {
     const res = await axios.get(`${BACKEND_ENDPOINT}/api/classes/requests/${id}`);
+    return res.data;
+}
+
+export const sendEnrollmentRequest = async (targetId) => {
+    const res = await axios.post(`${BACKEND_ENDPOINT}/api/classes/requests`, { targetId: targetId });
     return res.data;
 }
