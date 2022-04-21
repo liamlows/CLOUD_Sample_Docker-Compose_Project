@@ -10,7 +10,16 @@ const createNFT = async (name, image_url, price, description) => {
     return result;
 }
 
+const getNFT = async (name) => {
+    const query = knex.select('image_url').from(NFT_TABLE).where({ name })
+    // (NFT_TABLE).where({ name })
+    const result = await query;
+
+    return result;
+}
+
 module.exports = {
-    createNFT
+    createNFT,
+    getNFT
 }
 
