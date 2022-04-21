@@ -15,8 +15,6 @@ const customerDashRoutes = require('./routes/customer_dash');
 const farmerDashRoutes = require('./routes/farmer_dash');
 
 //middle ware
-const { createModelsMiddleware } = require('./middleware/model-middleware');
-const { authenticateJWT, authenticateWithClaims } = require('./middleware/auth');
 
 // set up some configs for express.
 const config = {
@@ -35,7 +33,6 @@ const logger = log({ console: true, file: false, label: config.name });
 app.use(bodyParser.json());
 app.use(cors({origin: '*'}));
 app.use(ExpressAPILogMiddleware(logger, { request: true }));
-app.use(createModelsMiddleware);
 
 //health route
 app.get('/health', (request, response, next) => {
@@ -49,9 +46,9 @@ app.get('/health', (request, response, next) => {
 //app.use('/routes', routes);
 app.use('/login', sessionRoutes);
 app.use('/account', usersRoutes);
-app.use('/settings', authenticateJWT, userUpdatesRoutes);
-app.use('/dashboard/farmer', authenticateWithClaims(['farmer']), farmerDashRoutes);
-app.use('/dashboard/customer', authenticateWithClaims(['customer']), customerDashRoutes);
+app.use('/settings', userUpdatesRoutes);
+app.use('/dashboard/farmer', farmerDashRoutes);
+app.use('/dashboard/customer', customerDashRoutes);
 
 
 // connecting the express object to listen on a particular port as defined in the config object.
