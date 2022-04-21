@@ -146,3 +146,8 @@ export const getClasses = async () => {
     const res = await axios.get(`${BACKEND_ENDPOINT}/api/classes`);
     return res.data;
 }
+
+export const uploadPP = async () => {
+    const res = await axios.post(`${BACKEND_ENDPOINT}/api/users`);
+    return res.data;
+}
