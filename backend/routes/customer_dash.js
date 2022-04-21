@@ -4,9 +4,8 @@ const router = express.Router();
 //get transactions by customer
 router.get('/transactions', async (req, res, next) => {
     try{
-        const user = req.user;
-        result = await req.models.dash.fetchTransactionsByCustomer(user.email);
-
+        const body = req.body;
+        result = await req.models.dash.fetchTransactionsByCustomer(body.email);
         res.status(200).json(result);
     } catch (err) {
         console.error('Failed to get customer transactions', err);
@@ -31,9 +30,8 @@ router.get('/transactions/:transaction_id', async (req, res, next) => {
 //get interested events by customer
 router.get('/interested_events', async (req, res, next) => {
     try{
-        const user = req.user;
-        result = await req.models.dash.fetchInterestedEvents(user.email);
-
+        const body = req.body;
+        result = await req.models.dash.fetchInterestedEvents(body.email);
         res.status(200).json(result);
     } catch (err) {
         console.error('Failed to get customer interested events', err);
@@ -56,11 +54,15 @@ router.delete('/interested_events/:customer_event_interests_id', async (req, res
 
     next();
 })
+<<<<<<< Updated upstream
 //delete interested event
+=======
+//7.6 delete interested event
+>>>>>>> Stashed changes
 router.delete('/interested_events', async (req, res, next) => {
     try {
-        const user = req.user;
-        const result = await req.models.dash.deleteAllInterestedEvents(user.email);
+        const body = req.body;
+        const result = await req.models.dash.deleteAllInterestedEvents(body.email);
         res.status(204).json(result);
     } catch (err) {
         console.error('Failed to delete all interested events:', err);
