@@ -82,7 +82,7 @@ router.post("/metadata", async (req, res, next) => {
     };
 
     let optionalBody = {
-        professorId: req.body.professorId,
+        // professorId: req.body.professorId,
     };
 
     let body;
