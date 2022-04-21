@@ -3,6 +3,8 @@ const express = require('express');
 const router = express.Router();
 const pool = require('./db');
 
+const knex = require('./knex');
+
 const EXCLUDED_TABLES = ["account", ];
 
 
@@ -203,12 +205,129 @@ exports.delete = async function(req, res) {
     res.json(rows).send();
   }
 
-  exports.populateCourses = async function(req, res){
-    for(let i = 0; i < req.params.amount; ++i){
-      req.body.args = {};
-      req.body.args.username= 'Test';
-      const query = knex('courses').insert(req.body);
-      const result = await query;
-      return result;
-    }
+  exports.resetCourses = async (req, res) => {
+    const resetCourse = knex('courses').truncate()
+    const resetCourseResult = await resetCourse
+
+    const resetMeta = knex('course_metadata').truncate()
+    const resetMetaResult = await resetMeta
+
+    const resetSchools = knex('schools').truncate()
+    const resetSchoolsResult = await resetSchools
+  }
+
+  exports.populateCourses = async (req, res) => {
+
+    const resetSerialSchools = knex.schema.raw('ALTER TABLE schools AUTO_INCREMENT = 1')
+    const resetResultSchools = await resetSerialSchools;
+    schools = [
+      {school_name: 'Southern Methodist University', 
+        school_location: 'Dallas, TX', 
+        school_logo_url: 'https://www.smu.edu/-/media/Site/DevelopmentExternalAffairs/MarketingCommunications/Logos/athletics/SMUwPony,-d-,RwB,-d-,outline,-d-,WebOnly,-d-,rgb.png?la=en'
+      },
+      {school_name: 'Harvard University', 
+        school_location: 'Boston, MA', 
+        school_logo_url: 'https://logos-world.net/wp-content/uploads/2020/12/Harvard-Logo.png'
+      },
+      {school_name: 'Oxford University', 
+        school_location: 'London, UK', 
+        school_logo_url: 'http://assets.stickpng.com/images/5842f8afa6515b1e0ad75b2b.png'
+      }
+    ]
+    const schoolQuery = knex('schools').insert(schools);
+    const schoolResult = await schoolQuery;
+
+    const resetSerialMeta= knex.schema.raw('ALTER TABLE course_metadata AUTO_INCREMENT = 1')
+    const resetResultMeta = await resetSerialMeta;
+    metaData = [
+      {school_id: 1, 
+        course_name: 'Database 1', 
+        department: 'Computer Science',
+        description: 'Make some cool DBs and stuff!'
+      },
+      {school_id: 1, 
+        course_name: 'GUI 1', 
+        department: 'Computer Science',
+        description: 'Make some cool GUIs and stuff!'
+      },
+      {school_id: 1, 
+        course_name: 'Biology 101', 
+        department: 'Science',
+        description: 'Learn about cells and other bio!'
+      },
+      {school_id: 2, 
+        course_name: 'Database 1', 
+        department: 'Computer Science',
+        description: 'Make some cool DB (but from Harvard)!'
+      },
+      {school_id: 2, 
+        course_name: 'Linear Algebra', 
+        department: 'Math',
+        description: 'Prepare to cry!'
+      },
+      {school_id: 3, 
+        course_name: 'GUI 1', 
+        department: 'Computer Science',
+        description: 'Make some cool GUIs - in LONDON!'
+      },
+      {school_id: 3, 
+        course_name: 'Tea Drinking 101', 
+        department: 'Social Studies',
+        description: 'Yummy scrumptious!'
+      }
+    ]
+
+    const metadataQuery = knex('course_metadata').insert(metaData);
+    const metadataResult = await metadataQuery;
+
+    const resetSerialCourse= knex.schema.raw('ALTER TABLE courses AUTO_INCREMENT = 1')
+    const resetResultCourse = await resetSerialCourse;
+    courses = [
+      {course_meta_id: 1,
+        max_seats: 35,
+        start_date: '2022-05-3',
+        end_date: '2022-12-20',
+        canceled: false
+      },
+      {course_meta_id: 2,
+        max_seats: 55,
+        start_date: '2022-05-3',
+        end_date: '2022-12-20',
+        canceled: false
+      },
+      {course_meta_id: 3,
+        max_seats: 35,
+        start_date: '2022-05-3',
+        end_date: '2022-12-20',
+        canceled: false
+      },
+      {course_meta_id: 4,
+        max_seats: 20,
+        start_date: '2022-05-4',
+        end_date: '2022-12-20',
+        canceled: false
+      },
+      {course_meta_id: 5,
+        max_seats: 15,
+        start_date: '2022-05-4',
+        end_date: '2022-12-20',
+        canceled: false
+      },
+      {course_meta_id: 6,
+        max_seats: 100,
+        start_date: '2022-05-5',
+        end_date: '2022-12-20',
+        canceled: false
+      },
+      {course_meta_id: 7,
+        max_seats: 30,
+        start_date: '2022-05-3',
+        end_date: '2022-12-20',
+        canceled: false
+      }
+    ]
+
+    const courseQuery = knex('courses').insert(courses);
+    const courseResult = await courseQuery;
+    return courseResult;
   }
