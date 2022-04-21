@@ -22,12 +22,10 @@ app.post('/nft', async (req, res, next) => {
   }
 })
 
-app.get('/nft', async (req, res, next) => {
+app.get('/nft/:name', async (req, res, next) => {
   try {
-    const body = req.body;
-    console.log(body);
-
-    const result = await req.models.nft.getNFT(body.name);
+    
+    const result = await req.models.nft.getNFT(req.params.name);
     res.status(201).json(result);
 
   } catch (err) {
