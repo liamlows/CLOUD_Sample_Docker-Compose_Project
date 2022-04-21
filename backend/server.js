@@ -32,11 +32,8 @@ const app = express();
 const logger = log({ console: true, file: false, label: config.name });
 
 // specify middleware to use
-
 app.use(bodyParser.json());
-app.use(cors({
-  origin: '*'
-}));
+app.use(cors({origin: '*'}));
 app.use(ExpressAPILogMiddleware(logger, { request: true }));
 app.use(createModelsMiddleware);
 
@@ -47,6 +44,7 @@ app.get('/health', (request, response, next) => {
 
   next();
 });
+
 //include routes
 //app.use('/routes', routes);
 app.use('/login', sessionRoutes);

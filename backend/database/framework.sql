@@ -1,5 +1,5 @@
 -- create database db
-CREATE DATABASE lab;
+CREATE DATABASE db;
 
 -- use newly create database
 USE db;
@@ -9,7 +9,7 @@ USE db;
 /*------------------------USERS PARTIES----------------------------*/
 
 CREATE TABLE farmer (
-    farmer_id VARCHAR(50),  PRIMARY KEY(farmer_id),
+    farmer_id VARCHAR(50) AUTO_INCREMENT,  PRIMARY KEY(farmer_id),
     first_name VARCHAR(50),
     last_name VARCHAR(50),
     /*--website VARCHAR(50)*/
@@ -30,7 +30,7 @@ CREATE TABLE consumer(
     user_login VARCHAR(50),
     user_password VARCHAR(50)
 );
---Extra?
+
 CREATE TABLE customer(
     customer_id VARCHAR(50),  PRIMARY KEY(customer_id),
     first_name VARCHAR(50),
@@ -42,20 +42,31 @@ CREATE TABLE customer(
 
 
 /*------------------------APP CAPABILITIES----------------------------*/
---Need customer id?
+
 CREATE TABLE requests(
     request_id VARCHAR(50),
     request_type VARCHAR(50),
     product_id VARCHAR(50), FOREIGN KEY (product_id) REFERENCES product(product_id),
+    product_count INT,
     farmer_id VARCHAR(50), FOREIGN KEY (farmer_id) REFERENCES product(farmer_id)
 
 );
---Need customer id and quantity?
+DROP TABLE  requests;
+
 CREATE TABLE cart(
     product_id VARCHAR(50), FOREIGN KEY (product_id) REFERENCES product(product_id),
+    product_count INT,
     farmer_id VARCHAR(50), FOREIGN KEY (farmer_id) REFERENCES product(farmer_id)
 
 );
+
+CREATE TABLE customer_inventory(
+    product_id VARCHAR(50), FOREIGN KEY (product_id) REFERENCES product(product_id),
+    product_count INT,
+    farmer_id VARCHAR(50), FOREIGN KEY (farmer_id) REFERENCES product(farmer_id)
+
+);
+
 CREATE TABLE event(
     event_id VARCHAR(50),  PRIMARY KEY(event_id),
     event_name VARCHAR(50),
@@ -70,5 +81,6 @@ CREATE TABLE product(
     product_stock INTEGER NOT NULL,
     product_category VARCHAR(50) NOT NULL,
     product_description VARCHAR(50),
-    farmer_id VARCHAR(50), FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id)
+    farmer_id VARCHAR(50), FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id),
+    farm_name VARCHAR(50), FOREIGN KEY (farm_name) REFERENCES farmer(farm_name)
 );
