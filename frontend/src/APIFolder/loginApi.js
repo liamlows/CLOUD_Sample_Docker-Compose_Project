@@ -47,11 +47,24 @@ export const getAccountbyUsername = async (username) => {
     return res.data;
 }
 
+export const getAccountbyId = async (id) => {
+    if(id === undefined || id === null){
+        return null;
+    }
+
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/users/${id}`);
+    if(res.status !== 200){
+        console.log(`Couldn't find user: ${id}`)
+        return null;
+    }
+    return res.data;
+}
 
 //Still work in progress. Account editing is not fully implemented
 export const updateAccountbyUsername = async (account) => {
     return axios.put(`${BACKEND_ENDPOINT}/api/account`, {account: account} );
 }
+
 
 export const getProfiles = async () => {
     const res = await axios.get(`${BACKEND_ENDPOINT}/api/users`);
@@ -149,5 +162,14 @@ export const getClasses = async () => {
 
 export const uploadPP = async () => {
     const res = await axios.post(`${BACKEND_ENDPOINT}/api/users`);
+    return res.data;
+}
+
+export const getCourseById = async (id) => {
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/classes/${id}`);
+    return res.data;
+}
+export const getCourseRequest = async (id) => {
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/classes/requests/${id}`);
     return res.data;
 }
