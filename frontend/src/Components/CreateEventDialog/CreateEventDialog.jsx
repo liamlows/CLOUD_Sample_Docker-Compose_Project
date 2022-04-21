@@ -11,55 +11,125 @@ import Checkmark from '../../images/green-checkmark.png';
 import { Box } from '@mui/system';
 import { addItemToFarm } from '../../api/farmItems';
 import EventCard from '../eventCard/EventCard';
-const CreateEventDialog = ({ open, setOpen, farmId, farmName }) => {
+import { createEvent, deleteEventById } from '../../api/events';
+// When creating an event, you should just pass in {open, setOpen, farmId, farmName}
+// When editing an event, all fields should be passed in
+// When deleting an event, all fields should be passed in
+const CreateEventDialog = ({ open, setOpen, eventTitle, eventDescription, eventImage, eventDate, eventTime, eventId, setEvent, farmId, farmName, showDelete }) => {
 
     const [eventDetails, setEventDetails] = useState({
     })
-
-    const [confirming, setConfirming] = useState(false);
-
+    const [previewing, setPreviewing] = useState(false);
+    const [processing, setProcessing] = useState(false);
+    const [confirmDeletion, setConfirmDeletion] = useState(false);
+    const [dialogComplete, setDialogComplete] = useState(false);
+    const [completionText, setCompletionText] = useState('')
     useEffect(() => {
         setEventDetails({
-            title: '',
-            description: '',
-            image: '',
-            date: '',
-            time: '',
-            farmId: farmId
+            eventTitle, eventDescription, eventImage, eventDate, eventTime, eventId, setEvent, farmId
         })
     }, [])
     const handleChange = (delta) => {
         setEventDetails({ ...eventDetails, ...delta });
     }
-    const handleSubmit = () => {
-        console.log(eventDetails);
+    //TODO make this real with backend
+    const handleSubmit = (option) => {
+        setConfirmDeletion(false);
+        setProcessing(true);
+        //delete event
+        if (option == 1) {
+            // deleteEventById(eventId);
+            //    setProcessing(false);
+            //    setCompletionText('Event removed');
+            //      setDialogComplete(true);
+        }
+        //IF we are passed an eventId, we are editing an event, WE should refresh the page or something to update 
+        if (eventId) {
+            // editEventById(eventId).then((res)=>{
+            //     setProcessing(false);
+            //     setCompletionText('Event edited');
+            //     //edit the changed event in the front-end
+            //     setEvent(res.data);
+            //     setDialogComplete(true);
+            //
+            // });
+        } else {
+            // createEvent(eventDetails).then(()=>{
+            // setProcessing(false);
+            // setCompletionText('Event Added');
+            // setDialogComplete(true);;
+        }
+
+        setTimeout(() => {
+            setProcessing(false);
+            setConfirmDeletion(false);
+            setCompletionText('Event Added');
+            setDialogComplete(true);
+        }, 2000)
+
+
     }
     const handleClose = () => {
         setOpen(false);
     };
     const today = new Date();
+    if (confirmDeletion) {
+        return (
+            <Backdrop
+                sx={{ flexDirection: "column", alignItems: "center", color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={true}>
+
+                <Dialog classes={{ root: { alignItems: "center", backgroundColor: "Blue" } }} open={true} onClose={handleClose}>
+                    <DialogTitle sx={{ textAlign: "center", fontWeight: "Bold" }}>Confirm Deletion</DialogTitle>
+                    <DialogActions>
+                        <Button onClick={() => setConfirmDeletion(false)}>Cancel</Button>
+                        <Button onClick={() => handleSubmit(1)}>Confirm</Button>
+                    </DialogActions>
+                </Dialog>
+            </Backdrop>
+        )
+    }
+
+    if (processing) {
+        return <Backdrop
+            sx={{ flexDirection: "column", alignItems: "center", color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open={true}>
+            <CircularProgress color="inherit" />
+        </Backdrop>
+    }
+    if (dialogComplete) {
+        return <Dialog classes={{ root: { alignItems: "center", backgroundColor: "Blue" } }} open={open} onClose={handleClose}>
+            <DialogTitle sx={{ textAlign: "center", fontWeight: "Bold" }}>{completionText}</DialogTitle>
+            <img id="add-item-success-icon" src={Checkmark}></img>
+            <DialogActions>
+                <Button variant="outlined" onClick={handleClose}>Close</Button>
+            </DialogActions>
+        </Dialog>
+    }
     return (
         <div>
             <Dialog open={open} onClose={handleClose}>
-                {confirming ? <>
+                {previewing ? <>
                     <DialogTitle sx={{ textAlign: "center", fontWeight: "Bold" }}>Confirm your event</DialogTitle>
-                    <EventCard
-                        name={eventDetails.title}
-                        description={eventDetails.description}
-                        farmName={farmName}
-                        image={eventDetails.image}
-                        date={eventDetails.date}
-                        time={eventDetails.time}
-                        hideButton={true}
-                    ></EventCard>
+                    <DialogContent>
+                        <EventCard
+                            eventTitle={eventDetails.eventTitle}
+                            eventDescription={eventDetails.eventDescription}
+                            farmName={farmName}
+                            eventImage={eventDetails.eventImage}
+                            eventDate={eventDetails.eventDate}
+                            eventTime={eventDetails.eventTime}
+                            hideButton={true}
+                        ></EventCard>
+                        </DialogContent>
                     <DialogActions>
-                        <Button onClick={()=>setConfirming(false)}>back</Button>
-                        <Button onClick={() => handleSubmit}>submit</Button>
+                        <Button onClick={() => setPreviewing(false)}>back</Button>
+                        <Button onClick={() => handleSubmit()}>submit</Button>
                     </DialogActions>
                 </>
                     :
                     <>
-                        <DialogTitle sx={{ textAlign: "center", fontWeight: "Bold" }}>Add An Event To Your Farm</DialogTitle>
+                        <DialogTitle sx={{ textAlign: "center", fontWeight: "Bold" }}>{showDelete ? "Edit Event":"Add An Event To Your Farm"}</DialogTitle>
                         <DialogContent>
                             <TextField
                                 sx={{ margin: "1rem 0" }}
@@ -69,8 +139,8 @@ const CreateEventDialog = ({ open, setOpen, farmId, farmName }) => {
 
                                 fullWidth
                                 rows={4}
-                                value={eventDetails.title}
-                                onChange={e => handleChange({ title: e.target.value })}
+                                value={eventDetails.eventTitle}
+                                onChange={e => handleChange({ eventTitle: e.target.value })}
 
                             />
                             <TextField
@@ -81,8 +151,8 @@ const CreateEventDialog = ({ open, setOpen, farmId, farmName }) => {
                                 sx={{ marginBottom: "1rem" }}
                                 fullWidth
 
-                                value={eventDetails.image}
-                                onChange={e => handleChange({ image: e.target.value })}
+                                value={eventDetails.eventImage}
+                                onChange={e => handleChange({ eventImage: e.target.value })}
 
                             />
                             <TextField
@@ -93,17 +163,17 @@ const CreateEventDialog = ({ open, setOpen, farmId, farmName }) => {
                                 multiline
                                 fullWidth
                                 rows={4}
-                                value={eventDetails.description}
-                                onChange={e => handleChange({ description: e.target.value })}
+                                value={eventDetails.eventDescription}
+                                onChange={e => handleChange({ eventDescription: e.target.value })}
 
                             />
                             <TextField
                                 id="date"
                                 label="Date"
                                 type="date"
-                                value={eventDetails.date}
-                                onChange={e => handleChange({ date: e.target.value })}
-                                
+                                value={eventDetails.eventDate}
+                                onChange={e => handleChange({ eventDate: e.target.value })}
+
                                 sx={{ width: 220, marginTop: "1rem", marginRight: "1rem" }}
                                 InputLabelProps={{
                                     shrink: true,
@@ -114,9 +184,9 @@ const CreateEventDialog = ({ open, setOpen, farmId, farmName }) => {
                                 id="time"
                                 label="Time"
                                 type="time"
-                        
-                                value={eventDetails.time}
-                                onChange={e => handleChange({ time: e.target.value })}
+
+                                value={eventDetails.eventTime}
+                                onChange={e => handleChange({ eventTime: e.target.value })}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
@@ -127,8 +197,9 @@ const CreateEventDialog = ({ open, setOpen, farmId, farmName }) => {
                             />
                         </DialogContent>
                         <DialogActions>
+                            {showDelete && <Button variant='outlined' color='error' onClick={() => setConfirmDeletion(true)}>Delete</Button>}
                             <Button onClick={handleClose}>Cancel</Button>
-                            <Button onClick={() => setConfirming(true)}>Preview</Button>
+                            <Button onClick={() => setPreviewing(true)}>Preview</Button>
                         </DialogActions>
                     </>
                 }

@@ -44,7 +44,6 @@ const Login = () => {
     }
 
     const toggleSignUp = () => {
-
         setSignUp(prev => !prev);
     }
     return (
