@@ -1,70 +1,73 @@
-import {StickyTable} from "./stickyTable";
+
 import { getAllCourses } from "../../APIFolder/loginApi";
 
-export const ClassMenu = () => {
+export const ClassMenu = ({ currUser, setCurrUser, pages, settings, setNavigated }) => {
+      const navigate = useNavigate();
+      const [courses, setCourses] = useState(false);
 
-    /**interface Column {
-    id: 'Class' | 'ID' | 'Professor' | 'Days' | 'Time';
-    label: string;
-    minWidth?: number;
-    align?: 'right';
-    format?: (value: number) => string;
-}
-const rows = [
-    //Insert Data
-];
-     * 
-     */
-    //minWidth 170, 100?
+      const goToCourse = (course) => {
+          navigate(`/users/${course.className}`);
+      }
 
+      if (!currUser) {
+          let username = Cookies.get("username");
+          if (username) {
+              getAccountbyUsername(username)
+                  .then(account => {
+                      if (account) {
+                          setCurrUser(account);
+                      }
+                      else {
+                          console.log("User is null after request");
+                          setCurrUser('');
+                      }
+                  });
+          }
+          else {
+              setCurrUser('');
+              setNavigated(true);
+              navigate('/');
+          }
+      }
   
-const columnsMenu = [
-    { id: 'Class', label: 'Class', minWidth: 170 },
-    { id: 'ID', label: 'ID', minWidth: 100 },
-    {
-      id: 'Professor',
-      label: 'Professor',
-      minWidth: 170,
-      align: 'right',
-      format: (value) => value.toLocaleString('en-US'),
-    },
-    {
-      id: 'Days',
-      label: 'Days',
-      minWidth: 170,
-      align: 'right',
-      format: (value) => value.toLocaleString('en-US'),
-    },
-    {
-      id: 'StartTime',
-      label: 'Start Time',
-      minWidth: 170,
-      align: 'right',
-      format: (value) => value.toFixed(2),
-    },
-    {
-      id: 'EndTime',
-      label: 'End Time',
-      minWidth: 170,
-      align: 'right',
-      format: (value) => value.toFixed(2),
-    }
-  ];
-  
-  
-  function createData(courses){
-    var rowsMenu = [];
-    for(var index = 0; index < courses.length; index++){
-      rowsMenu[index] = splitData(courses.index);
-    }
-    return rowsMenu;
-  }
-  function splitData(course){
-    return (course.className, course.id, course.professor, course.days, course.start_time, course.end_time);
-  }
+
+//    return (course.className, course.id, course.professor, course.days, course.start_time, course.end_time);
 
     //TODO: put nav bar in, data intergration
     return <div>
-        <StickyTable rows = {createData({getAllCourses})} columns = {columnsMenu}/>
-     </div>
+    <LoggedInResponsiveAppBar
+        pages={pages}
+        settings={settings}
+        signOut={() => signOut()}
+        username={currUser.username}
+        profileNav={() => profileNav()}
+        account={() => accountNav()} />
+
+      {/**Fix course table data when schema is updated */}
+    <div className='border-top mb-3'></div>
+    {console.log(courses)}
+    {courses.length > 0
+        && <table>
+            <thead>
+                {courses.map(course => {
+                    <tr key={course.courseID}>
+                        <td>{course.className}</td>
+                        <td>{course.start_date}</td>
+                        <td>{course.end_date}</td>
+
+                        <td>
+                            <Button variant="contained"
+                                className="btn btn-secondary"
+                                endIcon={<ArrowForwardIcon />}
+                                onClick={() => goToCourse(course)}>
+                                View Profile
+                            </Button>
+                        </td>
+                    </tr>
+                })}
+
+            </thead>
+        </table>}
+    {courses.length === 0 && <h2>No courses added. Try adding some!</h2>}
+</div>
 };
