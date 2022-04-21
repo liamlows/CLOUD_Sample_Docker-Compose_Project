@@ -36,12 +36,10 @@ export const Profile = (props) => {
     const location = useLocation();
 
     // Initial Load
-    useEffect(() => {
+    useEffect(() => {}, [editMode, reload]); //lol the useEffect is just here now.
+
+    if (account.username && account.username !== params.username) {
         let status = 0;
-
-        // if (JSON.stringify(account) === "{}"){
-        //     setAccount(JSON.parse(localStorage.getItem("currUser")));}
-
         getStatusByUsername(params.username).then((status) => setOnline(!!status.logged_in));
 
         getAccountbyUsername(params.username).then(loaded => {
@@ -83,9 +81,7 @@ export const Profile = (props) => {
                         }
                     }
                 }).catch(code => {
-                    if (code === 404) {
-                        status = 0;
-                    }
+                    setAccount({ ...loaded, status: 0 });
 
                 }).then(() => {
                     if (account.account_id !== JSON.parse(localStorage.getItem("currUser")).account_id) {
@@ -108,13 +104,7 @@ export const Profile = (props) => {
             {
                 console.log("profiles are the same")
                 setAccount({ ...loaded, status: 3 });
-            }
-        })
-
-    }, [editMode, reload, account]);
-
-    if (account.username && account.username !== params.username) {
-        getAccountbyUsername(params.username).then(loaded => { setAccount(loaded) });
+            }})
     }
     // Conditions
     if (JSON.stringify(account) === "{}") {
