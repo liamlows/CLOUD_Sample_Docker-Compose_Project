@@ -1,7 +1,7 @@
 const express = require('express');
 const dash = require('../models/dashboard');
 const router = express.Router();
-//get transactions by customer
+//7.2 get transactions by customer
 router.get('/transactions', async (req, res, next) => {
     try{
         const body = req.body;
@@ -14,7 +14,7 @@ router.get('/transactions', async (req, res, next) => {
 
     next();
 });
-//get transaction by id
+//7.5 get transaction by id
 router.get('/transactions/:transaction_id', async (req, res, next) => {
     try {
         const transaction_id=req.params.transaction_id;
@@ -27,7 +27,7 @@ router.get('/transactions/:transaction_id', async (req, res, next) => {
 
     next();
 })
-//get interested events by customer
+//7.2 get interested events by customer
 router.get('/interested_events', async (req, res, next) => {
     try{
         const body = req.body;
@@ -40,7 +40,7 @@ router.get('/interested_events', async (req, res, next) => {
 
     next();
 });
-//delete interested event
+//7.3 delete interested event
 router.delete('/interested_events/:customer_event_interests_id', async (req, res, next) => {
     try {
         const customer_event_interests_id=req.params.customer_event_interests_id;
@@ -54,11 +54,7 @@ router.delete('/interested_events/:customer_event_interests_id', async (req, res
 
     next();
 })
-<<<<<<< Updated upstream
-//delete interested event
-=======
-//7.6 delete interested event
->>>>>>> Stashed changes
+//7.6 delete all interested event
 router.delete('/interested_events', async (req, res, next) => {
     try {
         const body = req.body;

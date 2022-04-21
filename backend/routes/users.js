@@ -1,7 +1,7 @@
 const express = require('express');
 const User = require('../models/users');
 const router = express.Router();
-//create user
+//1.3 create user
 router.post('/', async (req, res, next) => {
     try {
         const body = req.body;

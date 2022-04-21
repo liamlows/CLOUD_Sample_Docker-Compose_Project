@@ -8,7 +8,7 @@ const UserController = require('../controllers/users');
  * requests. We configure a router here to handle a few routes specific to students
  */
 const router = express.Router();
-
+//1.4 and 1.5
 router.post('/', async (req, res, next) => {
     try {
         const body = req.body;

@@ -1,7 +1,7 @@
 const express = require('express');
 const dash = require('../models/dashboard');
 const router = express.Router();
-//get transactions by farmer
+//7.1 get transactions by farmer
 router.get('/transactions', async (req, res, next) => {
     try{
         const body = req.body;
@@ -14,7 +14,7 @@ router.get('/transactions', async (req, res, next) => {
 
     next();
 });
-//get transaction by id
+//7.4 get transaction by id
 router.get('/transactions/:transaction_id', async (req, res, next) => {
     try {
         const transaction_id=req.params.transaction_id;

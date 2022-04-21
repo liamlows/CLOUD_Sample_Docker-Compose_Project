@@ -1,7 +1,7 @@
 const express = require('express');
 const User = require('../models/users');
 const router = express.Router();
-//update user password
+//1.2 update user password
 router.put('/password', async (req, res, next) => {
     try {
         const body = req.body;
@@ -15,7 +15,7 @@ router.put('/password', async (req, res, next) => {
 
     next();
 })
-//delete account
+//1.6 delete account
 router.delete('/deletion', async (req, res, next) => {
     try {
         const body = req.body;
