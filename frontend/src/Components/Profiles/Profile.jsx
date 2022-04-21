@@ -1,6 +1,6 @@
 // Libary Imports
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import CircleIcon from '@mui/icons-material/Circle';
 import Cookies from "js-cookie";
 import { Button } from "@mui/material";
@@ -21,7 +21,6 @@ import { getFriendRequests, getStatusByUsername, getAccountbyUsername, handleFri
 export const Profile = (props) => {
     // Navigate Object
     const navigate = useNavigate();
-    const location = useLocation();
     if (localStorage.getItem("currUser") === null)
         localStorage.setItem("currUser", "{}");
 
@@ -32,6 +31,7 @@ export const Profile = (props) => {
     const [reload, setReload] = useState(false);
     const [classes, setClasses] = useState([]);
     const [pp, setPP] = useState(undefined);
+    const params = useParams();
 
     // Initial Load
     useEffect(() => {
@@ -45,9 +45,9 @@ export const Profile = (props) => {
             if (JSON.stringify(account) === "{}")
                 setAccount(JSON.parse(localStorage.getItem("currUser")));
 
-            getStatusByUsername(location.pathname.substring(7, location.pathname.length)).then((status) => setOnline(!!status.logged_in));
+            getStatusByUsername(params.username).then((status) => setOnline(!!status.logged_in));
 
-            getAccountbyUsername(location.pathname.substring(7, location.pathname.length)).then(loaded => {
+            getAccountbyUsername(params.username).then(loaded => {
                 // get the table of friend requests
                 getFriendRequest(loaded.account_id).then(res => {
                     // convert it to an array
