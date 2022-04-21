@@ -1,8 +1,8 @@
 import { getAccountbyUsername, getStatusByUsername, logout, updateAccountbyUsername } from "../../APIFolder/loginApi";
-import { TextField } from "../common";
+
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 import CircleIcon from '@mui/icons-material/Circle';
 import Check from "@mui/icons-material/Check";
