@@ -49,7 +49,7 @@ router.put('/api/d/:table/:variable/:value', async (req, res, next) => {
 
 // Dynamic Delete
 // /api/d/{table}/{variable}/delete
-router.delete('/api/d/:table/:variable', async (req, res, next) => {
+router.delete('/api/d/:table/:variable/:value', async (req, res, next) => {
   try{
     await controller.delete(req, res);
   } catch(error){
@@ -57,8 +57,17 @@ router.delete('/api/d/:table/:variable', async (req, res, next) => {
   }
 });
 
-// Classes, then accounts
-router.post('/populate/classes/:amount', async (req, res, next) => {
+//RESET table
+router.delete('/reset/courses', async (req, res, next) => {
+  try{
+    await controller.resetCourses(req, res);
+  } catch(error){
+    return next(error);
+  }
+})
+
+// POPULATE COURSES
+router.post('/populate/courses/', async (req, res, next) => {
   try{
     await controller.populateCourses(req, res);
   } catch(error){

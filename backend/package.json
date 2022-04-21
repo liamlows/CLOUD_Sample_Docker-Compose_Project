@@ -12,6 +12,7 @@
     "express": "^4.17.1",
     "express-mysql-session": "^2.1.7",
     "express-session": "^1.17.2",
+    "knex": "^1.0.7",
     "mysql2": "^2.3.3"
   },
   "devDependencies": {
