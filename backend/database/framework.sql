@@ -69,6 +69,7 @@ VALUES
 (2,'Farm show 2','see dogs','charlie3@smu.edu','kirk2@smu.edu'),
 (3,'Farm show 3','see cats','charlie4@smu.edu','kirk1@smu.edu');
 
+<<<<<<< Updated upstream
 /*------------------------USERS PARTIES----------------------------*/
 
 CREATE TABLE farmer (
@@ -104,6 +105,8 @@ CREATE TABLE customer(
 );
 
 
+=======
+>>>>>>> Stashed changes
 /*------------------------APP CAPABILITIES----------------------------*/
 
 CREATE TABLE requests(

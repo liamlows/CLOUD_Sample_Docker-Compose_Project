@@ -1,6 +1,4 @@
 const express = require('express');
-const UserController = require('../controllers/users');
-
 /**
  * https://expressjs.com/en/guide/routing.html#express-router
  * 
@@ -13,7 +11,7 @@ router.post('/', async (req, res, next) => {
     try {
         const body = req.body;
         
-        const result = await UserController.authenticateUser(body.email, body.password);
+        const result = await req.models.user.authenticateUser(body.email, body.password);
         res.status(201).json(result);
     } catch (err) {
         console.error('Failed to create new user:', err);
