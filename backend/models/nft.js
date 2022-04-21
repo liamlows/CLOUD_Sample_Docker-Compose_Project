@@ -1,4 +1,4 @@
-const knex = require('backend/knexfile.js')
+const knex = require('../database/knex')
 
 const NFT_TABLE = 'nft'
 

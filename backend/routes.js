@@ -18,7 +18,7 @@ app.post('/uploadnft', (req, res) => {
         logger.error('Problem obtaining MySQL connection', err)
         res.status(400).send('Problem obtaining MySQL connection'); 
       } else {
-        connection.query('INSERT INTO `nft_marketplace`.`nft` (name) VALUES (\'' + req.body.name + ', ' + req.body.url + '\')', function(err, rows, fields) {
+        connection.query('INSERT INTO `nft_marketplace`.`nft` (name, image_url) VALUES (\'' + req.body.name + ', ' + req.body.image_url + '\')', function(err, rows, fields) {
           connection.release();
           if (err) {
             // if there is an error with the query, log the error
@@ -30,6 +30,20 @@ app.post('/uploadnft', (req, res) => {
         })
       }
     })
+})
+
+app.post('/nft', async (req, res, next) => {
+  try {
+      const body = req.body;
+      console.log(body);
+
+      const result = await req.models.nft.createNFT(body.name, body.image_url, body.price, body.description);
+      res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to create new NFT: ", err);
+      // res.status(500).
+  }
 })
 
 };
