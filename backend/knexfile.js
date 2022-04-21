@@ -12,6 +12,7 @@ module.exports = {
         password : process.env.MYSQL_CLOUD_PASS,
         insecureAuth: true,
         database : process.env.MYSQL_DB
+        
       }
     }
   };
