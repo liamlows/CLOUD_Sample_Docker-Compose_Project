@@ -1,0 +1,31 @@
+.farmIntro {
+  margin-left: 20%;
+  margin-right: 20%;
+  margin-top: 0%;
+}
+.masthead {
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+.farmImage {
+  border-radius: 0% 0% 5% 5%;
+  margin-bottom: 1%;
+}
+
+.farmSpecifics {
+  margin-left: 2.5%;
+}
+
+.column {
+  float: left;
+  width: 50%;
+}
+
+.row::after {
+  content: "";
+  display: table;
+  clear: both;
+}
