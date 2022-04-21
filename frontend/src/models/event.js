@@ -1,10 +1,12 @@
 export class event{
-    constructor (name, description, eventId, farmName, farmId, image) {
-        this.name = name;
-        this.description = description;
+    constructor (eventTitle, eventDescription, eventId, farmName, farmId, userId, eventImage) {
+        this.eventTitle = eventTitle;
+        this.eventDescription = eventDescription;
         this.eventId = eventId;
+        this.eventImage = eventImage;
         this.farmName = farmName;
         this.farmId = farmId;
-        this.image = image;
+        this.userId = userId;
+        
     }
 }

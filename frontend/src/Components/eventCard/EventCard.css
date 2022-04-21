@@ -1,6 +1,7 @@
 #event-card-image{
     width: 100%;
-    height: 250px;
+    aspect-ratio: 1.5;
+   
 }
 #event-card-description{
     width: 100%; 

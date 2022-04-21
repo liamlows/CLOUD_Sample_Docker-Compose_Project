@@ -9,7 +9,8 @@ export const ProtectedContent = ({children}) => {
     if(context.userData?.userId){
         return children
     } else {
-        return <Navigate to={'/login'} state={{from: location.pathname}}/>
+        return <>Please login...</>
+        // <Navigate to={'/login'} state={{from: location.pathname}}/> race condition unsolved
     }
     
     

@@ -4,10 +4,12 @@
 }
 
 .main-navbar a:hover{
-  
   color:rgb(189, 233, 178) ;
 }
 
-.active{
+.active > *{
+  background-color: rgb(243, 243, 243) !important;
+  box-shadow: inset 3px 3px 2px #888, inset -3px -3px 2px #888;
+  border-radius: 4px !important;
   color: black !important;
 }

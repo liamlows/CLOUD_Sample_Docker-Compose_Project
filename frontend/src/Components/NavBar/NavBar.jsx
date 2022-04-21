@@ -126,7 +126,7 @@ export const NavBar = () => {
               {userContext.userData?.userId && pages.map((page, index) => (
                 <NavLink key={index} to={page.path} >
                   <Button
-                    variant='contained'
+                    variant='text'
 
                     onClick={handleCloseNavMenu}
                     sx={{ my: 2, color: 'inherit', display: 'block' }}
@@ -136,7 +136,8 @@ export const NavBar = () => {
                 </NavLink>
               ))}
 
-              <NavLink to={'/cart'} style={{ display: "flex", flexGrow: "1", justifyContent: "flex-end", marginRight: "12px" }}>
+              {userContext.userData?.userId && <div style={{ display: "flex", flexGrow: "1", justifyContent: "flex-end", marginRight: "24px" }}>
+                <NavLink to={'/cart'} >
                 <Button
                   onClick={handleCloseNavMenu}
                   sx={{ my: 2, color: 'inherit', display: 'block' }}
@@ -144,6 +145,7 @@ export const NavBar = () => {
                   Cart
                 </Button>
               </NavLink>
+              </div>}
             </Box>
 
             {/* Profile icon menu */}

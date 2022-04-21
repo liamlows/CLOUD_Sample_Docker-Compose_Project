@@ -19,6 +19,7 @@ import { ProtectedContent, ProtectedRoute } from './Components/ProtectedContent'
 import { SignUp } from './Components/SignUp/SignUp';
 import Dashboard from './Components/Dashboard/Dashboard';
 import { PROTECTED_ROUTES } from './Components/ProtectedRoutes';
+import { EventProvider } from './Components/EventContext';
 
 // React functional component
 function App() {
@@ -47,26 +48,28 @@ function App() {
 
   return (
     <UserProvider>
-      <Router>
-        <NavBar />
-        <Routes>
-          <Route exact path='/' element={<Home />} />
+      <EventProvider>
+        <Router>
+          <NavBar />
+          <Routes>
+            <Route exact path='/' element={<Home />} />
 
-          <Route path='/login' element={<Login />} />
-          <Route path='/signup' element={<SignUp />} />
-          {
-            PROTECTED_ROUTES.map((route, index) => {
-              return <Route path={route.path}
-                element={<ProtectedContent> {route.element} </ProtectedContent>}
-                key={index}>
-                {route.children}
-              </Route>
+            <Route path='/login' element={<Login />} />
+            <Route path='/signup' element={<SignUp />} />
+            {
+              PROTECTED_ROUTES.map((route, index) => {
+                return <Route path={route.path}
+                  element={<ProtectedContent> {route.element} </ProtectedContent>}
+                  key={index}>
+                  {route.children}
+                </Route>
 
-            })
-          }
-          <Route path='*' element={<Navigate to='/' replace />} />
-        </Routes>
-      </Router>
+              })
+            }
+            <Route path='*' element={<Navigate to='/' replace />} />
+          </Routes>
+        </Router>
+      </EventProvider>
     </UserProvider>
   )
 }

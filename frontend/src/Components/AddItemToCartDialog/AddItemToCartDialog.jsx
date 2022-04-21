@@ -1,6 +1,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Backdrop, CircularProgress, Grid, Input, InputAdornment, Typography } from '@mui/material';
+import { Backdrop, Box, CircularProgress, Grid, Input, InputAdornment, Stack, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -10,7 +10,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Checkmark from '../../images/green-checkmark.png';
 import { Link, useNavigate } from 'react-router-dom';
-const AddItemToCartDialog = ({ open, setOpen, name, description, stock, image, farmId }) => {
+const AddItemToCartDialog = ({ open, setOpen, name, description, price, stock, image, farmId }) => {
     const [quantity, setQuantity] = useState(1);
     const [processing, setProcessing] = useState(false);
     const [completed, setCompleted] = useState(false);
@@ -79,18 +79,24 @@ const AddItemToCartDialog = ({ open, setOpen, name, description, stock, image, f
                     <DialogContent sx={{ display: "flex", justifyContent: "center", padding: 0, margin: ["24px 0", "24px"] }}>
                         <img src={image} id="add-item-img" />
                     </DialogContent>
-                    <Typography>{description}</Typography>
-                    <Typography fontWeight={"bold"} sx={{ margin: "1rem 0" }}> Avaliable stock: {stock}</Typography>
-                    <TextField
-                        sx={{ maxWidth: "125px" }}
-                        id="quantity"
-                        label="Quantity"
-                        type="number"
-                        error={quantity === ""}
-                        helperText={quantity === "" ? 'Enter amount' : ' '}
-                        value={quantity}
-                        onChange={e => handleQuantity(e.target.value)}
-                    />
+                    <Typography color='GrayText'>{description}</Typography>
+                    <Box display={"flex"} alignItems='self-end' justifyContent={'space-between'} flexWrap='wrap'>
+                        <Stack>
+                            <Typography variant='h5' fontWeight={"bold"} sx={{ mt: 1 }}> Price: ${price}</Typography>
+                            <Typography variant='h6' sx={{ mb:2 }}> Stock: {stock}</Typography>
+                        </Stack>
+                        <TextField
+                            sx={{ maxWidth: "80px" }}
+                            id="quantity"
+                            label="Quantity"
+                            type="number"
+                            error={quantity === ""}
+                            helperText={quantity === "" ? 'invalid #' : ' '}
+                            value={quantity}
+                            onChange={e => handleQuantity(e.target.value)}
+                        />
+
+                    </Box>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>

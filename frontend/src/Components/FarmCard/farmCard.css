@@ -1,15 +1,16 @@
-.farm-description{
-
+.farm-description {
+    text-align: center;
 }
-#farm-img{
 
+#farm-img {
+    display: block;
+    border-radius: 10px;
+    margin: 0 auto;
 }
+
 @media screen and (max-width:599px) {
     .farm-description {
         display: none;
     }
-    #farm-img{
-        
-    }
-    
+    #farm-img {}
 }
