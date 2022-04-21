@@ -1,6 +1,6 @@
 // Libary Imports
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import CircleIcon from '@mui/icons-material/Circle';
 import Cookies from "js-cookie";
 import { Button } from "@mui/material";
@@ -33,79 +33,89 @@ export const Profile = (props) => {
     const [classes, setClasses] = useState([]);
     const [pp, setPP] = useState(undefined);
     const params = useParams();
+    const location = useLocation();
 
     // Initial Load
     useEffect(() => {
         let status = 0;
 
-        if (JSON.stringify(account) === "{}"){
-            setAccount(JSON.parse(localStorage.getItem("currUser")));}
+        // if (JSON.stringify(account) === "{}"){
+        //     setAccount(JSON.parse(localStorage.getItem("currUser")));}
 
         getStatusByUsername(params.username).then((status) => setOnline(!!status.logged_in));
 
         getAccountbyUsername(params.username).then(loaded => {
             // get the table of friend requests
-            getFriendRequest(loaded.account_id).then(res => {
-                // convert it to an array
-                if (res.requester_id === loaded.account_id) {
-                    // if the friend request has not been accepted
-                    if (res.status === -1) {
-                        status = 2; // display accept request button
-                        console.log("changing status to a 2", status);
+            if (loaded.username !== JSON.parse(localStorage.getItem("currUser")).username) {
+                getFriendRequest(loaded.account_id).then(res => {
+                    // convert it to an array
+                    if (res.requester_id === loaded.account_id) {
+                        // if the friend request has not been accepted
+                        if (res.status === -1) {
+                            status = 2; // display accept request button
+                            console.log("changing status to a 2", status);
+                        }
+                        // if the request has been accepted
+                        else if (res.status === 1) {
+                            status = 3; // display friend tag
+                            console.log("changing status to a 3", status);
+                        }
+                        else if (res.status === 0) {
+                            status = 4;
+                            console.log("changing status to a 4", status);
+                        }
                     }
-                    // if the request has been accepted
-                    else if (res.status === 1) {
-                        status = 3; // display friend tag
-                        console.log("changing status to a 3", status);
+                    // check if the request is from the user
+                    else if (res.requested_id === loaded.account_id) {
+                        // if the request has not been accepted
+                        if (res.status === -1) {
+                            status = 1; // display disabled button
+                            console.log("changing status to a 1", status);
+                        }
+                        // if the request has been accepted
+                        else if (res.status === 1) {
+                            status = 3; // display friend tag
+                            console.log("changing status to a 3", status);
+                        }
+                        else if (res.status === 0) {
+                            status = 4;
+                            console.log("changing status to a 4", status);
+                        }
                     }
-                    else if (res.status === 0) {
-                        status = 4;
-                        console.log("changing status to a 4", status);
+                }).catch(code => {
+                    if (code === 404) {
+                        status = 0;
                     }
-                }
-                // check if the request is from the user
-                else if (res.requested_id === loaded.account_id) {
-                    // if the request has not been accepted
-                    if (res.status === -1) {
-                        status = 1; // display disabled button
-                        console.log("changing status to a 1", status);
-                    }
-                    // if the request has been accepted
-                    else if (res.status === 1) {
-                        status = 3; // display friend tag
-                        console.log("changing status to a 3", status);
-                    }
-                    else if (res.status === 0) {
-                        status = 4;
-                        console.log("changing status to a 4", status);
-                    }
-                }
-            }).catch(code => {
-                if (code === 404) {
-                    status = 0;
-                }
 
-            }).then(() => {
-                if (account.account_id !== JSON.parse(localStorage.getItem("currUser")).account_id) {
-                    console.log(status, loaded);
-                    if (account.status !== status) {
-                        console.log("Adding status to account");
-                        setAccount({ ...loaded, status: status });
-                        console.log(account);
+                }).then(() => {
+                    if (account.account_id !== JSON.parse(localStorage.getItem("currUser")).account_id) {
+                        console.log(status, loaded);
+                        if (account.status !== status) {
+                            console.log("Adding status to account");
+                            setAccount({ ...loaded, status: status });
+                            console.log(account);
+                        }
                     }
-                }
-            }).then(() => {
-                if (status === 3) {
-                    getFriendsClasses().then(res => {
-                        setClasses(...res);
-                    })
-                }
-            });
+                }).then(() => {
+                    if (status === 3) {
+                        getFriendsClasses().then(res => {
+                            setClasses(...res);
+                        })
+                    }
+                });
+            }
+            else
+            {
+                console.log("profiles are the same")
+                setAccount({ ...loaded, status: 3 });
+            }
         })
 
     }, [editMode, reload, account]);
 
-
+    if (account.username && account.username !== params.username) {
+        getAccountbyUsername(params.username).then(loaded => { setAccount(loaded) });
+    }
     // Conditions
     if (JSON.stringify(account) === "{}") {
         let username = Cookies.get("username");
@@ -161,11 +171,9 @@ export const Profile = (props) => {
     }
 
     const profileNav = () => {
-        navigate(`users/${account.username}`);
-    }
-
-    const accountNav = () => {
-        navigate(`accounts/${account.username}`);
+        // setAccount(JSON.parse(localStorage.getItem("currUser")));
+        navigate(`/users/${JSON.parse(localStorage.getItem("currUser")).username}`);
+        // setReload(!reload);
     }
 
     const sendFriendRequestFunc = () => {
@@ -198,7 +206,6 @@ export const Profile = (props) => {
     // If so then allow them to edit with the edit button at the end (this edit button will update the database once done)
     // If not then display the profile without the edit buttons.
 
-    console.log("Account before if statement", account);
     // NOTE - IN FUTURE ADD BUTTON TO SEND FRIEND REQUEST...ONLY IF FUNCTIONALITY IS IMPLEMENTED
     if (JSON.stringify(account) !== "{}" && account.status !== undefined) {
         return <section className="userProfile">
@@ -206,9 +213,8 @@ export const Profile = (props) => {
                 pages={props.pages}
                 settings={props.settings}
                 signOut={() => signOut()}
-                username={account.username}
-                profileNav={() => profileNav()}
-                account={() => accountNav()} />
+                username={JSON.parse(localStorage.getItem("currUser")).username}
+                profileNav={() => profileNav()} />
 
             {/* Viewing own profile (EDITING) */}
             {JSON.parse(localStorage.getItem("currUser")).username === account.username && editMode === true &&
@@ -347,18 +353,18 @@ export const Profile = (props) => {
                         </div>
                     </div>
                 </div>}
-                {
-                    classes.length === 0 && account.status === 3 && <div>
-                        <h1>Classes</h1>
-                        <p>{account.username} is not enrolled in any classes</p>
-                    </div>
-                }
-                {
-                    classes.length=== 0 && account.status !== 3 && <div>
-                        <h1>Classes</h1>
-                        <p>You must be friends with {account.username} to view their classes</p>
-                    </div>
-                }
+            {
+                classes.length === 0 && (account.status === 3 || account.account_id === JSON.parse(localStorage.getItem("currUser")).account_id) && <div>
+                    <h1>Classes</h1>
+                    <p>{account.username} is not enrolled in any classes</p>
+                </div>
+            }
+            {
+                classes.length === 0 && account.status !== 3 && account.account_id !== JSON.parse(localStorage.getItem("currUser")).account_id && <div>
+                    <h1>Classes</h1>
+                    <p>You must be friends with {account.username} to view their classes</p>
+                </div>
+            }
             {classes.length !== 0 && <div>
                 <h1>Classes</h1>
                 <table>
@@ -374,18 +380,18 @@ export const Profile = (props) => {
                     <tbody>
                         {classes.map((clss, idx) => {
 
-                            <tr key={idx} className="container">
+                            return <tr key={idx} className="container">
                                 <td>{clss.name}</td>
                                 <td>{clss.number}</td>
                                 <td>{clss.days}</td>
                                 <td>{clss.time}</td>
                                 <td>
-                                <Button variant="contained"
-                                    className="btn bg-secondary"
-                                    endIcon={<ArrowForwardIcon />}
-                                    onClick={() => goToClass(clss)}>
-                                    View Profile
-                                </Button>
+                                    <Button variant="contained"
+                                        className="btn bg-secondary"
+                                        endIcon={<ArrowForwardIcon />}
+                                        onClick={() => goToClass(clss)}>
+                                        View Profile
+                                    </Button>
                                 </td>
                             </tr>
 
