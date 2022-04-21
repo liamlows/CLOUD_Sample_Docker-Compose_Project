@@ -33,8 +33,10 @@ CREATE TABLE `db`.`courses` (
     `start_date` DATE NOT NULL,
     `end_date` DATE NOT NULL,
     `canceled` BOOLEAN NOT NULL DEFAULT FALSE,
+    'requirements_cc_id' BIGINT UNSIGNED NOT NULL,
     PRIMARY KEY (`course_id`),
-    FOREIGN KEY (`course_meta_id`) REFERENCES course_metadata(`course_meta_id`)
+    FOREIGN KEY (`course_meta_id`) REFERENCES course_metadata(`course_meta_id`),
+    FOREIGN KEY ('requirements_cc_id') REFERENCES requirements_cc('requirements_cc_id')
 );
 
 -- ROLES TABLE
@@ -124,5 +126,35 @@ CREATE TABLE `db`.`waitlists` (
     FOREIGN KEY (`course_id`) REFERENCES courses(`course_id`)
 );
 
+-- REQUIREMENTS TABLE
+CREATE TABLE 'db'.'requirements' (
+    'course_id' BIGINT UNSIGNED NOT NULL,
+    'requirements_cc_id' BIGINT UNSIGNED NOT NULL,
+    PRIMARY KEY ('course_id', 'requirements_cc_id'),
+    FOREIGN KEY ('requirements_cc_id') REFERENCES courses('requirements_cc_id'),
+    FOREIGN KEY ('course_id') REFERENCES courses('course_id')
+);
 
+-- REQUIREMENTS CC TABLE
+CREATE TABLE 'db'.'requirements_cc'(
+    'requirements_cc_id' SERIAL,
+    'intro_math' bool,
+    'intermediate_math' bool,
+    'advanced_math' bool,
+    'intro_eng' bool,
+    'intermediate_eng' bool,
+    'advanced_eng' bool,
+    PRIMARY KEY ('requirements_cc_id')
+
+);
+
+-- REVIEWS Table
+CREATE TABLE 'db'.'reviews'(
+  'review_id' SERIAL,
+  'course_id' BIGINT UNSIGNED,
+  'rating' INTEGER NOT NULL check (rating between 0 and 5),
+  'text' TEXT NOT NULL,
+  PRIMARY KEY('review_id'),
+  FOREIGN KEY ('course_id') REFERENCES courses('course_id')
+);
 INSERT INTO `roles`(role_type) VALUES('admin');
