@@ -1,22 +1,32 @@
-const jwt = require('jsonwebtoken');
 const User = require('../models/users');
-const Admin = require('../models/admin');
 
-const accessTokenSecret = process.env.TOKEN;
-
-const authenticateAdmin = async (email, password) => {
-    const user = await User.authenticateUser(email, password);
-    if (user === null) {
-        return user;
+// Create new user if email and password are provided
+const createUser = async (username, name, email, password, privileges) => {
+    if(!email){
+        res.status(400).json("No email provided");
     }
-    const admins = await Admin.findUserByEmail(email);
-    console.log('Admins', admins);
-    const accessToken = jwt.sign({ ...admins[0], claims: ['Admin'] }, accessTokenSecret);
+    if(!password){
+        res.status(400).json("No password provided");     
+    }
+    const user = await User.createNewUser(username, name, email, password, privileges);
 
-    return accessToken;
-    
+    return user;
 }
 
+// Authenticate user
+const authenticateUser = async(email, password) => {
+    const result = await User.authenticateUser(email, password);
+    return result;
+}
+
+// Finds user by email
+const findUserByEmail = async(email) => {
+    const result = await User.findUserByEmail(email);
+    return result;
+};
+
 module.exports = {
-    authenticateAdmin
+    createUser,
+    authenticateUser,
+    findUserByEmail
 };

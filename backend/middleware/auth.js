@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-const accessTokenSecret = process.env.TOKEN;
+const accessTokenSecret =  process.env.TOKEN;
 
 const authenticateJWT = (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -30,8 +30,11 @@ const authenticateWithClaims = (claims) => (req, res, next) => {
 
   const token = authHeader.split(".")[1];
 
+  console.log(token);
+
   jwt.verify(token, accessTokenSecret, (err, user) => {
     if (err) {
+      console.log(err);
       return res.sendStatus(403);
     }
     for (let claim of claims) {
@@ -40,7 +43,7 @@ const authenticateWithClaims = (claims) => (req, res, next) => {
         return next();
       }
     }
-    return res.sendStatus(403);
+    return res.sendStatus(404);
   });
 }
 

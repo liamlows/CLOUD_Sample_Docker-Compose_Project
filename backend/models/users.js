@@ -1,56 +1,59 @@
+const jwt = require('jsonwebtoken');
 const knex = require('../knex');
 const bcrypt = require('bcryptjs');
 
 const USER_TABLE = 'user';
 
-const createNewUser = async (username, email, name, password) => {
+const accessTokenSecret =  process.env.TOKEN;
+
+// Creates a new system user with a secure password
+const createNewUser = async (username, name, email, password, privileges) => {
     console.log('Raw password:', password);
-    const salt = bcrypt.genSaltSync(1);
+    const salt = await bcrypt.genSalt(10);
     console.log('Password salt', salt);
-    const hashedPassword = bcrypt.hashSync(password, salt);
+    const hashedPassword = await bcrypt.hash(password, salt);
     console.log('Hashed password', hashedPassword);
 
-    const query = knex(USER_TABLE).insert({username, email, name, password: hashedPassword });
-    console.log('Raw query for createNewUser:', query.toString());
+    // Inserts into user table
+    const query = knex(USER_TABLE).insert({ username, name, email, password: hashedPassword, privileges });
     const result = await query;
-
     return result;
 };
 
+// Locates a user record by email
 const findUserByEmail = async (email) => {
     const query = knex(USER_TABLE).where({ email });
     const result = await query;
     return result;
 }
 
+// Authenticates user and returns a JWT
 const authenticateUser = async (email, password) => {
     const users = await findUserByEmail(email);
     console.log('Results of users query', users);
+    // If user does not exist, logs a relevant error
     if (users.length === 0) {
         console.error(`No users matched the email: ${email}`);
-        return false;
+        knex.closeknex();
+        return null;
     }
     const user = users[0];
-    console.log("User = ", user);
     const validPassword = await bcrypt.compare(password, user.password);
-
-    console.log('Results of password authentication: ', validPassword);
+    // If the password is valid, returns a JWT
     if (validPassword) {
-        return true;
+        delete user.password;
+        const accessToken = jwt.sign({ ...user, claims: ['user'] }, accessTokenSecret);
+        return accessToken;
+    // If the password is invalid, logs a relevant error
+    } else {
+        console.error(`Invalid password.`);
+        throw EvalError;
     }
-    return false;
-}
-
-const userRole = async (email) => {
-    const query = knex(USER_TABLE).select('role').where({ email });
-    const result = await query;
-    return result;
 }
 
 
 module.exports = {
     createNewUser,
     findUserByEmail,
-    authenticateUser,
-    userRole
+    authenticateUser
 };
