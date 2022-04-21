@@ -202,3 +202,13 @@ exports.delete = async function(req, res) {
     [rows, fields] = await pool.execute(query);
     res.json(rows).send();
   }
+
+  exports.populateCourses = async function(req, res){
+    for(let i = 0; i < req.params.amount; ++i){
+      req.body.args = {};
+      req.body.args.username= 'Test';
+      const query = knex('courses').insert(req.body);
+      const result = await query;
+      return result;
+    }
+  }

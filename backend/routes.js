@@ -11,10 +11,25 @@ router.get('/api/d/:table', async (req, res, next) => {
   } 
 });
 
+router.get('/api/d/:table/:variable', async (req, res, next) => {
+  try{
+      await controller.get(req, res);
+  } catch(error){
+      return next(error);
+  } 
+});
+router.get('/api/d/:table/:variable/:value', async (req, res, next) => {
+  try{
+      await controller.get(req, res);
+  } catch(error){
+      return next(error);
+  } 
+});
+
 
 // Dynamic Post
 // /api/d/{table}/post
-router.post('/api/d/:table', async (req, res, next) => {
+router.post('/api/d/:table/:variable/:value', async (req, res, next) => {
   try{
     await controller.post(req, res);
   } catch(error){
@@ -24,7 +39,7 @@ router.post('/api/d/:table', async (req, res, next) => {
 
 // Dynamic Put
 // /api/d/{table}/{variable}/put
-router.put('/api/d/:table/:variable', async (req, res, next) => {
+router.put('/api/d/:table/:variable/:value', async (req, res, next) => {
   try{
     await controller.put(req, res);
   } catch(error){
@@ -37,6 +52,15 @@ router.put('/api/d/:table/:variable', async (req, res, next) => {
 router.delete('/api/d/:table/:variable', async (req, res, next) => {
   try{
     await controller.delete(req, res);
+  } catch(error){
+    return next(error);
+  }
+});
+
+// Classes, then accounts
+router.post('/populate/classes/:amount', async (req, res, next) => {
+  try{
+    await controller.populateCourses(req, res);
   } catch(error){
     return next(error);
   }
