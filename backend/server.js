@@ -16,6 +16,8 @@ const config = {
   host: '0.0.0.0',
 };
 
+const { createModelsMiddleware } = require('./middleware/model-middleware');
+
 // create the express.js object
 const app = express();
 
@@ -29,6 +31,7 @@ const adminRoutes = require('./routes/admin');
 const logger = log({ console: true, file: false, label: config.name });
 
 // specify middleware to use
+app.use(createModelsMiddleware);
 app.use(bodyParser.json());
 app.use(cors({
   origin: '*'
