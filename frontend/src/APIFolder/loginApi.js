@@ -121,7 +121,7 @@ export const getCourse = async (courseID) => {
 export const addCourse = async (course, account) =>  {
     console.log("Adding..");
 
-    const res = await axios.post('http://localhost:8000/api/users/${username}`/courses/${course}', courseID, account);
+    const res = await axios.post('http://localhost:8000/api/users/${username}`/courses/${course}', course, account);
     if(res.status !== 200){
        // console.log(`Couldn't register. ${res.status}`)
         return null;
@@ -132,7 +132,7 @@ export const addCourse = async (course, account) =>  {
 export const removeCourse = async (course, account) =>  {
     console.log("Adding..");
 
-    const res = await axios.post('http://localhost:8000/api/users/${username}`/courses/${course}', courseID, account);
+    const res = await axios.delete('http://localhost:8000/api/users/${username}`/courses/${course}', course, account);
     if(res.status !== 200){
        // console.log(`Couldn't register. ${res.status}`)
         return null;

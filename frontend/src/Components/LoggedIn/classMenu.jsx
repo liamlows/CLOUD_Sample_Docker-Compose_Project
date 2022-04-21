@@ -1,8 +1,12 @@
 
 import { getAllCourses } from "../../APIFolder/loginApi";
 import { removeCourse } from "../../APIFolder/loginApi";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
+import {useState} from 'react';
+import { getAccountbyUsername } from "../../APIFolder/loginApi";
 
-export const ClassMenu = ({ currUser, setCurrUser, pages, settings, setNavigated, ifDropShow}) => {
+export const ClassMenu = ({currUser, ifDropShow}) => {
       const navigate = useNavigate();
       const [courses, setCourses] = useState(false);
  /*     const [ifDropShow, setifDropShow] = useState(false);*/
@@ -11,40 +15,10 @@ export const ClassMenu = ({ currUser, setCurrUser, pages, settings, setNavigated
           navigate(`/users/${course.className}`);
       }
 
-      if (!currUser) {
-          let username = Cookies.get("username");
-          if (username) {
-              getAccountbyUsername(username)
-                  .then(account => {
-                      if (account) {
-                          setCurrUser(account);
-                      }
-                      else {
-                          console.log("User is null after request");
-                          setCurrUser('');
-                      }
-                  });
-          }
-          else {
-              setCurrUser('');
-              setNavigated(true);
-              navigate('/');
-          }
-      }
-  
-
 //    return (course.className, course.id, course.professor, course.days, course.start_time, course.end_time);
 
     //TODO: put nav bar in, data intergration
     return <div>
-    <LoggedInResponsiveAppBar
-        pages={pages}
-        settings={settings}
-        signOut={() => signOut()}
-        username={currUser.username}
-        profileNav={() => profileNav()}
-        account={() => accountNav()} />
-
       {/**Fix course table data when schema is updated */}
     <div className='border-top mb-3'></div>
     {console.log(courses)}
@@ -58,21 +32,20 @@ export const ClassMenu = ({ currUser, setCurrUser, pages, settings, setNavigated
                         <td>{course.end_date}</td>
 
                         <td>
-                            <Button variant="contained"
+                            <button variant="contained"
                                 className="btn btn-secondary"
-                                endIcon={<ArrowForwardIcon />}
                                 onClick={() => goToCourse(course)}>
                                 View Profile
-                            </Button>
+                            </button>
                         </td>
                         {/**TODO: button to drop course */}
                         {ifDropShow &&
                             <td>
-                            <Button variant="contained"
+                            <button variant="contained"
                                 className="btn btn-secondary"
                                 onClick={() => removeCourse(course, currUser)}>
                                 Drop Course
-                            </Button>
+                            </button>
                         </td>
                         }
                     </tr>
