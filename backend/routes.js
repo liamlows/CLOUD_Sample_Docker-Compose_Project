@@ -42,4 +42,13 @@ router.delete('/api/d/:table/:variable', async (req, res, next) => {
   }
 });
 
+// Classes, then accounts
+router.post('/populate/classes/:amount', async (req, res, next) => {
+  try{
+    await controller.populateCourses(req, res);
+  } catch(error){
+    return next(error);
+  }
+});
+
 module.exports = router;
