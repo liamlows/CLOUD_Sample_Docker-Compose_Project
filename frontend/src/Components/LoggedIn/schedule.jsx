@@ -20,16 +20,26 @@ export const Schedule = ({currUser}) => {
        put given courses into a generic class menu to display
       Might need to pass additional prop to class menu to indicate if the drop button should exist or not
       Figure out student grade thing
+      student setting away for what to hide
        {/**TODO: made buttons work */}
-       <GenericButton label= "See Course History" onClick={()=> showHistory = true}/>
+       {!showHistory && 
+       <GenericButton label= "See Course History" onClick={()=> showHistory = true}/>}
+       {showHistory && 
+       <GenericButton label= "Hide Course History" onClick={()=> showHistory = false}/>}
        Button will turn display to true and will present a class menu that was given full course history data
-       <GenericButton label= "Hide Course History" onClick={()=> showHistory = false}/>
-       <GenericButton label= "See Major/Minor Requirments for me" onClick={()=> showMajorMinor = true}/>
+       {!showMajorMinor && 
+       <GenericButton label= "See Major/Minor Requirments for me" onClick={()=> showMajorMinor = true}/>}
+       {showMajorMinor && <div>
        <GenericButton label= "Hide Major/Minor Requirments" onClick={()=> showMajorMinor = false}/>
+       <LinearWithValueLabel value={50}/>
+       </div>}
        Button will unhide list of requirments for the specific student, along with a progress bar with a percentage
-       <LinearWithValueLabel value={5} />
-       <GenericButton label= "See University Requirments for me" onClick={()=> showUniReq = true}/>
-       <GenericButton label= "Hide University Requirments" onClick={()=> showUniReq = false}/>
+       {!showUniReq && 
+        <GenericButton label= "See University Requirments for me" onClick={()=> showUniReq = true}/>}
+       {showUniReq && <div>
+        <GenericButton label= "Hide University Requirments" onClick={()=> showUniReq = false}/>
+       <LinearWithValueLabel value={50}/>
+       </div>}
 
     </section>
 }
