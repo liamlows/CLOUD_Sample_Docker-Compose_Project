@@ -15,7 +15,7 @@ import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 
 
 // Method Imports
-import { getFriendRequests, getStatusByUsername, getAccountbyUsername, handleFriendRequest, logout, sendFriendRequest, updateAccountbyUsername, getFriendRequest, getFriendsClasses, uploadPP, getAccountbyId, getCourseById, getCourseRequest } from "../../APIFolder/loginApi";
+import { getAccountbyUsername, logout, sendEnrollmentRequest, updateAccountbyUsername, getAccountbyId, getCourseById, getCourseRequest } from "../../APIFolder/loginApi";
 
 export const ClassProfile = (props) => {
     // Navigate Object
@@ -27,10 +27,24 @@ export const ClassProfile = (props) => {
     // Component Variables
     const [editMode, setEditMode] = useState(false);
     const [reload, setReload] = useState(false);
-    const [course, setCourse] = useState({});
-    const [professor, setProfessor] = useState(undefined);
-    const [tas, setTAs] = useState([]);
+    const [course, setCourse] = useState({
+        course_name: "Algorithms",
+        course_number: "CS 3353",
+        course_description: "Insert course description here",
+        course_id: 1
+    });
+    const [professor, setProfessor] = useState({
+        first_name: "First",
+        last_name: "Last",
+        account_id: 1
+    });
+    const [tas, setTAs] = useState([
+        { first_name: "first1", last_name: "last1", account_id: 10 },
+
+        { first_name: "first2", last_name: "last2", account_id: 20 }
+    ]);
     const [account, setAccount] = useState({})
+    const [accountType, setAccountType] = useState()
 
     const params = useParams();
 
@@ -38,32 +52,33 @@ export const ClassProfile = (props) => {
     useEffect(() => {
         let status = 0;
 
-            if (JSON.stringify(account) === "{}")
-                setAccount(JSON.parse(localStorage.getItem("currUser")));
+        if (JSON.stringify(account) === "{}")
+            setAccount(JSON.parse(localStorage.getItem("currUser")));
 
-            getCourseById(params.course_id).then(loaded => {
-                // get the table of friend requests
-                getCourseRequest(loaded.course_id).then(res => {
+        setAccountType(Cookies.get("account_type"));
+        // getCourseById(params.course_id).then(loaded => {
+        //     // get the table of friend requests
+        //     getCourseRequest(loaded.course_id).then(res => {
 
-                }).catch(code => {
-                    if (code === 404) {
-                        status = 0;
-                    }
+        //     }).catch(code => {
+        //         if (code === 404) {
+        //             status = 0;
+        //         }
 
-                }).then(() => {
-                    console.log("Adding status to course");
-                    setCourse({ ...loaded, status: status });
-                    console.log(course);
-                }).then(() => {
-                    getAccountbyId(course.professor_id).then(account => setProfessor(account));
-                    setTAs([]);
-                    let newTas = []
-                    for (const ta in course.tas) {
-                        getAccountbyId(course.tas[ta]).then(person => newTas.push(person))
-                    }
-                    setTAs(newTas);
-                });
-            })
+        //     }).then(() => {
+        //         console.log("Adding status to course");
+        //         setCourse({ ...loaded, status: status });
+        //         console.log(course);
+        //     }).then(() => {
+        //         getAccountbyId(course.professor_id).then(account => setProfessor(account));
+        //         setTAs([]);
+        //         let newTas = []
+        //         for (const ta in course.tas) {
+        //             getAccountbyId(course.tas[ta]).then(person => newTas.push(person))
+        //         }
+        //         setTAs(newTas);
+        //     });
+        // })
     }, [editMode, reload]);
 
 
@@ -91,7 +106,7 @@ export const ClassProfile = (props) => {
     // Component Methods
     const startEditing = () => {
         setEditMode(true);
-        changeAccount({ ...account });
+        changeCourse({ ...course });
     }
 
     const doneEditing = () => {
@@ -124,19 +139,30 @@ export const ClassProfile = (props) => {
         navigate(`accounts/${account.username}`);
     }
 
-    const sendFriendRequestFunc = () => {
+    const sendEnrollmentRequestFunc = () => {
         console.log("sending friend request");
-        sendFriendRequest(account.account_id)
+        sendEnrollmentRequest()
         setReload(!reload)
     }
 
-    const handleFriendRequestFunc = (bool) => {
-        console.log("handling");
-        handleFriendRequest(account.account_id, bool)
-        setReload(!reload)
+    const canEdit = () => {
+        //check if listed as professor or ta for the class
+        if (accountType === "admin") {
+            return true;
+        }
+        if (account.account_id === professor.account_id) {
+            return true;
+        }
+        for (const ta in tas) {
+            if (account.account_id === tas[ta].account_id) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    const changeAccount = delta => setAccount({ ...account, ...delta });
+
+    const changeCourse = delta => setCourse({ ...account, ...delta });
 
     // Basically check if user is the same user as the loaded profile.
     // If so then allow them to edit with the edit button at the end (this edit button will update the database once done)
@@ -154,39 +180,33 @@ export const ClassProfile = (props) => {
                 profileNav={() => profileNav()}
                 account={() => accountNav()} />
 
-            {/* Viewing own profile (EDITING) */}
-            {JSON.parse(localStorage.getItem("currUser")).username === account.username && editMode === true &&
+            {/* Viewing editable class (EDITING) */}
+            {canEdit() && editMode === true &&
                 <div className="container border-0 mt-5">
                     <div className="row bg-light pb-4">
                         <div className="col-7 float-start mt-5">
                             <table className='table float-start'>
                                 <thead>
-                                    <th className="float-start col-3 fs-3 mt-2 text-start"><span className="text-start p-0">{account.username}</span></th>
+                                    <th className="float-start col-3 fs-3 mt-2 text-start"><span className="text-start p-0">{course.course_name} ({course.course_number})</span></th>
 
                                     <th className="col-1">
-                                        <button type="button" className="btn btn-light" onClick={() => startEditing()}>Edit Class</button>
+                                        <button type="button" className="btn btn-light" onClick={() => startEditing()}>Edit Course</button>
                                     </th>
                                 </thead>
                                 <tbody>
                                     <tr className="border-0">
                                         <td className="col-3 fs-6 text-start border-0">
-                                            <TextField label="First Name :" value={account.first_name} setValue={first_name => changeAccount({ first_name })} />
+                                            <TextField label="Course Name :" value={course.course_name} setValue={course_name => changeCourse({ course_name })} />
                                         </td>
                                     </tr>
                                     <tr className="border-0">
                                         <td className="col-3 fs-6 text-start border-0">
-
-                                            <TextField label="Last Name :" value={account.last_name} setValue={last_name => changeAccount({ last_name })} />
+                                            <TextField label="Course Number :" value={course.course_Number} setValue={course_number => changeCourse({ course_number })} />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <div className="roundered">
-                                                <label for="file-upload" class="custom-file-upload">
-                                                    <i class="fa fa-cloud-upload"></i> Upload
-                                                </label>
-                                                <input id="file-upload" type="file" />
-                                            </div>
+
                                         </td>
                                     </tr>
                                 </tbody>
@@ -203,14 +223,14 @@ export const ClassProfile = (props) => {
                     </div>
                 </div>}
 
-            {/* Viewing own profile (NOT EDITING) */}
-            {JSON.parse(localStorage.getItem("currUser")).username === account.username && editMode === false &&
+            {/* Viewing editable class (NOT EDITING) */}
+            {canEdit() && editMode === false &&
                 <div className="container border-0 mt-5">
                     <div className="row bg-light pb-4">
                         <div className="col-7 float-start mt-5">
                             <table className='table float-start'>
                                 <thead>
-                                    
+
                                     <th className="float-start col-3 fs-3 mt-2 text-start">{account.username}</th>
                                     <th className="col-1">
                                         <button type="button" className="btn btn-light" onClick={() => startEditing()}>Edit Profile</button>
@@ -228,46 +248,38 @@ export const ClassProfile = (props) => {
                     </div>
                 </div>}
 
-            {/* Viewing profile besides your own */}
-            {JSON.parse(localStorage.getItem("currUser")).username !== account.username &&
+            {/* Viewing non editable class */}
+            {!canEdit() &&
                 <div>
                     <div className="row">
                         <div className="col-3 float-end">
-                            <Button variant="contained" className="m-3" onClick={() => navigate('/users')} startIcon={<KeyboardBackspaceIcon />}>Return to Search</Button>
+                            <Button variant="contained" className="m-3" onClick={() => navigate('/classes/enrollment')} startIcon={<KeyboardBackspaceIcon />}>Return to Search</Button>
                         </div>
                     </div>
                     <div className="clearfix p-0"></div>
                     <div className="container border-0 mt-3">
                         <div className="row bg-light pb-4">
-                            {account.profile_picture !== undefined && <img src={`${account.profile_picture}.${account.profile_picture_type}`} className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
-                            {account.profile_picture === undefined && <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
                             <div className="col-7 float-start mt-5">
                                 <table className='table float-start'>
                                     <thead>
                                         <th className="float-start col-3 fs-3 mt-2 text-start">{account.username}</th>
-                                        {account.status === 2 && <th className="col-2 pb-2">
-                                            <Button variant="contained" className="bg-primary" onClick={() => { handleFriendRequestFunc(1) }} endIcon={<Add />}>Accept Request</Button>
-                                            <Button variant="contained" className="bg-danger col-2" onClick={() => { handleFriendRequest(0) }}><ClearIcon /></Button>
+                                        {accountType === "student" && account.status === -1 && <th className="col-2 pb-2">
+                                            <Button variant="contained" className="bg-success" onClick={() => sendEnrollmentRequestFunc()} endIcon={<Add />}>Waitlist</Button>
                                         </th>}
-                                        {account.status === 1 && <th className="col-2 pb-2">
-                                            <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Request Sent</Button>
+                                        {accountType === "student" && account.status === 0 && <th className="col-2 pb-2">
+                                            <Button variant="contained" className="bg-success" onClick={() => sendEnrollmentRequestFunc()} endIcon={<Add />}>Enroll</Button>
                                         </th>}
-                                        {account.status === 4 && <th className="col-2 pb-2">
-                                            <Button variant="contained" disabled endIcon={<ClearIcon color='disabled' />}>Redacted</Button>
+                                        {accountType === "student" && account.status === 1 && <th className="col-2 pb-2">
+                                            <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Waitlist</Button>
                                         </th>}
-                                        {account.status === 0 && <th className="col-2 pb-2">
-                                            <Button variant="contained" className="bg-success" onClick={() => sendFriendRequestFunc()} endIcon={<Add />}>Add Friend </Button>
-                                        </th>}
-                                        {account.status === 3 &&
-                                            <div className="float-end col-2 mb-1 mt-2">
-                                                <div className="clearfix p-0"></div>
-                                                <th className="col-1 rounded bg-success border-0 p-1">
-                                                    <div className="bg-success text-white">
-                                                        Friends <Check className='mb-1 m-1 mt-0' />
-                                                    </div>
-                                                </th>
-                                            </div>
-                                        }
+                                        {account.status === 2 && <div className="float-end col-2 mb-1 mt-2">
+                                            <div className="clearfix p-0"></div>
+                                            <th className="col-1 rounded bg-success border-0 p-1">
+                                                <div className="bg-success text-white">
+                                                    Enrolled <Check className='mb-1 m-1 mt-0' />
+                                                </div>
+                                            </th>
+                                        </div>}
 
                                     </thead>
                                     <tbody>
