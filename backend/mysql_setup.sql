@@ -124,5 +124,16 @@ CREATE TABLE `db`.`waitlists` (
     FOREIGN KEY (`course_id`) REFERENCES courses(`course_id`)
 );
 
+-- NOTIFICATIONS TABLE
+CREATE TABLE 'db'.'notifications' (
+    'notification_id' SERIAL,
+    'sender' BIGINT UNSIGNED NOT NULL,
+    'message' VARCHAR(1000) NOT NULL,
+    'course' BIGINT UNSIGNED NOT NULL,
+    PRIMARY KEY ('notification_id'),
+    FOREIGN KEY ('sender') REFERENCES accounts('account_id'),
+    FOREIGN KEY ('course') REFERENCES courses('course_id')
+);
+
 
 INSERT INTO `roles`(role_type) VALUES('admin');
