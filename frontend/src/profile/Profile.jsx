@@ -37,7 +37,7 @@ export const Profile = () => {
         };
       }
 
-    return(<div className="container">
+    return(<div className="profileContainer">
         <br/>
         <h2 className="userHead">
             username!!
