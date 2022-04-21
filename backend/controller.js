@@ -205,19 +205,21 @@ exports.delete = async function(req, res) {
     res.json(rows).send();
   }
 
-  exports.populateCourseMeta = async (req, res) => {
-    req.body = {};
-    req.body.school_id = '123456';
-    req.body.course_name = 'Database 1'
-    req.body.department = 'Computer Science'
-    req.body.description = 'Learn how to make databases and other cool jazz.'
-    const query = knex('course_metadata').insert(req.body);
-    const result = await query;
-    return result;
+  exports.resetCourses = async (req, res) => {
+    const resetCourse = knex('courses').truncate()
+    const resetCourseResult = await resetCourse
+
+    const resetMeta = knex('course_metadata').truncate()
+    const resetMetaResult = await resetMeta
+
+    const resetSchools = knex('schools').truncate()
+    const resetSchoolsResult = await resetSchools
   }
 
   exports.populateCourses = async (req, res) => {
 
+    const resetSerialSchools = knex.schema.raw('ALTER TABLE schools AUTO_INCREMENT = 1')
+    const resetResultSchools = await resetSerialSchools;
     schools = [
       {school_name: 'Southern Methodist University', 
         school_location: 'Dallas, TX', 
@@ -235,6 +237,8 @@ exports.delete = async function(req, res) {
     const schoolQuery = knex('schools').insert(schools);
     const schoolResult = await schoolQuery;
 
+    const resetSerialMeta= knex.schema.raw('ALTER TABLE course_metadata AUTO_INCREMENT = 1')
+    const resetResultMeta = await resetSerialMeta;
     metaData = [
       {school_id: 1, 
         course_name: 'Database 1', 
@@ -276,6 +280,8 @@ exports.delete = async function(req, res) {
     const metadataQuery = knex('course_metadata').insert(metaData);
     const metadataResult = await metadataQuery;
 
+    const resetSerialCourse= knex.schema.raw('ALTER TABLE courses AUTO_INCREMENT = 1')
+    const resetResultCourse = await resetSerialCourse;
     courses = [
       {course_meta_id: 1,
         max_seats: 35,
