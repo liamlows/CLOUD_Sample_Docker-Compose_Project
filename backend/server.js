@@ -11,6 +11,8 @@ const { log, ExpressAPILogMiddleware } = require('@rama41222/node-logger');
 const usersRoutes = require('./routes/users');
 const userUpdatesRoutes = require('./routes/user_updates');
 const sessionRoutes = require('./routes/session');
+const customerDashRoutes = require('./routes/customer_dash');
+const farmerDashRoutes = require('./routes/farmer_dash');
 
 //middle ware
 const { createModelsMiddleware } = require('./middleware/model-middleware');
@@ -50,8 +52,9 @@ app.get('/health', (request, response, next) => {
 app.use('/login', sessionRoutes);
 app.use('/account', usersRoutes);
 app.use('/settings', authenticateJWT, userUpdatesRoutes);
-//app.use('/customer', authenticateWithClaims(['customer']), usersRoutes);
-//app.use('/farmer', authenticateWithClaims(['farmer']), usersRoutes);
+app.use('/dashboard/farmer', authenticateWithClaims(['farmer']), farmerDashRoutes);
+app.use('/dashboard/customer', authenticateWithClaims(['customer']), customerDashRoutes);
+
 
 // connecting the express object to listen on a particular port as defined in the config object.
 app.listen(config.port, config.host, (e) => {

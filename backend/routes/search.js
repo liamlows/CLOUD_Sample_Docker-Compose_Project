@@ -44,7 +44,7 @@ router.get('/', async (req, res) => {
         console.error('Failed to create new product:', err);
         res.status(500).json({message: err.toString()});
     }
-}
+})
 
 
 module.exports = router;
