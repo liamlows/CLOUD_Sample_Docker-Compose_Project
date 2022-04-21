@@ -14,10 +14,11 @@ import { UserSearch } from './Components/Profiles/UserSearch';
 import { FriendsList } from './Components/Profiles/FriendsList';
 import { ClassMenu } from './Components/ClassView/classMenu';
 import { NoPages } from './Components/NoPages';
-import { addClasses } from './Components/ClassView/addClasses';
+import { AddClasses } from './Components/ClassView/AddClasses';
 
 // Method Imports
 import { getAccountbyUsername } from './APIFolder/loginApi';
+import { ClassProfile } from "./Components/ClassView/classProfile";
 
 // React functional component
 function App() {
@@ -131,14 +132,19 @@ function App() {
 
           <Route path="/users/:username" element={<Profile 
             pages={loggedInPages}
-            settings={settings}/>} />
+            settings={settings}
+            setNavigated={x => setNavigated(x)}/>} />
 
 
 
 
           {/* Classes loading */}
           <Route path="/classes" element={<ClassMenu />} />
-          <Route path="/classes/enrollment" element={<addClasses />} />
+          <Route path="/classes/enrollment" element={<AddClasses />} />
+          <Route path="/classes/:course_id" element={<ClassProfile
+          pages={loggedInPages}
+          settings={settings}
+          setNavigated={x => setNavigated(x)}/>} />
 
           <Route path="*" element={<NoPages/>} />
 
