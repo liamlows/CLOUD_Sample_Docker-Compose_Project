@@ -9,6 +9,7 @@ import Add from "@mui/icons-material/Add";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import ClearIcon from '@mui/icons-material/Clear';
 import "./Profile.css";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 // Component Imports
 import { TextField } from "../common";
@@ -135,12 +136,12 @@ export const Profile = (props) => {
 
     const doneEditing = () => {
         if (account.first_name && account.last_name) {
-            updateAccountbyUsername(account).then(setEditMode(false));
-            localStorage.setItem("currUser", JSON.stringify(account));
             if (pp !== undefined) {
                 uploadPP(pp);
                 setPP(undefined);
             }
+            updateAccountbyUsername(account).then(setEditMode(false));
+            localStorage.setItem("currUser", JSON.stringify(account));
         }
         else {
             window.alert("Please fill out both fields");
@@ -188,6 +189,10 @@ export const Profile = (props) => {
         this.setPP(event.target.files[0]);
 
     };
+
+    const goToClass = (clss) => {
+        navigate(`/classes/${clss.course_id}`);
+    }
 
     // Basically check if user is the same user as the loaded profile.
     // If so then allow them to edit with the edit button at the end (this edit button will update the database once done)
@@ -240,7 +245,7 @@ export const Profile = (props) => {
                                                 <label for="file-upload" class="custom-file-upload">
                                                     <i class="fa fa-cloud-upload"></i> Upload
                                                 </label>
-                                                <input id="file-upload" type="file" />
+                                                <input id="file-upload" type="file" onChange={(event) => onFileChange(event)} />
                                             </div>
                                         </td>
                                     </tr>
@@ -342,15 +347,46 @@ export const Profile = (props) => {
                         </div>
                     </div>
                 </div>}
-
+                {
+                    classes.length === 0 && account.status === 3 && <div>
+                        <h1>Classes</h1>
+                        <p>{account.username} is not enrolled in any classes</p>
+                    </div>
+                }
+                {
+                    classes.length=== 0 && account.status !== 3 && <div>
+                        <h1>Classes</h1>
+                        <p>You must be friends with {account.username} to view their classes</p>
+                    </div>
+                }
             {classes.length !== 0 && <div>
                 <h1>Classes</h1>
                 <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Number</th>
+                            <th>Days</th>
+                            <th>Time</th>
+                            <th> </th>
+                        </tr>
+                    </thead>
                     <tbody>
                         {classes.map((clss, idx) => {
 
                             <tr key={idx} className="container">
-
+                                <td>{clss.name}</td>
+                                <td>{clss.number}</td>
+                                <td>{clss.days}</td>
+                                <td>{clss.time}</td>
+                                <td>
+                                <Button variant="contained"
+                                    className="btn bg-secondary"
+                                    endIcon={<ArrowForwardIcon />}
+                                    onClick={() => goToClass(clss)}>
+                                    View Profile
+                                </Button>
+                                </td>
                             </tr>
 
                         })}
