@@ -56,11 +56,9 @@ export const ClassProfile = (props) => {
     useEffect(() => {
         let status = 0;
 
-        if (JSON.stringify(account) === "{}")
-            setAccount(JSON.parse(localStorage.getItem("currUser")));
+        // if (JSON.stringify(account) === "{}")
+        //     setAccount(JSON.parse(localStorage.getItem("currUser")));
 
-        setAccountType("student");
-        // setAccountType(Cookies.get("account_type"));
         // getCourseById(params.course_id).then(loaded => {
         //     // get the table of friend requests
         //     getCourseRequest(loaded.course_id).then(res => {
