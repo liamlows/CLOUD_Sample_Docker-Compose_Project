@@ -9,9 +9,10 @@ import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
-import { Divider, Grid, Stack } from '@mui/material';
+import { Divider, Grid, Stack, TextField } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import { Link } from 'react-router-dom';
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -137,8 +138,10 @@ export const Posts = ()=> {
             For Sale
           </Typography>
           <Typography gutterBottom>
-            $$
+            $$ 
           </Typography>
+          <Button color="secondary" variant="contained"><Link to='/transaction' className="postLink">Buy</Link></Button>
+          <br/><br/>
         <Divider/>
         <h6>Comments</h6>
         <br/>
@@ -147,6 +150,8 @@ export const Posts = ()=> {
             <div> Comment</div>
             <div>Date</div>
         </Stack>
+        <TextField id="outlined-basic" label="Add Comment" variant="outlined" fullWidth/>
+        <Button>Send</Button>
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClose}>

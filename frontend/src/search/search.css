@@ -1,0 +1,22 @@
+.searchContainer {
+    padding: .5rem 2rem;
+}
+
+.searchHead {
+    padding: 1rem 0rem;
+    font-weight: bold;
+    color: rgb(112, 5, 126);
+    text-align: center;
+}
+
+.toggle {
+    padding-bottom: 1rem;
+    justify-content: center;
+}
+
+.recent {
+    text-align: center;
+    padding: 1rem;
+    font-weight: bold;
+    color: rgb(112, 5, 126);
+}

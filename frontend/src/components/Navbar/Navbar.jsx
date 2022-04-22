@@ -22,6 +22,9 @@ export const Navbar = () => {
             <Link to='/search'>Search</Link>
           </div>
           <div className="navLink">
+            <Link to='/rankings'>Rankings</Link>
+          </div>
+          <div className="navLink">
             <Link to='/notifications'>Notifications</Link>
           </div>
         </div>
