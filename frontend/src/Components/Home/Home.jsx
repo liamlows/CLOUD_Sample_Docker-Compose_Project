@@ -8,7 +8,7 @@ import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import { Divider, Grid, Slide, Typography, useMediaQuery, useTheme } from '@material-ui/core';
 
 
 export const Home = () => {
@@ -16,89 +16,31 @@ export const Home = () => {
 
     return (
         <>
-            <Box sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                pt: 5,
-                width: '100%',
-                fontFamily: 'Roboto',
-                maxWidth: 500
-            }}>
-                <Typography variant="h1" component="div" gutterBottom>
-                    Welcome To Farm Finders
-                </Typography>
-            </Box>
-            <Box sx={{
-                display: 'flex',
-            }}>
-                <Typography variant="h5" component="div"
-                    sx={{
-                        display: 'flex',
-                        width: '40%',
-                        pl: 10,
-                        justifyContent: 'right'
-                    }}>
-                    Farm Finders is an online community where users can sell, buy, and connect with other farmers.
-                    It's as easy as 1, 2, 3!
-                </Typography>
-                <Timeline
-                    sx={{
-                        display: 'flex',
-                        width: '10%',
-                        justifyContent: 'left'
-                    }}>
-                    <TimelineItem>
-                        <TimelineOppositeContent color="text.secondary">
-                            #1
-                        </TimelineOppositeContent>
-                        <TimelineSeparator>
-                            <TimelineDot variant="outlined" color="primary" />
-                            <TimelineConnector />
-                        </TimelineSeparator>
-                        <TimelineContent>Sign Up</TimelineContent>
-                    </TimelineItem>
-                    <TimelineItem>
-                        <TimelineOppositeContent color="text.secondary">
-                            #2
-                        </TimelineOppositeContent>
-                        <TimelineSeparator>
-                            <TimelineDot variant="outlined" color="primary" />
-                            <TimelineConnector />
-                        </TimelineSeparator>
-                        <TimelineContent>Connect With Other Farmers</TimelineContent>
-                    </TimelineItem>
-                    <TimelineItem>
-                        <TimelineOppositeContent color="text.secondary">
-                            #3
-                        </TimelineOppositeContent>
-                        <TimelineSeparator>
-                            <TimelineDot variant="outlined" color="primary" />
-                        </TimelineSeparator>
-                        <TimelineContent>Buy, Sell, and RSPV to Farm Events</TimelineContent>
-                    </TimelineItem>
-                </Timeline>
-            </Box>
-            <Box sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                pt: 5,
-                width: '100%',
-                fontFamily: 'Roboto',
-                maxWidth: 500
-            }}>
-                <Typography variant="h1" component="div" gutterBottom>
-                    Welcome To Farm Finders
-                </Typography>
-            </Box>
+            <Grid container direction='column' justify='center' alignItems='center' spacing={2}>
+                <Grid container item sm={12} lg={9} justify='center' alignItems='center' spacing={3}>
+                    <Grid item sm={12} lg={6}>
+                        <Slide direction='down' in={true} timeout={1000}>
+                            <div className='HomePageContainer'>
+                                <Typography variant='h2' justify='center' alignItems='center' >Task Board App</Typography>
+                                <img
+                                    alt='React Task board App'
+                                    style={{ height: '400px', width: '500px'}}
+                                    src={'https://media.istockphoto.com/photos/sunrise-strawberry-farm-landscape-agricultural-agriculture-picture-id1091940998?k=20&m=1091940998&s=612x612&w=0&h=cs6cFdycUbBph7bdpmr1bqrNaaoioETjXB_Np8MaMus='}
+                                ></img>
+                                <Typography variant='subtitle1'>
+                                    Free / Open source React MaterialUI Template - Task Board App. Template comes with most essential
+                                    things of Typescript, Lint, prettier, React Router, Material-UI and Cool Landing Page to bootstrap
+                                    your web app. Just clone the Repo and start building your app.
+                                </Typography>
+                            </div>
+                        </Slide>
+                    </Grid>
+                </Grid>
+            </Grid>
+
+            </>
 
 
 
-
-
-
-        </>
-
-
-
-    );
-}
+            );
+} 

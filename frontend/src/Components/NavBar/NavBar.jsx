@@ -49,6 +49,9 @@ export const NavBar = () => {
     userContext.setUserData({});
     navigate("/");
   }
+  const redirect = (route) =>{
+    navigate(route);
+  }
   console.log(userContext.userData)
   return (
     <nav className="main-navbar">
@@ -66,8 +69,8 @@ export const NavBar = () => {
 
             {/* Hamburger menu */}
             {
-              userContext.userData?.userId &&  <>
-                <IconButton sx={{display: { xs: 'flex', md: 'none' }}}
+              userContext.userData?.userId && <>
+                <IconButton sx={{ display: { xs: 'flex', md: 'none' } }}
                   size="large"
                   aria-label="account of current user"
                   aria-controls="menu-appbar"
@@ -120,9 +123,10 @@ export const NavBar = () => {
 
             {/* desktop page links */}
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              { userContext.userData?.userId && pages.map((page, index) => (
+              {userContext.userData?.userId && pages.map((page, index) => (
                 <NavLink key={index} to={page.path} >
                   <Button
+                    variant='text'
 
                     onClick={handleCloseNavMenu}
                     sx={{ my: 2, color: 'inherit', display: 'block' }}
@@ -131,6 +135,17 @@ export const NavBar = () => {
                   </Button>
                 </NavLink>
               ))}
+
+              {userContext.userData?.userId && <div style={{ display: "flex", flexGrow: "1", justifyContent: "flex-end", marginRight: "24px" }}>
+                <NavLink to={'/cart'} >
+                <Button
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: 'inherit', display: 'block' }}
+                >
+                  Cart
+                </Button>
+              </NavLink>
+              </div>}
             </Box>
 
             {/* Profile icon menu */}
@@ -163,15 +178,19 @@ export const NavBar = () => {
                       <Typography textAlign="center">{setting}</Typography>
                     </MenuItem>
                   ))} */}
-                    <MenuItem onClick={() => { handleCloseUserMenu(); logout(); }}>
-                      <Typography textAlign="center">logout</Typography>
+                    <MenuItem onClick={() => { handleCloseUserMenu(); redirect('/cart'); }}>
+                      <Typography textAlign="center">My cart</Typography>
                     </MenuItem>
+                    <MenuItem onClick={() => { handleCloseUserMenu(); logout(); }}>
+                      <Typography textAlign="center">Logout</Typography>
+                    </MenuItem>
+
                   </Menu>
                 </Box>
                 :
                 <Link to={'/login'}>
                   <Button variant="contained" color="success" >
-                    <Typography textAlign="center">login</Typography>
+                    <Typography textAlign="center">Login</Typography>
                   </Button>
                 </Link>
             }

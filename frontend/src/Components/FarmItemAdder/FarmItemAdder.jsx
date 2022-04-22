@@ -50,19 +50,19 @@ const FarmItemAdder = () => {
         setOpenAddForm(true);
     }
     return (
-        <div>
-            <Typography>Add items to farm</Typography>
-            <Search searchObject={search} setSearchObject={setSearch} justItem={true}></Search>
+        <div style={{padding:"16px"}}>
+            <Typography variant='h5' textAlign={'center'}>Add items to your farm</Typography>
+            <Search searchObject={search} setSearchObject={setSearch} justItem={true} hideSearch={true}></Search>
             <Grid container
                 spacing={1}
                 direction="row"
                 justifyContent="flex-start"
                 alignItems="stretch"
-                mb={4}
+                my={4}
             >
                 {
                     itemsFound.map((item) => {
-                        return <Grid key={item.name}item xs={12} sm={4} md={3} lg={2}>
+                        return <Grid key={item.name}item xs={12} sm={6} md={3} lg={2}>
                             <ItemCard name={item.name}
                                 image={item.image}
                                 description={item.description}

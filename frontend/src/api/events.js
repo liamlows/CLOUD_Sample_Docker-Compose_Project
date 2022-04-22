@@ -20,12 +20,12 @@ export const getEventById = (id) => {
 }    
 
 // update event info
-export const updateEventByID = (eventInfo,id) => {
+export const updateEventById = (eventInfo,id) => {
     axios.patch(`${apiEndpoint}/${id}`, eventInfo, apiConfig)
 }
 
 
-export const deleteEventByID = (id) => {
+export const deleteEventById = (id) => {
     axios.delete(`${apiEndpoint}/${id}`, apiConfig)
     
 }
