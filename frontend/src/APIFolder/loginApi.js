@@ -91,7 +91,7 @@ export const sendFriendRequest = async (targetId) => {
 }
 export const getAllCourses = async() => {
     //TODO: is this right???
-    const res = await axios.get('http://localhost:8000/api/courses');
+    const res = await axios.get('http://localhost:8000/api/d/courses');
     if(res.status !== 200){
         console.log("Couldn't find courses");
         return null;
@@ -110,9 +110,9 @@ export const getFriends = async () => {
     return res.data;
 }
 
-export const getCourse = async (courseID) => {
+export const getCoursebyId = async (courseID) => {
     //TODO: is this right???
-    const res = await axios.get(`${BACKEND_ENDPOINT}/api/courses/${courseID}`);
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/d/course_id/${courseID}`);
     if(res.status !== 200){
         console.log("Couldn't find courses");
         return null;
@@ -164,17 +164,22 @@ export const uploadPP = async (pp) => {
     console.log(typeof(pp), pp)
 
     let formData = new FormData();
-    formData.append("image", pp);
-    
-    const res = await axios.put(`${BACKEND_ENDPOINT}/api/account`, formData, { headers:{
-        'Content-Type': "multipart/form-data"
-    }});
-    return res.data;
-}
+    let reader = new FileReader();
 
-export const getCourseById = async (id) => {
-    const res = await axios.get(`${BACKEND_ENDPOINT}/api/classes/${id}`);
-    return res.data;
+    if(pp){
+        reader.readAsDataURL(pp);
+    }
+
+    reader.onload = (event) => {
+        formData.append("image", event.target.result);
+    
+        axios.put(`${BACKEND_ENDPOINT}/api/account`, event.target.result).then(() => {
+            console.log("hi");
+        })
+    }
+
+    return;
+    // return res.data;
 }
 
 export const getEnrollmentRequest = async (id) => {
