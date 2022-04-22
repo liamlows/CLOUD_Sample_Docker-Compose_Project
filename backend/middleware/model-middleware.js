@@ -1,4 +1,5 @@
 const NFT = require('../models/nft');
+const MESSAGES = require('../models/messages');
 
 /**
  * This middleware function is meant to be registered BEFORE the route handlers (see index.js)
@@ -11,6 +12,7 @@ const createModelsMiddleware = async (req, res, next) => {
     console.log('Creating models in middleware');
     req.models = {
         nft: NFT,
+        messages: MESSAGES,
     }
     next();
 }

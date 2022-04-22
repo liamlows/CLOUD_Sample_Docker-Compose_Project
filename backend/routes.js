@@ -3,6 +3,7 @@ const { query } = require('./db');
 const pool = require('./db')
 
 module.exports = function routes(app, logger) {
+
   // GET /
   app.get('/', (req, res) => {
     res.status(200).send('Go to 0.0.0.0:3000.');
@@ -58,6 +59,36 @@ app.get('/nft/:id', async (req, res, next) => {
 
   } catch (err) {
       console.error("Failed to create get NFT by name: ", err);
+      // res.status(500).
+  }
+
+  next()
+})
+
+  // for messages
+// Post: create a message /message
+app.post('/message', async (req, res, next) => {
+  try {
+      const body = req.body;
+      console.log(body);
+      const result = await req.models.messages.createMessage(body.message,body.send_id,body.recieve_id);
+      //const result = await req.models.message.createMessage(body.message, body.send_id, body.recieve_id);
+      res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to create new message: ", err);
+      // res.status(500).
+  } 
+}) 
+
+app.get('/message/:send_id', async (req, res, next) => {
+  try {
+
+    const result = await req.models.messages.getMessage(req.params.send_id);
+    res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to get message by send id: ", err);
       // res.status(500).
   }
 

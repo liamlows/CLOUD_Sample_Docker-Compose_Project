@@ -4,8 +4,10 @@ const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const cors = require('cors');
 const { log, ExpressAPILogMiddleware } = require('@rama41222/node-logger');
+// create the express.js object
+const app = express();
 // const mysqlConnect = require('./db');
-// const routes = require('./routes');
+const routes = require('./routes'); //http://localhost:8000/account/newnft
 // const usersRoutes = require('./routes/users');
 // const sessionRoutes = require('./routes/sessions');
 
@@ -18,8 +20,6 @@ const config = {
 
 const { createModelsMiddleware } = require('./middleware/model-middleware');
 
-// create the express.js object
-const app = express();
 
 // Importing route handlers
 const usersRoutes = require('./routes/users');
@@ -56,7 +56,7 @@ app.get('/health', (request, response, next) => {
 
 
 //include routes
-// routes(app, logger);
+routes(app, logger);
 
 // connecting the express object to listen on a particular port as defined in the config object.
 app.listen(config.port, config.host, (e) => {
