@@ -75,4 +75,13 @@ router.post('/populate/courses/', async (req, res, next) => {
   }
 });
 
+// POPULATE ACCOUNTS
+router.post('/populate/accounts/', async (req, res, next) => {
+  try{
+    await controller.populateAccounts(req, res);
+  } catch(error){
+    return next(error);
+  }
+});
+
 module.exports = router;
