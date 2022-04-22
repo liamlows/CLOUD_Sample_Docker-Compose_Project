@@ -50,9 +50,10 @@ const FarmItemAdder = () => {
         setOpenAddForm(true);
     }
     return (
-        <div style={{padding:"16px"}}>
-            <Typography variant='h5' textAlign={'center'}>Add items to your farm</Typography>
-            <Search searchObject={search} setSearchObject={setSearch} justItem={true} hideSearch={true}></Search>
+        <div>
+            
+            <Search searchObject={search} setSearchObject={setSearch} justItem={true} hideSearch={true} header={'Search avaliable items'}></Search>
+            <Typography variant='h5' textAlign={'center'} mt={2}>Add items to your farm</Typography>
             <Grid container
                 spacing={1}
                 direction="row"

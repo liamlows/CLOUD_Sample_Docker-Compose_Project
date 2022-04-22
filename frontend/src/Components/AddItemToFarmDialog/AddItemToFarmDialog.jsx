@@ -85,7 +85,7 @@ const AddItemDialog = ({ open, setOpen, itemName, itemDescription, image, farmId
                         label="Description"
                         multiline
                         fullWidth
-                        rows={4}
+                        rows={2}
                         value={itemDetails.itemDescription}
                         onChange={e => handleChange({ itemDescription: e.target.value })}
 

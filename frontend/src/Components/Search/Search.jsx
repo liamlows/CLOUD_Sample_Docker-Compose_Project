@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Button, Checkbox, Container, Grid, MenuItem, Stack, TextField, ToggleButton, Typography } from '@mui/material';
 import { getFarmItems } from '../../api/farmItems';
 import { item } from '../../models/item';
-const Search = ({ searchObject, setSearchObject, setFarms, justItem, verticalFilters, hideSearch }) => {
+const Search = ({ searchObject, setSearchObject, setFarms, justItem, header, verticalFilters, hideSearch }) => {
     const priceSearchOptions = [
         { priceOption: 0, label: "Any", minPrice: 0, maxPrice: 100000 },
         { priceOption: 1, label: "Under $10", minPrice: 0, maxPrice: 10 },
@@ -78,9 +78,9 @@ const Search = ({ searchObject, setSearchObject, setFarms, justItem, verticalFil
     if (!searchObject) return <> </>;
     return (
 
-        <div className="feed-search-container" style={  {backgroundColor: hideSearch ? 'rgb(41, 44, 100)': 'rgb(41, 44, 47)',
+        <div className="feed-search-container" style={  {backgroundColor: hideSearch ? 'rgb(41, 44, 47)': 'rgb(41, 44, 47)',
                                                         color: hideSearch ? 'white': 'white'}}>
-            
+            {header ? <Typography variant='subtitle1' textAlign={'center'}>{header}</Typography> : null}
             <Grid container rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                 {
                     !justItem && <Grid item xs={12} sm={12} md={12}>
