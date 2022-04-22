@@ -22,7 +22,7 @@ const mysql = require('mysql');
 
 // module.exports = pool;
 
-
+//
 module.exports = {
   development: {
     client: 'mysql',

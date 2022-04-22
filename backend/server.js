@@ -13,6 +13,7 @@ const userUpdatesRoutes = require('./routes/user_updates');
 const sessionRoutes = require('./routes/session');
 const customerDashRoutes = require('./routes/customer_dash');
 const farmerDashRoutes = require('./routes/farmer_dash');
+const searchRoutes = require('./routes/search');
 
 //middle ware
 const { createModelsMiddleware } = require('./middleware/model-middleware');
@@ -49,9 +50,16 @@ app.get('/health', (request, response, next) => {
 //app.use('/routes', routes);
 app.use('/login', sessionRoutes);
 app.use('/account', usersRoutes);
+<<<<<<< Updated upstream
 app.use('/settings', authenticateJWT, userUpdatesRoutes);
 app.use('/dashboard/farmer', authenticateWithClaims(['farmer']), farmerDashRoutes);
 app.use('/dashboard/customer', authenticateWithClaims(['customer']), customerDashRoutes);
+=======
+app.use('/settings', userUpdatesRoutes);
+app.use('/dashboard/farmer', farmerDashRoutes);
+app.use('/dashboard/customer', customerDashRoutes);
+app.use('/search', searchRoutes);
+>>>>>>> Stashed changes
 
 
 // connecting the express object to listen on a particular port as defined in the config object.
