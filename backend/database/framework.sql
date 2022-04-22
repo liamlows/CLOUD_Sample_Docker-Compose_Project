@@ -41,7 +41,6 @@ VALUES
 ('kirk1@smu.edu','charlie4@smu.edu','789',2,'$30','4 Sheep','345'),
 ('kirk1@smu.edu','charlie4@smu.edu','890',1,'$30','2 Goats','567');
 select * from transactions;
-drop tables transactions;
 CREATE TABLE event(
     event_id integer not null auto_increment, PRIMARY KEY(event_id),
     event_name VARCHAR(50),
@@ -56,8 +55,6 @@ CREATE TABLE customer_event_interests(
     farmer_id VARCHAR(50),
     customer_id VARCHAR(50)
 );
-drop tables event;
-drop tables customer_event_interests;
 select * from event;
 select * from customer_event_interests;
 INSERT INTO event(event_name,event_description,farmer_id)
