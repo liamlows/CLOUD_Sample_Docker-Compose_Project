@@ -93,14 +93,14 @@ export const Feed = () => {
                         aria-controls="panel4bh-content"
                         id="panel4bh-header"
                     >
-                        <Typography sx={{ width: '33%', flexShrink: 0 }}>Search</Typography>
+                        <Typography sx={{ width: '33%', flexShrink: 0 }}>Search Farms</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
                         <Search searchObject={searchParams} setSearchObject={setSearchParams} setFarms={setLoadedFarms} verticalFilters={true} />
                     </AccordionDetails>
                 </Accordion> 
                 : 
-                <Search searchObject={searchParams} setSearchObject={setSearchParams} setFarms={setLoadedFarms} verticalFilters={true} />
+                <Search searchObject={searchParams} setSearchObject={setSearchParams} setFarms={setLoadedFarms} verticalFilters={true} header='Search Farms'/>
             }
             <div className="farm-page-farms pt-4">
                 <Typography ref={titleRef}variant='h3' textAlign={'center'} sx={{ fontWeight: '100', mb: 2 }}>Your Feed</Typography>
