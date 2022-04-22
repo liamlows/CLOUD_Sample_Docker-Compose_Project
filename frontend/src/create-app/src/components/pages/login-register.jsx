@@ -1,8 +1,9 @@
-import {getAccount, setAccount} from '../app.jsx';
 import { TextField } from "../common/textField.jsx";
 import { useEffect, useState } from "react";
 
-export const Login = () => {
+export const Login = (props) => {
+  const {setAccount} = props;
+  const {setScreen} = props;
   const [loginUsername, setLoginUsername] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [registerUsername, setRegisterUsername] = useState('');

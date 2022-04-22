@@ -1,13 +1,18 @@
-import {getAccount, getScreen} from '../app.jsx';
+export const Layout = (props) => {
+  const {account} = props;
+  const {screen} = props;
+  const {setScreen} = props;
 
-export const Layout = ({ logged }) => {
   return <>
     <nav className="navbar text-white bg-dark mb-2">
       <div className="container-fluid row">
         <div className="col">
           <nav className="navbar justify-content-left">
-            {getScreen != 1 &&
-            <button type="button" className="btn btn-md bg-primary text-white">Back</button>}
+            {screen != 1 &&
+            <button type="button" className="btn btn-md bg-primary text-white"
+            onClick={() => {
+              setScreen(1);
+            }}>Back</button>}
           </nav>
         </div>
         <div className="col">
@@ -17,8 +22,11 @@ export const Layout = ({ logged }) => {
         </div>
         <div className="col">
           <nav className="navbar justify-content-end">
-            {getScreen != 2 && getAccount == [] &&
-            <button type="button" className="btn btn-md bg-primary text-white">Submit</button>}
+            {screen != 2 && account == undefined &&
+            <button type="button" className="btn btn-md bg-primary text-white"
+            onClick={() => {
+              setScreen(2);
+            }}>Login/Register</button>}
           </nav>
         </div>
       </div>

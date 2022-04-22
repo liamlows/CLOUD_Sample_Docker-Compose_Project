@@ -1,27 +1,21 @@
 import { Login } from './pages/login-register.jsx'
 import { Layout } from './pages/layout.jsx'
+import { Main } from './pages/main.jsx'
 import { useEffect, useState } from "react";
 import React from 'react';
 
-export var account = {username:'', password:''};
-var screen = 2;
-
-export function getAccount(){
-  return account;
-}
-
-export function setAccount(value){
-  account = value;
-}
-
-export function getScreen(){
-  return screen;
-}
-
 export const App = () => {
-  console.log(account);
+  const [ account, setAccount ] = useState(undefined);
+  const [ screen, setScreen ] = useState(1);
+  function setScreenValue(value){
+    setScreen(value);
+  }
+  function setAccountValue(value){
+    setAccount(value);
+  }
   return <>
-    <Layout />
-    {screen == 2 && <Login />}
+    <Layout account = {account} screen={screen} setScreen={setScreenValue}/>
+    {screen == 1 && <Main setScreen = {setScreenValue}/>}
+    {screen == 2 && <Login setAccount={setAccountValue} setScreen={setScreenValue}/>}
   </>;
 }
