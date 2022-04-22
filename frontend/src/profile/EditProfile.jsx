@@ -6,7 +6,7 @@ import { Avatar, TextField } from '@mui/material';
 import { stringAvatar } from './Profile';
 
 export const EditProfile = () => {
-    return (<div className="container">
+    return (<div className="profileContainer">
 
     <h4 className="editHead">Edit Profile</h4>
 

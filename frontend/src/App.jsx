@@ -17,6 +17,9 @@ import { ChangePassword } from './profile/ChangePassword';
 import { NewPost } from './profile/NewPost';
 import {DM} from "./messages/DM";
 import { Compose } from "./messages/Compose"
+import { ExampleUser } from './profile/ExampleUser';
+import { Transactions } from './profile/Transactions';
+import { Rankings } from './rankings/Rankings';
 
 // React functional component
 function App () {
@@ -39,6 +42,10 @@ function App () {
       <Route exact path="/postPicture" element={<NewPost/>} />
       <Route exact path="/thatMessage" element={<DM/>} />
       <Route exact path="/newMessage" element={<Compose/>} />
+      <Route exact path="/theirUser" element={<ExampleUser/>}/>
+      <Route exact path="/transaction" element={<Transactions/>}/>
+      <Route exact path="/rankings" element={<Rankings/>}/>
+
     </Routes>
 </div>
     );

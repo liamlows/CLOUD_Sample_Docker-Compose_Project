@@ -1,0 +1,15 @@
+.rankingContainer {
+    padding: .5rem 2rem;
+}
+
+.rankingHead {
+    padding: 1rem 0rem;
+    font-weight: bold;
+    color: rgb(112, 5, 126);
+    text-align: center;
+}
+
+.rankingTitle {
+    font-weight: bold;
+    color: darkgrey;
+}
