@@ -306,7 +306,8 @@ router.get("/api/users/", async (req, res, next) => {
 
 
 router.put("/api/account", async(req, res, next) => {
-    logger.info(`Got put request for profile. ${req}`);
+    logger.info(`Got put request for profile. ${JSON.stringify(req.files)}`);
+    res.status(200).json(req.files);
 });
 
 router.get("/api/users/:username/status/", async (req, res, next) => {
