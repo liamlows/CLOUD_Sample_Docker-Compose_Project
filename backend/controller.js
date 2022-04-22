@@ -7,7 +7,6 @@ const knex = require('./knex');
 
 const EXCLUDED_TABLES = ["account", ];
 
-
 function isTableExcluded(tableName) {
     return EXCLUDED_TABLES.includes(tableName);
 }
@@ -331,3 +330,124 @@ exports.delete = async function(req, res) {
     const courseResult = await courseQuery;
     return courseResult;
   }
+
+  exports.resetAccounts = async(req, res) => {
+    const resetRoles = knex('roles').truncate()
+    const resetRolesResult = await resetRoles
+
+    const resetAcc = knex('accounts').truncate()
+    const resetAccResult = await resetAcc
+  }
+
+  exports.populateAccounts = async (req, res) => {
+    roles = [
+      {
+        'role_type': 'student',
+        'course_id': 1,
+        'school_id': 1
+      },
+      {
+        'role_type': 'ta',
+        'course_id': 1,
+        'school_id': 1
+      },
+      {
+        'role_type': 'professor',
+        'course_id': 1,
+        'school_id': 1
+      },
+      {
+        'role_type': 'admin',
+        'course_id': 1,
+        'school_id': 1
+      },
+      {
+        'role_type': 'student',
+        'course_id': 2,
+        'school_id': 1
+      },
+      {
+        'role_type': 'ta',
+        'course_id': 2,
+        'school_id': 1
+      },
+      {
+        'role_type': 'professor',
+        'course_id': 2,
+        'school_id': 1
+      },
+      {
+        'role_type': 'admin',
+        'course_id': 2,
+        'school_id': 1
+      },
+      {
+        'role_type': 'student',
+        'course_id': 3,
+        'school_id': 1
+      },
+      {
+        'role_type': 'ta',
+        'course_id': 3,
+        'school_id': 1
+      },
+      {
+        'role_type': 'professor',
+        'course_id': 3,
+        'school_id': 1
+      },
+      {
+        'role_type': 'admin',
+        'course_id': 3,
+        'school_id': 1
+      }
+    ]
+    const roleQuery = knex('roles').insert(roles);
+    const roleQueryResults = await roleQuery;
+
+    accounts = generateAccounts(10);
+    const query = knex('accounts').insert(accounts);
+    const results = await query;
+    
+  }
+
+
+  // ************ DATA GENERATION FUNCTIONS ***************
+  function makeRandom(length){
+    var result = "";
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return result;
+}
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
+
+function generateAccounts(amount){
+    values = []
+    for(var i = 0; i < amount; i++){
+        dict = {}
+        userName = makeRandom(5)
+        password = '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'
+        firstName = makeRandom(5)
+        lastName = makeRandom(5)
+        email = makeRandom(5) + '@' + makeRandom(3) + '.com'
+        school_id = getRandomInt(3) + 1
+        role_id = getRandomInt(3) + 1
+
+        dict['username'] = userName
+        dict['password'] = password
+        dict['first_name'] = firstName
+        dict['last_name'] = lastName
+        dict['school_id'] = Math.random
+        dict['email'] = email
+        dict['school_id'] = school_id
+        dict['role_id'] = role_id
+
+        values.push(dict)
+    }
+    return values
+}
