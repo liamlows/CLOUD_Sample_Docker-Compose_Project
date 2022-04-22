@@ -67,6 +67,7 @@ app.get('/nft/:id', async (req, res, next) => {
 
   // for messages
 // Post: create a message /message
+// /message
 app.post('/message', async (req, res, next) => {
   try {
       const body = req.body;
@@ -81,6 +82,7 @@ app.post('/message', async (req, res, next) => {
   } 
 }) 
 
+// Get: /message/id
 app.get('/message/:send_id', async (req, res, next) => {
   try {
 
