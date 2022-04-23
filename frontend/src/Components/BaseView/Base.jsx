@@ -36,7 +36,7 @@ export const Base = (props) => {
 
     // HTML
     return <section className="baseView">
-        {props.navigated && <ErrorSnackBar></ErrorSnackBar>}
+        {props.navigated === 1 && <ErrorSnackBar></ErrorSnackBar>}
         {localStorage.getItem("currUser") === "{}" && <div>
             <BaseResponsiveAppBar 
                 pages={props.basePages}

@@ -47,6 +47,7 @@ export const LoginPage = (props) => {
             getAccountbyUsername(res.username)
                 .then(x => {
                     localStorage.setItem("currUser", JSON.stringify(x));
+                    props.setNavigated(0);
                     navigate('/');
                 });
         }
@@ -54,7 +55,7 @@ export const LoginPage = (props) => {
 
     // HTML
     return <section id="loginView">
-        <h1>Login</h1>
+        <h1 class="text-success">Login</h1>
         <form className="container">
             <TextField label="Username"
                 value={username}
@@ -70,7 +71,7 @@ export const LoginPage = (props) => {
                 type="button"
                 onClick={() => login()}
                 variant="contained"
-                color="success">
+                class="btn btn-secondary text-light">
                 Login
             </button>
             {/* <GenericButton label="Login" click="/loggedIn" /> */}

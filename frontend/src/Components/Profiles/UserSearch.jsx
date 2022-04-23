@@ -43,7 +43,7 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
                         // check if the request is to the current user
                         if (frReq[req].requester_id === res[profile].account_id) {
                             // if the friend request has not been accepted
-                            if (frReq[req].status === -1 || frReq[req].status === 0) {
+                            if (frReq[req].status === -1) {
                                 status[profile] = 2; // display accept request button
                                 console.log("changing status to a 2", status);
                             }
@@ -51,6 +51,10 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
                             else if (frReq[req].status === 1) {
                                 status[profile] = 3; // display friend tag
                                 console.log("changing status to a 3", status);
+                            }
+                            else if(frReq[req].status === 0){
+                                status[profile] = 4; 
+                                console.log("changing status to a 4", status);
                             }
                         }
                         // check if the request is from the user
@@ -64,6 +68,10 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
                             else if (frReq[req].status === 1) {
                                 status[profile] = 3; // display friend tag
                                 console.log("changing status to a 3", status);
+                            }
+                            else if(frReq[req].status === 0){
+                                status[profile] = 4; 
+                                console.log("changing status to a 4", status);
                             }
                         }
                     }
@@ -186,13 +194,6 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
                             <td>{profile.username}</td>
                             <td>{profile.first_name}</td>
                             <td>{profile.last_name}</td>
-                            {/* <td>
-                        <Button variant="contained"
-                            className="btn btn-secondary"
-                            onClick={() => sendFriendRequest(profile.id)}>
-                            Add Friend
-                        </Button>
-                    </td> */}
 
                             <td className="col-3 pb-2">
                                 {profile.status === 2 &&
@@ -207,10 +208,9 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
                                 {profile.status === 0 &&
                                     <Button variant="contained" className="bg-success" onClick={() => { sendFriendRequest(profile.account_id).then(setDummy(dummy + 1)) }} endIcon={<Add />}>Add Friend </Button>
                                 }
-
-                                {/* {!displayUser(profile) && <td className="col-1 pb-2">
-                                <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Already Friends </Button>
-                            </td>} */}
+                                {profile.status === 4 &&
+                                    <Button variant="contained" disabled endIcon={<ClearIcon color='disabled' />}>Redacted</Button>
+                                }
                             </td>
                             <td>
                                 <Button variant="contained"

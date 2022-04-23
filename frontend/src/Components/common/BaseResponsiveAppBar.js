@@ -38,7 +38,7 @@ export const BaseResponsiveAppBar = ({ pages, signIn, signUp }) => {
   };
 
   return (
-    <AppBar position="static" sx={{background:'black'}}>
+    <AppBar position="static" sx={{background:'green'}}>
       <Container maxWidth="xl" >
         <Toolbar disableGutters>
           <Typography
@@ -47,7 +47,7 @@ export const BaseResponsiveAppBar = ({ pages, signIn, signUp }) => {
             component="div"
             sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
           >
-            Website Name Here
+            Course Pickle
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>

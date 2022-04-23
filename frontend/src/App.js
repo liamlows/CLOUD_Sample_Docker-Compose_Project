@@ -10,12 +10,15 @@ import { SignUpPage } from './Components/Login/SignUpPage';
 import { LoginPage } from './Components/Login/LoginPage';
 import { Base } from './Components/BaseView/Base';
 import { Profile } from './Components/Profiles/Profile';
-import { AccountInfo } from './Components/Profiles/AccountInfo';
 import { UserSearch } from './Components/Profiles/UserSearch';
 import { FriendsList } from './Components/Profiles/FriendsList';
+import { ClassMenu } from './Components/ClassView/classMenu';
+import { NoPages } from './Components/NoPages';
+import { AddClasses } from './Components/ClassView/AddClasses';
 
 // Method Imports
 import { getAccountbyUsername } from './APIFolder/loginApi';
+import { ClassProfile } from "./Components/ClassView/classProfile";
 
 // React functional component
 function App() {
@@ -44,7 +47,6 @@ function App() {
     // { label: 'Public Profile', route: `/users/${account.id}` }, Keep out until have an account id confirmed
     // { label: 'Account', route: `/accounts/${account.id}` }, 
     { label: 'Public Profile', route: `/users` },
-    { label: 'Account', route: `/accounts` },
     { label: 'Logout', route: '/signout' }
   ]);
 
@@ -132,9 +134,21 @@ function App() {
             pages={loggedInPages}
             settings={settings}
             setNavigated={x => setNavigated(x)}/>} />
-            
-          <Route path="/accounts/:username" element={<AccountInfo 
-            setNavigated={x => setNavigated(x)} />} />
+
+
+
+
+          {/* Classes loading */}
+          <Route path="/classes" element={<ClassMenu />} />
+          <Route path="/classes/enrollment" element={<AddClasses />} />
+          <Route path="/classes/:course_id" element={<ClassProfile
+          pages={loggedInPages}
+          settings={settings}
+          setNavigated={x => setNavigated(x)}/>} />
+
+          <Route path="*" element={<NoPages/>} />
+
+
         </Routes>
       </BrowserRouter>
     </div>
