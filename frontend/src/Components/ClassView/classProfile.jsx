@@ -18,7 +18,7 @@ import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 
 
 // Method Imports
-import { getAccountbyUsername, logout, sendEnrollmentRequest, updateAccountbyUsername, getAccountbyId, getCourseById, getCourseRequest } from "../../APIFolder/loginApi";
+import { getAccountbyUsername, logout, sendEnrollmentRequest, updateAccountbyUsername, getAccountbyId, getCourseById, getCourseRequest, getCoursebyId } from "../../APIFolder/loginApi";
 
 export const ClassProfile = (props) => {
     // Navigate Object
@@ -37,10 +37,10 @@ export const ClassProfile = (props) => {
         course_id: 1
     });
     const [professor, setProfessor] = useState({
-        first_name: "Wes",
-        last_name: "Anderson",
-        username: "wes",
-        account_id: 1
+        // first_name: "Wes",
+        // last_name: "Anderson",
+        // username: "wes",
+        // account_id: 1
     });
     const [tas, setTAs] = useState([
         { first_name: "first1", last_name: "last1", account_id: 10 },
@@ -58,30 +58,31 @@ export const ClassProfile = (props) => {
 
         // if (JSON.stringify(account) === "{}")
         //     setAccount(JSON.parse(localStorage.getItem("currUser")));
+        console.log(params.course_id)
+        getCoursebyId(params.course_id).then(loaded => {
+            console.log(loaded);
+            // get the table of friend requests
+            // getCourseRequest(loaded.course_id).then(res => {
 
-        // getCourseById(params.course_id).then(loaded => {
-        //     // get the table of friend requests
-        //     getCourseRequest(loaded.course_id).then(res => {
+            // }).catch(code => {
+            //     if (code === 404) {
+            //         status = 0;
+            //     }
 
-        //     }).catch(code => {
-        //         if (code === 404) {
-        //             status = 0;
-        //         }
-
-        //     }).then(() => {
-        //         console.log("Adding status to course");
-        //         setCourse({ ...loaded, status: status });
-        //         console.log(course);
-        //     }).then(() => {
-        //         getAccountbyId(course.professor_id).then(account => setProfessor(account));
-        //         setTAs([]);
-        //         let newTas = []
-        //         for (const ta in course.tas) {
-        //             getAccountbyId(course.tas[ta]).then(person => newTas.push(person))
-        //         }
-        //         setTAs(newTas);
-        //     });
-        // })
+            // }).then(() => {
+            //     console.log("Adding status to course");
+            //     setCourse({ ...loaded, status: status });
+            //     console.log(course);
+            // }).then(() => {
+            getAccountbyId(course.professor_id).then(account => setProfessor(account));
+            setTAs([]);
+            let newTas = []
+            for (const ta in course.tas) {
+                getAccountbyId(course.tas[ta]).then(person => newTas.push(person))
+            }
+            setTAs(newTas);
+            // });
+        })
     }, [editMode, reload]);
 
 
@@ -176,7 +177,7 @@ export const ClassProfile = (props) => {
     console.log("Account before if statement", account);
     // NOTE - IN FUTURE ADD BUTTON TO SEND FRIEND REQUEST...ONLY IF FUNCTIONALITY IS IMPLEMENTED
     if (JSON.stringify(account) !== "{}") {
-        return <section className="userProfile">
+        return <section className="classProfile">
             <LoggedInResponsiveAppBar
                 pages={props.pages}
                 settings={props.settings}
@@ -231,7 +232,7 @@ export const ClassProfile = (props) => {
             {/* Viewing editable class (NOT EDITING) */}
             {canEdit() === true && editMode === false &&
                 <div className="container border-0 mt-5">
-                    <div className="row bg-light p-4">
+                    <div className="row bg-light p-4 mb-0">
                         <div className="col-7 float-start mt-1">
                             <table className='table float-start'>
                                 <thead>
@@ -241,27 +242,20 @@ export const ClassProfile = (props) => {
                                         <button type="button" className="btn btn-light" onClick={() => startEditing()}>Edit Course</button>
                                     </th>
                                 </thead>
-                                <tbody>
-                                    <td className="col-3 fs-6 text-start">
-                                        <span className="p-0 text-capitalize">{account.first_name} </span><span className="p-0 text-capitalize" >{account.last_name}</span>
-                                    </td>
-                                    {/* <h2>Email :</h2>
-                            <p>{account.email}</p> */}
-                                </tbody>
                             </table>
                         </div>
                         <div className="ProfessorProfile col-5 mt-1 bg-light2">
-                        <table className='table float-start'>
+                            <table className='table float-start'>
                                 <thead>
 
-                                    <th className="float-start col-11 fs-3 mt-2 text-start">Professor</th>
+                                    <th className="float-start col-11 fs-4 mt-2 text-start">Professor</th>
                                     <th className="col-1">
-                                    <Button variant="contained"
-                                className="btn bg-secondary"
-                                endIcon={<ArrowForwardIcon />}
-                                onClick={() => navigate(`/users/${professor.username}`)}>
-                                View Profile
-                            </Button>
+                                        <Button variant="contained"
+                                            className="btn bg-secondary"
+                                            endIcon={<ArrowForwardIcon />}
+                                            onClick={() => navigate(`/users/${professor.username}`)}>
+                                            View Profile
+                                        </Button>
                                     </th>
                                 </thead>
                                 <tbody>
@@ -271,9 +265,12 @@ export const ClassProfile = (props) => {
                                     {/* <h2>Email :</h2>
                             <p>{account.email}</p> */}
                                 </tbody>
-                                </table>
+                            </table>
 
                         </div>
+                    </div>
+                    <div className="row p-4 bg-light mt-0">
+
                     </div>
                 </div>}
 

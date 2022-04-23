@@ -107,18 +107,18 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
         navigate(`/classes/${course.id}`);
     }
 
-    const goToFriendsList = () => {
-        navigate(`/users/${account.username}/friends`);
+    const goToSchedule = () => {
+        navigate(`/classes/eronll`);
     }
 
-    const addStatusToProfiles = (dummy, statuses) => {
-        console.log("Adding status to profile")
-        let profiles2 = [];
-        for (const profile in dummy) {
-            profiles2.push({ ...dummy[profile], status: statuses[profile] });
-        }
-        setProfiles(profiles2);
-    }
+    // const addStatusToProfiles = (dummy, statuses) => {
+    //     console.log("Adding status to profile")
+    //     let profiles2 = [];
+    //     for (const profile in dummy) {
+    //         profiles2.push({ ...dummy[profile], status: statuses[profile] });
+    //     }
+    //     setProfiles(profiles2);
+    // }
 
 
     const signOut = () => {
@@ -137,28 +137,29 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
         navigate(`accounts/${account.username}`);
     }
 
-    const displayUser = (profile) => {
-        if (profile.status === 3) {
-            console.log("already friends");
-            return false;
-        }
-        if (profile.account_id === account.account_id) {
-            return false;
-        }
-        return true;
+    // const displayUser = (profile) => {
+    //     if (profile.status === 3) {
+    //         console.log("already friends");
+    //         return false;
+    //     }
+    //     if (profile.account_id === account.account_id) {
+    //         return false;
+    //     }
+    //     return true;
 
-    }
+    // }
 
-    const readyToDisplay = () => {
-        console.log("profiles", profiles);
-        if (profiles !== undefined && profiles[0] !== undefined && profiles[0].status !== undefined) {
-            return true;
-        }
-        return false;
-    }
+    // const readyToDisplay = () => {
+    //     console.log("profiles", profiles);
+    //     if (profiles !== undefined && profiles[0] !== undefined && profiles[0].status !== undefined) {
+    //         return true;
+    //     }
+    //     return false;
+    // }
 
     // HTML
-    if (readyToDisplay()) {
+    // if (readyToDisplay()) {
+        if(courses !== []){
         return <div>
             <LoggedInResponsiveAppBar
                 pages={pages}
@@ -180,48 +181,48 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
             <table className="table">
                 <thead>
                     <tr>
-                        <th>Username</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th className="col-2"></th>
+                        <th className="col-3">Name</th>
+                        <th className="col-3">Number</th>
+                        <th className="col-3">Professor</th>
+                        <th className="col-3"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {console.log("RENDER", typeof (profiles))}
-                    {profiles.map((profile, idx) => {
-                        return (displayUser(profile) && <tr key={idx} className="container">
+                    {/* {console.log("RENDER", typeof (profiles))} */}
+                    {courses.map((course, idx) => {
+                        return <tr key={idx} className="container">
 
-                            <td>{profile.username}</td>
-                            <td>{profile.first_name}</td>
-                            <td>{profile.last_name}</td>
+                            <td>{course.username}</td>
+                            <td>{course.first_name}</td>
+                            <td>{course.last_name}</td>
 
                             <td className="col-3 pb-2">
-                                {profile.status === 2 &&
-                                    <Button variant="contained" className="bg-primary col-7 m-1 mt-0 mb-0" onClick={() => { handleFriendRequest(profile.account_id, 1).then(setDummy(dummy + 1)) }} endIcon={<Add />}>Accept Request</Button>
+                                {course.status === 2 &&
+                                    <Button variant="contained" className="bg-primary col-7 m-1 mt-0 mb-0" onClick={() => { handleFriendRequest(course.account_id, 1).then(setDummy(dummy + 1)) }} endIcon={<Add />}>Accept Request</Button>
                                 }
-                                {profile.status === 2 &&
-                                    <Button variant="contained" className="bg-danger col-2" onClick={() => { handleFriendRequest(profile.account_id, 0).then(setDummy(dummy + 1)) }}><ClearIcon /></Button>
+                                {course.status === 2 &&
+                                    <Button variant="contained" className="bg-danger col-2" onClick={() => { handleFriendRequest(course.account_id, 0).then(setDummy(dummy + 1)) }}><ClearIcon /></Button>
                                 }
-                                {profile.status === 1 &&
+                                {course.status === 1 &&
                                     <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Sent Request</Button>
                                 }
-                                {profile.status === 0 &&
-                                    <Button variant="contained" className="bg-success" onClick={() => { sendFriendRequest(profile.account_id).then(setDummy(dummy + 1)) }} endIcon={<Add />}>Add Friend </Button>
+                                {course.status === 0 &&
+                                    <Button variant="contained" className="bg-success" onClick={() => { sendFriendRequest(course.account_id).then(setDummy(dummy + 1)) }} endIcon={<Add />}>Add Friend </Button>
                                 }
-                                {profile.status === 4 &&
+                                {course.status === 4 &&
                                     <Button variant="contained" disabled endIcon={<ClearIcon color='disabled' />}>Redacted</Button>
                                 }
                             </td>
-                            <td>
+                            <td className="col-3">
                                 <Button variant="contained"
                                     className="btn bg-secondary"
                                     endIcon={<ArrowForwardIcon />}
-                                    onClick={() => goToProfile(profile)}>
-                                    View Profile
+                                    onClick={() => goToCourse(course)}>
+                                    View course
                                 </Button>
                             </td>
 
-                        </tr>)
+                        </tr>
                     })}
                 </tbody>
             </table>

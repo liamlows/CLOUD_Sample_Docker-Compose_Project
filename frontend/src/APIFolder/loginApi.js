@@ -114,7 +114,7 @@ export const getCoursebyId = async (courseID) => {
     //TODO: is this right???
     const res = await axios.get(`${BACKEND_ENDPOINT}/api/d/course_id/${courseID}`);
     if(res.status !== 200){
-        console.log("Couldn't find courses");
+        console.log("Couldn't find course");
         return null;
     }
     return res.data;
