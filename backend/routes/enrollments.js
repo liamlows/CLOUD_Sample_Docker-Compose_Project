@@ -10,9 +10,6 @@ router.use(isUserAuthenticated);
 GET /api/enrollments/
     Gets all student enrollments.
 
-
-
-
 POST /enrollments/
     Adds a new student enrollment
 GET /enrollments/:student-id
@@ -24,8 +21,6 @@ GET /enrollments/courses/:course-id/waitlist/
     Gets all students in the wait list for the specified course ID.
 POST /enrollments/courses/:course-id/waitlist/
     Adds a student to the wait list for the specified student ID and course ID.
-
-
 
 
  */
