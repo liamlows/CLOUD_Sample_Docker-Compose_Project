@@ -1,0 +1,27 @@
+const knex = require('../database/knex');
+
+//create new cart
+const createCart = async (email, product_id, quantity) => {
+    //add cart to table
+    const query = knex('cart').insert({ customer_id: email, product_id, quantity });
+    console.log('Raw query for createCart:', query.toString());
+    const result = await query;
+    //return cart
+    const query2 = knex('cart').where({customer_id:email});
+    console.log('Raw query for getCart:', query2.toString());
+    const result2 = await query2;
+    return result2;
+}
+//get product by cart
+const fetchProductByID = async (product_id) => {
+    //return product
+    const query = knex('product').where({product_id});
+    console.log('Raw query for getProduct:', query.toString());
+    const result = await query;
+    return result;
+};
+
+module.exports = {
+    createCart,
+    fetchProductByID
+};

@@ -86,9 +86,9 @@ DROP TABLE  requests;
 CREATE TABLE cart(
     cart_id INTEGER NOT NULL AUTO_INCREMENT, PRIMARY KEY (cart_id),
     cart_price INTEGER,
-    product_count INTEGER,
-    cart_price INTEGER
-
+    quantity INTEGER,
+    customer_id VARCHAR(50),
+    product_id INTEGER
 );
 
 CREATE TABLE customer_inventory(

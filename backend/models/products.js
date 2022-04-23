@@ -1,5 +1,4 @@
-const knex = require('../db/knex');
-
+const knex = require('../database/knex');
 
 const PRODUCT_TABLE = 'product';
 
