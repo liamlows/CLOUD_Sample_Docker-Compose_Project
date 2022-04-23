@@ -197,7 +197,8 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
                             <td>{course.last_name}</td>
 
                             <td className="col-3 pb-2">
-                                {course.status === 2 &&
+                                {/* Need to get the actual status back first. May not be impplemented by demo time but whatever */}
+                                {/* {course.status === 2 &&
                                     <Button variant="contained" className="bg-primary col-7 m-1 mt-0 mb-0" onClick={() => { handleFriendRequest(course.account_id, 1).then(setDummy(dummy + 1)) }} endIcon={<Add />}>Accept Request</Button>
                                 }
                                 {course.status === 2 &&
@@ -211,7 +212,7 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
                                 }
                                 {course.status === 4 &&
                                     <Button variant="contained" disabled endIcon={<ClearIcon color='disabled' />}>Redacted</Button>
-                                }
+                                } */}
                             </td>
                             <td className="col-3">
                                 <Button variant="contained"
