@@ -7,7 +7,7 @@ USE db;
 
 
 -- NEW NEW NEW NEW NEW
--- USER STORY 1
+-- EPIC 1
 CREATE TABLE farmer (
     farm_name VARCHAR(50),
     farm_description VARCHAR(50)
@@ -19,7 +19,7 @@ CREATE TABLE users(
     last_name VARCHAR(50),
     isFarmer BOOL default false
 );
--- USER STORY 7
+-- EPIC 7
 CREATE TABLE transactions(
 	transaction_id integer not null auto_increment, primary key(transaction_id),
     customer_id VARCHAR(50),
