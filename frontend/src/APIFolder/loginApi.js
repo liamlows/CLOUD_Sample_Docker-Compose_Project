@@ -117,6 +117,7 @@ export const getCoursebyId = async (courseID) => {
         console.log("Couldn't find course");
         return null;
     }
+
     return res.data;
 }
 
@@ -150,6 +151,7 @@ export const getFriendRequest = async (id) => {
 
 export const getFriendsClasses = async (id) => {
     const res = await axios.get(`${BACKEND_ENDPOINT}/api/enrollments/${id}`);
+
     return res.data;
 }
 

@@ -8,8 +8,10 @@ import Check from "@mui/icons-material/Check";
 import Add from "@mui/icons-material/Add";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import ClearIcon from '@mui/icons-material/Clear';
+
 import "./Profile.css";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+
 
 // Component Imports
 import { TextField } from "../common";
@@ -18,6 +20,7 @@ import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 
 // Method Imports
 import { getFriendRequests, getStatusByUsername, getAccountbyUsername, handleFriendRequest, logout, sendFriendRequest, updateAccountbyUsername, getFriendRequest, getFriendsClasses, uploadPP } from "../../APIFolder/loginApi";
+
 
 export const Profile = (props) => {
     // Navigate Object
@@ -31,18 +34,22 @@ export const Profile = (props) => {
     const [online, setOnline] = useState(false);
     const [reload, setReload] = useState(false);
     const [classes, setClasses] = useState([]);
+
     const [pp, setPP] = useState(undefined);
     const params = useParams();
     const location = useLocation();
+
 
     // Initial Load
     useEffect(() => {
         let status = 0;
         getStatusByUsername(params.username).then((status) => setOnline(!!status.logged_in));
 
+
         getAccountbyUsername(params.username).then(loaded => {
             // get the table of friend requests
             if (loaded.username !== JSON.parse(localStorage.getItem("currUser")).username) {
+
                 getFriendRequest(loaded.account_id).then(res => {
                     // convert it to an array
                     if (res.requester_id === loaded.account_id) {
@@ -80,6 +87,7 @@ export const Profile = (props) => {
                     }
                 }).catch(code => {
                     setAccount({ ...loaded, status: 0 });
+
 
                 }).then(() => {
                     if (account.account_id !== JSON.parse(localStorage.getItem("currUser")).account_id) {
@@ -149,6 +157,7 @@ export const Profile = (props) => {
                     }
                 }).catch(code => {
                     setAccount({ ...loaded, status: 0 });
+
 
                 }).then(() => {
                     if (account.account_id !== JSON.parse(localStorage.getItem("currUser")).account_id) {
@@ -250,6 +259,7 @@ export const Profile = (props) => {
     }
 
     const changeAccount = delta => setAccount({ ...account, ...delta });
+
 
 
     const onFileChange = event => {
@@ -414,6 +424,7 @@ export const Profile = (props) => {
                         </div>
                     </div>
                 </div>}
+
             {
                 classes.length === 0 && (account.status === 3 || account.account_id === JSON.parse(localStorage.getItem("currUser")).account_id) && <div>
                     <h1>Classes</h1>
@@ -454,6 +465,7 @@ export const Profile = (props) => {
                                         View Profile
                                     </Button>
                                 </td>
+
                             </tr>
 
                         })}
