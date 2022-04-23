@@ -31,10 +31,10 @@ export const ClassProfile = (props) => {
     const [editMode, setEditMode] = useState(false);
     const [reload, setReload] = useState(false);
     const [course, setCourse] = useState({
-        course_name: "Algorithms",
-        course_number: "CS 3353",
-        course_description: "Insert course description here",
-        course_id: 1
+        // course_name: "Algorithms",
+        // course_number: "CS 3353",
+        // course_description: "Insert course description here",
+        // course_id: 1
     });
     const [professor, setProfessor] = useState({
         // first_name: "Wes",
@@ -43,12 +43,11 @@ export const ClassProfile = (props) => {
         // account_id: 1
     });
     const [tas, setTAs] = useState([
-        { first_name: "first1", last_name: "last1", account_id: 10 },
+        // { first_name: "first1", last_name: "last1", account_id: 10 },
 
-        { first_name: "first2", last_name: "last2", account_id: 20 }
+        // { first_name: "first2", last_name: "last2", account_id: 20 }
     ]);
     const [account, setAccount] = useState({})
-    const [accountType, setAccountType] = useState()
 
     const params = useParams();
 
@@ -114,12 +113,12 @@ export const ClassProfile = (props) => {
     }
 
     const doneEditing = () => {
-        if (account.first_name && account.last_name) {
-            updateAccountbyUsername(account).then(setEditMode(false));
+        if (course.course_name && course.course_number && course.description) {
+            updateCoursebyId(course).then(setEditMode(false));
             localStorage.setItem("currUser", JSON.stringify(account));
         }
         else {
-            window.alert("Please fill out both fields");
+            window.alert("Please fill out all fields");
         }
     }
 
@@ -151,7 +150,7 @@ export const ClassProfile = (props) => {
 
     const canEdit = () => {
         //check if listed as professor or ta for the class
-        if (accountType === "admin") {
+        if (account.account_type === "admin") {
             console.log("user is an admin")
             return true;
         }
@@ -212,7 +211,8 @@ export const ClassProfile = (props) => {
                                     </tr>
                                     <tr>
                                         <td>
-
+                                            {/* Probably should make this a text area and move down to where the description actually is */}
+                                            <TextField label="Course Description :" value={course.description} setValue={description => changeCourse({ description })} />
                                         </td>
                                     </tr>
                                 </tbody>
@@ -262,8 +262,6 @@ export const ClassProfile = (props) => {
                                     <td className="col-3 fs-6 text-start">
                                         <span className="p-0 text-capitalize">{professor.first_name} </span><span className="p-0 text-capitalize" >{professor.last_name}</span>
                                     </td>
-                                    {/* <h2>Email :</h2>
-                            <p>{account.email}</p> */}
                                 </tbody>
                             </table>
 
