@@ -64,18 +64,18 @@ app.use(session({
 //include routes
 const account = require('./routes/account');
 const friends = require('./routes/friends');
+const course_metadata = require('./routes/course_metadata');
 const courses = require('./routes/courses');
 const enrollments = require('./routes/enrollments');
 const roles = require('./routes/roles');
 const schools = require('./routes/schools');
-const students = require('./routes/students');
 app.use('/', account);
 app.use('/api/friends', friends);
 app.use('/api/courses', courses);
-app.use('/enrollments', enrollments);
-app.use('/roles', roles);
-app.use('/schools', schools);
-app.use('/students', students);
+app.use('/api/course-metadata/', course_metadata);
+app.use('/api/enrollments', enrollments);
+app.use('/api/roles', roles);
+app.use('/api/schools', schools);
 app.use('/', routes);
 
 // connecting the express object to listen on a particular port as defined in the config object.
