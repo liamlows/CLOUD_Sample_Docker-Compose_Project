@@ -14,7 +14,7 @@ import { UserSearch } from './Components/Profiles/UserSearch';
 import { FriendsList } from './Components/Profiles/FriendsList';
 import { ClassMenu } from './Components/ClassView/classMenu';
 import { NoPages } from './Components/NoPages';
-import { AddClasses } from './Components/ClassView/AddClasses';
+import { AddClasses } from './Components/ClassView/addClasses';
 
 // Method Imports
 import { getAccountbyUsername } from './APIFolder/loginApi';

@@ -110,6 +110,12 @@ export const getFriends = async () => {
     return res.data;
 }
 
+export const getWaitlist = async (courseID) => {
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/d/waitlists/course_id/${courseID}`);
+    console.log(res);
+    return res.data;
+}
+
 export const getCoursebyId = async (courseID) => {
     //TODO: is this right???
     const res = await axios.get(`${BACKEND_ENDPOINT}/api/d/course_id/${courseID}`);
