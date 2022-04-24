@@ -4,10 +4,7 @@ CREATE DATABASE db;
 -- use newly create database
 USE db;
 
-
-DROP TABLE customer_event_interests, farmer, product, transactions, users, customer_inventory, cart, event;
--- NEW NEW NEW NEW NEW
--- EPIC 1
+DROP TABLE customer_event_interests, farmer, product, transactions, users, requests, customer_inventory, cart, event;
 
 CREATE TABLE users(
     user_id INTEGER AUTO_INCREMENT, PRIMARY KEY(user_id),
@@ -17,7 +14,6 @@ CREATE TABLE users(
     last_name VARCHAR(50),
     isFarmer tinyint(1) NOT NULL DEFAULT FALSE
 );
-
 CREATE TABLE farmer (
     farmer_id INTEGER AUTO_INCREMENT, PRIMARY KEY (farmer_id),
     farm_name VARCHAR(100),
@@ -26,8 +22,6 @@ CREATE TABLE farmer (
     date_founded DATE,
     owner_id INTEGER NOT NULL, FOREIGN KEY (owner_id) REFERENCES users(user_id)
 );
--- EPIC 4
-
 CREATE TABLE transactions(
 	transaction_id integer auto_increment, primary key(transaction_id),
     customer_id INTEGER NOT NULL, FOREIGN KEY (customer_id) REFERENCES users(user_id),
@@ -48,7 +42,6 @@ CREATE TABLE transactions(
 );
 CREATE TABLE cart(
     cart_id INTEGER NOT NULL AUTO_INCREMENT, PRIMARY KEY (cart_id),
-    cart_price FLOAT,
     quantity INTEGER,
     customer_id INTEGER NOT NULL, FOREIGN KEY (customer_id) REFERENCES users(user_id),
     product_id INTEGER NOT NULL, FOREIGN KEY (product_id) REFERENCES product(product_id)
@@ -58,7 +51,9 @@ CREATE TABLE event(
     event_id integer auto_increment, PRIMARY KEY(event_id),
     event_name VARCHAR(100),
     event_description VARCHAR(300),
-    farmer_id INTEGER NOT NULL, FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id)
+    farmer_id INTEGER NOT NULL, FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id),
+    date VARCHAR(50),
+    time VARCHAR(50)
 );
 
 CREATE TABLE customer_event_interests(
@@ -103,14 +98,26 @@ VALUES ('smu@email.edu', 'Password123', 'John', 'Deere', 1),
 INSERT INTO farmer(farm_name, farm_description, farm_image_url, date_founded, owner_id)
 VALUES ('Johns Farm', 'LETS GOOOOO', 'https://st.depositphotos.com/1333205/2857/i/600/depositphotos_28571959-stock-photo-farm-building.jpg', '1999-03-23', 1);
 
-INSERT INTO transactions() VALUES ();
+INSERT INTO event(event_name,event_description,farmer_id,date,time)
+VALUES
+('Animal Show','All Animals 50% off','smu@email.edu''4/24/22','5:00 PM'),
+('Plant Show','Buy one get one 50% off','smu@email.edu''5/1/22','10:00 AM'),
+('Dog Show','Tricks and treats','smu@email.edu','6/1/22','11:00 AM');
 
-INSERT INTO cart() VALUES();
+INSERT INTO customer_event_interests(event_id,customer_id)
+VALUES
+(1,'cool@gmail.com'),
+(3,'cool@gmail.com');
 
-INSERT INTO event() VALUES();
+INSERT INTO transactions(customer_id,farmer_id,product_id,quantity,is_complete,total_price,purchaseDate, firstName,lastName,address,city,state,zip,cardName,cardNumber,cardExprDate)
+VALUES
+('cool@gmail.com','smu@email.edu',1,2,1,'$100','4/24/22','Mark','Fontenot','123 elm stree','dallas','tx','75205','visa','1111222233334444','05/22'),
+('cool@gmail.com','smu@email.edu',2,1,0,'$50','5/1/22','Mark','Fontenot','123 elm stree','dallas','tx','75205','visa','1111222233334444','05/22');
 
-INSERT INTO customer_event_interests(event_id, customer_id)
-VALUES(1, 2);
+INSERT INTO cart(quantity,customer_id,product_id)
+VALUES
+(2,'cool@gmail.com'1),
+(1,'cool@gmail.com'2);
 
 INSERT INTO product(product_name, product_price, product_stock, product_category, product_description, product_image_url, farmer_id)
 VALUES('Apples', 1.00, 20, 'Fruit', 'Apples, now available in red color.', 'https://i5.walmartimages.com/asr/7320e63a-de46-4a16-9b8c-526e15219a12_3.e557c1ad9973e1f76f512b34950243a3.jpeg', 1),
