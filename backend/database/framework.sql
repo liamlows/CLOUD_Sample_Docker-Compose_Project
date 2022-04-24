@@ -4,7 +4,7 @@ CREATE DATABASE db;
 -- use newly create database
 USE db;
 
-DROP TABLE customer_event_interests, farmer, product, transactions, users, requests, customer_inventory, cart, event;
+DROP TABLE customer_event_interests, farmer, product, transactions, users, cart, event;
 
 CREATE TABLE users(
     user_id INTEGER AUTO_INCREMENT, PRIMARY KEY(user_id),
@@ -100,24 +100,24 @@ VALUES ('Johns Farm', 'LETS GOOOOO', 'https://st.depositphotos.com/1333205/2857/
 
 INSERT INTO event(event_name,event_description,farmer_id,date,time)
 VALUES
-('Animal Show','All Animals 50% off','smu@email.edu''4/24/22','5:00 PM'),
-('Plant Show','Buy one get one 50% off','smu@email.edu''5/1/22','10:00 AM'),
-('Dog Show','Tricks and treats','smu@email.edu','6/1/22','11:00 AM');
+('Animal Show','All Animals 50% off', 1,'4/24/22','5:00 PM'),
+('Plant Show','Buy one get one 50% off', 1,'5/1/22','10:00 AM'),
+('Dog Show','Tricks and treats', 1,'6/1/22','11:00 AM');
 
 INSERT INTO customer_event_interests(event_id,customer_id)
 VALUES
-(1,'cool@gmail.com'),
-(3,'cool@gmail.com');
+(1,2),
+(3, 2);
 
-INSERT INTO transactions(customer_id,farmer_id,product_id,quantity,is_complete,total_price,purchaseDate, firstName,lastName,address,city,state,zip,cardName,cardNumber,cardExprDate)
+INSERT INTO transactions(customer_id,farmer_id,product_id,quantity,is_complete,purchaseDate, firstName,lastName,address,city,state,zip,cardName,cardNumber,cardExprDate)
 VALUES
-('cool@gmail.com','smu@email.edu',1,2,1,'$100','4/24/22','Mark','Fontenot','123 elm stree','dallas','tx','75205','visa','1111222233334444','05/22'),
-('cool@gmail.com','smu@email.edu',2,1,0,'$50','5/1/22','Mark','Fontenot','123 elm stree','dallas','tx','75205','visa','1111222233334444','05/22');
+(2,1,1,2,1,CURRENT_TIME,'Mark','Fontenot','123 elm stree','dallas','tx','75205','visa','1111222233334444','05/22'),
+(2,1,2,1,0,CURRENT_TIME,'Mark','Fontenot','123 elm stree','dallas','tx','75205','visa','1111222233334444','05/22');
 
 INSERT INTO cart(quantity,customer_id,product_id)
 VALUES
-(2,'cool@gmail.com'1),
-(1,'cool@gmail.com'2);
+(2,2, 1),
+(1,2, 3);
 
 INSERT INTO product(product_name, product_price, product_stock, product_category, product_description, product_image_url, farmer_id)
 VALUES('Apples', 1.00, 20, 'Fruit', 'Apples, now available in red color.', 'https://i5.walmartimages.com/asr/7320e63a-de46-4a16-9b8c-526e15219a12_3.e557c1ad9973e1f76f512b34950243a3.jpeg', 1),

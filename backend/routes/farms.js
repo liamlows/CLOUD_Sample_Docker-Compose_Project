@@ -1,6 +1,6 @@
 const express = require('express');
 const Farm = require('../models/farm');
-const Events = require('../models/farm');
+const Events = require('../models/event');
 const Products = require('../models/products');
 
 
