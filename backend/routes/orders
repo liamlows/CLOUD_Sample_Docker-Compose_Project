@@ -1,0 +1,46 @@
+const express = require('express');
+const Product = require('../models/orders');
+
+const router = express.Router();
+
+//4.1 create cart
+router.post('/', async (req, res, next) => {
+    try {
+        const body = req.body;
+        const result = await Product.createCart(body.email, body.product_id, body.quantity);
+        res.status(201).json(result);
+    } catch (err) {
+        console.error('Failed to create new cart:', err);
+        res.status(500).json({ message: err.toString() });
+    }
+
+    next();
+})
+//4.2 and 4.3 get product by id
+router.get('/product/:product_id', async (req, res, next) => {
+    try {
+        const product_id=req.params.product_id;
+        const result = await Product.fetchProductByID(product_id);
+        res.status(200).json(result);
+    } catch (err) {
+        console.error('Failed to get product by ID:', err); 
+        res.status(500).json({ message: err.toString() });
+    }
+
+    next();
+})
+//4.5 and 4.6 and 4.8 create order
+router.post('/checkout', async (req, res, next) => {
+    try {
+        const body = req.body;
+        const result = await Product.createOrder(body.firstName,body.lastName,body.address,body.city,body.state,body.zip,body.cardName,body.cardNumber,body.cardExprDate,body.purchaseDate,body.farmer_id,body.customer_id,body.product_id,body.quantity,body.price);
+        res.status(201).json(result);
+    } catch (err) {
+        console.error('Failed to create new order:', err);
+        res.status(500).json({ message: err.toString() });
+    }
+
+    next();
+})
+
+module.exports = router;

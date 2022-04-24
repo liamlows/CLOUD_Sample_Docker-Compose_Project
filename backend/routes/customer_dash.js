@@ -5,7 +5,7 @@ const router = express.Router();
 router.get('/transactions', async (req, res, next) => {
     try{
         const body = req.body;
-        result = await req.models.dash.fetchTransactionsByCustomer(body.email);
+        result = await dash.fetchTransactions(body.email);
         res.status(200).json(result);
     } catch (err) {
         console.error('Failed to get customer transactions', err);
@@ -18,7 +18,7 @@ router.get('/transactions', async (req, res, next) => {
 router.get('/transactions/:transaction_id', async (req, res, next) => {
     try {
         const transaction_id=req.params.transaction_id;
-        const result = await req.models.dash.fetchTransactionByID(transaction_id);
+        const result = await dash.fetchTransactionByID(transaction_id);
         res.status(200).json(result);
     } catch (err) {
         console.error('Failed to get transaction by ID:', err); 
@@ -31,7 +31,7 @@ router.get('/transactions/:transaction_id', async (req, res, next) => {
 router.get('/interested_events', async (req, res, next) => {
     try{
         const body = req.body;
-        result = await req.models.dash.fetchInterestedEvents(body.email);
+        result = await dash.fetchInterestedEvents(body.email);
         res.status(200).json(result);
     } catch (err) {
         console.error('Failed to get customer interested events', err);
@@ -45,7 +45,7 @@ router.delete('/interested_events/:customer_event_interests_id', async (req, res
     try {
         const customer_event_interests_id=req.params.customer_event_interests_id;
         console.log(customer_event_interests_id);
-        const result = await req.models.dash.deleteInterestedEvent(customer_event_interests_id);
+        const result = await dash.deleteInterestedEvent(customer_event_interests_id);
         res.status(204).json(result);
     } catch (err) {
         console.error('Failed to delete interested event:', err);
@@ -58,7 +58,7 @@ router.delete('/interested_events/:customer_event_interests_id', async (req, res
 router.delete('/interested_events', async (req, res, next) => {
     try {
         const body = req.body;
-        const result = await req.models.dash.deleteAllInterestedEvents(body.email);
+        const result = await dash.deleteAllInterestedEvents(body.email);
         res.status(204).json(result);
     } catch (err) {
         console.error('Failed to delete all interested events:', err);

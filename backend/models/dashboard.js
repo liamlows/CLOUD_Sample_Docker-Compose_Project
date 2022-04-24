@@ -1,14 +1,8 @@
 const knex = require('../database/knex');
 
-//Get all transactions by farmer
-const fetchTransactionsByFarmer = async (email) => {
-    const query = knex('transactions').where({farmer_id: email});
-    const result = await query;
-    return result;
-}
-//Get all transactions by customer
-const fetchTransactionsByCustomer = async (email) => {
-    const query = knex('transactions').where({customer_id: email});
+//Get all transactions by user
+const fetchTransactions = async (email) => {
+    const query = knex('transactions').where({farmer_id: email}).orWhere({customer_id: email});
     const result = await query;
     return result;
 }
@@ -44,8 +38,7 @@ const deleteAllInterestedEvents = async (customer_id) => {
 };
 
 module.exports = {
-    fetchTransactionsByFarmer,
-    fetchTransactionsByCustomer,
+    fetchTransactions,
     fetchTransactionByID,
     fetchInterestedEvents,
     deleteInterestedEvent,

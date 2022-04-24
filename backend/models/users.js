@@ -2,9 +2,9 @@ const knex = require('../database/knex');
 
 const USER_TABLE = 'users';
 //create new user account
-const createNewUser = async (email, password, type) => {
+const createNewUser = async (email, password, isFarmer) => {
     //create farmer
-    if(type==="farmer"){
+    if(isFarmer==="1"){
         //add farmer to table
         const query = knex('users').insert({ email, password, isFarmer: 1 });
         console.log('Raw query for createFarmer:', query.toString());
