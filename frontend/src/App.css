@@ -1,43 +1,56 @@
 /* CSS classes */
+
 .App {
-  text-align: center;
+    text-align: center;
 }
 
 .App-logo {
-  height: 40vmin;
+    height: 40vmin;
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
 }
 
 .App-link {
-  color: #09d3ac;
-}
-a{
-  color: white ;
-  text-decoration: none !important;
+    color: #09d3ac;
 }
 
-body{
-  
+a {
+    color: white;
+    text-decoration: none !important;
 }
-#root{
-  display:flex;
-  flex-direction: column;
-  align-items: center;
-  
+
+body {
+    --midnight-green-eagle-green: #114b5fff;
+    --pine-green: #166f67ff;
+    --illuminating-emerald: #1a936fff;
+    --granny-smith-apple: #88d498ff;
+    --tea-green: #c6dabfff;
+    --beige: #dde2c9ff;
+    --eggshell: #f3e9d2ff;
+    background-color: #ffffff !important;
 }
-#root > *{
-  width: 100%;
+
+.fc-pine-green {
+    color: var(--pine-green);
 }
-#root > :nth-child(2){
-  max-width: 3000px;
+
+.fc-tea-green {
+    color: var(--tea-green);
+}
+
+.fc-beige {
+    color: var(--beige);
+}
+
+.fc-eggshell {
+    color: var(--eggshell);
 }

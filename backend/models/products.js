@@ -12,6 +12,36 @@ const deleteProduct = async (product_id) => {
     return query;
 }
 
+const getProductsAllFilters = async(farm_name, product_category, product_name)=>{
+    const result = knex(PRODUCT_TABLE).select().where('farm_name', farm_name).where('product_category', product_category).where('product_name', product_name);
+    return result;
+}
+
+const getProductThroughFarmNameCategory = async(farm_name, product_category)=>{
+    const result = knex(PRODUCT_TABLE).select().where('farm_name', farm_name).where('product_category', product_category);
+    return result;
+}
+
+const getThroughFarmNameProductName = async(farm_name, product_name)=>{
+    const result = knex(PRODUCT_TABLE).select().where('farm_name', farm_name).where('product_name', product_name);
+    return result;
+}
+
+const getProductThroughCategoryName = async(product_category, product_name)=>{
+    const result = knex(PRODUCT_TABLE).select().where('product_category', product_category).where('product_name', product_name);
+    return result;
+}
+
+const getProductThroughCategory = async(product_category)=>{
+    const result = knex(PRODUCT_TABLE).select().where('product_category', product_category);
+    return result;
+}
+
+const getProductThroughName = async( product_name)=>{
+    const result = knex(PRODUCT_TABLE).select().where('product_name', product_name);
+    return result;
+}
+
 const getProductThroughFarmName = async(farm_name) => {
     const result = knex(PRODUCT_TABLE).select().where('farm_name', farm_name);
     return result;
@@ -23,7 +53,7 @@ const getProductThroughFarmID = async(farmer_id) => {
 }
 
 const getAvailableProducts = async() => {
-    const result = knex(PRODUCT_TABLE).select.where('stock', '>', 0);
+    const result = knex(PRODUCT_TABLE).select().where('product_stock', '>', 0);
     return result;
 }
 
@@ -32,5 +62,11 @@ module.exports = {
     deleteProduct,
     getProductThroughFarmName,
     getProductThroughFarmID,
-    getAvailableProducts
+    getProductThroughCategory,
+    getProductThroughName,
+    getAvailableProducts,
+    getProductsAllFilters,
+    getProductThroughCategoryName,
+    getThroughFarmNameProductName,
+    getProductThroughFarmNameCategory
 };

@@ -6,22 +6,26 @@ import { ItemCard } from '../ItemCard/itemCard';
 
 import './farmCard.css'
 export const FarmCard = ({ farm, itemsPerFarm }) => {
-    const[showAddItemDialog, setShowAddItemDialog] = useState();
-    const[addItemDetails, setAddItemDetails] = useState();
+    const [showAddItemDialog, setShowAddItemDialog] = useState();
+    const [addItemDetails, setAddItemDetails] = useState();
 
 
-    const handleSetItem = (item) =>{
+    const handleSetItem = (item) => {
         setShowAddItemDialog(true);
         setAddItemDetails(item)
     }
     return (
         <>
-            <div className="text-center fs-4 fw-bold mb-3">{farm.farmName}</div>
             <Grid container
-                justifyContent={["center","space-between"]}>
-                <Grid item sm={8} md={8}>
+                  justifyContent={["center", "space-between"]}
+                  spacing={2}>
+                <Grid item xs={12} sm={12} md={6} justifyContent={"flex-end"}>
+                    <img src={farm.farmImage} id="farm-img" alt={farm.farmName} />
+                </Grid>
+                <Grid item sm={12} md={6} sx={{display:'flex', flexDirection:'column', justifyContent:'center'}}>
+                    <div className="text-center fs-2 fw-bold mb-3 text-decoration-underline" >{farm.farmName}</div>
                     <Typography component={'span'}>
-                        <div className="farm-description">
+                        <div className="farm-description text-muted">
                             Lorem ipsum dolor sit amet consectetur adipisicing elit.
                             Obcaecati culpa aliquid expedita,
                             repudiandae suscipit omnis ratione recusandae
@@ -30,15 +34,13 @@ export const FarmCard = ({ farm, itemsPerFarm }) => {
                         </div>
                     </Typography>
                 </Grid>
-                <Grid item xs={6} sm={4} md={4} justifyContent={"flex-end"}>
-                    <img src={farm.farmImage} id="farm-img" alt={farm.farmName}/>
-                </Grid> 
+
 
             </Grid>
             <Grid container textAlign={"center"}>
-                
+
                 <Typography fontWeight={"bold"} mt={4} mb={2} textAlign={"center"}>
-                        Items for sale
+                    Items for sale
                 </Typography>
                 <Grid container
                     spacing={1}
@@ -49,24 +51,24 @@ export const FarmCard = ({ farm, itemsPerFarm }) => {
                 >
                     {
                         farm.items.map((item, index) => {
-                            return index < itemsPerFarm ? 
-                            <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-                                <ItemCard name={item.name}
-                                    description={item.description}
-                                    image={item.image}
-                                    price={item.price}
-                                    stock={item.stock}
-                                    addText={"Add to cart"} 
-                                    action={item=> handleSetItem(item)}/>
-                            </Grid> : null
+                            return index < itemsPerFarm ?
+                                <Grid item xs={12} sm={6} md={4} lg={3} key={index} padding={1}>
+                                    <ItemCard name={item.name}
+                                        description={item.description}
+                                        image={item.image}
+                                        price={item.price}
+                                        stock={item.stock}
+                                        addText={"Add to cart"}
+                                        action={item => handleSetItem(item)} />
+                                </Grid> : null
                         })
                     }
                 </Grid>
             </Grid>
-            {showAddItemDialog && <AddItemToCartDialog 
-                                open={showAddItemDialog}
-                                setOpen={setShowAddItemDialog}
-                                {...addItemDetails}/>}
+            {showAddItemDialog && <AddItemToCartDialog
+                open={showAddItemDialog}
+                setOpen={setShowAddItemDialog}
+                {...addItemDetails} />}
 
         </>
     )
