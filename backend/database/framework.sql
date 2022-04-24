@@ -47,7 +47,6 @@ CREATE TABLE transactions(
 );
 CREATE TABLE cart(
     cart_id INTEGER NOT NULL AUTO_INCREMENT, PRIMARY KEY (cart_id),
-    cart_price INTEGER,
     quantity INTEGER,
     customer_id VARCHAR(50),
     product_id INTEGER
@@ -120,3 +119,8 @@ INSERT INTO transactions(customer_id,farmer_id,product_id,quantity,is_complete,t
 VALUES
 ('cool@gmail.com','smu@email.edu',1,2,1,'$100','4/24/22','Mark','Fontenot','123 elm stree','dallas','tx','75205','visa','1111222233334444','05/22'),
 ('cool@gmail.com','smu@email.edu',2,1,0,'$50','5/1/22','Mark','Fontenot','123 elm stree','dallas','tx','75205','visa','1111222233334444','05/22');
+
+INSERT INTO cart(quantity,customer_id,product_id)
+VALUES
+(2,'cool@gmail.com'1),
+(1,'cool@gmail.com'2);
