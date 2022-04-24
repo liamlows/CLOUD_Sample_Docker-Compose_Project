@@ -8,7 +8,7 @@ import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 import Box from '@mui/material/Box';
-import { Divider, Grid, Slide, Typography, useMediaQuery, useTheme } from '@material-ui/core';
+// import { Divider, Grid, Slide, Typography, useMediaQuery, useTheme } from '@material-ui/core';
 
 
 export const Home = () => {
@@ -16,7 +16,7 @@ export const Home = () => {
 
     return (
         <>
-            <Grid container direction='column' justify='center' alignItems='center' spacing={2}>
+            {/* <Grid container direction='column' justify='center' alignItems='center' spacing={2}>
                 <Grid container item sm={12} lg={9} justify='center' alignItems='center' spacing={3}>
                     <Grid item sm={12} lg={6}>
                         <Slide direction='down' in={true} timeout={1000}>
@@ -36,7 +36,7 @@ export const Home = () => {
                         </Slide>
                     </Grid>
                 </Grid>
-            </Grid>
+            </Grid> */}
 
             </>
 

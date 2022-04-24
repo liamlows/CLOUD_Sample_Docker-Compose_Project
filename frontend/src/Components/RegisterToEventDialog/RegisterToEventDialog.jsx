@@ -32,7 +32,7 @@ const RegisterToEventDialog = ({ open, setOpen, eventId, farmId, farmName, unreg
             // // .then(()=>{\
                    // setProcessing(false);
             //     setDialogComplete(true);
-            //     setCompletionText("Successfull unregistered");
+            //     setCompletionText("Successfully unregistered");
             // })
         } else {
             
@@ -41,7 +41,7 @@ const RegisterToEventDialog = ({ open, setOpen, eventId, farmId, farmName, unreg
             // // .then(()=>{
                    // setProcessing(false);
             //     setDialogComplete(true);
-            //     setCompletionText("Successfull unregistered");
+            //     setCompletionText("Successfully registered");
             // })
         }
 

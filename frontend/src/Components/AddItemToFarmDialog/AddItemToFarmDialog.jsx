@@ -11,14 +11,17 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Checkmark from '../../images/green-checkmark.png';
 import './AddItemToFarmDialog.css';
 import { Box } from '@mui/system';
-import { addItemToFarm } from '../../api/farmItems';
-//TODO Add fail logic and style to adding item
-const AddItemDialog = ({ open, setOpen, itemName, itemDescription, image, farmId }) => {
+import { addItemToFarm, editFarmItem } from '../../api/farmItems';
+import { useNavigate, useParams } from 'react-router-dom';
+// TODO Add fail logic and style to adding item
+// If we are passed an item Id, we are editing
+const AddItemToFarmDialog = ({ open, setOpen, itemName, itemDescription, price, stock, image, farmId, itemId, returnToFarm }) => {
 
     const [itemDetails, setItemDetails] = useState({
     });
     const [processing, setProcessing] = useState(false);
     const [completed, setCompleted] = useState(false);
+    const [completionText, setCompletionText] = useState('');
     const timer = useRef();
     const timer2 = useRef();
     useEffect(() => {
@@ -27,8 +30,8 @@ const AddItemDialog = ({ open, setOpen, itemName, itemDescription, image, farmId
             itemName: itemName,
             itemDescription: itemDescription,
             image: image,
-            price: 1,
-            quantity: 1
+            price: price ? price : 1,
+            quantity: stock ? stock : 1
         })
 
         return () => {
@@ -44,14 +47,27 @@ const AddItemDialog = ({ open, setOpen, itemName, itemDescription, image, farmId
     const handleClose = () => {
         setOpen(false);
     };
-    const handleSubmit = () => {
+    const handleSubmit = (option) => {
         setProcessing(true);
-        //addItemToFarm(farmId, itemDetails).then();
+        if(option){
+            //deleteItemFromFarm(itemId).then({
+            //     setCompletionText('Item Deleted');
+            //     setCompleted(true);
+            // })
+        } else if (!itemId) {
+            //addItemToFarm(farmId, itemDetails).then({
+            //     setCompletionText('Item Added');
+            //     setCompleted(true);
+            // })
+        } else {
+            //editFarmItem(itemId).then({
+            //     setCompletionText('Item Edited');
+            //     setCompleted(true);
+            // })
+        }
+
         timer.current = setTimeout(() => {
             setCompleted(true);
-            timer2.current = setTimeout(() => {
-                handleClose();
-            }, 3000)
         }, 2000)
 
 
@@ -61,10 +77,15 @@ const AddItemDialog = ({ open, setOpen, itemName, itemDescription, image, farmId
             sx={{ flexDirection: "column", color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
             open={open}>
             {
-                completed ? <>
+                completed ? <Dialog classes={{ root: { alignItems: "center", backgroundColor: "Blue" } }} open={open} onClose={handleClose}>
+                    <DialogTitle sx={{ textAlign: "center", fontWeight: "Bold" }}>{completionText}</DialogTitle>
                     <img id="add-item-success-icon" src={Checkmark}></img>
-                    <Typography component={"div"} variant="h4">Added Item</Typography>
-                </> : <CircularProgress color="inherit" />
+                    <DialogActions>
+                        <Button variant="outlined" onClick={returnToFarm || handleClose}>Return to farm</Button>
+                        {returnToFarm && <Button variant="outlined" onClick={handleClose}>Add more items</Button>}
+                    </DialogActions>
+                </Dialog>
+                    : <CircularProgress color="inherit" />
 
             }
         </Backdrop>
@@ -72,14 +93,24 @@ const AddItemDialog = ({ open, setOpen, itemName, itemDescription, image, farmId
     return (
         <div>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle sx={{textAlign: "center", fontWeight:"Bold"}}>Add Item To Your Farm</DialogTitle>
-                <DialogTitle sx={{ textAlign: "center", paddingTop: "4px", paddingBottom: "4px" }}>{itemName}</DialogTitle>
+                <DialogTitle sx={{ textAlign: "center", fontWeight: "Bold" }}>{itemId ? "Edit your item" : "Add Item To Your Farm"}</DialogTitle>
+                <DialogTitle sx={{ textAlign: "center", paddingTop: "4px", paddingBottom: "4px" }}>{itemDetails.itemName}</DialogTitle>
                 <DialogContent>
-                    <DialogContent sx={{ display: "flex", justifyContent: "center" , padding:0, margin:["24px 0", "24px"]}}>
-                        <img src={image} id="add-item-img"/>
+                    <DialogContent sx={{ display: "flex", justifyContent: "center", padding: 0, margin: ["24px 0", "24px"] }}>
+                        <img src={image} id="add-item-img" />
                     </DialogContent>
                     <TextField
 
+                        required
+                        id="itemName"
+                        label="Name"
+                        fullWidth
+                        value={itemDetails.itemName}
+                        onChange={e => handleChange({ itemName: e.target.value })}
+
+                    />
+                    <TextField
+                        sx={{ marginTop: '18px' }}
                         required
                         id="itemDescription"
                         label="Description"
@@ -90,9 +121,9 @@ const AddItemDialog = ({ open, setOpen, itemName, itemDescription, image, farmId
                         onChange={e => handleChange({ itemDescription: e.target.value })}
 
                     />
-                    <Box sx={{ display: "flex", flexDirection: ["column", "row", "row"], justifyContent: "space-between",marginTop: "18px", gap: "20px" }}>
+                    <Box sx={{ display: "flex", flexDirection: ["column", "row", "row"], justifyContent: "space-between", marginTop: "18px", gap: "20px" }}>
                         <TextField
-                            sx={{alignSelf:"flex-start" }}
+                            sx={{ alignSelf: "flex-start" }}
                             InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
                             inputProps={{ pattern: "[0-9]*", type: "number", inputMode: "numeric" }}
                             id="price"
@@ -105,7 +136,7 @@ const AddItemDialog = ({ open, setOpen, itemName, itemDescription, image, farmId
 
                         />
                         <TextField
-                            sx={{ maxWidth: "125px"}}
+                            sx={{ maxWidth: "125px" }}
                             id="quantity"
                             label="Quantity"
                             type="number"
@@ -120,13 +151,22 @@ const AddItemDialog = ({ open, setOpen, itemName, itemDescription, image, farmId
                         />
                     </Box>
                 </DialogContent>
-                <DialogActions>
+                <DialogActions sx={{ pl: 3 }}>
+                    {
+                        itemId && <div style={{ display: 'flex', flexGrow: 1 }}>
+                            <Button
+                                variant='outlined'
+                                color='error'
+                                sx={{ alignSelf: 'flex-start' }}
+                                onClick={() => handleSubmit(1)}>Delete</Button>
+                        </div>
+                    }
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleSubmit}>Add</Button>
+                    <Button onClick={handleSubmit}>{itemId ? 'Edit' : 'Add'}</Button>
                 </DialogActions>
             </Dialog>
         </div>
     );
 };
 
-export default AddItemDialog;
+export default AddItemToFarmDialog;

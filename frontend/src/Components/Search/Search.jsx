@@ -68,6 +68,22 @@ const Search = ({ searchObject, setSearchObject, setFarms, justItem, header, ver
             farmDescription: "great farm with great produce",
             items: [new item("bananssssa", "i am banana", "https://cdn1.sph.harvard.edu/wp-content/uploads/sites/30/2018/08/bananas-1354785_1920.jpg", 20, 2, 1),
             ]
+        },
+        {
+            farmId: 1,
+            farmName: "Outback steak house",
+            farmImage: "google.com/favicon",
+            farmDescription: "great farm with great produce",
+            items: [new item("bananssssa", "i am banana", "https://cdn1.sph.harvard.edu/wp-content/uploads/sites/30/2018/08/bananas-1354785_1920.jpg", 20, 2, 1),
+            ]
+        },
+        {
+            farmId: 1,
+            farmName: "Outback steak house",
+            farmImage: "google.com/favicon",
+            farmDescription: "great farm with great produce",
+            items: [new item("bananssssa", "i am banana", "https://cdn1.sph.harvard.edu/wp-content/uploads/sites/30/2018/08/bananas-1354785_1920.jpg", 20, 2, 1),
+            ]
         }]);
     };
     window.addEventListener('resize', () => {

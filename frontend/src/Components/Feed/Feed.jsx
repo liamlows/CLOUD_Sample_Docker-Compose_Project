@@ -15,6 +15,8 @@ export const Feed = () => {
     const [itemsPerFarm, setItemsPerFarm] = useState(6);
     const [smallScreen, setSmallScreen] = useState(false);
     const [showSearch, setShowSearch] = useState(false);
+    const [firstLoad, setFirstLoad] = useState(true);
+    const [fade, setFade] = useState(false);
     const [loadedFarms, setLoadedFarms] = useState([
         {
             farmId: 1,
@@ -57,6 +59,7 @@ export const Feed = () => {
             if (window.outerWidth < 900) {
                 setSmallScreen(true);
             }
+            
         }, [])
 
 
@@ -75,7 +78,13 @@ export const Feed = () => {
     }, [searchParams])
 
     useEffect(() => {
-        titleRef.current.scrollIntoView();
+        if(!firstLoad){
+            titleRef.current.scrollIntoView();
+            setFade(true);
+        }
+        setFirstLoad(false);
+        
+        
     }, [loadedFarms])
 
     window.addEventListener("resize", () => {
@@ -102,7 +111,7 @@ export const Feed = () => {
                 : 
                 <Search searchObject={searchParams} setSearchObject={setSearchParams} setFarms={setLoadedFarms} verticalFilters={true} header='Search Farms'/>
             }
-            <div className="farm-page-farms pt-4">
+            <div className={`farm-page-farms pt-4 ${fade ? 'fade':''}`} onAnimationEnd={()=>setFade(false)}>
                 <Typography ref={titleRef}variant='h3' textAlign={'center'} sx={{ fontWeight: '100', mb: 2 }}>Your Feed</Typography>
                 {
                     loadedFarms.map((farm, index) => {
