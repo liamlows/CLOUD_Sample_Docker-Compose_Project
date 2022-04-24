@@ -4,7 +4,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Grid from '@mui/material/Grid';
-import { Backdrop, Button, Checkbox, CircularProgress, Container, FormControlLabel, Paper, Stack, TextField } from '@mui/material';
+import { Backdrop, Button, Checkbox, CircularProgress, Container, Divider, FormControlLabel, Paper, Stack, TextField } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { Box } from '@mui/system';
 import { useContext, useEffect, useState } from 'react';
@@ -250,7 +250,7 @@ export const Checkout = () => {
                 {
                     orders.map((order, index) =>
                         <Typography key={index} sx={{ py: 1, px: 0 }}>
-                            <Typography variant="h6" textAlign={['center', 'start']} sx={{ fontWeight: "bold", my: '8px' }}>{`Order: ${index + 1}`}</Typography>
+                            <Typography variant="h6" textAlign={['center']} sx={{ fontWeight: "bold", my: '8px' }}>{`Order: ${index + 1}`}</Typography>
                             <List >
 
                                 {
@@ -273,9 +273,9 @@ export const Checkout = () => {
 
                     )
                 }
-
-                <ListItem sx={{ py: 1, px: 0 }}>
-                    <ListItemText primary="Total" />
+                <Divider variant='middle' />
+                <ListItem sx={{ py: 4, px: 0 }}>
+                    <ListItemText primary={<Typography variant='h4'>Total</Typography>} />
                     <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
                         {`$${total}`}
                     </Typography>

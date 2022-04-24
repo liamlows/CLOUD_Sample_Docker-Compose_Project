@@ -12,10 +12,14 @@
 
 .farmImage {
   border-radius: 0% 0% 5% 5%;
-  margin-bottom: 1%;
+  margin-bottom: 2%;
+  max-height: 500px;
+  display:block;
+  margin: 0 auto;
 }
 
 .farmSpecifics {
+  margin-top: 2.5%;
   margin-left: 2.5%;
 }
 

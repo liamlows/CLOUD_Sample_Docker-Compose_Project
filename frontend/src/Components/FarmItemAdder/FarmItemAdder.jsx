@@ -6,7 +6,8 @@ import Search from '../Search/Search';
 import Horse from '../../images/horse.jpg';
 import AddItemDialog from '../AddItemToFarmDialog/AddItemToFarmDialog';
 import CreateEventDialog from '../CreateEventDialog/CreateEventDialog';
-const FarmItemAdder = () => {
+import AddItemToFarmDialog from '../AddItemToFarmDialog/AddItemToFarmDialog';
+const FarmItemAdder = ({close}) => {
     const [search, setSearch] = useState();
     const [avaliableItems, setAvaliableItems] = useState([
         { name: "Horse", image: Horse, description: "Typical horse you are selling, edit this description if you want", tags: ["Livestock","Big"] },
@@ -38,21 +39,20 @@ const FarmItemAdder = () => {
             setItemsFound(avaliableItems);
         }
     },[search])
-    const handleClickOpenAddForm = () => {
-        setOpenAddForm(true);
-    };
 
-    const handleClose = () => {
-        setOpenAddForm(false);
-    };
+    useEffect(()=>{
+        window.scrollTo(0,0);
+    },[])
     const addToFarm = (item) => {
         setSelectedItem(item);
         setOpenAddForm(true);
     }
+    
     return (
         <div>
             
             <Search searchObject={search} setSearchObject={setSearch} justItem={true} hideSearch={true} header={'Search avaliable items'}></Search>
+            <div className='btn btn-danger m-3' onClick={close}>Return to farm</div>
             <Typography variant='h5' textAlign={'center'} mt={2}>Add items to your farm</Typography>
             <Grid container
                 spacing={1}
@@ -60,6 +60,7 @@ const FarmItemAdder = () => {
                 justifyContent="flex-start"
                 alignItems="stretch"
                 my={4}
+                padding={4}
             >
                 {
                     itemsFound.map((item) => {
@@ -75,14 +76,14 @@ const FarmItemAdder = () => {
                 }
             </Grid>
             
-            { openAddForm && <AddItemDialog open={openAddForm}
+            { openAddForm && <AddItemToFarmDialog open={openAddForm}
                             setOpen={setOpenAddForm} 
                             itemName={selectedItem.name} 
                             itemDescription={selectedItem.description}
-                            image={selectedItem.image}/>
+                            image={selectedItem.image}
+                            returnToFarm={close}/>
             }
-            <Button onClick={()=>setCreateEvent(true)}>Create Event</Button>
-            {createEvent && <CreateEventDialog open={createEvent} setOpen={setCreateEvent}></CreateEventDialog>}
+            
         </div>
     );
 };

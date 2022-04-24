@@ -121,7 +121,7 @@ const CreateEventDialog = ({ open, setOpen, eventTitle, eventDescription, eventI
                             eventTime={eventDetails.eventTime}
                             hideButton={true}
                         ></EventCard>
-                        </DialogContent>
+                    </DialogContent>
                     <DialogActions>
                         <Button onClick={() => setPreviewing(false)}>back</Button>
                         <Button onClick={() => handleSubmit()}>submit</Button>
@@ -129,7 +129,7 @@ const CreateEventDialog = ({ open, setOpen, eventTitle, eventDescription, eventI
                 </>
                     :
                     <>
-                        <DialogTitle sx={{ textAlign: "center", fontWeight: "Bold" }}>{showDelete ? "Edit Event":"Add An Event To Your Farm"}</DialogTitle>
+                        <DialogTitle sx={{ textAlign: "center", fontWeight: "Bold" }}>{showDelete ? "Edit Event" : "Add An Event To Your Farm"}</DialogTitle>
                         <DialogContent>
                             <TextField
                                 sx={{ margin: "1rem 0" }}
@@ -196,10 +196,20 @@ const CreateEventDialog = ({ open, setOpen, eventTitle, eventDescription, eventI
                                 sx={{ width: 150, marginTop: "1rem" }}
                             />
                         </DialogContent>
-                        <DialogActions>
-                            {showDelete && <Button variant='outlined' color='error' onClick={() => setConfirmDeletion(true)}>Delete</Button>}
-                            <Button onClick={handleClose}>Cancel</Button>
-                            <Button onClick={() => setPreviewing(true)}>Preview</Button>
+                        <DialogActions sx={{ justifyContent: 'flex-end', pl: 3 }}>
+                            {
+                            showDelete && <div style={{display:'flex', flexGrow:1}}>
+                                    <Button
+                                        variant='outlined'
+                                        color='error'
+                                        sx={{ alignSelf: 'flex-start' }}
+                                        onClick={() => setConfirmDeletion(true)}>Delete</Button>
+                                </div>
+                            }
+                            <div>
+                                <Button onClick={handleClose}>Cancel</Button>
+                                <Button onClick={() => setPreviewing(true)}>Preview</Button>
+                            </div>
                         </DialogActions>
                     </>
                 }
