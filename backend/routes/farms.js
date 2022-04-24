@@ -9,7 +9,10 @@ const router = express.Router();
 router.get('/:farm_id', async (req, res) =>{
 //this route is for User Story 2.2 where "As a farmer, I want to be able to add my products"
     try{
-        const result = await Farm.getFarmInformation(req.params.farm_id);
+        const farmInfo = await Farm.getFarmInformation(req.params.farm_id);
+        const events = await Events.getFarmEvents(req.params.farm_id);
+        const products = await Products.getProductThroughFarmName(req.params.farm_id);
+        const result = {farmInfo, events, products};
         res.status(201).json(result);
     }catch (err){
         console.error('Failed to get farm information:', err);
