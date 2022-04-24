@@ -54,7 +54,6 @@ const findFarmRatingByFarmID = async(farm_id) => {
     const result = knex(FARM_TABLE).select(farm_rating).where('farmer_id', farmer_id);
     return result;
 }
-
 // find farm establish year by farm ID
 const findFarmEstablishedByFarmID = async(farm_id) => {
     const result = knex(FARM_TABLE).select(farm_established).where('farmer_id', farmer_id);
@@ -70,7 +69,7 @@ const deleteFarm = async (farm_name) => {
 };
 
 const getFarmInformation = async(farm_id) =>{
-    const query = knex('farm').select().where('farmer_id', farmer_id);
+    const query = knex('farmer').select().where('farmer_id', farm_id);
     return query;
 };
 

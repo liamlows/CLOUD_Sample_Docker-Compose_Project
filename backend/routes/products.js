@@ -15,7 +15,6 @@ router.post('/', async (req, res) =>{
     }
 
 })
-//FIGURE OUT HOW TO DO THE EDIT OF A PRODUCT USING PATCH
 router.put('/', async (req, res) =>{
 //this route is for User Story 2.3 where "As a farmer, I want to be able to edit my products"
 //NOT YET DONE
