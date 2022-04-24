@@ -18,7 +18,7 @@ import { UserContext } from '../userContext';
 const pages = [
   { display: "Dashboard", path: "/dashboard" },
   { display: "Feed", path: "/feed" },
-  { display: "My Farm", path: "/add" },
+  { display: "My Farm", path: "/farms/1" },
 ];
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];

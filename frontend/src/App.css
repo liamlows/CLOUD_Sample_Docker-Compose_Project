@@ -38,7 +38,10 @@ body {
     --eggshell: #f3e9d2ff;
     background-color: #ffffff !important;
 }
-
+#root > div{
+    margin: 0 auto;
+    max-width: 2000px;
+}
 .fc-pine-green {
     color: var(--pine-green);
 }

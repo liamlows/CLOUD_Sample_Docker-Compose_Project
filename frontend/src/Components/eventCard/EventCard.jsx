@@ -111,7 +111,7 @@ const EventCard = ({ eventTitle, eventDescription, eventId, farmName, farmId, us
                     eventId={eventId}
                     farmId={farmId}
                     farmName={farmName}
-                    showRemove={true} />
+                    showDelete={true} />
             }
 
             {
