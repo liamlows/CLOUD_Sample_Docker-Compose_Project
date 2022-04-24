@@ -1,5 +1,6 @@
 const express = require('express');
 const Product = require('../models/products');
+const Farm = require('../models/farm');
 
 
 const router = express.Router();
@@ -46,6 +47,8 @@ const router = express.Router();
 //     }
 // })
 
+
+
 router.get('/', async(req, res) =>{
     try{
         var isFarmName = false;
@@ -84,7 +87,7 @@ router.get('/', async(req, res) =>{
         }
         res.status(200).json(result);
     } catch(err){
-        console.error('Failed to create new product:', err);
+        console.error('Failed to get product:', err);
         res.status(500).json({message: err.toString()});
     }
 })

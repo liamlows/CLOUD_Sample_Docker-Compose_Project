@@ -8,7 +8,7 @@ router.post('/', async (req, res) =>{
 //this route is for User Story 2.2 where "As a farmer, I want to be able to add my products"
     try{
         const body = req.body;
-        const result = await Product.createNewProduct(body.product_id, body.product_name, body.product_price, body.product_stock. body.product_description, body.farmer_id, body.farm_name);
+        const result = await Product.createNewProduct(body.product_name, body.product_price, body.product_stock, body.product_description, body.farmer_id);
         res.status(201).json(result);
     }catch (err){
         console.error('Failed to create new product:', err);
