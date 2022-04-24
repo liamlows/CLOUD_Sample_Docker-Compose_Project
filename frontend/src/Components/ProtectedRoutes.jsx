@@ -9,7 +9,7 @@ import { Feed } from "./Feed/Feed";
 export const PROTECTED_ROUTES = [
     {path:'/dashboard', element: <Dashboard/>},
     {path:'/feed', element: <Feed/>},
-    {path:'/farms/:id', element: <FarmPage/>},
+    {path:'/farms/:farmId', element: <FarmPage/>},
     {path:'/add', element: <FarmItemAdder/>},
     {path:'/event/:id', element: <EventPage/>},
     {path:'/cart', element: <Cart/>},

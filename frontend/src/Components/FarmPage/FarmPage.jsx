@@ -57,7 +57,7 @@ const FarmPage = () => {
     }
     useEffect(() => {
         if (params.farmId) {
-            //getFarmById(params.farmId).then(x => setFarm(x));
+            getFarmById(params.farmId).then(x => setFarm(x));
         }
 
     }, [showCreateEvent, showAddItem, showEditItemDialog]);
