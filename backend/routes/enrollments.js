@@ -22,19 +22,25 @@ async function getEnrollmentsByAccount(accountId){
 
 /*
 GET /api/enrollments/
-    Gets current student's enrollments.
+    Gets all student enrollments.
  */
 router.get("/", async (req, res, next) => {
-    let accountId = req.session.accountId;
+    let courseId = req.query.courseId;
 
-    let enrollments;
-    try{
-         enrollments = await getEnrollmentsByAccount(accountId);
-    } catch (error) {
+    let rows, fields;
+    try {
+        if(courseId !== undefined){
+            [rows, fields] = await pool.execute('SELECT * FROM `enrollments` WHERE course_id = ?', [courseId]);
+        }
+        else {
+            [rows, fields] = await pool.execute('SELECT * FROM `enrollments`');
+        }
+
+    } catch(error) {
         return next(error);
     }
 
-    res.status(200).json(enrollments);
+    return res.status(200).json(rows);
 });
 
 /*
