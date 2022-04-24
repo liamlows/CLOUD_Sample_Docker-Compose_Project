@@ -69,6 +69,11 @@ const deleteFarm = async (farm_name) => {
     return result;
 };
 
+const getFarmInformation = async(farm_id) =>{
+    const query = knex('farm').select().where('farmer_id', farmer_id);
+    return query;
+};
+
 
 
 module.exports = {
@@ -76,7 +81,7 @@ module.exports = {
     createEvent
     findEventByName
     deleteEvent
-
+    getFarmInformation
     createFarm
     findFarmByName
     findFarmByID

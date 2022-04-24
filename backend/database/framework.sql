@@ -5,28 +5,33 @@ CREATE DATABASE db;
 USE db;
 
 
-
+DROP TABLE cart, customer_event_interests, db.event, farmer, product, transactions, users;
 -- NEW NEW NEW NEW NEW
 -- EPIC 1
 CREATE TABLE farmer (
+    farmer_id INTEGER AUTO_INCREMENT, PRIMARY KEY (farmer_id),
     farm_name VARCHAR(50),
-    farm_description VARCHAR(50)
+    farm_description VARCHAR(50),
+    farm_image_url VARCHAR(100),
+    date_founded DATE
 );
 CREATE TABLE users(
-	email VARCHAR(50) NOT NULL, PRIMARY KEY(email),
+    user_id INTEGER AUTO_INCREMENT, PRIMARY KEY(user_id),
+	email VARCHAR(50) NOT NULL,
     password VARCHAR(50) NOT NULL,
 	first_name VARCHAR(50),
     last_name VARCHAR(50),
-    isFarmer BOOL default false
+    isFarmer tinyint(1) NOT NULL DEFAULT FALSE
 );
 -- EPIC 4
 CREATE TABLE transactions(
-	transaction_id integer not null auto_increment, primary key(transaction_id),
-    customer_id VARCHAR(50), 
-    farmer_id VARCHAR(50),
+	transaction_id integer auto_increment, primary key(transaction_id),
+    customer_id INTEGER NOT NULL, FOREIGN KEY (customer_id) REFERENCES users(user_id),
+    farmer_id INTEGER NOT NULL, FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id),
     product_id VARCHAR(50),
     quantity integer,
-    price varchar(50) not null,
+    is_complete tinyint(1) NOT NULL DEFAULT FALSE,
+    total_price varchar(50) not null,
     product_name VARCHAR(50) NOT NULL,
     purchaseDate VARCHAR(50),
     
@@ -47,55 +52,21 @@ CREATE TABLE cart(
     customer_id VARCHAR(50),
     product_id INTEGER
 );
--- EPIC 7
-CREATE TABLE event(
-    event_id integer not null auto_increment, PRIMARY KEY(event_id),
-    event_name VARCHAR(50),
-    event_description VARCHAR(50),
-    farmer_id VARCHAR(50)
-);
-CREATE TABLE customer_event_interests(
-	customer_event_interests_id integer not null auto_increment, PRIMARY KEY(customer_event_interests_id),
-    event_id VARCHAR(50),
-    event_name VARCHAR(50),
-    event_description VARCHAR(50),
-    farmer_id VARCHAR(50),
-    customer_id VARCHAR(50)
-);
-
--- OLD OLD OLD
-/*------------------------APP CAPABILITIES----------------------------*/
-
-CREATE TABLE requests(
-    request_id INTEGER NOT NULL AUTO_INCREMENT,
-    request_type VARCHAR(50),
-    product_id INTEGER NOT NULL, FOREIGN KEY (product_id) REFERENCES product(product_id),
-    product_count INT,
-    farmer_id INTEGER NOT NULL, FOREIGN KEY (farmer_id) REFERENCES product(farmer_id)
-
-);
-DROP TABLE  requests;
-
-CREATE TABLE cart(
-    cart_id INTEGER NOT NULL AUTO_INCREMENT, PRIMARY KEY (cart_id),
-    cart_price INTEGER,
-    quantity INTEGER,
-    customer_id VARCHAR(50),
-    product_id INTEGER
-);
-
-CREATE TABLE customer_inventory(
-    product_id INTEGER NOT NULL, FOREIGN KEY (product_id) REFERENCES product(product_id),
-    product_count INT,
-    farmer_id INTEGER NOT NULL, FOREIGN KEY (farmer_id) REFERENCES product(farmer_id)
-
-);
 
 CREATE TABLE event(
-    event_id INTEGER NOT NULL AUTO_INCREMENT,  PRIMARY KEY(event_id),
+    event_id integer auto_increment, PRIMARY KEY(event_id),
     event_name VARCHAR(50),
     event_description VARCHAR(50),
     farmer_id INTEGER NOT NULL, FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id)
+);
+
+CREATE TABLE customer_event_interests(
+	customer_event_interests_id integer auto_increment, PRIMARY KEY(customer_event_interests_id),
+    event_id VARCHAR(50),
+    event_name VARCHAR(50),
+    event_description VARCHAR(50),
+    farmer_id INTEGER NOT NULL, FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id),
+    customer_id INTEGER NOT NULL, FOREIGN KEY (customer_id) REFERENCES users(user_id)
 );
 
 CREATE TABLE product(
@@ -105,6 +76,38 @@ CREATE TABLE product(
     product_stock INTEGER NOT NULL,
     product_category VARCHAR(50) NOT NULL,
     product_description VARCHAR(50),
-    farm_name VARCHAR(50), FOREIGN KEY (farm_name) REFERENCES farmer(farm_name),
+    farmer_id INTEGER NOT NULL, FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id),
     cart_id INTEGER NOT NULL, FOREIGN KEY(cart_id) REFERENCES cart(cart_id)
+);
+
+
+CREATE TABLE requests(
+    request_id INTEGER NOT NULL AUTO_INCREMENT, PRIMARY KEY (request_id),
+    request_type VARCHAR(50),
+    product_id INTEGER NOT NULL, FOREIGN KEY (product_id) REFERENCES product(product_id),
+    product_count INTEGER,
+    farmer_id INTEGER NOT NULL, FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id)
+
+);
+
+CREATE TABLE cart(
+    cart_id INTEGER NOT NULL AUTO_INCREMENT, PRIMARY KEY (cart_id),
+    product_count INTEGER,
+    user_id INTEGER NOT NULL, FOREIGN KEY (user_id) REFERENCES users(user_id)
+    cart_price INTEGER,
+    quantity INTEGER
+);
+
+CREATE TABLE customer_inventory(
+    product_id INTEGER NOT NULL, FOREIGN KEY (product_id) REFERENCES product(product_id),
+    product_count INT,
+    farmer_id INTEGER NOT NULL, FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id)
+
+);
+
+CREATE TABLE event(
+    event_id INTEGER NOT NULL AUTO_INCREMENT,  PRIMARY KEY(event_id),
+    event_name VARCHAR(50),
+    event_description VARCHAR(50),
+    farmer_id INTEGER NOT NULL, FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id)
 );

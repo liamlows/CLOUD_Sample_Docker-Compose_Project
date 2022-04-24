@@ -14,8 +14,10 @@ const sessionRoutes = require('./routes/session');
 const customerDashRoutes = require('./routes/customer_dash');
 const farmerDashRoutes = require('./routes/farmer_dash');
 const searchRoutes = require('./routes/search');
+const farmsRoutes = require('./routes/farms');
 const productRoutes = require('./routes/products');
 const ordersRoutes = require('./routes/orders');
+
 
 //middle ware
 
@@ -53,6 +55,7 @@ app.use('/search', searchRoutes);
 app.use('/settings', userUpdatesRoutes);
 app.use('/dashboard/farmer', farmerDashRoutes);
 app.use('/dashboard/customer', customerDashRoutes);
+app.use('/farms', farmsRoutes);
 app.use('/products', productRoutes);
 app.use('/cart', ordersRoutes);
 
