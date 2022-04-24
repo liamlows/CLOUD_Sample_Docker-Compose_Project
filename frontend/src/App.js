@@ -16,6 +16,8 @@ import { ClassMenu } from './Components/ClassView/classMenu';
 import { NoPages } from './Components/NoPages';
 import { AddClasses } from './Components/ClassView/AddClasses';
 
+import { Waitlist } from './Components/AdminView/Waitlist';
+
 // Method Imports
 import { getAccountbyUsername } from './APIFolder/loginApi';
 import { ClassProfile } from "./Components/ClassView/classProfile";
@@ -142,6 +144,12 @@ function App() {
           <Route path="/classes" element={<ClassMenu />} />
           <Route path="/classes/enrollment" element={<AddClasses />} />
           <Route path="/classes/:course_id" element={<ClassProfile
+          pages={loggedInPages}
+          settings={settings}
+          setNavigated={x => setNavigated(x)}/>} />
+
+          {/* Admin loading */}
+          <Route path="/waitlist/:course_id" element={<Waitlist
           pages={loggedInPages}
           settings={settings}
           setNavigated={x => setNavigated(x)}/>} />
