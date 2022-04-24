@@ -1,6 +1,7 @@
 #item-card-image {
     height: 170px;
-    width: 100%
+    width: 100%;
+    background-color: white;
 }
 
 #item-card-price {

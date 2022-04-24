@@ -1,7 +1,6 @@
 const express = require('express');
 const Product = require('../models/products');
 
-
 const router = express.Router();
 
 router.post('/', async (req, res) =>{
@@ -17,7 +16,7 @@ router.post('/', async (req, res) =>{
 
 })
 //FIGURE OUT HOW TO DO THE EDIT OF A PRODUCT USING PATCH
-router.put('/'), async (req, res) =>{
+router.put('/', async (req, res) =>{
 //this route is for User Story 2.3 where "As a farmer, I want to be able to edit my products"
 //NOT YET DONE
     try{
@@ -50,6 +49,5 @@ router.delete('/:product_id', async (req, res) =>{
         res.status(500).json({message: err.toString()});
     }
 })
-
 
 module.exports = router;

@@ -1,4 +1,5 @@
 const express = require('express');
+const User = require('../models/users');
 /**
  * https://expressjs.com/en/guide/routing.html#express-router
  * 
@@ -11,10 +12,10 @@ router.post('/', async (req, res, next) => {
     try {
         const body = req.body;
         
-        const result = await req.models.user.authenticateUser(body.email, body.password);
+        const result = await User.authenticateUser(body.email, body.password);
         res.status(201).json(result);
     } catch (err) {
-        console.error('Failed to create new user:', err);
+        console.error('Failed to create new session:', err);
         res.status(500).json({ message: err.toString() });
     }
 

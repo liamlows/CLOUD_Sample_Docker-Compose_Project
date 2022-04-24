@@ -1,6 +1,5 @@
 const knex = require('../database/knex');
 
-
 const PRODUCT_TABLE = 'product';
 
 const createNewProduct = async (product_name, product_price, product_stock, product_description, farmer_id) => {

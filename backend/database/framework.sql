@@ -7,7 +7,7 @@ USE db;
 
 DROP TABLE cart, customer_event_interests, db.event, farmer, product, transactions, users;
 -- NEW NEW NEW NEW NEW
--- USER STORY 1
+-- EPIC 1
 CREATE TABLE farmer (
     farmer_id INTEGER AUTO_INCREMENT, PRIMARY KEY (farmer_id),
     farm_name VARCHAR(50),
@@ -23,7 +23,7 @@ CREATE TABLE users(
     last_name VARCHAR(50),
     isFarmer tinyint(1) NOT NULL DEFAULT FALSE
 );
--- USER STORY 7
+-- EPIC 4
 CREATE TABLE transactions(
 	transaction_id integer auto_increment, primary key(transaction_id),
     customer_id INTEGER NOT NULL, FOREIGN KEY (customer_id) REFERENCES users(user_id),
@@ -33,9 +33,25 @@ CREATE TABLE transactions(
     is_complete tinyint(1) NOT NULL DEFAULT FALSE,
     total_price varchar(50) not null,
     product_name VARCHAR(50) NOT NULL,
-    product_price VARCHAR(50) NOT NULL
+    purchaseDate VARCHAR(50),
+    
+    firstName VARCHAR(50),
+    lastName VARCHAR(50),
+    address VARCHAR(50),
+    city VARCHAR(50),
+    state VARCHAR(50),
+    zip VARCHAR(50),
+    cardName VARCHAR(50),
+    cardNumber VARCHAR(50),
+    cardExprDate VARCHAR(50)
 );
-
+CREATE TABLE cart(
+    cart_id INTEGER NOT NULL AUTO_INCREMENT, PRIMARY KEY (cart_id),
+    cart_price INTEGER,
+    quantity INTEGER,
+    customer_id VARCHAR(50),
+    product_id INTEGER
+);
 
 CREATE TABLE event(
     event_id integer auto_increment, PRIMARY KEY(event_id),
@@ -64,6 +80,7 @@ CREATE TABLE product(
     cart_id INTEGER NOT NULL, FOREIGN KEY(cart_id) REFERENCES cart(cart_id)
 );
 
+
 CREATE TABLE requests(
     request_id INTEGER NOT NULL AUTO_INCREMENT, PRIMARY KEY (request_id),
     request_type VARCHAR(50),
@@ -77,6 +94,8 @@ CREATE TABLE cart(
     cart_id INTEGER NOT NULL AUTO_INCREMENT, PRIMARY KEY (cart_id),
     product_count INTEGER,
     user_id INTEGER NOT NULL, FOREIGN KEY (user_id) REFERENCES users(user_id)
+    cart_price INTEGER,
+    quantity INTEGER
 );
 
 CREATE TABLE customer_inventory(
