@@ -69,6 +69,14 @@ CREATE TABLE customer_event_interests(
     customer_id INTEGER NOT NULL, FOREIGN KEY (customer_id) REFERENCES users(user_id)
 );
 
+CREATE TABLE cart(
+    cart_id INTEGER NOT NULL AUTO_INCREMENT, PRIMARY KEY (cart_id),
+    product_count INTEGER,
+    user_id INTEGER NOT NULL, FOREIGN KEY (user_id) REFERENCES users(user_id),
+    cart_price INTEGER,
+    quantity INTEGER
+);
+
 CREATE TABLE product(
     product_id INTEGER NOT NULL AUTO_INCREMENT,  PRIMARY KEY(product_id),
     product_name VARCHAR(50) NOT NULL,
@@ -88,14 +96,6 @@ CREATE TABLE requests(
     product_count INTEGER,
     farmer_id INTEGER NOT NULL, FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id)
 
-);
-
-CREATE TABLE cart(
-    cart_id INTEGER NOT NULL AUTO_INCREMENT, PRIMARY KEY (cart_id),
-    product_count INTEGER,
-    user_id INTEGER NOT NULL, FOREIGN KEY (user_id) REFERENCES users(user_id)
-    cart_price INTEGER,
-    quantity INTEGER
 );
 
 CREATE TABLE customer_inventory(
