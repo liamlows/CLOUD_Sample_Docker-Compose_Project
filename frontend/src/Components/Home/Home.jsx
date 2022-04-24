@@ -8,7 +8,7 @@ import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 import Box from '@mui/material/Box';
-// import { Divider, Grid, Slide, Typography, useMediaQuery, useTheme } from '@material-ui/core';
+// import { Divider, Grid, Slide, Typography, useMediaQuery, useTheme } from '@mui/material';
 
 
 export const Home = () => {
