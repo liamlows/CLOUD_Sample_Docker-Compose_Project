@@ -4,9 +4,7 @@ CREATE DATABASE db;
 -- use newly create database
 USE db;
 
-
 DROP TABLE customer_event_interests, farmer, product, transactions, users, requests, customer_inventory, cart, event;
-
 
 CREATE TABLE users(
     user_id INTEGER AUTO_INCREMENT, PRIMARY KEY(user_id),
@@ -18,8 +16,8 @@ CREATE TABLE users(
 );
 CREATE TABLE farmer (
     farmer_id INTEGER AUTO_INCREMENT, PRIMARY KEY (farmer_id),
-    farm_name VARCHAR(50),
-    farm_description VARCHAR(50),
+    farm_name VARCHAR(100),
+    farm_description VARCHAR(300),
     farm_image_url VARCHAR(500),
     date_founded DATE,
     owner_id INTEGER NOT NULL, FOREIGN KEY (owner_id) REFERENCES users(user_id)
@@ -28,13 +26,10 @@ CREATE TABLE transactions(
 	transaction_id integer auto_increment, primary key(transaction_id),
     customer_id INTEGER NOT NULL, FOREIGN KEY (customer_id) REFERENCES users(user_id),
     farmer_id INTEGER NOT NULL, FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id),
-    product_id VARCHAR(50),
+    product_id INTEGER NOT NULL, FOREIGN KEY (product_id) REFERENCES product(product_id),
     quantity integer,
     is_complete tinyint(1) NOT NULL DEFAULT FALSE,
-    total_price varchar(50) not null,
-    product_name VARCHAR(50) NOT NULL,
-    purchaseDate VARCHAR(50),
-    
+    purchaseDate TIMESTAMP,
     firstName VARCHAR(50),
     lastName VARCHAR(50),
     address VARCHAR(50),
@@ -48,51 +43,51 @@ CREATE TABLE transactions(
 CREATE TABLE cart(
     cart_id INTEGER NOT NULL AUTO_INCREMENT, PRIMARY KEY (cart_id),
     quantity INTEGER,
-    customer_id VARCHAR(50),
-    product_id INTEGER
+    customer_id INTEGER NOT NULL, FOREIGN KEY (customer_id) REFERENCES users(user_id),
+    product_id INTEGER NOT NULL, FOREIGN KEY (product_id) REFERENCES product(product_id)
 );
 
 CREATE TABLE event(
     event_id integer auto_increment, PRIMARY KEY(event_id),
-    event_name VARCHAR(50),
-    event_description VARCHAR(50),
+    event_name VARCHAR(100),
+    event_description VARCHAR(300),
     farmer_id INTEGER NOT NULL, FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id),
     date VARCHAR(50),
     time VARCHAR(50)
 );
+
 CREATE TABLE customer_event_interests(
 	customer_event_interests_id integer auto_increment, PRIMARY KEY(customer_event_interests_id),
-    event_id VARCHAR(50),
+    event_id INTEGER NOT NULL, FOREIGN KEY (event_id) REFERENCES event(event_id),
     customer_id INTEGER NOT NULL, FOREIGN KEY (customer_id) REFERENCES users(user_id)
 );
 
 CREATE TABLE product(
     product_id INTEGER NOT NULL AUTO_INCREMENT,  PRIMARY KEY(product_id),
-    product_name VARCHAR(50) NOT NULL,
-    product_price VARCHAR(50) NOT NULL,
+    product_name VARCHAR(100) NOT NULL,
+    product_price FLOAT NOT NULL,
     product_stock INTEGER NOT NULL,
     product_category VARCHAR(50) NOT NULL,
-    product_description VARCHAR(50),
-    farmer_id INTEGER NOT NULL, FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id),
-    cart_id INTEGER NOT NULL, FOREIGN KEY(cart_id) REFERENCES cart(cart_id)
-);
-
-
-CREATE TABLE requests(
-    request_id INTEGER NOT NULL AUTO_INCREMENT, PRIMARY KEY (request_id),
-    request_type VARCHAR(50),
-    product_id INTEGER NOT NULL, FOREIGN KEY (product_id) REFERENCES product(product_id),
-    product_count INTEGER,
+    product_description VARCHAR(300),
+    product_image_url VARCHAR(500),
     farmer_id INTEGER NOT NULL, FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id)
-
 );
 
-CREATE TABLE customer_inventory(
-    product_id INTEGER NOT NULL, FOREIGN KEY (product_id) REFERENCES product(product_id),
-    product_count INT,
-    farmer_id INTEGER NOT NULL, FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id)
+# CREATE TABLE requests(
+#     request_id INTEGER NOT NULL AUTO_INCREMENT, PRIMARY KEY (request_id),
+#     request_type VARCHAR(50),
+#     product_id INTEGER NOT NULL, FOREIGN KEY (product_id) REFERENCES product(product_id),
+#     product_count INTEGER,
+#     farmer_id INTEGER NOT NULL, FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id)
+#
+# );
 
-);
+# CREATE TABLE customer_inventory(
+#     product_id INTEGER NOT NULL, FOREIGN KEY (product_id) REFERENCES product(product_id),
+#     product_count INT,
+#     farmer_id INTEGER NOT NULL, FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id)
+#
+# );
 
 SELECT * FROM farmer;
 
@@ -103,7 +98,6 @@ VALUES ('smu@email.edu', 'Password123', 'John', 'Deere', 1),
 INSERT INTO farmer(farm_name, farm_description, farm_image_url, date_founded, owner_id)
 VALUES ('Johns Farm', 'LETS GOOOOO', 'https://st.depositphotos.com/1333205/2857/i/600/depositphotos_28571959-stock-photo-farm-building.jpg', '1999-03-23', 1);
 
--- event transaction cart
 INSERT INTO event(event_name,event_description,farmer_id,date,time)
 VALUES
 ('Animal Show','All Animals 50% off','smu@email.edu''4/24/22','5:00 PM'),
@@ -124,3 +118,8 @@ INSERT INTO cart(quantity,customer_id,product_id)
 VALUES
 (2,'cool@gmail.com'1),
 (1,'cool@gmail.com'2);
+
+INSERT INTO product(product_name, product_price, product_stock, product_category, product_description, product_image_url, farmer_id)
+VALUES('Apples', 1.00, 20, 'Fruit', 'Apples, now available in red color.', 'https://i5.walmartimages.com/asr/7320e63a-de46-4a16-9b8c-526e15219a12_3.e557c1ad9973e1f76f512b34950243a3.jpeg', 1),
+       ('Pears', 2.00, 10, 'Fruit', 'They are peary good!', 'https://images-prod.healthline.com/hlcmsresource/images/AN_images/benefits-of-pears-1296x728-feature.jpg', 1),
+       ('4066M Heavy Duty Compact Utility Tractor', 54930.00, 3, 'Heavy Duty Equipment', 'Factory-installed 440R Quick Park™ Loader Mounting System included, Turbocharged diesel engine, eHydrostatic Transmission, Standard mid and rear hydraulics, Category 1 and 2, Three-point hitch', 'https://www.deere.com/assets/images/region-4/products/tractors/utility-tractors/4-family-compact-utility-tractors/4066m-heavy-duty/4066m_heavyduty_4seriestractor_studio_r4f093227_r2_1024x576_large_7c64dcb98d85b7743313560c171cf119fd92fc6a.jpg', 1);
