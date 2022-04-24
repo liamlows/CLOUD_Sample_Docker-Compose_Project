@@ -111,8 +111,13 @@ export const getFriends = async () => {
 }
 
 export const getWaitlist = async (courseID) => {
-    const res = await axios.get(`${BACKEND_ENDPOINT}/api/d/waitlists/course_id/${courseID}`);
-    console.log(res);
+    var res;
+    try {
+        res = await axios.get(`${BACKEND_ENDPOINT}/api/d/waitlists/course_id/${courseID}`);
+    }
+    catch {
+        return [];
+    }
     return res.data;
 }
 
