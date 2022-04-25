@@ -11,27 +11,30 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Checkmark from '../../images/green-checkmark.png';
 import './AddItemToFarmDialog.css';
 import { Box } from '@mui/system';
-import { addItemToFarm, editFarmItem } from '../../api/farmItems';
+import { addItemToFarm, deleteItemFromFarm, editFarmItem } from '../../api/items';
 import { useNavigate, useParams } from 'react-router-dom';
 // TODO Add fail logic and style to adding item
 // If we are passed an item Id, we are editing
-const AddItemToFarmDialog = ({ open, setOpen, itemName, itemDescription, price, stock, image, farmId, itemId, returnToFarm }) => {
+const AddItemToFarmDialog = ({ open, setOpen, product_name, product_description, product_price, product_stock, product_image_url, farmer_id, product_id, returnToFarm }) => {
 
     const [itemDetails, setItemDetails] = useState({
     });
     const [processing, setProcessing] = useState(false);
     const [completed, setCompleted] = useState(false);
     const [completionText, setCompletionText] = useState('');
+    const params = useParams();
     const timer = useRef();
     const timer2 = useRef();
     useEffect(() => {
-        console.log("here")
+        console.log("here" +farmer_id)
         setItemDetails({
-            itemName: itemName,
-            itemDescription: itemDescription,
-            image: image,
-            price: price ? price : 1,
-            quantity: stock ? stock : 1
+            product_name: product_name,
+            product_description: product_description,
+            product_image_url: product_image_url,
+            product_price: product_price ? product_price : 1,
+            product_stock: product_stock ? product_stock : 1,
+            farmer_id: params.farmId,
+            product_id: product_id,
         })
 
         return () => {
@@ -48,22 +51,23 @@ const AddItemToFarmDialog = ({ open, setOpen, itemName, itemDescription, price, 
         setOpen(false);
     };
     const handleSubmit = (option) => {
+        console.log(itemDetails);
         setProcessing(true);
-        if(option){
-            //deleteItemFromFarm(itemId).then({
-            //     setCompletionText('Item Deleted');
-            //     setCompleted(true);
-            // })
-        } else if (!itemId) {
-            //addItemToFarm(farmId, itemDetails).then({
-            //     setCompletionText('Item Added');
-            //     setCompleted(true);
-            // })
+        if(option == 1){
+            deleteItemFromFarm(product_id).then(()=>{
+                setCompletionText('Item Deleted');
+                setCompleted(true);
+            })
+        } else if (!product_id) {
+            addItemToFarm(itemDetails).then(()=>{
+                setCompletionText('Item Added');
+                setCompleted(true);
+            })
         } else {
-            //editFarmItem(itemId).then({
-            //     setCompletionText('Item Edited');
-            //     setCompleted(true);
-            // })
+            editFarmItem(itemDetails).then(()=>{
+                setCompletionText('Item Edited');
+                setCompleted(true);
+            })
         }
 
         timer.current = setTimeout(() => {
@@ -93,32 +97,32 @@ const AddItemToFarmDialog = ({ open, setOpen, itemName, itemDescription, price, 
     return (
         <div>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle sx={{ textAlign: "center", fontWeight: "Bold" }}>{itemId ? "Edit your item" : "Add Item To Your Farm"}</DialogTitle>
-                <DialogTitle sx={{ textAlign: "center", paddingTop: "4px", paddingBottom: "4px" }}>{itemDetails.itemName}</DialogTitle>
+                <DialogTitle sx={{ textAlign: "center", fontWeight: "Bold" }}>{product_id ? "Edit your item" : "Add Item To Your Farm"}</DialogTitle>
+                <DialogTitle sx={{ textAlign: "center", paddingTop: "4px", paddingBottom: "4px" }}>{itemDetails.product_name}</DialogTitle>
                 <DialogContent>
                     <DialogContent sx={{ display: "flex", justifyContent: "center", padding: 0, margin: ["24px 0", "24px"] }}>
-                        <img src={image} id="add-item-img" />
+                        <img src={product_image_url} id="add-item-img" />
                     </DialogContent>
                     <TextField
 
                         required
-                        id="itemName"
+                        id="product_name"
                         label="Name"
                         fullWidth
-                        value={itemDetails.itemName}
-                        onChange={e => handleChange({ itemName: e.target.value })}
+                        value={itemDetails.product_name}
+                        onChange={e => handleChange({ product_name: e.target.value })}
 
                     />
                     <TextField
                         sx={{ marginTop: '18px' }}
                         required
-                        id="itemDescription"
+                        id="product_description"
                         label="Description"
                         multiline
                         fullWidth
                         rows={2}
-                        value={itemDetails.itemDescription}
-                        onChange={e => handleChange({ itemDescription: e.target.value })}
+                        value={itemDetails.product_description}
+                        onChange={e => handleChange({ product_description: e.target.value })}
 
                     />
                     <Box sx={{ display: "flex", flexDirection: ["column", "row", "row"], justifyContent: "space-between", marginTop: "18px", gap: "20px" }}>
@@ -126,12 +130,12 @@ const AddItemToFarmDialog = ({ open, setOpen, itemName, itemDescription, price, 
                             sx={{ alignSelf: "flex-start" }}
                             InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
                             inputProps={{ pattern: "[0-9]*", type: "number", inputMode: "numeric" }}
-                            id="price"
+                            id="product_price"
                             label="Price"
                             pattern={"[0-9]*"}
                             inputMode={"numeric"}
-                            value={itemDetails.price}
-                            onChange={e => handleChange({ price: e.target.value })}
+                            value={itemDetails.product_price}
+                            onChange={e => handleChange({ product_price: e.target.value })}
 
 
                         />
@@ -146,14 +150,14 @@ const AddItemToFarmDialog = ({ open, setOpen, itemName, itemDescription, price, 
                                 max: 9999,
 
                             }}
-                            value={itemDetails.quantity}
-                            onChange={e => handleChange({ quantity: e.target.value })}
+                            value={itemDetails.product_stock}
+                            onChange={e => handleChange({ product_stock: e.target.value })}
                         />
                     </Box>
                 </DialogContent>
                 <DialogActions sx={{ pl: 3 }}>
                     {
-                        itemId && <div style={{ display: 'flex', flexGrow: 1 }}>
+                        product_id && <div style={{ display: 'flex', flexGrow: 1 }}>
                             <Button
                                 variant='outlined'
                                 color='error'
@@ -162,7 +166,7 @@ const AddItemToFarmDialog = ({ open, setOpen, itemName, itemDescription, price, 
                         </div>
                     }
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleSubmit}>{itemId ? 'Edit' : 'Add'}</Button>
+                    <Button onClick={handleSubmit}>{product_id ? 'Edit' : 'Add'}</Button>
                 </DialogActions>
             </Dialog>
         </div>

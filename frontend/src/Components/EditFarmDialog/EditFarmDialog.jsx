@@ -6,13 +6,10 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
+
 import DialogTitle from '@mui/material/DialogTitle';
 import Checkmark from '../../images/green-checkmark.png';
-import { Box } from '@mui/system';
-import { addItemToFarm } from '../../api/farmItems';
-import EventCard from '../eventCard/EventCard';
-import { createEvent, deleteEventById } from '../../api/events';
+
 const EditFarmDialog = ({ open, setOpen, farmName, farmDescription, farmImage, dateFounded, farmId }) => {
 
     const [farmDetails, setFarmDetails] = useState({});

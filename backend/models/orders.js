@@ -1,13 +1,13 @@
 const knex = require('../database/knex');
 
 //create new cart
-const createCart = async (email, product_id, quantity) => {
+const createCart = async (user_id, product_id, quantity) => {
     //add cart to table
-    const query = knex('cart').insert({ customer_id: email, product_id, quantity });
+    const query = knex('cart').insert({ customer_id: user_id, product_id, quantity });
     console.log('Raw query for createCart:', query.toString());
     const result = await query;
     //return cart
-    const query2 = knex('cart').where({customer_id:email});
+    const query2 = knex('cart').where({customer_id:user_id});
     console.log('Raw query for getCart:', query2.toString());
     const result2 = await query2;
     return result2;
@@ -37,9 +37,9 @@ const createOrder = async (firstName, lastName, address, city, state, zip, cardN
     return result3;
 }
 //get product by cart
-const fetchCartProducts = async (email) => {
+const fetchCartProducts = async (user_id) => {
     //return product
-    const query = knex('cart').join('product','product_id','cart.product_id').select().where({customer_id:email});
+    const query = knex('cart').join('product','product_id','cart.product_id').select().where({customer_id:user_id});
     console.log('Raw query for getProduct:', query.toString());
     const result = await query;
     return result;

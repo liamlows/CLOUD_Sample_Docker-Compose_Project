@@ -17,6 +17,8 @@ const searchRoutes = require('./routes/search');
 const farmsRoutes = require('./routes/farms');
 const productRoutes = require('./routes/products');
 const ordersRoutes = require('./routes/orders');
+const eventRoutes = require('./routes/event');
+const userEventRoutes = require('./routes/userEvents')
 
 
 //middle ware
@@ -58,6 +60,8 @@ app.use('/dashboard/customer', customerDashRoutes);
 app.use('/farms', farmsRoutes);
 app.use('/products', productRoutes);
 app.use('/cart', ordersRoutes);
+app.use('/event', eventRoutes);
+app.use('/userEvents', userEventRoutes);
 
 
 // connecting the express object to listen on a particular port as defined in the config object.

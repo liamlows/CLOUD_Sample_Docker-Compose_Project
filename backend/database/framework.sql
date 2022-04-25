@@ -51,6 +51,7 @@ CREATE TABLE event(
     event_id integer auto_increment, PRIMARY KEY(event_id),
     event_name VARCHAR(100),
     event_description VARCHAR(300),
+    event_image_url VARCHAR(500),
     farmer_id INTEGER NOT NULL, FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id),
     date VARCHAR(50),
     time VARCHAR(50)
@@ -71,6 +72,12 @@ CREATE TABLE product(
     product_description VARCHAR(300),
     product_image_url VARCHAR(500),
     farmer_id INTEGER NOT NULL, FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id)
+);
+
+CREATE TABLE transaction_products(
+    transaction_products_id INTEGER NOT NULL AUTO_INCREMENT,  PRIMARY KEY(transaction_products_id),
+    transaction_id INTEGER NOT NULL, FOREIGN KEY (transaction_id) REFERENCES transactions(transaction_id),
+    product_id INTEGER NOT NULL, FOREIGN KEY (product_id) REFERENCES product(product_id)
 );
 
 # CREATE TABLE requests(
@@ -98,11 +105,11 @@ VALUES ('smu@email.edu', 'Password123', 'John', 'Deere', 1),
 INSERT INTO farmer(farm_name, farm_description, farm_image_url, date_founded, owner_id)
 VALUES ('Johns Farm', 'LETS GOOOOO', 'https://st.depositphotos.com/1333205/2857/i/600/depositphotos_28571959-stock-photo-farm-building.jpg', '1999-03-23', 1);
 
-INSERT INTO event(event_name,event_description,farmer_id,date,time)
+INSERT INTO event(event_name,event_description, event_image_url,farmer_id,date,time)
 VALUES
-('Animal Show','All Animals 50% off', 1,'4/24/22','5:00 PM'),
-('Plant Show','Buy one get one 50% off', 1,'5/1/22','10:00 AM'),
-('Dog Show','Tricks and treats', 1,'6/1/22','11:00 AM');
+('Animal Show','All Animals 50% off', 'https://upload.wikimedia.org/wikipedia/commons/5/5c/Grand_Parade_3.jpg', 1,'4/24/22','5:00 PM'),
+('Plant Show','Buy one get one 50% off', 'https://phsonline.org/uploads/attachments/ckpjtxtrd8mvji3ra8kf14qby-2021-habitat-mainslider.0.233.2952.1545.full.jpg', 1,'5/1/22','10:00 AM'),
+('Dog Show','Tricks and treats', 'https://www.gannett-cdn.com/presto/2020/11/26/USAT/8cba8893-d6c5-4d06-b085-5edf6d4f6c53-NUP_192343_2139.jpg?width=2560', 1,'6/1/22','11:00 AM');
 
 INSERT INTO customer_event_interests(event_id,customer_id)
 VALUES
@@ -123,3 +130,9 @@ INSERT INTO product(product_name, product_price, product_stock, product_category
 VALUES('Apples', 1.00, 20, 'Fruit', 'Apples, now available in red color.', 'https://i5.walmartimages.com/asr/7320e63a-de46-4a16-9b8c-526e15219a12_3.e557c1ad9973e1f76f512b34950243a3.jpeg', 1),
        ('Pears', 2.00, 10, 'Fruit', 'They are peary good!', 'https://images-prod.healthline.com/hlcmsresource/images/AN_images/benefits-of-pears-1296x728-feature.jpg', 1),
        ('4066M Heavy Duty Compact Utility Tractor', 54930.00, 3, 'Heavy Duty Equipment', 'Factory-installed 440R Quick Park™ Loader Mounting System included, Turbocharged diesel engine, eHydrostatic Transmission, Standard mid and rear hydraulics, Category 1 and 2, Three-point hitch', 'https://www.deere.com/assets/images/region-4/products/tractors/utility-tractors/4-family-compact-utility-tractors/4066m-heavy-duty/4066m_heavyduty_4seriestractor_studio_r4f093227_r2_1024x576_large_7c64dcb98d85b7743313560c171cf119fd92fc6a.jpg', 1);
+
+SELECT * FROM farmer;
+SELECT * FROM event;
+SELECT * FROM customer_event_interests;
+SELECT * FROM customer_event_interests INNER JOIN event ON event.event_id = customer_event_interests.event_id WHERE customer_id = 2;
+SELECT customer_event_interests.event_id, event.event_name,event.event_description, event.event_image_url, event.farmer_id, event.date, event.time FROM customer_event_interests INNER JOIN event ON event.event_id = customer_event_interests.event_id WHERE customer_id = 2;
