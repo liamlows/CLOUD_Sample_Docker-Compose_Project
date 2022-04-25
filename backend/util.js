@@ -30,16 +30,23 @@ async function isUserAdmin(req, res, next) {
 }
 
 
-exports.getSchoolById = async (schoolId) => {
+async function getById(tableName, keyName, key) {
     let rows, fields;
     try{
-        [rows, fields] = await pool.execute('SELECT * FROM `school` WHERE school_id = ? LIMIT 1', [req.params.id]);
+        [rows, fields] = await pool.execute(`SELECT * FROM ${tableName} WHERE ${keyName} = ? LIMIT 1`, [key]);
     } catch(error){
         return undefined;
     }
 
+    if(rows.length === 0)
+        return undefined;
+
     return rows[0];
 }
+
+exports.getSchoolById = async (schoolId) => getById("schools", "school_id", schoolId);
+exports.getCourseMetadataById = async (metadataId) => getById("course_metadata", "course_meta_id", metadataId);
+exports.getCourseById = async (courseId) => getById("courses", "course_id", courseId);
 
 exports.isUserAuthenticated = isUserAuthenticated;
 exports.isUserAdmin = isUserAdmin;
@@ -73,7 +80,12 @@ exports.validateBody = (requiredBody, optionalBody={}, maxLengths={}) => {
 
     for (const property in optionalBody) {
         if(optionalBody[property] === undefined) {
-            optionalBody[property] = null;
+            if(property in maxLengths){
+                optionalBody[property] = "";
+            }
+            else {
+                optionalBody[property] = null;
+            }
         }
     }
 
@@ -98,3 +110,37 @@ exports.validateBody = (requiredBody, optionalBody={}, maxLengths={}) => {
 
     return body;
 };
+
+
+// bit 0: MON
+// ....
+// bit 8: REMOTE
+const DAYS = ["MON", "TUES", "WED", "THR", "FRI", "SAT", "SUN", "REMOTE"];
+
+exports.parseWeekFlags = (course) => {
+    course.days = [];
+
+    for(let i = 0; i < DAYS.length; i++){
+        // check each bit
+        if(course.week_flags & (1 << (i + 1))){
+            course.days.push(DAYS[i]);
+        }
+    }
+}
+
+const dateRegex = /[0-9]{4}-[0-9]{2}-[0-9]{2}( [0-9]{2}:[0-9]{2}:([0-9]{2})?)?/
+const timeRegex = /([0-9]{2}):([0-9]{2}):([0-9]{2})?/
+
+exports.validateDates = (dates) => {
+    for(const property in dates) {
+        if(!dates[property].match(dateRegex))
+            throw `Field ${property} is not valid datetime string.`;
+    }
+}
+
+exports.validateTimes = (times) => {
+    for(const property in times) {
+        if(!times[property].match(timeRegex))
+            throw `Field ${property} is not valid time string.`;
+    }
+}

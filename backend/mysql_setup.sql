@@ -28,7 +28,7 @@ CREATE TABLE `db`.`course_metadata` (
 -- COURSE TABLE
 CREATE TABLE `db`.`courses` (
     `course_id` SERIAL,
-    `course_meta_id` BIGINT UNSIGNED,
+    `course_meta_id` BIGINT UNSIGNED NOT NULL,
     `max_seats` INT NOT NULL,
     `start_date` DATE NOT NULL,
     `end_date` DATE NOT NULL,

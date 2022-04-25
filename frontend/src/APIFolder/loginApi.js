@@ -110,6 +110,17 @@ export const getFriends = async () => {
     return res.data;
 }
 
+export const getWaitlist = async (courseID) => {
+    var res;
+    try {
+        res = await axios.get(`${BACKEND_ENDPOINT}/api/d/waitlists/course_id/${courseID}`);
+    }
+    catch {
+        return [];
+    }
+    return res.data;
+}
+
 export const getCoursebyId = async (courseID) => {
     //TODO: is this right???
     const res = await axios.get(`${BACKEND_ENDPOINT}/api/d/course_id/${courseID}`);
@@ -170,7 +181,7 @@ export const getFriendsClasses = async (id) => {
 // api/users/professors/
 
 export const getClasses = async () => {
-    const res = await axios.get(`${BACKEND_ENDPOINT}/api/classes`);
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/courses`);
     return res.data;
 }
 
@@ -197,11 +208,11 @@ export const uploadPP = async (pp) => {
 }
 
 export const getEnrollmentRequest = async (id) => {
-    const res = await axios.get(`${BACKEND_ENDPOINT}/api/classes/requests/${id}`);
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/enrollments/${id}`);
     return res.data;
 }
 
 export const sendEnrollmentRequest = async (targetId) => {
-    const res = await axios.post(`${BACKEND_ENDPOINT}/api/classes/requests`, { targetId: targetId });
+    const res = await axios.post(`${BACKEND_ENDPOINT}/api/enrollments/`, { targetId: targetId });
     return res.data;
 }
