@@ -47,6 +47,7 @@ async function getById(tableName, keyName, key) {
 exports.getSchoolById = async (schoolId) => getById("schools", "school_id", schoolId);
 exports.getCourseMetadataById = async (metadataId) => getById("course_metadata", "course_meta_id", metadataId);
 exports.getCourseById = async (courseId) => getById("courses", "course_id", courseId);
+exports.getAccountById = async (accountId) => getById("accounts", "account_id", accountId);
 
 exports.isUserAuthenticated = isUserAuthenticated;
 exports.isUserAdmin = isUserAdmin;
