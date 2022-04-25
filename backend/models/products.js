@@ -7,6 +7,11 @@ const createNewProduct = async (product_name, product_price, product_stock, prod
     return query;
 }
 
+const updateProduct = async (product_id, product_name, product_price, product_stock, product_category, product_description,product_image_url, farmer_id) =>{
+    const query = knex(PRODUCT_TABLE).where('product_id', product_id).update({product_name}, {product_price}, {product_stock}, {product_category}, {product_description},{product_image_url}, {farmer_id});
+    return query;
+}
+
 const deleteProduct = async (product_id) => {
     const query = knex(PRODUCT_TABLE).where('product_id', product_id).del();
     return query;
@@ -63,5 +68,6 @@ module.exports = {
     getProductsAllFilters,
     getProductThroughCategoryName,
     getThroughFarmNameProductName,
-    getProductThroughFarmNameCategory
+    getProductThroughFarmNameCategory,
+    updateProduct
 };

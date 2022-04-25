@@ -15,15 +15,15 @@ router.post('/', async (req, res) =>{
     }
 
 })
-router.put('/', async (req, res) =>{
+router.put('/:product_id', async (req, res) =>{
 //this route is for User Story 2.3 where "As a farmer, I want to be able to edit my products"
 //NOT YET DONE
     try{
         const body = req.body;
-
+        const result = await Product.updateProduct(req.params.product_id, body.product_name, body.product_price, body.product_stock, body.product_category, body.product_description, body.product_image_url, body.farmer_id);
         res.status(201).json(result);
     }catch (err){
-        console.error('Failed to update new product:', err);
+        console.error('Failed to update a product:', err);
         res.status(500).json({message: err.toString()});
     }
 })
