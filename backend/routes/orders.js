@@ -7,7 +7,7 @@ const router = express.Router();
 router.post('/', async (req, res, next) => {
     try {
         const body = req.body;
-        const result = await Product.createCart(body.email, body.product_id, body.quantity);
+        const result = await Product.createCart(body.user_id, body.product_id, body.quantity);
         res.status(201).json(result);
     } catch (err) {
         console.error('Failed to create new cart:', err);
@@ -20,7 +20,7 @@ router.post('/', async (req, res, next) => {
 router.get('/', async (req, res, next) => {
     try {
         const body = req.body;
-        const result = await Product.fetchCartProducts(body.email);
+        const result = await Product.fetchCartProducts(body.user_id);
         res.status(200).json(result);
     } catch (err) {
         console.error('Failed to get products in cart:', err); 

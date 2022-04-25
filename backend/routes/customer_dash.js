@@ -5,7 +5,7 @@ const router = express.Router();
 router.get('/transactions', async (req, res, next) => {
     try{
         const body = req.body;
-        result = await dash.fetchTransactions(body.email);
+        result = await dash.fetchTransactions(body.user_id);
         res.status(200).json(result);
     } catch (err) {
         console.error('Failed to get customer transactions', err);
@@ -31,7 +31,7 @@ router.get('/transactions/:transaction_id', async (req, res, next) => {
 router.get('/interested_events/:userid', async (req, res, next) => {
     try{
         const body = req.body;
-        result = await dash.fetchInterestedEvents(req.params.userid);
+        result = await dash.fetchInterestedEvents(body.user_id);
         res.status(200).json(result);
     } catch (err) {
         console.error('Failed to get customer interested events', err);
@@ -58,7 +58,7 @@ router.delete('/interested_events/:customer_event_interests_id', async (req, res
 router.delete('/interested_events', async (req, res, next) => {
     try {
         const body = req.body;
-        const result = await dash.deleteAllInterestedEvents(body.email);
+        const result = await dash.deleteAllInterestedEvents(body.user_id);
         res.status(204).json(result);
     } catch (err) {
         console.error('Failed to delete all interested events:', err);

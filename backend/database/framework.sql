@@ -74,6 +74,12 @@ CREATE TABLE product(
     farmer_id INTEGER NOT NULL, FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id)
 );
 
+CREATE TABLE transaction_products(
+    transaction_products_id INTEGER NOT NULL AUTO_INCREMENT,  PRIMARY KEY(transaction_products_id),
+    transaction_id INTEGER NOT NULL, FOREIGN KEY (transaction_id) REFERENCES transactions(transaction_id),
+    product_id INTEGER NOT NULL, FOREIGN KEY (product_id) REFERENCES product(product_id)
+);
+
 # CREATE TABLE requests(
 #     request_id INTEGER NOT NULL AUTO_INCREMENT, PRIMARY KEY (request_id),
 #     request_type VARCHAR(50),

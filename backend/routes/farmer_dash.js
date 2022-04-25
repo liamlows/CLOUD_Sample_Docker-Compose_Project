@@ -5,7 +5,7 @@ const router = express.Router();
 router.get('/transactions', async (req, res, next) => {
     try{
         const body = req.body;
-        result = await dash.fetchTransactions(body.email);
+        result = await dash.fetchTransactions(body.user_id);
         res.status(200).json(result);
     } catch (err) {
         console.error('Failed to get farmer transactions', err);
