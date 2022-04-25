@@ -10,7 +10,7 @@ import {
 
 import axios from 'axios';
 import { NavBar } from './Components/NavBar/NavBar';
-import { Home } from './Components/Home/Home';
+// import { Home } from './Components/Home/Home';
 import { Feed } from './Components/Feed/Feed';
 import Login from './Components/Login/Login';
 import FarmPage from './Components/FarmPage/FarmPage';
@@ -52,7 +52,7 @@ function App() {
         <Router>
           <NavBar />
           <Routes>
-            <Route exact path='/' element={<Home />} />
+            {/* <Route exact path='/' element={<Home />} /> */}
 
             <Route path='/login' element={<Login />} />
             <Route path='/signup' element={<SignUp />} />
