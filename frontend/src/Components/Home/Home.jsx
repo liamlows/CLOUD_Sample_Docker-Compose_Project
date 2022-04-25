@@ -114,15 +114,7 @@ export const Home = () => {
 
 
                 </div>
-<<<<<<< HEAD
             </ThemeProvider> */}
-=======
-
-
-
-
-            </ThemeProvider>
->>>>>>> cb16834dcc9a8d4366c4177c71b940353771aa17
 
         </>
 
