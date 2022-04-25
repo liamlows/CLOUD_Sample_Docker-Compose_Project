@@ -53,11 +53,7 @@ export const FarmCard = ({ farm, itemsPerFarm }) => {
                         farm.items.map((item, index) => {
                             return index < itemsPerFarm ?
                                 <Grid item xs={12} sm={6} md={4} lg={3} key={index} padding={0}>
-                                    <ItemCard name={item.name}
-                                        description={item.description}
-                                        image={item.image}
-                                        price={item.price}
-                                        stock={item.stock}
+                                    <ItemCard {...item}
                                         addText={"Add to cart"}
                                         action={item => handleSetItem(item)} />
                                 </Grid> : null

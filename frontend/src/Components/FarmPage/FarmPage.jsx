@@ -1,6 +1,6 @@
-import axios from "axios";
+
 import { useContext, useEffect, useState } from "react"
-import Button from '@mui/material/Button';
+
 import { useParams } from "react-router-dom";
 import { getFarmById } from "../../api/farms";
 import { farm } from "../../models/farm";
@@ -8,7 +8,7 @@ import FarmImg from '../../images/farm.jpg';
 import horse from '../../images/horse.jpg';
 import { item } from "../../models/item";
 import './FarmPage.css';
-import { Link } from "react-router-dom";
+
 import { Divider, Grid, Typography } from "@mui/material";
 import { ItemCard } from "../ItemCard/itemCard";
 import AddItemToCartDialog from "../AddItemToCartDialog/AddItemToCartDialog";
@@ -20,6 +20,7 @@ import { event } from "../../models/event";
 import CreateEventDialog from "../CreateEventDialog/CreateEventDialog";
 import EditFarmDialog from "../EditFarmDialog/EditFarmDialog";
 
+
 const FarmPage = () => {
     const params = useParams();
     const [showCreateEvent, setShowCreateEvent] = useState(false);
@@ -28,6 +29,7 @@ const FarmPage = () => {
     const [showAddItemDialog, setShowAddItemDialog] = useState();
     const [addItemDetails, setAddItemDetails] = useState();
     const [showAddItem, setShowAddItem] = useState(false);
+    const [refresh, setRefresh] = useState(false);
     const userContext = useContext(UserContext);
 
     const [thisfarm, setFarm] = useState(new farm(
@@ -52,16 +54,24 @@ const FarmPage = () => {
     }
 
     const handleEditItem = (item) => {
+        console.log(item)
         setShowEditItemDialog(true);
         setAddItemDetails(item)
     }
     useEffect(() => {
         if (params.farmId) {
-            //getFarmById(params.farmId).then(x => setFarm(x));
+            getFarmById(params.farmId).then(res => setFarm({
+                ...thisfarm,
+                farmName: res.data.farmInfo[0].farm_name,
+                farmDescription: res.data.farmInfo[0].farm_description,
+                farmImage: res.data.farmInfo[0].farm_image_url,
+                items: res.data.products,
+                events: res.data.events
+            }));
         }
+        console.log(thisfarm)
+    }, [showCreateEvent, showAddItem, showEditItemDialog, refresh]);
 
-    }, [showCreateEvent, showAddItem, showEditItemDialog]);
-    
 
     if (showAddItem)
         return <FarmItemAdder close={() => setShowAddItem(false)} />
@@ -78,7 +88,7 @@ const FarmPage = () => {
                             <p className=""> {thisfarm.farmDescription} </p>
                         </div>
                         <div className="column">
-                            <div to="/editfarm" className="btn btn-success float-end" onClick={()=> setShowEditFarm(true)}>
+                            <div to="/editfarm" className="btn btn-success float-end" onClick={() => setShowEditFarm(true)}>
                                 Edit Farm
                             </div>
                             <div className="clearfix"></div>
@@ -91,48 +101,46 @@ const FarmPage = () => {
                 Items for Sale
             </Typography>
             {
-                userContext.userData.userId == params.id && <div onClick={() => setShowAddItem(true)} className="btn btn-success mb-2 float-end"> 
+                userContext.userData.userId == params.farmId && <div onClick={() => setShowAddItem(true)} className="btn btn-success mb-2 float-end">
                     Add items to your farm
                 </div>
             }
             <Grid container
-                spacing={1}
+                spacing={2}
                 direction="row"
                 justifyContent="flex-start"
                 alignItems="stretch"
                 mb={4}
             >
                 {
-                    thisfarm.items.map((item, index) => {
-                        return <Grid item xs={12} sm={6} md={4} lg={3} key={index} padding={0}>
+                    thisfarm.items && thisfarm.items.map((item, index) => {
+                        return <Grid item xs={12} sm={6} md={4} lg={2} key={index} padding={0}>
                             <ItemCard
-                                name={item.name}
-                                description={item.description}
-                                image={item.image}
-                                price={item.price}
-                                stock={item.stock}
-                                itemId={item.itemId}
-                                addText={userContext.userData.userId == params.id ? "Edit item" : "Add to cart"}
-                                action={item => userContext.userData.userId == params.id ? handleEditItem(item) : handleAddItem(item)} />
+                                {...item}
+                                addText={userContext.userData.userId == params.farmId ? "Edit item" : "Add to cart"}
+                                action={item => userContext.userData.userId == params.farmId ? handleEditItem(item) : handleAddItem(item)} />
                         </Grid>
                     })
                 }
             </Grid>
-            <Divider variant="middle" sx={{margin:'0 20%'}}/>
+            <Divider variant="middle" sx={{ margin: '0 20%' }} />
 
             <Typography variant={"h5"} fontWeight={"bold"} mt={2} mb={2} textAlign={"center"}>
                 Farm Events
             </Typography>
             {
-                userContext.userData.userId == params.id && <div onClick={() => setShowCreateEvent(true)} className="btn btn-success mb-2 float-end"> 
+                userContext.userData.userId == params.farmId && <div onClick={() => setShowCreateEvent(true)} className="btn btn-success mb-2 float-end">
                     Create new event
                 </div>
             }
-            <Grid container  rowSpacing={1} columnSpacing={[0,1]} sx={{ width: ["100%"] }}>
+            <Grid container rowSpacing={1} columnSpacing={[0, 1]} sx={{ width: ["100%"] }}>
                 {
-                    thisfarm.events.map((event) => {
+                    thisfarm.events && thisfarm.events.map((event) => {
                         return <Grid item sm={6} md={4} lg={3} width="100%">
-                            <EventCard {...event} />
+                            <EventCard farmName={thisfarm.farmName}
+                                        setRefresh={setRefresh}
+                                        farmer_id={params.farmId}
+                                {...event} />
                         </Grid>
                     })
                 }
@@ -142,7 +150,7 @@ const FarmPage = () => {
                 showAddItemDialog && <AddItemToCartDialog
                     open={showAddItemDialog}
                     setOpen={setShowAddItemDialog}
-
+                    farmId={params.farmId}
                     {...addItemDetails} />
             }
 
@@ -151,19 +159,24 @@ const FarmPage = () => {
                     open={showEditItemDialog}
                     setOpen={setShowEditItemDialog}
                     itemName={addItemDetails.name}
+                    itemId={addItemDetails.itemId}
                     itemDescription={addItemDetails.description}
                     {...addItemDetails} />
             }
             {
                 showEditFarm && <EditFarmDialog open={showEditFarm}
-                                             setOpen={setShowEditFarm}
-                                             farmName={thisfarm.farmName}
-                                             farmDescription={thisfarm.farmDescription}
-                                             farmImage={thisfarm.farmImage}
-                                             farmId={params.id}/>
-            }   
-        
-            {showCreateEvent && <CreateEventDialog open={showCreateEvent} setOpen={setShowCreateEvent}/>}
+                    setOpen={setShowEditFarm}
+                    farmName={thisfarm.farmName}
+                    farmDescription={thisfarm.farmDescription}
+                    farmImage={thisfarm.farmImage}
+                    farmId={params.farmId} />
+            }
+
+            {showCreateEvent && <CreateEventDialog 
+                                    open={showCreateEvent} 
+                                    setOpen={setShowCreateEvent} 
+                                    farmId={params.farmId}
+                                     />}
         </div>
     </>;
 };

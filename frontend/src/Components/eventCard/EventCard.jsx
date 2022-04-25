@@ -16,15 +16,15 @@ import { UserContext } from '../userContext';
 import { EventContext } from '../EventContext';
 import CreateEventDialog from '../CreateEventDialog/CreateEventDialog';
 import RegisterToEventDialog from '../RegisterToEventDialog/RegisterToEventDialog';
-const EventCard = ({ eventTitle, eventDescription, eventId, farmName, farmId, userId, eventImage, eventTime, eventDate, setEvents, hideButton, isEdit }) => {
-
+const EventCard = ({ event_name, event_description, event_id, farmName, event_image_url, time, date, setEvents, hideButton, farmer_id, isEdit, setRefresh }) => {
+    console.log(farmer_id);
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [openAddOrRemoveDialog, setOpenAddOrRemoveDialog] = useState(false);
     const [deleting, setDeleting] = useState(false);
     const [deletingCompleted, setDeletingCompleted] = useState(false);
     const eventContext = useContext(EventContext);
     const userContext = useContext(UserContext);
-    const fDate = new Date(eventDate + " " + eventTime);
+    const fDate = new Date(date + " " + time);
 
     const handleClose = () => {
         setOpenEditDialog(false);
@@ -36,7 +36,7 @@ const EventCard = ({ eventTitle, eventDescription, eventId, farmName, farmId, us
 
     //     setTimeout(() => {
     //         eventContext.setEvents((events) =>{
-    //             let indexToRemove = events.findIndex(event => eventId == event.eventId);
+    //             let indexToRemove = events.findIndex(event => event_id == event.event_id);
     //             return events.filter((e,index)=> index != indexToRemove);
     //         })
     //         setDeleting(false);
@@ -50,7 +50,7 @@ const EventCard = ({ eventTitle, eventDescription, eventId, farmName, farmId, us
 
     // }
     const handleAction = () => {
-        if (userId == userContext.userData?.userId) {
+        if (farmer_id == userContext.userData?.userId) {
             setOpenEditDialog(true);
         } else {
             setOpenAddOrRemoveDialog(true);
@@ -59,16 +59,16 @@ const EventCard = ({ eventTitle, eventDescription, eventId, farmName, farmId, us
     return (
         <Card variant="outlined" sx={{ height: "100%", width: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", boxShadow: "2px 2px 7px #888" }} >
             <CardMedia alignItems="center">
-                <Link to={`/event/${eventId}`}><img src={eventImage} id="event-card-image" /></Link>
+                <Link to={`/event/${event_id}`}><img src={event_image_url} id="event-card-image" /></Link>
             </CardMedia>
 
             <CardContent sx={{ textAlign: ["left"], width: "100%", flexGrow: 1, height: "fit-content", display: "flex", flexDirection: 'column', justifyContent: "space-between" }} >
                 <div style={{ width: "100%" }}>
                     <Typography gutterBottom variant="h5" component="div" align="start" >
-                        {eventTitle}
+                        {event_name}
                     </Typography>
-                    <Typography variant="h6" color="text.secondary"><div id="event-card-eventDescription">
-                        {eventDescription}</div>
+                    <Typography variant="h6" color="text.secondary"><div id="event-card-event_description">
+                        {event_description}</div>
                     </Typography>
                 </div>
                 <div>
@@ -93,40 +93,41 @@ const EventCard = ({ eventTitle, eventDescription, eventId, farmName, farmId, us
                 {!hideButton && <Button
                     variant="contained"
                     size="small"
-                    color={userId == userContext.userData?.userId ? "error" : "primary"}
+                    color={farmer_id == userContext.userData?.userId ? "error" : "primary"}
                     fullWidth sx={{ padding: [2, 2, 1] }}
                     onClick={() => handleAction()}>
-                    {userId == userContext.userData?.userId ? "Edit Event" : eventContext.events.some(e => e.eventId == eventId) ? "Unsubscribe" : "RSVP"}
+                    {farmer_id == userContext.userData?.userId ? "Edit Event" : eventContext.events.some(e => e.event_id == event_id) ? "Unsubscribe" : "RSVP"}
                 </Button>}
             </CardActions>
             {
                 openEditDialog && <CreateEventDialog
                     open={openEditDialog}
                     setOpen={setOpenEditDialog}
-                    eventTitle={eventTitle}
-                    eventDescription={eventDescription}
-                    eventImage={eventImage}
-                    eventDate={eventDate}
-                    eventTime={eventTime}
-                    eventId={eventId}
-                    farmId={farmId}
+                    event_name={event_name}
+                    event_description={event_description}
+                    event_image_url={event_image_url}
+                    date={date}
+                    time={time}
+                    event_id={event_id}
+                    farmer_id={farmer_id}
                     farmName={farmName}
-                    showDelete={true} />
+                    showDelete={true}
+                    setRefresh={setRefresh} />
             }
 
             {
                 openAddOrRemoveDialog && <RegisterToEventDialog
                                             open={openAddOrRemoveDialog}
                                             setOpen={setOpenAddOrRemoveDialog}
-                                            eventTitle={eventTitle}
-                                            eventDescription={eventDescription}
-                                            eventImage={eventImage}
-                                            eventDate={eventDate}
-                                            eventTime={eventTime}
-                                            eventId={eventId}
-                                            farmId={farmId}
+                                            event_name={event_name}
+                                            event_description={event_description}
+                                            event_image_url={event_image_url}
+                                            date={date}
+                                            time={time}
+                                            event_id={event_id}
+                                            farmer_id={farmer_id}
                                             farmName={farmName}
-                                            unregistering={eventContext.events.some(e => e.eventId == eventId)} />
+                                            unregistering={eventContext.events.some(e => e.event_id == event_id)} />
             }
             {/* {
                 openRemoveDialog && <Backdrop

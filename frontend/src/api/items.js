@@ -3,7 +3,7 @@ import apiURL from "./APIURL"
 import axios from "axios"
 // This is used to edit the items belonging to farms
 
-const apiEndpoint = apiURL + "farms/items"
+const apiEndpoint = apiURL + "products"
 const apiConfig = {
     headers: {
         Authorization: "admin"
@@ -11,24 +11,24 @@ const apiConfig = {
 
 }
 
-//MAke sure the farmer can't add the same item twice, it hsould update stock ?
-
-//get all items, Used for adding items to farms
-export const getItems = () => {
+export const getItems = (params) => {
     let _apiConfig = apiConfig;
-    if(params) {
+    if (params) {
         _apiConfig.params = params;
     }
     axios.get(`${apiEndpoint}/`, apiConfig)
 }
 
-export const addItemToFarm = (farmId, itemId) => {
-    axios.post(`${apiEndpoint}/`, {farmId, itemId}, apiConfig)
+export const addItemToFarm = (itemDetails) => {
+    console.log(itemDetails);
+    return axios.post(`${apiEndpoint}/`, itemDetails)
 }
-export const editFarmItem = (farmId, itemId, data) => {
-    axios.patch(`${apiEndpoint}/`, {farmId, itemId, data}, apiConfig)
+export const editFarmItem = (itemDetails) => {
+    return axios.put(`${apiEndpoint}/${itemDetails.product_id}`, 
+        itemDetails
+    , apiConfig)
 }
 
-export const deleteItemFromFarm = (farmId, itemId) => {
-    axios.delete(`${apiEndpoint}/`, {farmId, itemId}, apiConfig)
+export const deleteItemFromFarm = (itemId) => {
+    return axios.delete(`${apiEndpoint}/${itemId}`, apiConfig)
 }

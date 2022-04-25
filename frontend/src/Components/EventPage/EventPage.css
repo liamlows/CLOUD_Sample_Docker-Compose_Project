@@ -1,11 +1,43 @@
-#event-page{
-    display:flex;
-    flex-direction: column;
+.event-page {
+    background-color: #E2E7E9;
+}
+
+.eventTitle {
+    font-weight: bold;
+    color: #3B8EDE;
 
 }
-#event-page-image{
-    width:35%;
-    align-self: center;
-    min-width: 280px;
-    margin: 1.5rem 0;
+
+.details {
+    margin-left: 10%;
+    margin-right: 10%;
+
+}
+
+svg {
+    margin-right: 1%;
+}
+
+i {
+    margin-right: 5%;
+    font-size: large;
+}
+
+.eventImage {
+    margin-top: 10%;
+    margin-bottom: 10%;
+    display: inline;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.intro {
+    margin-bottom: 4%;
+}
+
+.eventDetails {
+    background-color: #DDE6EA;
+    padding: 3%;
+    border-radius: 10px;
+    display: inline;
 }
