@@ -1,8 +1,8 @@
 const knex = require('../database/knex');
 
 //Get all transactions by user
-const fetchTransactions = async (email) => {
-    const query = knex('transactions').where({farmer_id: email}).orWhere({customer_id: email});
+const fetchTransactions = async (user_id) => {
+    const query = knex('transactions').where({farmer_id: user_id}).orWhere({customer_id: user_id});
     const result = await query;
     return result;
 }

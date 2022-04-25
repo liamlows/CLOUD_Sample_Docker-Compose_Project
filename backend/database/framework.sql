@@ -74,6 +74,12 @@ CREATE TABLE product(
     farmer_id INTEGER NOT NULL, FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id)
 );
 
+CREATE TABLE transaction_products(
+    transaction_products_id INTEGER NOT NULL AUTO_INCREMENT,  PRIMARY KEY(transaction_products_id),
+    transaction_id INTEGER NOT NULL, FOREIGN KEY (transaction_id) REFERENCES transactions(transaction_id),
+    product_id INTEGER NOT NULL, FOREIGN KEY (product_id) REFERENCES product(product_id)
+);
+
 # CREATE TABLE requests(
 #     request_id INTEGER NOT NULL AUTO_INCREMENT, PRIMARY KEY (request_id),
 #     request_type VARCHAR(50),
@@ -126,6 +132,7 @@ VALUES('Apples', 1.00, 20, 'Fruit', 'Apples, now available in red color.', 'http
        ('4066M Heavy Duty Compact Utility Tractor', 54930.00, 3, 'Heavy Duty Equipment', 'Factory-installed 440R Quick Park™ Loader Mounting System included, Turbocharged diesel engine, eHydrostatic Transmission, Standard mid and rear hydraulics, Category 1 and 2, Three-point hitch', 'https://www.deere.com/assets/images/region-4/products/tractors/utility-tractors/4-family-compact-utility-tractors/4066m-heavy-duty/4066m_heavyduty_4seriestractor_studio_r4f093227_r2_1024x576_large_7c64dcb98d85b7743313560c171cf119fd92fc6a.jpg', 1);
 
 SELECT * FROM farmer;
+SELECT * FROM event;
 SELECT * FROM customer_event_interests;
 SELECT * FROM customer_event_interests INNER JOIN event ON event.event_id = customer_event_interests.event_id WHERE customer_id = 2;
 SELECT customer_event_interests.event_id, event.event_name,event.event_description, event.event_image_url, event.farmer_id, event.date, event.time FROM customer_event_interests INNER JOIN event ON event.event_id = customer_event_interests.event_id WHERE customer_id = 2;
