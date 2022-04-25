@@ -48,6 +48,7 @@ exports.getSchoolById = async (schoolId) => getById("schools", "school_id", scho
 exports.getCourseMetadataById = async (metadataId) => getById("course_metadata", "course_meta_id", metadataId);
 exports.getCourseById = async (courseId) => getById("courses", "course_id", courseId);
 exports.getAccountById = async (accountId) => getById("accounts", "account_id", accountId);
+exports.getNotificationById = async (notificationId) => getById("notifications", "notification_id", notificationId);
 
 exports.isUserAuthenticated = isUserAuthenticated;
 exports.isUserAdmin = isUserAdmin;
