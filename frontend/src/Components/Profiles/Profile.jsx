@@ -326,7 +326,7 @@ export const Profile = (props) => {
                                                 <label for="file-upload" class="custom-file-upload">
                                                     <i class="fa fa-cloud-upload"></i> Upload
                                                 </label>
-                                                <input id="file-upload" type="file" onChange={(event) => onFileChange(event)} />
+                                                <input id="file-upload" type="file" accept=".gif,.jpg,.jpeg,.png" onChange={(event) => onFileChange(event)} />
                                             </div>
                                         </td>
                                     </tr>
