@@ -27,6 +27,8 @@ i {
     margin-top: 10%;
     margin-bottom: 10%;
     display: inline;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
 }
 
 .intro {
