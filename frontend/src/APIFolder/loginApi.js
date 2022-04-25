@@ -53,12 +53,10 @@ export const getUsernameById = async (id) => {
 }
 
 export const getAccountbyId = async (id) => {
-    let response = null
-    getUsernameById(id).then(res => {
-        getAccountbyUsername(res.username).then(res2 => {response = res2})
-    }).then(() => {
-    return response;
-})}
+    let res = await getUsernameById(id);
+    let res2 = await getAccountbyUsername(res.username);
+    return {...res, ...res2};
+}
 
 //Still work in progress. Account editing is not fully implemented
 export const updateAccountbyUsername = async (account) => {
