@@ -4,9 +4,9 @@ const knex = require('../database/knex');
 const FARM_TABLE = 'farmer';
 
 //create new farm
-const createFarm = async (farm_id,farm_name, farmer_id, farm_picture, farm_description, farm_rating, farm_established) => {
+const createFarm = async (farm_id,farm_name, farmer_id, farm_picture, farm_description, farm_rating, date_founded) => {
     //add farm to table
-    const query = knex('event').insert({farm_id,farm_name, farmer_id, farm_picture, farm_description, farm_rating, farm_established});
+    const query = knex('event').insert({farm_id,farm_name, farmer_id, farm_picture, farm_description, farm_rating, date_founded});
     console.log('Raw query for createFarm:', query.toString());
     const result = await query;
     return result;
@@ -18,19 +18,19 @@ const findFarmByName = async (farm_name) => {
     return result;
 }
 //find farm by ID
-const findFarmByID = async (farm_id) => {
-    const query = knex('farm').where({ farm_id });
+const findFarmByID = async (farmer_id) => {
+    const query = knex('farm').where({ farmer_id });
     const result = await query;
     return result;
 }
 // find farm rating by farm ID
-const findFarmRatingByFarmID = async(farm_id) => {
+const findFarmRatingByFarmID = async(farmer_id) => {
     const result = knex(FARM_TABLE).select(farm_rating).where('farmer_id', farmer_id);
     return result;
 }
 // find farm establish year by farm ID
 const findFarmEstablishedByFarmID = async(farm_id) => {
-    const result = knex(FARM_TABLE).select(farm_established).where('farmer_id', farmer_id);
+    const result = knex(FARM_TABLE).select(date_founded).where('farmer_id', farmer_id);
     return result;
 }
 
@@ -55,7 +55,7 @@ const updateFarmInformation = async(farmer_id, farm_name, farm_description, farm
 
 
 module.exports = {
-    
+
     getFarmInformation,
     createFarm,
     findFarmByName,
