@@ -21,6 +21,14 @@ export const Schedule = ({currUser}) => {
       Might need to pass additional prop to class menu to indicate if the drop button should exist or not
       Figure out student grade thing
       student setting away for what to hide
+
+        grades = account.getGrades();
+        <table>
+            <tr><td><h4>Course</h4></td><td><h4>Grades</h4></td></tr>
+            grades.map(index arrow <tr><td><p>index.course</p></td><td><p>index.grade</p></td></tr>
+            )
+        </table>
+    
        {/**TODO: made buttons work */}
        {!showHistory && 
        <GenericButton label= "See Course History" onClick={()=> showHistory = true}/>}
