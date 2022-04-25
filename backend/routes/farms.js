@@ -21,6 +21,17 @@ router.get('/:farm_id', async (req, res) =>{
 
 })
 
+router.put('/', async (req, res) =>{
+    try{
+        const body = req.body;
+        const result = await Farm.updateFarmInformation(body.farmer_id, body.farm_name, body.farm_description, body.farm_image_url, body.date_founded);
+        res.status(201).json(result);
+    }catch (err){
+        console.error('Failed to update farm information:', err);
+        res.status(500).json({message: err.toString()});
+    }
+})
+
 router.get('/events/:farm_id', async(req, res) =>{
     try{
         const result = await Events.getFarmEvents(req.params.farm_id);
