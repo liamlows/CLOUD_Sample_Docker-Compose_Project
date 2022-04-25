@@ -28,10 +28,10 @@ router.get('/transactions/:transaction_id', async (req, res, next) => {
     next();
 })
 //7.2 get interested events by customer
-router.get('/interested_events', async (req, res, next) => {
+router.get('/interested_events/:userid', async (req, res, next) => {
     try{
         const body = req.body;
-        result = await dash.fetchInterestedEvents(body.email);
+        result = await dash.fetchInterestedEvents(req.params.userid);
         res.status(200).json(result);
     } catch (err) {
         console.error('Failed to get customer interested events', err);

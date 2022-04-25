@@ -28,7 +28,6 @@ router.delete('/:event_name', async (req, res) =>{
     }
 })
 
-//5.3 I want to be able to edit events
 router.put('/:event_id', async (req, res) =>{
     try{
         const body = req.body;
