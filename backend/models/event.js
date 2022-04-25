@@ -19,9 +19,15 @@ const getAllUserEvents = async(user_id) =>{
     return query;
 }
 
+const signUserForEvent = async(user_id, event_id) => {
+    const result = knex(USER_EVENT_TABLE).insert({event_id, customer_id: user_id});
+    return result;
+}
+
 
 module.exports = {
     getFarmEvents,
     getUsersInterestedEvents,
-    getAllUserEvents
+    getAllUserEvents,
+    signUserForEvent
 };
