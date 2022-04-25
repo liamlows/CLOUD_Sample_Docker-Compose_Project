@@ -13,7 +13,7 @@ const deleteProduct = async (product_id) => {
 }
 
 const getProductsAllFilters = async(farm_id, product_category, product_name)=>{
-    const result = knex(PRODUCT_TABLE).select().where('farmer_id', farm_id).where('product_category', product_category).where('product_name', product_name);
+    const result = knex(PRODUCT_TABLE).select().where('farmer_id', farm_id).where('product_category', product_category).where('product_name', 'like', product_name);
     return result;
 }
 
@@ -23,12 +23,12 @@ const getProductThroughFarmNameCategory = async(farm_id, product_category)=>{
 }
 
 const getThroughFarmNameProductName = async(farm_id, product_name)=>{
-    const result = knex(PRODUCT_TABLE).select().where('farmer_id', farm_id).where('product_name', product_name);
+    const result = knex(PRODUCT_TABLE).select().where('farmer_id', farm_id).where('product_name','like', product_name);
     return result;
 }
 
 const getProductThroughCategoryName = async(product_category, product_name)=>{
-    const result = knex(PRODUCT_TABLE).select().where('product_category', product_category).where('product_name', product_name);
+    const result = knex(PRODUCT_TABLE).select().where('product_category', product_category).where('product_name','like', product_name);
     return result;
 }
 
@@ -38,7 +38,7 @@ const getProductThroughCategory = async(product_category)=>{
 }
 
 const getProductThroughName = async( product_name)=>{
-    const result = knex(PRODUCT_TABLE).select().where('product_name', product_name);
+    const result = knex(PRODUCT_TABLE).select().where('product_name','like', product_name);
     return result;
 }
 
