@@ -2,8 +2,8 @@ const knex = require('../database/knex');
 
 const PRODUCT_TABLE = 'product';
 
-const createNewProduct = async (product_name, product_price, product_stock, product_description, farmer_id) => {
-    const query = knex(PRODUCT_TABLE).insert({product_name, product_price, product_stock, product_description, farmer_id});
+const createNewProduct = async (product_name, product_price, product_stock, product_category, product_description,product_image_url, farmer_id) => {
+    const query = knex(PRODUCT_TABLE).insert({product_name, product_price, product_stock, product_category, product_description, product_image_url, farmer_id});
     return query;
 }
 
