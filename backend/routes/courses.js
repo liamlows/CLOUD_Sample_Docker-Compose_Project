@@ -2,10 +2,16 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../db');
 const {isUserAuthenticated, isUserAdmin, getSchoolById, validateBody,
-    parseWeekFlags, validateDates, validateTimes, getCourseById} = require("../util");
+    parseWeekFlags, validateDates, validateTimes, getCourseById, getCourseMetadataById
+} = require("../util");
 const {log} = require("@rama41222/node-logger");
 
 router.use(isUserAuthenticated);
+
+/*
+TODO:
+    DELETE /api/courses/:course_id
+*/
 
 /*
 GET /api/courses/
@@ -14,7 +20,8 @@ GET /api/courses/
 router.get("/", async (req, res, next) => {
     let rows, fields;
     try{
-        [rows, fields] = await pool.execute('SELECT * FROM `courses`');
+        [rows, fields] = await pool.execute(
+            'SELECT * FROM `courses` LEFT JOIN `course_metadata` ON `courses`.course_meta_id = `course_metadata`.course_meta_id');
     } catch(error){
         return next(error);
     }
@@ -25,7 +32,7 @@ router.get("/", async (req, res, next) => {
 
 /*
 GET /api/courses/:course-id
-    Gets a course by ID
+    Gets a course by ID, includes metadata
 */
 router.get("/:course_id", async (req, res, next) => {
     let courseId = req.params.course_id;
@@ -36,6 +43,13 @@ router.get("/:course_id", async (req, res, next) => {
         return;
     }
     parseWeekFlags(course);
+
+    let metadata = await getCourseMetadataById(course.course_meta_id);
+    if(metadata === undefined) {
+        res.status(500).json("Could not find metadata.");
+    }
+
+    course = {...course, ...metadata};
 
     res.status(200).json(course);
 });
