@@ -1,5 +1,5 @@
 const express = require('express');
-const Farm = require('../models/farm');
+const Farm = require('../models/events');
 
 
 const router = express.Router();
