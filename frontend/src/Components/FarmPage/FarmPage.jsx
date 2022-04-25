@@ -29,6 +29,7 @@ const FarmPage = () => {
     const [showAddItemDialog, setShowAddItemDialog] = useState();
     const [addItemDetails, setAddItemDetails] = useState();
     const [showAddItem, setShowAddItem] = useState(false);
+    const [refresh, setRefresh] = useState(false);
     const userContext = useContext(UserContext);
 
     const [thisfarm, setFarm] = useState(new farm(
@@ -69,7 +70,7 @@ const FarmPage = () => {
             }));
         }
         console.log(thisfarm)
-    }, [showCreateEvent, showAddItem, showEditItemDialog]);
+    }, [showCreateEvent, showAddItem, showEditItemDialog, refresh]);
 
 
     if (showAddItem)
@@ -137,6 +138,8 @@ const FarmPage = () => {
                     thisfarm.events && thisfarm.events.map((event) => {
                         return <Grid item sm={6} md={4} lg={3} width="100%">
                             <EventCard farmName={thisfarm.farmName}
+                                        setRefresh={setRefresh}
+                                        farmer_id={params.farmId}
                                 {...event} />
                         </Grid>
                     })
@@ -169,7 +172,11 @@ const FarmPage = () => {
                     farmId={params.farmId} />
             }
 
-            {showCreateEvent && <CreateEventDialog open={showCreateEvent} setOpen={setShowCreateEvent} />}
+            {showCreateEvent && <CreateEventDialog 
+                                    open={showCreateEvent} 
+                                    setOpen={setShowCreateEvent} 
+                                    farmId={params.farmId}
+                                     />}
         </div>
     </>;
 };

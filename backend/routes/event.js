@@ -1,5 +1,5 @@
 const express = require('express');
-const Farm = require('../models/farm');
+const Farm = require('../models/events');
 
 
 const router = express.Router();
@@ -17,17 +17,6 @@ router.post('/', async (req, res) =>{
 
 })
 
-router.put('/:event_id', async (req, res) =>{
-    try{
-        const body = req.body;
-        const result = await Farm.updateEvent(req.params.event_id, body.event_name, body.event_description, body.event_image_url, body.farmer_id, body.date, body.time);
-        res.status(201).json(result);
-    }catch (err){
-        console.error('Failed to update an event:', err);
-        res.status(500).json({message: err.toString()});
-    }
-})
- 
 router.delete('/:event_name', async (req, res) =>{
 //5.2 I want to be able to delete posts about events on my page
     try{
@@ -35,6 +24,17 @@ router.delete('/:event_name', async (req, res) =>{
         res.status(204).json(result);
     }catch (err){
         console.error('Failed to delete event:', err);
+        res.status(500).json({message: err.toString()});
+    }
+})
+
+router.put('/:event_id', async (req, res) =>{
+    try{
+        const body = req.body;
+        const result = await Farm.updateEvent(req.params.event_id, body.event_name, body.event_description, body.event_image_url, body.farmer_id, body.date, body.time);
+        res.status(201).json(result);
+    }catch (err){
+        console.error('Failed to update an event:', err);
         res.status(500).json({message: err.toString()});
     }
 })
