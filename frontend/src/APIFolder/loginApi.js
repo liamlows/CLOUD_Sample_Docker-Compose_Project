@@ -216,3 +216,8 @@ export const sendEnrollmentRequest = async (targetId) => {
     const res = await axios.post(`${BACKEND_ENDPOINT}/api/enrollments/`, { targetId: targetId });
     return res.data;
 }
+
+export const deleteNotification = async (id) => {
+    const res = await axios.delete(`${BACKEND_ENDPOINT}/api/notifications/${id}`);
+    return res.data;
+}
