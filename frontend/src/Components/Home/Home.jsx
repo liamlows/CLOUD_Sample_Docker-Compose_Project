@@ -2,6 +2,7 @@ import * as React from 'react';
 import Timeline from '@mui/lab/Timeline';
 import "./Home.css";
 import LandingImage from '../../images/landing_img.jpg';
+import LandingImageTwo from '../../images/farm_icon.png';
 import TimelineItem from '@mui/lab/TimelineItem';
 import TimelineSeparator from '@mui/lab/TimelineSeparator';
 import TimelineConnector from '@mui/lab/TimelineConnector';
@@ -21,7 +22,6 @@ import { Divider, Grid, Slide, Typography, useMediaQuery, useTheme } from '@mate
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 
-
 export const Home = () => {
     const theme = createTheme({
         typography: {
@@ -30,7 +30,6 @@ export const Home = () => {
             ].join(",")
         }
     });
-
 
     return (
         <>
@@ -66,7 +65,7 @@ export const Home = () => {
                                         </Typography>
                                     </div>
                                     <Link to={'/login'}>
-                                        <Button variant="contained" color="success" sx={{ pl: 3, pr: 3 }}>
+                                        <Button variant="contained" color="success" sx={{ pl: 5, pr: 5 }}>
                                             <Typography textAlign="center">Login</Typography>
                                         </Button>
                                     </Link>
@@ -75,45 +74,43 @@ export const Home = () => {
                         </div>
                     </Card>
 
-                    <Card sx={{ display: 'flex' }}>
-                        <CardContent>
-                            <Timeline id="timeline">
-                                <TimelineItem>
-                                    <TimelineSeparator>
-                                        <TimelineDot />
-                                        <TimelineConnector />
-                                    </TimelineSeparator>
-                                    <TimelineContent>Create your account and choose if you are a farmer or not </TimelineContent>
-                                </TimelineItem>
-                                <TimelineItem>
-                                    <TimelineSeparator>
-                                        <TimelineDot />
-                                        <TimelineConnector />
-                                    </TimelineSeparator>
-                                    <TimelineContent>Post items & buy items from other farmers in your area</TimelineContent>
-                                </TimelineItem>
-                                <TimelineItem>
-                                    <TimelineSeparator>
-                                        <TimelineDot />
-                                    </TimelineSeparator>
-                                    <TimelineContent>Host or attend events from farms</TimelineContent>
-                                </TimelineItem>
-                            </Timeline>
-                        </CardContent>
-                        <div id="timelineimg">
-                            <CardMedia
-                                component="img"
-                                sx={{ width: 450 }}
-                                image={LandingImage}
-                                alt="Landing Img"
-                            />
-                        </div>
 
-                    </Card>
-
-
-
-
+                    <div id="secondLanding">
+                        <Card sx={{ display: 'flex' }}>
+                            <CardContent>
+                                <Timeline id="timeline">
+                                    <TimelineItem>
+                                        <TimelineSeparator>
+                                            <TimelineDot />
+                                            <TimelineConnector />
+                                        </TimelineSeparator>
+                                        <TimelineContent>Create your account and choose if you are a farmer or not </TimelineContent>
+                                    </TimelineItem>
+                                    <TimelineItem>
+                                        <TimelineSeparator>
+                                            <TimelineDot />
+                                            <TimelineConnector />
+                                        </TimelineSeparator>
+                                        <TimelineContent>Post items & buy items from other farmers in your area</TimelineContent>
+                                    </TimelineItem>
+                                    <TimelineItem>
+                                        <TimelineSeparator>
+                                            <TimelineDot />
+                                        </TimelineSeparator>
+                                        <TimelineContent>Host or attend events from farms</TimelineContent>
+                                    </TimelineItem>
+                                </Timeline>
+                            </CardContent>
+                            <div id="timelineimg">
+                                <CardMedia
+                                    component="img"
+                                    sx={{ width: 350 }}
+                                    image={LandingImageTwo}
+                                    alt="Landing Img"
+                                />
+                            </div>
+                        </Card>
+                    </div>
                 </div>
 
 
