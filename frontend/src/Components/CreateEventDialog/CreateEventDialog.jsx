@@ -9,13 +9,12 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Checkmark from '../../images/green-checkmark.png';
 import { Box } from '@mui/system';
-import { addItemToFarm } from '../../api/farmItems';
 import EventCard from '../eventCard/EventCard';
 import { createEvent, deleteEventById } from '../../api/events';
 // When creating an event, you should just pass in {open, setOpen, farmId, farmName}
 // When editing an event, all fields should be passed in
 // When deleting an event, all fields should be passed in
-const CreateEventDialog = ({ open, setOpen, eventTitle, eventDescription, eventImage, eventDate, eventTime, eventId, setEvent, farmId, farmName, showDelete }) => {
+const CreateEventDialog = ({ open, setOpen, event_name, event_description, eventImage, eventDate, eventTime, eventId, setEvent, farmId, farmName, showDelete }) => {
 
     const [eventDetails, setEventDetails] = useState({
     })
@@ -26,7 +25,7 @@ const CreateEventDialog = ({ open, setOpen, eventTitle, eventDescription, eventI
     const [completionText, setCompletionText] = useState('')
     useEffect(() => {
         setEventDetails({
-            eventTitle, eventDescription, eventImage, eventDate, eventTime, eventId, setEvent, farmId
+            event_name, event_description, eventImage, eventDate, eventTime, eventId, setEvent, farmId
         })
     }, [])
     const handleChange = (delta) => {
@@ -113,8 +112,8 @@ const CreateEventDialog = ({ open, setOpen, eventTitle, eventDescription, eventI
                     <DialogTitle sx={{ textAlign: "center", fontWeight: "Bold" }}>Confirm your event</DialogTitle>
                     <DialogContent>
                         <EventCard
-                            eventTitle={eventDetails.eventTitle}
-                            eventDescription={eventDetails.eventDescription}
+                            event_name={eventDetails.event_name}
+                            event_description={eventDetails.event_description}
                             farmName={farmName}
                             eventImage={eventDetails.eventImage}
                             eventDate={eventDetails.eventDate}
@@ -134,13 +133,13 @@ const CreateEventDialog = ({ open, setOpen, eventTitle, eventDescription, eventI
                             <TextField
                                 sx={{ margin: "1rem 0" }}
                                 required
-                                id="eventTitle"
+                                id="event_name"
                                 label="Title"
 
                                 fullWidth
                                 rows={4}
-                                value={eventDetails.eventTitle}
-                                onChange={e => handleChange({ eventTitle: e.target.value })}
+                                value={eventDetails.event_name}
+                                onChange={e => handleChange({ event_name: e.target.value })}
 
                             />
                             <TextField
@@ -158,13 +157,13 @@ const CreateEventDialog = ({ open, setOpen, eventTitle, eventDescription, eventI
                             <TextField
                                 sx={{ marginBottom: "1rem" }}
                                 required
-                                id="eventDescription"
+                                id="event_description"
                                 label="Description"
                                 multiline
                                 fullWidth
                                 rows={4}
-                                value={eventDetails.eventDescription}
-                                onChange={e => handleChange({ eventDescription: e.target.value })}
+                                value={eventDetails.event_description}
+                                onChange={e => handleChange({ event_description: e.target.value })}
 
                             />
                             <TextField
