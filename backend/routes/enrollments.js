@@ -5,15 +5,6 @@ const {isUserAuthenticated, isUserAdmin, getCourseById} = require("../util");
 
 router.use(isUserAuthenticated);
 
-/* TODO
-
-GET /api/wait-list/:course-id/
-    Gets all students in the wait list for the specified course ID.
-POST /api/wait-list/:course-id/
-    Adds a student to the wait list for the specified student ID and course ID.
- */
-
-
 async function getEnrollmentsByAccount(accountId){
     let [rows, fields] = await pool.execute('SELECT * FROM `enrollments` WHERE `account_id` = ?', [accountId]);
     return rows;

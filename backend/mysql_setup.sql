@@ -122,7 +122,7 @@ CREATE TABLE `db`.`enrollments` (
 CREATE TABLE `db`.`waitlists` (
     `account_id` BIGINT UNSIGNED NOT NULL,
     `course_id` BIGINT UNSIGNED NOT NULL,
-    `timestamp` DATETIME NOT NULL,
+    `timestamp` DATETIME DEFAULT NOW(),
     PRIMARY KEY (`account_id`, `course_id`),
     FOREIGN KEY (`account_id`) REFERENCES  accounts(`account_id`),
     FOREIGN KEY (`course_id`) REFERENCES courses(`course_id`)
