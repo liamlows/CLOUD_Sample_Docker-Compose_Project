@@ -26,12 +26,18 @@ const findUserByID = async (user_id) => {
     const result = await query;
     return result;
 }
+//find user by email
+const findUserByEmail = async (email) => {
+    const query = knex(USER_TABLE).where({ email });
+    const result = await query;
+    return result;
+}
 //sign in
-const authenticateUser = async (user_id, password) => {
-    const users = await findUserByID(user_id);
+const authenticateUser = async (email, password) => {
+    const users = await findUserByEmail(email);
     console.log('Results of users query', users);
     if (users.length === 0) {
-        console.error(`No users matched the id: ${user_id}`);
+        console.error(`No users matched the id: ${email}`);
         return null;
     }
     const user = users[0];
@@ -63,6 +69,7 @@ const deleteAccount = async (user_id) => {
 module.exports = {
     createNewUser,
     findUserByID,
+    findUserByEmail,
     authenticateUser,
     updatePassword,
     deleteAccount
