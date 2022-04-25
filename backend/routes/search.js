@@ -66,21 +66,22 @@ router.get('/', async(req, res) =>{
         if(req.body.itemName != ""){
             isItemName = true;
         }
+        var product_name = '%' + req.body.itemName +'%';
 
         if(isFarmName & isFilters & isItemName){
-            result = await Product.getProductsAllFilters(req.body.farmName, req.body.filters[0], req.body.itemName);
+            result = await Product.getProductsAllFilters(req.body.farmName, req.body.filters[0], product_name);
         }else if(isFarmName & isFilters){
             result = await Product.getProductThroughFarmNameCategory(req.body.farmName, req.body.filters[0]);
         }else if(isFarmName & isItemName){
-            result = await Product.getThroughFarmNameProductName(req.body.farmName, req.body.itemName);
+            result = await Product.getThroughFarmNameProductName(req.body.farmName, product_name);
         }else if(isFilters & isItemName){
-            result = await Product.getProductThroughCategoryName(req.body.filters[0], req.body.itemName);
+            result = await Product.getProductThroughCategoryName(req.body.filters[0], product_name);
         }else if(isFarmName){
             result = await Product.getProductThroughFarmName(req.body.farmName);
         } else if(isFilters){
             result = await Product.getProductThroughCategory(req.body.filters[0]);
         }else if(isItemName){
-            result = await Product.getProductThroughName(req.body.itemName);
+            result = await Product.getProductThroughName(product_name);
         }else{
             result = await Product.getAvailableProducts();
         }
