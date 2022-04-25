@@ -9,7 +9,7 @@ import { Button } from "@mui/material";
 import { LoggedInResponsiveAppBar } from "../common/LoggedInResponsiveAppBar";
 
 // Method Imports
-import { deleteNotification, getAccountbyUsername, logout } from "../../APIFolder/loginApi";
+import { deleteNotification, getAccountbyUsername, getNotifications, logout } from "../../APIFolder/loginApi";
 
 import ClearIcon from '@mui/icons-material/Clear';
 
@@ -109,9 +109,9 @@ export const HomeView = (props) => {
                     <thead>
                         <tr>
                             <th>Notifications</th>
-                            <th>
+                            {notifications.length !== 0 && <th>
                                 <Button onClick={() => { removeAllNotification(account.account_id) }}>Clear All</Button>
-                            </th>
+                            </th>}
                         </tr>
                     </thead>
                     <tbody>
