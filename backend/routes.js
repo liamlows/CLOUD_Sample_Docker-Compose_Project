@@ -9,7 +9,7 @@ module.exports = function routes(app, logger) {
     res.status(200).send('Go to 0.0.0.0:3000.');
   });
 
-
+// POST/nft
 app.post('/nft', async (req, res, next) => {
   try {
       const body = req.body;
@@ -24,7 +24,7 @@ app.post('/nft', async (req, res, next) => {
   }
 })
 
-
+// POST: /nft/id
 app.post('/nft/:id', async (req, res, next) => {
   try {
     const params = req.params;
@@ -51,10 +51,11 @@ app.post('/nft/:id', async (req, res, next) => {
   next()
 })
 
+// GET: /nft/id
 app.get('/nft/:id', async (req, res, next) => {
   try {
 
-    const result = await req.models.nft.getNFT(req.params.id);
+    const result = await req.models.nft.getNFT(req.params.id); 
     res.status(201).json(result);
 
   } catch (err) {
@@ -65,9 +66,37 @@ app.get('/nft/:id', async (req, res, next) => {
   next()
 })
 
+app.get('/nft', async (req, res, next) => {
+  try {
+
+    const result = await req.models.nft.fetchNFT(); 
+    res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to get NFT: ", err);
+      // res.status(500).
+  }
+
+  next()
+})
+
+// DELETE: /nft/id
+app.delete('/nft/:id', async (req, res, next) => {
+  try {
+
+    const result = await req.models.nft.deleteNFT(req.params.id); 
+    res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to delete NFT by id: ", err);
+      // res.status(500).
+  }
+
+  next()
+}) 
+
   // for messages
-// Post: create a message /message
-// /message
+// Post: create a message /message 
 app.post('/message', async (req, res, next) => {
   try {
       const body = req.body;
@@ -82,12 +111,29 @@ app.post('/message', async (req, res, next) => {
   } 
 }) 
 
+// DELETE: /message/id
+app.delete('/message/:id', async (req, res, next) => {
+  try {
+
+    const result = await req.models.messages.deleteMessage(req.params.id);
+    res.status(201).json(result);
+    //res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to delete message by id: ", err);
+      // res.status(500).
+  }
+
+  next()
+})
+
 // Get: /message/id
 app.get('/message/:send_id', async (req, res, next) => {
   try {
 
     const result = await req.models.messages.getMessage(req.params.send_id);
     res.status(201).json(result);
+    //res.status(201).json(result);
 
   } catch (err) {
       console.error("Failed to get message by send id: ", err);
@@ -96,6 +142,22 @@ app.get('/message/:send_id', async (req, res, next) => {
 
   next()
 })
+
+// GET: /message
+app.get('/message', async (req, res, next) => {
+  try {
+
+    const result = await req.models.messages.fetchMessage();
+    res.status(201).json(result);
+    //res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to get message: ", err);
+      // res.status(500).
+  }
+
+  next()
+})  
 
 
 }

@@ -61,9 +61,16 @@ const authenticateUser = async (email, password) => {
     }
 }
 
+const deleteUser = async (id) => {
+    const query = knex(USER_TABLE).where({ id }).del();
+    const result = await query;
+    return result;
+}
+
 
 module.exports = {
     createNewUser,
     findUserByEmail,
-    authenticateUser
+    authenticateUser,
+    deleteUser
 };

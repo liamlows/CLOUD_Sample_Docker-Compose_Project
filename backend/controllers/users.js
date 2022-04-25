@@ -25,8 +25,15 @@ const findUserByEmail = async(email) => {
     return result;
 };
 
+
+const deleteUserById = async (id) => {
+    const result = await User.deleteUser(id);  
+    return result;
+}
+
 module.exports = {
     createUser,
     authenticateUser,
-    findUserByEmail
+    findUserByEmail,
+    deleteUserById
 };
