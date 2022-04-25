@@ -23,14 +23,13 @@ export const getFarmById = (id) => axios.get(`${apiEndpoint}/${id}`, apiConfig);
 // update farm info, should update stuff only on the farm table like image, name, description, and not items
 export const updateFarmByID = (farmInfo, id) => axios.put(`${apiEndpoint}/${id}`, farmInfo, apiConfig)
 
-
 // create a new farm
 export const createFarm = (farm) => {
     axios.post(`${apiEndpoint}/`, farm, apiConfig)
 
 }
-
 export const deleteFarmByID = (farm,id) => {
     axios.delete(`${apiEndpoint}/${id}`, apiConfig)
     
 }
+
