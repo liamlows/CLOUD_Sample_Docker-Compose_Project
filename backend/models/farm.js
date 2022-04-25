@@ -11,7 +11,7 @@ const createEvent = async (event_name, event_description, event_image_url, farme
 };
 
 const updateEvent = async(event_id, event_name,event_description, event_image_url,farmer_id,date,time) => {
-    const query = knex(EVENT_TABLE).where('event_id', event_id).update({event_name}).update({event_description}).update({event_image_url}).update({farmer_id}).update({date}).update({time})
+    const query = knex(EVENT_TABLE).where('event_id', event_id).update({event_name}).update({event_description}).update({event_image_url}).update({farmer_id}).update({date}).update({time});
     return query;
 }
 
@@ -33,7 +33,7 @@ const deleteEvent = async (event_id) => {
 
 
 
-const FARM_TABLE = 'farm';
+const FARM_TABLE = 'farmer';
 
 //create new farm
 const createFarm = async (farm_id,farm_name, farmer_id, farm_picture, farm_description, farm_rating, farm_established) => {
@@ -79,6 +79,11 @@ const getFarmInformation = async(farm_id) =>{
     return query;
 };
 
+const updateFarmInformation = async(farmer_id, farm_name, farm_description, farm_image_url, date_founded) => {
+    const result = knex(FARM_TABLE).where('farmer_id', farmer_id).update({farm_name}).update({farm_description}).update({farm_image_url}).update({date_founded});
+    return result;
+};
+
 
 
 module.exports = {
@@ -93,5 +98,6 @@ module.exports = {
     findFarmByID,
     findFarmRatingByFarmID,
     findFarmEstablishedByFarmID,
-    deleteFarm
+    deleteFarm,
+    updateFarmInformation
 };
