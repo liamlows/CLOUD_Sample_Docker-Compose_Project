@@ -297,7 +297,7 @@ export const Profile = (props) => {
                             <table className='table float-start'>
                                 <thead>
                                     {online && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
-                                    {online && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
+                                    {!online && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
                                     <th className="float-start col-3 fs-3 mt-2 text-start"><span className="text-start p-0">{account.username}</span></th>
 
                                     <th className="col-1">
