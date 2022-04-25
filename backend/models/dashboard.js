@@ -15,8 +15,8 @@ const fetchTransactionByID = async (transaction_id) => {
     return result;
 };
 //Get all interested events by customer
-const fetchInterestedEvents = async (email) => {
-    const query = knex('customer_event_interests').join('events','event_id','customer_event_interests.event_id').select().where({customer_id: email});
+const fetchInterestedEvents = async (user_id) => {
+    const query = knex('customer_event_interests').join('event','event.event_id','customer_event_interests.event_id').select().where({customer_id: user_id});
     const result = await query;
     return result;
 }

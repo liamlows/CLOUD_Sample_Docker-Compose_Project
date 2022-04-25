@@ -27,7 +27,7 @@ router.put('/:event_id', async (req, res) =>{
         res.status(500).json({message: err.toString()});
     }
 })
-
+ 
 router.delete('/:event_name', async (req, res) =>{
 //5.2 I want to be able to delete posts about events on my page
     try{
