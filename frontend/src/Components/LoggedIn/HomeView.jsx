@@ -9,7 +9,7 @@ import { Button } from "@mui/material";
 import { LoggedInResponsiveAppBar } from "../common/LoggedInResponsiveAppBar";
 
 // Method Imports
-import { getAccountbyUsername, logout } from "../../APIFolder/loginApi";
+import { deleteNotification, getAccountbyUsername, logout } from "../../APIFolder/loginApi";
 
 import ClearIcon from '@mui/icons-material/Clear';
 
@@ -21,6 +21,7 @@ export const HomeView = (props) => {
 
     // Component Variables
     const [account, setAccount] = useState({});
+    const [notifications, setNotifications] = useState([]);
 
     // Initial Load
     useEffect(() => {
@@ -69,6 +70,23 @@ export const HomeView = (props) => {
         navigate(`accounts/${account.username}`);
     }
 
+    const removeNotification = (id) => {
+        let notifications2 = notifications
+        for (const idx in notifications2) {
+            if (notifications2[idx].notification_id === id) {
+                notifications2.splice(idx, 1);
+                setNotifications({ ...notifications2 });
+                deleteNotification(id);
+            }
+        }
+    }
+    const removeAllNotification = () => {
+        for(const i in notifications)
+        {
+            removeNotification(notifications[i].notification_id);
+        }
+    }
+
     // HTML
     return <div>
         <LoggedInResponsiveAppBar
@@ -85,20 +103,34 @@ export const HomeView = (props) => {
                 Add Classes Here
             </div>
             <div className="col-6 border p-5">
-                Notifications
+
                 {/* Need to add api routes to clear notifications */}
-                <Button onClick={() => {removeAllNotification(account.account_id)}}>Clear All</Button>
                 <table className="overflow-hidden">
-                    {notifications.map((notification, idx) => {
-                        return <div>
-                            <tr className="row">
-                                <h1 className="col-9">{notification.title}</h1>
-                                <Button className="col-1" onClick={() => removeNotification(account.account_id, notification.id)}><ClearIcon/></Button>
-                                <div className="p-0 m-0 border"></div>
-                                <p>{notification.body}</p>
+                    <thead>
+                        <tr>
+                            <th>Notifications</th>
+                            <th>
+                                <Button onClick={() => { removeAllNotification(account.account_id) }}>Clear All</Button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {notifications.length !== 0 && notifications.map((notification, idx) => {
+                            return <div>
+                                <tr className="row">
+                                    <h1 className="col-9">{notification.title}</h1>
+                                    <Button className="col-1" onClick={() => removeNotification(notification.id)}><ClearIcon /></Button>
+                                    <div className="p-0 m-0 border"></div>
+                                    <p>{notification.body}</p>
+                                </tr>
+                            </div>
+                        })}
+                        {
+                            notifications.length === 0 && <tr>
+                                <td>No Notifications</td>
                             </tr>
-                        </div>
-                    })}
+                    }
+                    </tbody>
                 </table>
             </div>
         </div>
