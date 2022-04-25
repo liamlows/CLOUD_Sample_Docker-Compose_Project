@@ -12,7 +12,7 @@ import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 import { TextField } from "../common";
 
 // Method Imports
-import { getAccountbyUsername, getFriendRequests, getProfiles, handleFriendRequest, logout, sendFriendRequest } from "../../APIFolder/loginApi"
+import { getAccountbyUsername, getFriendRequests, getProfiles, getStudents, handleFriendRequest, logout, sendFriendRequest } from "../../APIFolder/loginApi"
 
 
 export const UserSearch = ({ pages, settings, setNavigated }) => {
