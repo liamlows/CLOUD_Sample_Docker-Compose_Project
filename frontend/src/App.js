@@ -16,7 +16,7 @@ import { ClassMenu } from './Components/ClassView/classMenu';
 import { NoPages } from './Components/NoPages';
 import { AddClasses } from './Components/ClassView/AddClasses';
 
-import { Waitlist } from './Components/AdminView/Waitlist';
+// import { Waitlist } from './Components/AdminView/Waitlist';
 
 // Method Imports
 import { getAccountbyUsername } from './APIFolder/loginApi';
@@ -149,10 +149,10 @@ function App() {
           setNavigated={x => setNavigated(x)}/>} />
 
           {/* Admin loading */}
-          <Route path="/waitlist/:course_id" element={<Waitlist
+          {/* <Route path="/waitlist/:course_id" element={<Waitlist
           pages={loggedInPages}
           settings={settings}
-          setNavigated={x => setNavigated(x)}/>} />
+          setNavigated={x => setNavigated(x)}/>} /> */}
 
           <Route path="*" element={<NoPages/>} />
 

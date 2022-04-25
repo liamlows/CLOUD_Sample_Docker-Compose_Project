@@ -66,8 +66,8 @@ export const updateAccountbyUsername = async (account) => {
 }
 
 
-export const getProfiles = async () => {
-    const res = await axios.get(`${BACKEND_ENDPOINT}/api/users`);
+export const getStudents = async () => {
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/users?account_type=student`);
     if(res.status !== 200){
         console.log("Couldn't find users");
         return null;
@@ -207,7 +207,7 @@ export const uploadPP = async (pp) => {
     // return res.data;
 }
 
-export const getEnrollmentRequest = async (id) => {
+export const getEnrollmentRequests = async (id) => {
     const res = await axios.get(`${BACKEND_ENDPOINT}/api/enrollments/${id}`);
     return res.data;
 }

@@ -30,7 +30,7 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
     useEffect(() => {
         console.log("running");
         // setProfiles(false);
-        getProfiles().then(res => {
+        getStudents().then(res => {
             console.log("Getting requests")
             getFriendRequests().then(frRes => {
                 // convert it to an array

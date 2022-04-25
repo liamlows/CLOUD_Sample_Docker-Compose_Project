@@ -462,7 +462,7 @@ export const Profile = (props) => {
                                         className="btn bg-secondary"
                                         endIcon={<ArrowForwardIcon />}
                                         onClick={() => goToClass(clss)}>
-                                        View Profile
+                                        View Course
                                     </Button>
                                 </td>
 
@@ -472,6 +472,14 @@ export const Profile = (props) => {
                     </tbody>
                 </table>
             </div>}
+
+            
+           
+            {/* {
+                //satisfying the review professor
+                //honestly we may be able to get away with doing the flagging be a note saying "flagged reviews are seen as false or overly critical by professor"
+                account.account_type === "professor" && <ReviewList></ReviewList>
+            } */}
         </section>
     }
     return <></>;

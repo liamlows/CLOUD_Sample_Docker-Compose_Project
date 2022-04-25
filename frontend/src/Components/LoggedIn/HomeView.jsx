@@ -3,11 +3,14 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
+
 // Component Imports
 import { LoggedInResponsiveAppBar } from "../common/LoggedInResponsiveAppBar";
 
 // Method Imports
 import { getAccountbyUsername, logout } from "../../APIFolder/loginApi";
+
+import ClearIcon from '@mui/icons-material/Clear';
 
 export const HomeView = (props) => {
     // Navigate Object
@@ -22,6 +25,9 @@ export const HomeView = (props) => {
     useEffect(() => {
         if (JSON.stringify(account) === "{}")
             setAccount(JSON.parse(localStorage.getItem("currUser")));
+
+        // scedule?
+        getNotifications(account.account_id).then(res => { setNotifications(res) })
         console.log("Loading HomeView...");
     }, [account]);
 
@@ -78,7 +84,21 @@ export const HomeView = (props) => {
                 Add Classes Here
             </div>
             <div className="col-6 border p-5">
-                Add Notifications Here
+                Notifications
+                {/* Need to add api routes to clear notifications */}
+                <Button onClick={() => {removeAllNotification(account.account_id)}}>Clear All</Button>
+                <table className="overflow-hidden">
+                    {notifications.map((notification, idx) => {
+                        return <div>
+                            <tr className="row">
+                                <h1 className="col-9">{notification.title}</h1>
+                                <Button className="col-1" onClick={() => removeNotification(account.account_id, notification.id)}><ClearIcon/></Button>
+                                <div className="p-0 m-0 border"></div>
+                                <p>{notification.body}</p>
+                            </tr>
+                        </div>
+                    })}
+                </table>
             </div>
         </div>
     </div>

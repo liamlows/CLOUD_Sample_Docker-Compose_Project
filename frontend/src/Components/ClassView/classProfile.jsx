@@ -18,7 +18,7 @@ import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 
 
 // Method Imports
-import { getAccountbyUsername, logout, sendEnrollmentRequest, updateAccountbyUsername, getAccountbyId, getCourseById, getCourseRequest, getCoursebyId } from "../../APIFolder/loginApi";
+import { getAccountbyUsername, logout, sendEnrollmentRequest, updateAccountbyUsername, getAccountbyId, getCourseById, getCourseRequest, getCoursebyId, updateCoursebyId } from "../../APIFolder/loginApi";
 
 export const ClassProfile = (props) => {
     // Navigate Object
@@ -48,6 +48,8 @@ export const ClassProfile = (props) => {
         // { first_name: "first2", last_name: "last2", account_id: 20 }
     ]);
     const [account, setAccount] = useState({})
+    const [messageMode, setMessageMode] = useState(false);
+    const [message, setMessage] = useState("")
 
     const params = useParams();
 
@@ -60,19 +62,7 @@ export const ClassProfile = (props) => {
         console.log(params.course_id)
         getCoursebyId(params.course_id).then(loaded => {
             console.log(loaded);
-            // get the table of friend requests
-            // getCourseRequest(loaded.course_id).then(res => {
 
-            // }).catch(code => {
-            //     if (code === 404) {
-            //         status = 0;
-            //     }
-
-            // }).then(() => {
-            //     console.log("Adding status to course");
-            //     setCourse({ ...loaded, status: status });
-            //     console.log(course);
-            // }).then(() => {
             getAccountbyId(course.professor_id).then(account => setProfessor(account));
             setTAs([]);
             let newTas = []
@@ -80,7 +70,33 @@ export const ClassProfile = (props) => {
                 getAccountbyId(course.tas[ta]).then(person => newTas.push(person))
             }
             setTAs(newTas);
-            // });
+            // get the table of friend requests
+            if (account.account_type === "student") {
+                getEnrollmentRequests(account.account_id).then(res => {
+                    // Slight problem, I have no idea what the heck this returns so yikes
+                    for (const clss in res) {
+                        if (res[clss].course_id === course.course_id) {
+                            if (res[clss].status === 1) {
+                                status = 1
+                            }
+                            if (res[clss].status === -1) {
+                                status = -1
+                            }
+                        }
+                    }
+
+                    // console.log(res); 
+                }).catch(code => {
+                    if (code === 404) {
+                        status = 0;
+                    }
+
+                }).then(() => {
+                    console.log("Adding status to course");
+                    setCourse({ ...loaded, status: status });
+                    console.log(course);
+                });
+            }
         })
     }, [editMode, reload]);
 
@@ -114,8 +130,22 @@ export const ClassProfile = (props) => {
 
     const doneEditing = () => {
         if (course.course_name && course.course_number && course.description) {
+
+
+
+
+
+
+            //Please send back the updated course so that I can send "Updated course info message"
+
+
+
+
+
+
+
             updateCoursebyId(course).then(setEditMode(false));
-            localStorage.setItem("currUser", JSON.stringify(account));
+            localStorage.setItem("currUser", JSON.stringify(account));//dont think this ever gets hit or matters in the slightest
         }
         else {
             window.alert("Please fill out all fields");
@@ -143,8 +173,24 @@ export const ClassProfile = (props) => {
     }
 
     const sendEnrollmentRequestFunc = () => {
-        console.log("sending friend request");
         sendEnrollmentRequest()
+        setReload(!reload)
+    }
+
+    const sendMessage = () => {
+        //Need to finalize the sending. 
+
+
+
+
+        // sendMessageToPeopleInCourse(account.account_id, message, other info here?)
+
+
+
+
+
+
+        setMessageMode(false)
         setReload(!reload)
     }
 
@@ -209,15 +255,34 @@ export const ClassProfile = (props) => {
                                             <TextField label="Course Number :" value={course.course_number} setValue={course_number => changeCourse({ course_number })} />
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            {/* Probably should make this a text area and move down to where the description actually is */}
-                                            <TextField label="Course Description :" value={course.description} setValue={description => changeCourse({ description })} />
-                                        </td>
-                                    </tr>
+                                    Teaching Assistants
+                                    {
+                                        tas.map((profile, idx) => {
+
+                                            return <tr key={idx} className="container">
+                                                <td>
+                                                    <span className="p-0 text-capitalize">{profile.first_name} </span><span className="p-0 text-capitalize" >{profile.last_name}</span>
+                                                </td>
+                                                <td>
+                                                    <Button variant="contained"
+                                                        className="btn bg-secondary"
+                                                        endIcon={<ArrowForwardIcon />}
+                                                        onClick={() => goToProfile(profile)}>
+                                                        View Profile
+                                                    </Button>
+                                                </td>
+                                            </tr>
+                                        })
+                                    }
                                 </tbody>
                             </table>
                         </div>
+
+                        <div className="row p-4 bg-light mt-0">
+                            <TextField label="Course Description :" value={course.description} setValue={description => changeCourse({ description })} />
+
+                        </div>
+
                         <div className="row mb-3">
                             <div className="col-6">
                                 <button type="button" className="btn btn-secondary col-4 contained m-1 float-end" onClick={() => cancel()}>Cancel</button>
@@ -242,6 +307,27 @@ export const ClassProfile = (props) => {
                                         <button type="button" className="btn btn-light" onClick={() => startEditing()}>Edit Course</button>
                                     </th>
                                 </thead>
+                                <tbody>
+                                    Teaching Assistants
+                                    {
+                                        tas.map((profile, idx) => {
+
+                                            return <tr key={idx} className="container">
+                                                <td>
+                                                    <span className="p-0 text-capitalize">{profile.first_name} </span><span className="p-0 text-capitalize" >{profile.last_name}</span>
+                                                </td>
+                                                <td>
+                                                    <Button variant="contained"
+                                                        className="btn bg-secondary"
+                                                        endIcon={<ArrowForwardIcon />}
+                                                        onClick={() => goToProfile(profile)}>
+                                                        View Profile
+                                                    </Button>
+                                                </td>
+                                            </tr>
+                                        })
+                                    }
+                                </tbody>
                             </table>
                         </div>
                         <div className="ProfessorProfile col-5 mt-1 bg-light2">
@@ -268,12 +354,32 @@ export const ClassProfile = (props) => {
                         </div>
                     </div>
                     <div className="row p-4 bg-light mt-0">
-
+                        <p>
+                            {course.description}
+                        </p>
                     </div>
-                </div>}
+
+                    {!messageMode && <Button onClick={() => { setMessageMode(true); setReload(!reload) }}>Send Annoucement</Button>}
+                    {messageMode && <div>
+                        <TextField label="Message Title :" value={message.title} setValue={title => setMessage({ ...message, title: title })} />
+                        <TextField label="Message Body :" value={message.body} setValue={body => setMessage({ ...message, body: body })} />
+
+                        <div className="row mb-3">
+                            <div className="col-6">
+                                <button type="button" className="btn btn-secondary col-4 contained m-1 float-end" onClick={() => { setMessage({}); setMessageMode(false) }; setReload(!reload)}>Cancel</button>
+                        </div>
+                        <div className="col-6">
+                            <button type="button" className="btn btn-success col-4 contained m-1 float-start" onClick={() => sendMessage()}>Save</button>
+                        </div>
+                    </div>}
+
+
+                </div>
+            }
 
             {/* Viewing non editable class */}
-            {!canEdit() &&
+            {
+                !canEdit() &&
                 <div>
                     <div className="row">
                         <div className="col-3 float-end">
@@ -287,13 +393,13 @@ export const ClassProfile = (props) => {
                                 <table className='table float-start'>
                                     <thead>
                                         <th className="float-start col-3 fs-3 mt-2 text-start">{account.username}</th>
-                                        {accountType === "student" && account.status === -1 && <th className="col-2 pb-2">
+                                        {account.account_type === "student" && account.status === -1 && <th className="col-2 pb-2">
                                             <Button variant="contained" className="bg-success" onClick={() => sendEnrollmentRequestFunc()} endIcon={<Add />}>Waitlist</Button>
                                         </th>}
-                                        {accountType === "student" && account.status === 0 && <th className="col-2 pb-2">
+                                        {account.account_type === "student" && account.status === 0 && <th className="col-2 pb-2">
                                             <Button variant="contained" className="bg-success" onClick={() => sendEnrollmentRequestFunc()} endIcon={<Add />}>Enroll</Button>
                                         </th>}
-                                        {accountType === "student" && account.status === 1 && <th className="col-2 pb-2">
+                                        {account.account_type === "student" && account.status === 1 && <th className="col-2 pb-2">
                                             <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Waitlist</Button>
                                         </th>}
                                         {account.status === 2 && <div className="float-end col-2 mb-1 mt-2">
@@ -307,19 +413,66 @@ export const ClassProfile = (props) => {
 
                                     </thead>
                                     <tbody>
-                                        <td className="col-3 fs-6 text-start">
-                                            <span className="p-0 text-capitalize">{account.first_name} </span><span className="p-0 text-capitalize" >{account.last_name}</span>
-                                        </td>
+                                        Teaching Assistants
+                                        {
+                                            tas.map((profile, idx) => {
+
+                                                return <tr key={idx} className="container">
+                                                    <td>
+                                                        <span className="p-0 text-capitalize">{profile.first_name} </span><span className="p-0 text-capitalize" >{profile.last_name}</span>
+                                                    </td>
+                                                    <td>
+                                                        <Button variant="contained"
+                                                            className="btn bg-secondary"
+                                                            endIcon={<ArrowForwardIcon />}
+                                                            onClick={() => goToProfile(profile)}>
+                                                            View Profile
+                                                        </Button>
+                                                    </td>
+                                                </tr>
+                                            })
+                                        }
                                     </tbody>
                                 </table>
                             </div>
+                            <div className="ProfessorProfile col-5 mt-1 bg-light2">
+                                <table className='table float-start'>
+                                    <thead>
+
+                                        <th className="float-start col-11 fs-4 mt-2 text-start">Professor</th>
+                                        <th className="col-1">
+                                            <Button variant="contained"
+                                                className="btn bg-secondary"
+                                                endIcon={<ArrowForwardIcon />}
+                                                onClick={() => navigate(`/users/${professor.username}`)}>
+                                                View Profile
+                                            </Button>
+                                        </th>
+                                    </thead>
+                                    <tbody>
+                                        <td className="col-3 fs-6 text-start">
+                                            <span className="p-0 text-capitalize">{professor.first_name} </span><span className="p-0 text-capitalize" >{professor.last_name}</span>
+                                        </td>
+                                    </tbody>
+                                </table>
+
+                            </div>
                         </div>
+                        <div className="row p-4 bg-light mt-0">
+                            <p>
+                                {course.description}
+                            </p>
+                        </div>
+
+
                     </div>
-                </div>}
+
+                </div>
+            }
 
 
             {/* <ReviewList/>  To be implemented, need to check if user is eligible to submit review (has not submitted before, and either currently enrolled or previously enrolled*/}
-        </section>
+        </section >
     }
-    return <></>;
+    return <>Loading...</>;
 }
