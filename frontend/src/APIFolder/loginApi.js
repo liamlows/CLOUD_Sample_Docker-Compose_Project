@@ -123,12 +123,12 @@ export const getWaitlist = async (courseID) => {
 
 export const getCoursebyId = async (courseID) => {
     //TODO: is this right???
-    const res = await axios.get(`${BACKEND_ENDPOINT}/api/d/course_id/${courseID}`);
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/courses/${courseID}`);
     if(res.status !== 200){
         console.log("Couldn't find course");
         return null;
     }
-
+    console.log(res)
     return res.data;
 }
 
@@ -207,17 +207,33 @@ export const uploadPP = async (pp) => {
     // return res.data;
 }
 
-export const getEnrollmentRequests = async (id) => {
-    const res = await axios.get(`${BACKEND_ENDPOINT}/api/enrollments/${id}`);
-    return res.data;
-}
-
 export const sendEnrollmentRequest = async (targetId) => {
     const res = await axios.post(`${BACKEND_ENDPOINT}/api/enrollments/`, { targetId: targetId });
     return res.data;
 }
 
 export const deleteNotification = async (id) => {
-    const res = await axios.delete(`${BACKEND_ENDPOINT}/api/notifications/${id}`);
+    await axios.delete(`${BACKEND_ENDPOINT}/api/notifications/${id}`);
+    return;
+}
+
+export const getNotifications = async () => {
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/notifications`);
     return res.data;
+}
+
+export const sendNotification = async (message) => {
+    const res = await axios.post(`${BACKEND_ENDPOINT}/api/notifications`, message);
+    return res.data;
+}
+
+//status for course
+export const getEnrollmentStatus = async (id) => {
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/enrollments/status/${id}`);
+    return res.data;
+}
+//drop course
+export const dropCourse = async (account_id, id) => {
+    await axios.delete(`${BACKEND_ENDPOINT}/api/enrollments/${account_id}/${id}`);
+    return;
 }
