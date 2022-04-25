@@ -28,6 +28,8 @@ router.put('/:product_id', async (req, res) =>{
     }
 })
 
+
+
 // router.patch('/:id', (req, res) => {
 //   const query = 'UPDATE product SET product_name = ?, product_price = ?, product_stock = ?, product_description = ?, farmer_id = ?, farm_name = ? WHERE id = ?';
 //   const params = [req.body.product_name, req.body.product_price, req.body.product_stock, req.body.product_description, req.body.farmer_id, req.body.farm_name, req.params.id];

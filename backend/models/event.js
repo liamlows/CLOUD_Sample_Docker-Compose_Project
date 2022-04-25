@@ -15,6 +15,7 @@ const createEvent = async (event_name, event_description, event_image_url, farme
     return result;
 };
 
+//edit event
 const updateEvent = async(event_id, event_name,event_description, event_image_url,farmer_id,date,time) => {
     const query = knex(EVENT_TABLE).where('event_id', event_id).update({event_name}).update({event_description}).update({event_image_url}).update({farmer_id}).update({date}).update({time});
     return query;
