@@ -129,14 +129,18 @@ CREATE TABLE `db`.`waitlists` (
 );
 
 -- NOTIFICATIONS TABLE
-CREATE TABLE 'db'.'notifications' (
-    'notification_id' SERIAL,
-    'sender' BIGINT UNSIGNED NOT NULL,
-    'message' VARCHAR(1000) NOT NULL,
-    'course' BIGINT UNSIGNED NOT NULL,
-    PRIMARY KEY ('notification_id'),
-    FOREIGN KEY ('sender') REFERENCES accounts('account_id'),
-    FOREIGN KEY ('course') REFERENCES courses('course_id')
+CREATE TABLE `db`.`notifications` (
+    `notification_id` SERIAL,
+    `sender` BIGINT UNSIGNED NOT NULL,
+    `recipient` BIGINT UNSIGNED NOT NULL,
+    `title` VARCHAR(500) NOT NULL,
+    `body` VARCHAR(1000) NOT NULL,
+    `course` BIGINT UNSIGNED NOT NULL,
+    `timestamp` DATETIME DEFAULT NOW(),
+    PRIMARY KEY (`notification_id`),
+    FOREIGN KEY (`sender`) REFERENCES accounts(`account_id`),
+    FOREIGN KEY (`recipient`) REFERENCES accounts(`account_id`),
+    FOREIGN KEY (`course`) REFERENCES courses(`course_id`)
 );
 
 
