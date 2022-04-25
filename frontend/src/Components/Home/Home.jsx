@@ -1,39 +1,39 @@
-import * as React from 'react';
-import Timeline from '@mui/lab/Timeline';
-import "./Home.css";
-import LandingImage from '../../images/landing_img.jpg';
-import TimelineItem from '@mui/lab/TimelineItem';
-import TimelineSeparator from '@mui/lab/TimelineSeparator';
-import TimelineConnector from '@mui/lab/TimelineConnector';
-import TimelineContent from '@mui/lab/TimelineContent';
-import TimelineDot from '@mui/lab/TimelineDot';
-import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import IconButton from '@mui/material/IconButton';
-import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import SkipNextIcon from '@mui/icons-material/SkipNext';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import { Divider, Link, Grid, Slide, Typography, useMediaQuery, useTheme } from '@material-ui/core';
-import { createTheme, ThemeProvider } from "@material-ui/core/styles";
+// import * as React from 'react';
+// import Timeline from '@mui/lab/Timeline';
+// import "./Home.css";
+// // import LandingImage from '../../images/landing_img.jpg';
+// import TimelineItem from '@mui/lab/TimelineItem';
+// import TimelineSeparator from '@mui/lab/TimelineSeparator';
+// import TimelineConnector from '@mui/lab/TimelineConnector';
+// import TimelineContent from '@mui/lab/TimelineContent';
+// import TimelineDot from '@mui/lab/TimelineDot';
+// import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
+// import Card from '@mui/material/Card';
+// import CardContent from '@mui/material/CardContent';
+// import CardMedia from '@mui/material/CardMedia';
+// import IconButton from '@mui/material/IconButton';
+// import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
+// import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+// import SkipNextIcon from '@mui/icons-material/SkipNext';
+// import Button from '@mui/material/Button';
+// import Box from '@mui/material/Box';
+// import { Divider, Link, Grid, Slide, Typography, useMediaQuery, useTheme } from '@material-ui/core';
+// import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 
 
 export const Home = () => {
-    const theme = createTheme({
-        typography: {
-            fontFamily: [
-                'Josefin Slab'
-            ].join(",")
-        }
-    });
+    // const theme = createTheme({
+    //     typography: {
+    //         fontFamily: [
+    //             'Josefin Slab'
+    //         ].join(",")
+    //     }
+    // });
 
 
     return (
         <>
-            <ThemeProvider theme={theme}>
+            {/* <ThemeProvider theme={theme}>
                 <div className="home-container">
                     <Card sx={{ display: 'flex' }}>
                         <div id="landingImg">
@@ -80,7 +80,7 @@ export const Home = () => {
                     </Card>
 
                 </div>
-            </ThemeProvider>
+            </ThemeProvider> */}
 
         </>
 

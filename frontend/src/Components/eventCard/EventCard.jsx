@@ -16,7 +16,7 @@ import { UserContext } from '../userContext';
 import { EventContext } from '../EventContext';
 import CreateEventDialog from '../CreateEventDialog/CreateEventDialog';
 import RegisterToEventDialog from '../RegisterToEventDialog/RegisterToEventDialog';
-const EventCard = ({ eventTitle, eventDescription, eventId, farmName, farmId, userId, eventImage, eventTime, eventDate, setEvents, hideButton, isEdit }) => {
+const EventCard = ({ event_name, event_description, eventId, farmName, farmId, userId, eventImage, time, date, setEvents, hideButton, isEdit }) => {
 
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [openAddOrRemoveDialog, setOpenAddOrRemoveDialog] = useState(false);
@@ -24,7 +24,7 @@ const EventCard = ({ eventTitle, eventDescription, eventId, farmName, farmId, us
     const [deletingCompleted, setDeletingCompleted] = useState(false);
     const eventContext = useContext(EventContext);
     const userContext = useContext(UserContext);
-    const fDate = new Date(eventDate + " " + eventTime);
+    const fDate = new Date(date + " " + time);
 
     const handleClose = () => {
         setOpenEditDialog(false);
@@ -65,10 +65,10 @@ const EventCard = ({ eventTitle, eventDescription, eventId, farmName, farmId, us
             <CardContent sx={{ textAlign: ["left"], width: "100%", flexGrow: 1, height: "fit-content", display: "flex", flexDirection: 'column', justifyContent: "space-between" }} >
                 <div style={{ width: "100%" }}>
                     <Typography gutterBottom variant="h5" component="div" align="start" >
-                        {eventTitle}
+                        {event_name}
                     </Typography>
-                    <Typography variant="h6" color="text.secondary"><div id="event-card-eventDescription">
-                        {eventDescription}</div>
+                    <Typography variant="h6" color="text.secondary"><div id="event-card-event_description">
+                        {event_description}</div>
                     </Typography>
                 </div>
                 <div>
@@ -103,11 +103,11 @@ const EventCard = ({ eventTitle, eventDescription, eventId, farmName, farmId, us
                 openEditDialog && <CreateEventDialog
                     open={openEditDialog}
                     setOpen={setOpenEditDialog}
-                    eventTitle={eventTitle}
-                    eventDescription={eventDescription}
+                    event_name={event_name}
+                    event_description={event_description}
                     eventImage={eventImage}
-                    eventDate={eventDate}
-                    eventTime={eventTime}
+                    date={date}
+                    time={time}
                     eventId={eventId}
                     farmId={farmId}
                     farmName={farmName}
@@ -118,11 +118,11 @@ const EventCard = ({ eventTitle, eventDescription, eventId, farmName, farmId, us
                 openAddOrRemoveDialog && <RegisterToEventDialog
                                             open={openAddOrRemoveDialog}
                                             setOpen={setOpenAddOrRemoveDialog}
-                                            eventTitle={eventTitle}
-                                            eventDescription={eventDescription}
+                                            event_name={event_name}
+                                            event_description={event_description}
                                             eventImage={eventImage}
-                                            eventDate={eventDate}
-                                            eventTime={eventTime}
+                                            date={date}
+                                            time={time}
                                             eventId={eventId}
                                             farmId={farmId}
                                             farmName={farmName}

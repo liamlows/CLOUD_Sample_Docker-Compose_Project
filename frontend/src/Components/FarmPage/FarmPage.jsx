@@ -60,16 +60,11 @@ const FarmPage = () => {
         if (params.farmId) {
             getFarmById(params.farmId).then(res => setFarm({
                 ...thisfarm,
-                farmName: res.data[0].farm_name,
-                farmDescription: res.data[0].farm_description,
-                farmImage: res.data[0].farm_image_url,
-            }));
-
-            getFarmById(params.farmId).then(res => setFarm({
-                ...thisfarm,
-                farmName: res.data[0].farm_name,
-                farmDescription: res.data[0].farm_description,
-                farmImage: res.data[0].farm_image_url,
+                farmName: res.data.farmInfo[0].farm_name,
+                farmDescription: res.data.farmInfo[0].farm_description,
+                farmImage: res.data.farmInfo[0].farm_image_url,
+                items: res.data.products,
+                events: res.data.events
             }));
         }
 
@@ -119,12 +114,12 @@ const FarmPage = () => {
                     thisfarm.items && thisfarm.items.map((item, index) => {
                         return <Grid item xs={12} sm={6} md={4} lg={3} key={index} padding={0}>
                             <ItemCard
-                                name={item.name}
-                                description={item.description}
-                                image={item.image}
-                                price={item.price}
-                                stock={item.stock}
-                                itemId={item.itemId}
+                                name={item.product_name}
+                                description={item.product_description}
+                                image={item.product_image_url}
+                                price={item.product_price}
+                                stock={item.product_stock}
+                                itemId={item.product_id}
                                 addText={userContext.userData.userId == params.farmId ? "Edit item" : "Add to cart"}
                                 action={item => userContext.userData.userId == params.farmId ? handleEditItem(item) : handleAddItem(item)} />
                         </Grid>
@@ -155,7 +150,7 @@ const FarmPage = () => {
                 showAddItemDialog && <AddItemToCartDialog
                     open={showAddItemDialog}
                     setOpen={setShowAddItemDialog}
-
+                    farmId={params.farmId}
                     {...addItemDetails} />
             }
 

@@ -11,7 +11,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Checkmark from '../../images/green-checkmark.png';
 import './AddItemToFarmDialog.css';
 import { Box } from '@mui/system';
-import { addItemToFarm, editFarmItem } from '../../api/farmItems';
+import { addItemToFarm, deleteItemFromFarm, editFarmItem } from '../../api/farmItems';
 import { useNavigate, useParams } from 'react-router-dom';
 // TODO Add fail logic and style to adding item
 // If we are passed an item Id, we are editing
@@ -31,7 +31,8 @@ const AddItemToFarmDialog = ({ open, setOpen, itemName, itemDescription, price, 
             itemDescription: itemDescription,
             image: image,
             price: price ? price : 1,
-            quantity: stock ? stock : 1
+            quantity: stock ? stock : 1,
+            farmId: farmId
         })
 
         return () => {
@@ -49,21 +50,21 @@ const AddItemToFarmDialog = ({ open, setOpen, itemName, itemDescription, price, 
     };
     const handleSubmit = (option) => {
         setProcessing(true);
-        if(option){
-            //deleteItemFromFarm(itemId).then({
-            //     setCompletionText('Item Deleted');
-            //     setCompleted(true);
-            // })
+        if(option == 1){
+            deleteItemFromFarm(itemId).then(()=>{
+                setCompletionText('Item Deleted');
+                setCompleted(true);
+            })
         } else if (!itemId) {
-            //addItemToFarm(farmId, itemDetails).then({
-            //     setCompletionText('Item Added');
-            //     setCompleted(true);
-            // })
+            addItemToFarm(itemDetails).then(()=>{
+                setCompletionText('Item Added');
+                setCompleted(true);
+            })
         } else {
-            //editFarmItem(itemId).then({
-            //     setCompletionText('Item Edited');
-            //     setCompleted(true);
-            // })
+            editFarmItem(itemDetails).then(()=>{
+                setCompletionText('Item Edited');
+                setCompleted(true);
+            })
         }
 
         timer.current = setTimeout(() => {
