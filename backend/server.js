@@ -69,13 +69,17 @@ const courses = require('./routes/courses');
 const enrollments = require('./routes/enrollments');
 const roles = require('./routes/roles');
 const schools = require('./routes/schools');
+const waitlist = require('./routes/waitlist');
+const notifications = require('./routes/notifications');
 app.use('/', account);
 app.use('/api/friends', friends);
 app.use('/api/courses', courses);
-app.use('/api/course-metadata/', course_metadata);
+app.use('/api/course-metadata', course_metadata);
 app.use('/api/enrollments', enrollments);
 app.use('/api/roles', roles);
 app.use('/api/schools', schools);
+app.use('/api/waitlist', waitlist);
+app.use('/api/notifications', notifications);
 app.use('/', routes);
 
 // connecting the express object to listen on a particular port as defined in the config object.
