@@ -39,11 +39,10 @@ export const Home = () => {
                         <div id="landingImg">
                             <CardMedia
                                 component="img"
-                                sx={{ width: 500 }}
+                                sx={{ width: 450 }}
                                 image={LandingImage}
                                 alt="Landing Img"
                             />
-
                         </div>
 
                         <div id="header">
@@ -66,21 +65,64 @@ export const Home = () => {
                                         </Typography>
                                     </div>
                                     <Link to={'/login'}>
-                                        <Button variant="contained" color="success" sx={{ pl: 2, pr: 2 }}>
+                                        <Button variant="contained" color="success" sx={{ pl: 3, pr: 3 }}>
                                             <Typography textAlign="center">Login</Typography>
                                         </Button>
                                     </Link>
-
                                 </CardContent>
                             </Box>
-
                         </div>
+                    </Card>
 
+                    <Card sx={{ display: 'flex' }}>
+                        <CardContent>
+                            <Timeline id="timeline">
+                                <TimelineItem>
+                                    <TimelineSeparator>
+                                        <TimelineDot />
+                                        <TimelineConnector />
+                                    </TimelineSeparator>
+                                    <TimelineContent>Create your account and choose if you are a farmer or not </TimelineContent>
+                                </TimelineItem>
+                                <TimelineItem>
+                                    <TimelineSeparator>
+                                        <TimelineDot />
+                                        <TimelineConnector />
+                                    </TimelineSeparator>
+                                    <TimelineContent>Post items & buy items from other farmers in your area</TimelineContent>
+                                </TimelineItem>
+                                <TimelineItem>
+                                    <TimelineSeparator>
+                                        <TimelineDot />
+                                    </TimelineSeparator>
+                                    <TimelineContent>Host or attend events from farms</TimelineContent>
+                                </TimelineItem>
+                            </Timeline>
+                        </CardContent>
+                        <div id="timelineimg">
+                            <CardMedia
+                                component="img"
+                                sx={{ width: 450 }}
+                                image={LandingImage}
+                                alt="Landing Img"
+                            />
+                        </div>
 
                     </Card>
 
+
+
+
                 </div>
+<<<<<<< HEAD
             </ThemeProvider> */}
+=======
+
+
+
+
+            </ThemeProvider>
+>>>>>>> cb16834dcc9a8d4366c4177c71b940353771aa17
 
         </>
 
