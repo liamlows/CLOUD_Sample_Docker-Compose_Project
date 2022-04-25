@@ -70,7 +70,7 @@ router.post('/', async (req, res) =>{
 //6.7
 router.get('/farm/:farmer_id', async (req, res, next) => {
     try {
-        const farm_id=req.params.farm_id;
+        const farmer_id=req.params.farmer_id;
         const result = await req.models.dash.findFarmRatingByFarmID(farmer_id);
         res.status(200).json(result);
     } catch (err) {
@@ -83,8 +83,8 @@ router.get('/farm/:farmer_id', async (req, res, next) => {
 //6.8
 router.get('/farm/:farm_established', async (req, res, next) => {
     try {
-        const farm_id=req.params.farm_id;
-        const result = await req.models.dash.findFarmEstablishedByFarmID(farm_id);
+        const farmer_id=req.params.farmer_id;
+        const result = await req.models.dash.findFarmEstablishedByFarmID(farmer_id);
         res.status(200).json(result);
     } catch (err) {
         console.error('Failed to get farm establishment by farmer_ID:', err);
