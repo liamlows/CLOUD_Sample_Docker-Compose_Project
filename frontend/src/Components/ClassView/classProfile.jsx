@@ -366,7 +366,7 @@ export const ClassProfile = (props) => {
 
                         <div className="row mb-3">
                             <div className="col-6">
-                                <button type="button" className="btn btn-secondary col-4 contained m-1 float-end" onClick={() => { setMessage({}); setMessageMode(false) }; setReload(!reload)}>Cancel</button>
+                                <button type="button" className="btn btn-secondary col-4 contained m-1 float-end" onClick={() => { setMessage({}); setMessageMode(false); setReload(!reload)} }>Cancel</button>
                         </div>
                         <div className="col-6">
                             <button type="button" className="btn btn-success col-4 contained m-1 float-start" onClick={() => sendMessage()}>Save</button>
