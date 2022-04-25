@@ -16,8 +16,8 @@ import { UserContext } from '../userContext';
 import { EventContext } from '../EventContext';
 import CreateEventDialog from '../CreateEventDialog/CreateEventDialog';
 import RegisterToEventDialog from '../RegisterToEventDialog/RegisterToEventDialog';
-const EventCard = ({ event_name, event_description, event_id, farmName, farmId, userId, eventImage, time, date, setEvents, hideButton, farmer_id, isEdit }) => {
-console.log(farmName)
+const EventCard = ({ event_name, event_description, event_id, farmName, event_image_url, time, date, setEvents, hideButton, farmer_id, isEdit, setRefresh }) => {
+    console.log(farmer_id);
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [openAddOrRemoveDialog, setOpenAddOrRemoveDialog] = useState(false);
     const [deleting, setDeleting] = useState(false);
@@ -59,7 +59,7 @@ console.log(farmName)
     return (
         <Card variant="outlined" sx={{ height: "100%", width: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", boxShadow: "2px 2px 7px #888" }} >
             <CardMedia alignItems="center">
-                <Link to={`/event/${event_id}`}><img src={eventImage} id="event-card-image" /></Link>
+                <Link to={`/event/${event_id}`}><img src={event_image_url} id="event-card-image" /></Link>
             </CardMedia>
 
             <CardContent sx={{ textAlign: ["left"], width: "100%", flexGrow: 1, height: "fit-content", display: "flex", flexDirection: 'column', justifyContent: "space-between" }} >
@@ -105,13 +105,14 @@ console.log(farmName)
                     setOpen={setOpenEditDialog}
                     event_name={event_name}
                     event_description={event_description}
-                    eventImage={eventImage}
+                    event_image_url={event_image_url}
                     date={date}
                     time={time}
                     event_id={event_id}
-                    farmId={farmId}
+                    farmer_id={farmer_id}
                     farmName={farmName}
-                    showDelete={true} />
+                    showDelete={true}
+                    setRefresh={setRefresh} />
             }
 
             {
@@ -120,11 +121,11 @@ console.log(farmName)
                                             setOpen={setOpenAddOrRemoveDialog}
                                             event_name={event_name}
                                             event_description={event_description}
-                                            eventImage={eventImage}
+                                            event_image_url={event_image_url}
                                             date={date}
                                             time={time}
                                             event_id={event_id}
-                                            farmId={farmId}
+                                            farmer_id={farmer_id}
                                             farmName={farmName}
                                             unregistering={eventContext.events.some(e => e.event_id == event_id)} />
             }
