@@ -33,13 +33,28 @@ app.post('/nft/:id', async (req, res, next) => {
     var result;
     
     if (body.name != undefined) {
-      result = await req.models.nft.update(params.id, body.name);
+      result = await req.models.nft.updateName(params.id, body.name);
     }
     if (body.price != undefined) {
-      result = await req.models.nft.update(params.id, body.price);
+      result = await req.models.nft.updatePrice(params.id, body.price);
     }
     if (body.description != undefined) {
-      result = await req.models.nft.update(params.id, body.description);
+      result = await req.models.nft.updateDescription(params.id, body.description);
+    }
+    if (body.image_url != undefined) {
+      result = await req.models.nft.updateImageUrl(params.id, body.image_url);
+    }
+    if (body.creator_id != undefined) {
+      result = await req.models.nft.updateCreatorId(params.id, body.creator_id);
+    } 
+    if (body.seller_id != undefined) {
+      result = await req.models.nft.updateSellerId(params.id, body.seller_id);
+    } 
+    if (body.owner_id != undefined) {
+      result = await req.models.nft.updateOwnerId(params.id, body.owner_id);
+    } 
+    if (body.for_sale != undefined) {
+      result = await req.models.nft.updateForSale(params.id, body.for_sale);
     }
 
     res.status(201).json(result);

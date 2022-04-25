@@ -19,11 +19,60 @@ const createNFT = async (name, image_url, price, description) => {
     return result;
 }
 
-const update = async (id, name, price, description) => {
-    const query = knex(NFT_TABLE).update({ name: name, price: price, description: description} ).where({ id });
+const updateName = async (id, name) => {
+    const query = knex(NFT_TABLE).update({ name: name} ).where({ id });
     const result = await query;
 
     return result;
+}
+
+const updatePrice = async (id, price) => {
+    const query = knex(NFT_TABLE).update({price: price} ).where({ id });
+    const result = await query;
+
+    return result;
+}
+
+const updateDescription = async (id, description) => {
+    const query = knex(NFT_TABLE).update({ description: description } ).where({ id });
+    const result = await query;
+
+    return result;
+}
+
+const updateImageUrl = async (id, image_url) => {
+    const query = knex(NFT_TABLE).update({image_url: image_url} ).where({ id });
+    const result = await query;
+
+    return result;
+}
+
+const updateCreatorId = async (id, creator_id) => {
+    const query = knex(NFT_TABLE).update({creator_id: creator_id} ).where({ id });
+    const result = await query;
+
+    return result;
+}
+
+const updateSellerId = async (id, seller_id) => {
+    const query = knex(NFT_TABLE).update({ seller_id: seller_id } ).where({ id });
+    const result = await query;
+
+    return result;
+}
+
+const updateOwnerId = async (id, owner_id) => {
+    const query = knex(NFT_TABLE).update({ owner_id: owner_id} ).where({ id });
+    const result = await query;
+
+    return result;
+}
+
+const updateForSale = async (id, for_sale) => {
+    const query = knex(NFT_TABLE).update({for_sale: for_sale} ).where({ id });
+    const result = await query;
+
+return result;
 }
 
 const getNFT = async (id) => {
@@ -43,10 +92,17 @@ const deleteNFT = async (id) => {
 }
 
 module.exports = {
-    createNFT,
-    update,
+    createNFT, 
     getNFT,
     fetchNFT,
-    deleteNFT
+    deleteNFT,
+    updateName,
+    updatePrice,
+    updateDescription,
+    updateImageUrl,
+    updateCreatorId,
+    updateSellerId,
+    updateOwnerId,
+    updateForSale 
 }
 

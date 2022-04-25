@@ -7,7 +7,7 @@ const USER_TABLE = 'user';
 const accessTokenSecret =  process.env.TOKEN;
 
 // Creates a new system user with a secure password
-const createNewUser = async (username, name, email, password, privileges) => {
+const createNewUser = async (username, name, email, password, privileges, photo) => {
     console.log('Raw password:', password);
     const salt = await bcrypt.genSalt(10);
     console.log('Password salt', salt);
@@ -15,7 +15,7 @@ const createNewUser = async (username, name, email, password, privileges) => {
     console.log('Hashed password', hashedPassword);
 
     // Inserts into user table
-    const query = knex(USER_TABLE).insert({ username, name, email, password: hashedPassword, privileges });
+    const query = knex(USER_TABLE).insert({ username, name, email, password: hashedPassword, privileges, photo });
     const result = await query;
     return result;
 };
@@ -67,10 +67,25 @@ const deleteUser = async (id) => {
     return result;
 }
 
+const updateName = async (id, name) => {
+    const query = knex(USER_TABLE).update({name: name} ).where({ id });
+    const result = await query;
+    return result;
+} 
+
+const updatePhoto = async (id, photo) => {
+    const query = knex(USER_TABLE).update({photo: photo} ).where({ id });
+    const result = await query;
+    return result;
+} 
+
+ 
 
 module.exports = {
     createNewUser,
     findUserByEmail,
     authenticateUser,
-    deleteUser
+    deleteUser, 
+    updateName,
+    updatePhoto
 };
