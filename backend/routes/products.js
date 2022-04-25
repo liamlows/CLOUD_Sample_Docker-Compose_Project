@@ -17,6 +17,8 @@ router.post('/', async (req, res) =>{
 })
 router.put('/:product_id', async (req, res) =>{
 //this route is for User Story 2.3 where "As a farmer, I want to be able to edit my products"
+//5.4 As a farmer, I want to be able to create a discounted price for a given product
+
 //NOT YET DONE
     try{
         const body = req.body;
@@ -27,7 +29,6 @@ router.put('/:product_id', async (req, res) =>{
         res.status(500).json({message: err.toString()});
     }
 })
-
 
 
 // router.patch('/:id', (req, res) => {

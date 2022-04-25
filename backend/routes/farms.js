@@ -53,12 +53,6 @@ router.get('/products/:farm_id', async(req, res) =>{
 })
 
 
-
-
-
-
-
-
 //6.1 , 6.2 , 6.3
 router.post('/', async (req, res) =>{
 //
