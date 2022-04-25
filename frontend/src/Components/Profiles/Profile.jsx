@@ -20,6 +20,7 @@ import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 
 // Method Imports
 import { getFriendRequests, getStatusByUsername, getAccountbyUsername, handleFriendRequest, logout, sendFriendRequest, updateAccountbyUsername, getFriendRequest, getFriendsClasses, uploadPP } from "../../APIFolder/loginApi";
+import { TextAreaField } from "../common/TextAreaField";
 
 
 export const Profile = (props) => {
@@ -418,8 +419,7 @@ export const Profile = (props) => {
                                         <td className="col-3 fs-6 text-start">
                                             <span className="p-0 text-capitalize">{account.first_name} </span><span className="p-0 text-capitalize" >{account.last_name}</span>
                                         </td>
-                                        {/* <h2>Email :</h2>
-                        <p>{account.email}</p> */}
+                                        <td>{account.bio}</td>
                                     </tbody>
                                 </table>
                             </div>
