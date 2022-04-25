@@ -14,6 +14,16 @@ const fetchTransactionByID = async (transaction_id) => {
     const result = await query;
     return result;
 };
+
+//get most common customers    //untested
+const fetchMostCommonCustomers = async (farmer_id) => {
+    //return transaction
+    const query = knex('transactions').select().where({farmer_id}).groupBy(customer_id).orderBy(name,desc).limit(3);
+    console.log('Raw query for fetchMostCommonCustomerTransaction:', query.toString());
+    const result = await query;
+    return result;
+};
+
 //Get all interested events by customer
 const fetchInterestedEvents = async (user_id) => {
     const query = knex('customer_event_interests').join('event','event.event_id','customer_event_interests.event_id').select().where({customer_id: user_id});
@@ -40,6 +50,9 @@ const deleteAllInterestedEvents = async (customer_id) => {
 module.exports = {
     fetchTransactions,
     fetchTransactionByID,
+
+    fetchMostCommonCustomers,
+
     fetchInterestedEvents,
     deleteInterestedEvent,
     deleteAllInterestedEvents

@@ -10,25 +10,47 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Checkmark from '../../images/green-checkmark.png';
 import { Box } from '@mui/system';
 import EventCard from '../eventCard/EventCard';
-import { createEvent, deleteEventById } from '../../api/events';
-// When creating an event, you should just pass in {open, setOpen, farmId, farmName}
+import { createEvent, deleteEventById, updateEventById } from '../../api/events';
+// When creating an event, you should just pass in {open, setOpen, farmer_id, farmName}
 // When editing an event, all fields should be passed in
 // When deleting an event, all fields should be passed in
-const CreateEventDialog = ({ open, setOpen, event_name, event_description, eventImage, eventDate, eventTime, eventId, setEvent, farmId, farmName, showDelete }) => {
-
+const CreateEventDialog = ({ open, setOpen, event_name, event_description, event_image_url, date, time, event_id, setEvent, farmer_id, farmName, showDelete, setRefresh }) => {
+    console.log(time)
     const [eventDetails, setEventDetails] = useState({
     })
     const [previewing, setPreviewing] = useState(false);
     const [processing, setProcessing] = useState(false);
     const [confirmDeletion, setConfirmDeletion] = useState(false);
     const [dialogComplete, setDialogComplete] = useState(false);
-    const [completionText, setCompletionText] = useState('')
+    const [completionText, setCompletionText] = useState('');
+
+
     useEffect(() => {
+        let _time = time;
+        var hours = parseInt(_time.substr(0, 2));
+        if (_time.indexOf('AM') != -1 && hours == 12) {
+            _time = _time.replace('12', '0');
+        }
+        if (time.indexOf('PM') != -1 && hours < 12) {
+            _time = _time.replace(hours, (hours + 12));
+        }
+        _time = _time.replace(/(AM|PM)/, '');
+        _time = _time.split(' ')[0];
+        console.log(_time);
+
         setEventDetails({
-            event_name, event_description, eventImage, eventDate, eventTime, eventId, setEvent, farmId
+            event_name,
+            event_description,
+            event_image_url,
+            date: new Date(date).toISOString().split('T')[0],
+            time: _time,
+            event_id,
+            setEvent,
+            farmer_id: farmer_id,
         })
     }, [])
     const handleChange = (delta) => {
+        console.log(eventDetails);
         setEventDetails({ ...eventDetails, ...delta });
     }
     //TODO make this real with backend
@@ -37,39 +59,40 @@ const CreateEventDialog = ({ open, setOpen, event_name, event_description, event
         setProcessing(true);
         //delete event
         if (option == 1) {
-            // deleteEventById(eventId);
-            //    setProcessing(false);
-            //    setCompletionText('Event removed');
-            //      setDialogComplete(true);
+            console.log(event_id);
+            deleteEventById(event_id).then(() => {
+                setProcessing(false);
+                setCompletionText('Event removed');
+                setDialogComplete(true);
+                setRefresh(x => (!x));
+            });
+
         }
         //IF we are passed an eventId, we are editing an event, WE should refresh the page or something to update 
-        if (eventId) {
-            // editEventById(eventId).then((res)=>{
-            //     setProcessing(false);
-            //     setCompletionText('Event edited');
-            //     //edit the changed event in the front-end
-            //     setEvent(res.data);
-            //     setDialogComplete(true);
-            //
-            // });
+        if (event_id) {
+            updateEventById(eventDetails).then((res) => {
+                setProcessing(false);
+                setCompletionText('Event edited');
+                setDialogComplete(true);
+                setRefresh(x => (!x));
+
+            });
         } else {
-            // createEvent(eventDetails).then(()=>{
-            // setProcessing(false);
-            // setCompletionText('Event Added');
-            // setDialogComplete(true);;
+            console.log(eventDetails);
+            createEvent(eventDetails).then(() => {
+                setProcessing(false);
+                setCompletionText('Event Added');
+                setDialogComplete(true);
+
+            })
         }
 
-        setTimeout(() => {
-            setProcessing(false);
-            setConfirmDeletion(false);
-            setCompletionText('Event Added');
-            setDialogComplete(true);
-        }, 2000)
 
 
     }
     const handleClose = () => {
         setOpen(false);
+
     };
     const today = new Date();
     if (confirmDeletion) {
@@ -115,9 +138,9 @@ const CreateEventDialog = ({ open, setOpen, event_name, event_description, event
                             event_name={eventDetails.event_name}
                             event_description={eventDetails.event_description}
                             farmName={farmName}
-                            eventImage={eventDetails.eventImage}
-                            eventDate={eventDetails.eventDate}
-                            eventTime={eventDetails.eventTime}
+                            event_image_url={eventDetails.event_image_url}
+                            date={eventDetails.date}
+                            time={eventDetails.time}
                             hideButton={true}
                         ></EventCard>
                     </DialogContent>
@@ -145,13 +168,13 @@ const CreateEventDialog = ({ open, setOpen, event_name, event_description, event
                             <TextField
 
                                 required
-                                id="eventImage"
+                                id="event_image_url"
                                 label="Image"
                                 sx={{ marginBottom: "1rem" }}
                                 fullWidth
 
-                                value={eventDetails.eventImage}
-                                onChange={e => handleChange({ eventImage: e.target.value })}
+                                value={eventDetails.event_image_url}
+                                onChange={e => handleChange({ event_image_url: e.target.value })}
 
                             />
                             <TextField
@@ -170,8 +193,9 @@ const CreateEventDialog = ({ open, setOpen, event_name, event_description, event
                                 id="date"
                                 label="Date"
                                 type="date"
-                                value={eventDetails.eventDate}
-                                onChange={e => handleChange({ eventDate: e.target.value })}
+                                required
+                                value={eventDetails.date}
+                                onChange={e => handleChange({ date: e.target.value })}
 
                                 sx={{ width: 220, marginTop: "1rem", marginRight: "1rem" }}
                                 InputLabelProps={{
@@ -184,8 +208,8 @@ const CreateEventDialog = ({ open, setOpen, event_name, event_description, event
                                 label="Time"
                                 type="time"
 
-                                value={eventDetails.eventTime}
-                                onChange={e => handleChange({ eventTime: e.target.value })}
+                                value={eventDetails.time}
+                                onChange={e => handleChange({ time: e.target.value })}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
@@ -197,7 +221,7 @@ const CreateEventDialog = ({ open, setOpen, event_name, event_description, event
                         </DialogContent>
                         <DialogActions sx={{ justifyContent: 'flex-end', pl: 3 }}>
                             {
-                            showDelete && <div style={{display:'flex', flexGrow:1}}>
+                                showDelete && <div style={{ display: 'flex', flexGrow: 1 }}>
                                     <Button
                                         variant='outlined'
                                         color='error'
