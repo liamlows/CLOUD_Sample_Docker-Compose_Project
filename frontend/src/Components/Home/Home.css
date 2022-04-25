@@ -19,7 +19,7 @@
 #subheading {
     padding-top: 10px;
     text-align: center;
-    padding-bottom: 20px;
+    padding-bottom: 0px;
     font-size: 100px;
 }
 
@@ -28,4 +28,8 @@
     padding-left: 170px;
     padding-top: 20px;
 
+}
+
+#timeline{
+    padding-top: 50px;
 }
