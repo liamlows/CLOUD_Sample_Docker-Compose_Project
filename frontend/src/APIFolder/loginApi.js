@@ -89,7 +89,7 @@ export const sendFriendRequest = async (targetId) => {
 }
 export const getAllCourses = async() => {
     //TODO: is this right???
-    const res = await axios.get('http://localhost:8000/api/d/courses');
+    const res = await axios.get('http://localhost:8000/api/courses');
     if(res.status !== 200){
         console.log("Couldn't find courses");
         return null;
