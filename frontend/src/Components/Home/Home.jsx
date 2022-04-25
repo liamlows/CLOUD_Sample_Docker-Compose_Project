@@ -17,7 +17,8 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import { Divider, Link, Grid, Slide, Typography, useMediaQuery, useTheme } from '@material-ui/core';
+import { Divider, Grid, Slide, Typography, useMediaQuery, useTheme } from '@material-ui/core';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 
 
@@ -39,7 +40,7 @@ export const Home = () => {
                         <div id="landingImg">
                             <CardMedia
                                 component="img"
-                                sx={{ width: 500 }}
+                                sx={{ width: 450 }}
                                 image={LandingImage}
                                 alt="Landing Img"
                             />
