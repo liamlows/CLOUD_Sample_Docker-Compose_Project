@@ -1,8 +1,8 @@
 const knex = require('../database/knex');
 
 //Get all transactions by user
-const fetchTransactions = async (email) => {
-    const query = knex('transactions').where({farmer_id: email}).orWhere({customer_id: email});
+const fetchTransactions = async (user_id) => {
+    const query = knex('transactions').where({farmer_id: user_id}).orWhere({customer_id: user_id});
     const result = await query;
     return result;
 }
@@ -15,8 +15,8 @@ const fetchTransactionByID = async (transaction_id) => {
     return result;
 };
 //Get all interested events by customer
-const fetchInterestedEvents = async (email) => {
-    const query = knex('customer_event_interests').join('events','event_id','customer_event_interests.event_id').select().where({customer_id: email});
+const fetchInterestedEvents = async (user_id) => {
+    const query = knex('customer_event_interests').join('events','event_id','customer_event_interests.event_id').select().where({customer_id: user_id});
     const result = await query;
     return result;
 }

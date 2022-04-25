@@ -6,7 +6,7 @@ router.put('/password', async (req, res, next) => {
     try {
         const body = req.body;
         console.log(body);
-        const result = await User.updatePassword(body.email,body.newPassword);
+        const result = await User.updatePassword(body.user_id,body.newPassword);
         res.status(200).json(result);
     } catch (err) {
         console.error('Failed to update password:', err);
@@ -19,7 +19,7 @@ router.put('/password', async (req, res, next) => {
 router.delete('/deletion', async (req, res, next) => {
     try {
         const body = req.body;
-        const result = await User.deleteAccount(body.email);
+        const result = await User.deleteAccount(body.user_id);
         res.status(204).json(result);
     } catch (err) {
         console.error('Failed to delete account:', err);

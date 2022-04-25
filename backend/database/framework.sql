@@ -73,6 +73,12 @@ CREATE TABLE product(
     farmer_id INTEGER NOT NULL, FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id)
 );
 
+CREATE TABLE transaction_products(
+    transaction_products_id INTEGER NOT NULL AUTO_INCREMENT,  PRIMARY KEY(transaction_products_id),
+    transaction_id INTEGER NOT NULL, FOREIGN KEY (transaction_id) REFERENCES transactions(transaction_id),
+    product_id INTEGER NOT NULL, FOREIGN KEY (product_id) REFERENCES product(product_id)
+);
+
 # CREATE TABLE requests(
 #     request_id INTEGER NOT NULL AUTO_INCREMENT, PRIMARY KEY (request_id),
 #     request_type VARCHAR(50),
@@ -123,3 +129,4 @@ INSERT INTO product(product_name, product_price, product_stock, product_category
 VALUES('Apples', 1.00, 20, 'Fruit', 'Apples, now available in red color.', 'https://i5.walmartimages.com/asr/7320e63a-de46-4a16-9b8c-526e15219a12_3.e557c1ad9973e1f76f512b34950243a3.jpeg', 1),
        ('Pears', 2.00, 10, 'Fruit', 'They are peary good!', 'https://images-prod.healthline.com/hlcmsresource/images/AN_images/benefits-of-pears-1296x728-feature.jpg', 1),
        ('4066M Heavy Duty Compact Utility Tractor', 54930.00, 3, 'Heavy Duty Equipment', 'Factory-installed 440R Quick Park™ Loader Mounting System included, Turbocharged diesel engine, eHydrostatic Transmission, Standard mid and rear hydraulics, Category 1 and 2, Three-point hitch', 'https://www.deere.com/assets/images/region-4/products/tractors/utility-tractors/4-family-compact-utility-tractors/4066m-heavy-duty/4066m_heavyduty_4seriestractor_studio_r4f093227_r2_1024x576_large_7c64dcb98d85b7743313560c171cf119fd92fc6a.jpg', 1);
+
