@@ -9,7 +9,6 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Checkmark from '../../images/green-checkmark.png';
 import { Box } from '@mui/system';
-import { addItemToFarm } from '../../api/farmItems';
 import EventCard from '../eventCard/EventCard';
 import { createEvent, deleteEventById } from '../../api/events';
 // When creating an event, you should just pass in {open, setOpen, farmId, farmName}

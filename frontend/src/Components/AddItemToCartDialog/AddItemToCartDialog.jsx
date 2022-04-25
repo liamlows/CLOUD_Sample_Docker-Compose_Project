@@ -10,7 +10,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Checkmark from '../../images/green-checkmark.png';
 import { Link, useNavigate } from 'react-router-dom';
-const AddItemToCartDialog = ({ open, setOpen, name, description, price, stock, image, farmId }) => {
+const AddItemToCartDialog = ({ open, setOpen, product_name, product_description, product_price, product_stock, product_image_url, product_id, farmId }) => {
     const [quantity, setQuantity] = useState(1);
     const [processing, setProcessing] = useState(false);
     const [completed, setCompleted] = useState(false);
@@ -48,7 +48,7 @@ const AddItemToCartDialog = ({ open, setOpen, name, description, price, stock, i
         if (num == 0 || num < 0) {
             setQuantity("");
         }
-        else setQuantity(Math.min(num, stock));
+        else setQuantity(Math.min(num, product_stock));
     }
     if (processing) {
         return <Backdrop
@@ -74,16 +74,16 @@ const AddItemToCartDialog = ({ open, setOpen, name, description, price, stock, i
         <div>
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle sx={{ textAlign: "center", fontWeight: "Bold" }}>Adding To Cart</DialogTitle>
-                <DialogTitle sx={{ textAlign: "center", paddingTop: "4px", paddingBottom: "4px" }}>{name}</DialogTitle>
+                <DialogTitle sx={{ textAlign: "center", paddingTop: "4px", paddingBottom: "4px" }}>{product_name}</DialogTitle>
                 <DialogContent>
                     <DialogContent sx={{ display: "flex", justifyContent: "center", padding: 0, margin: ["24px 0", "24px"] }}>
-                        <img src={image} id="add-item-img" />
+                        <img src={product_image_url} id="add-item-img" />
                     </DialogContent>
-                    <Typography color='GrayText'>{description}</Typography>
+                    <Typography color='GrayText'>{product_description}</Typography>
                     <Box display={"flex"} alignItems='self-end' justifyContent={'space-between'} flexWrap='wrap'>
                         <Stack>
-                            <Typography variant='h5' fontWeight={"bold"} sx={{ mt: 1 }}> Price: ${price}</Typography>
-                            <Typography variant='h6' sx={{ mb:2 }}> Stock: {stock}</Typography>
+                            <Typography variant='h5' fontWeight={"bold"} sx={{ mt: 1 }}> Price: ${product_price}</Typography>
+                            <Typography variant='h6' sx={{ mb:2 }}> Stock: {product_stock}</Typography>
                         </Stack>
                         <TextField
                             sx={{ maxWidth: "80px" }}

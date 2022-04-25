@@ -11,6 +11,7 @@ import { FarmCard } from '../FarmCard/farmCard';
 import './Feed.css'
 import Search from '../Search/Search';
 import { AiFillWindows, AiOutlineArrowDown } from 'react-icons/ai';
+import { getFarmById } from '../../api/farms';
 export const Feed = () => {
     const [itemsPerFarm, setItemsPerFarm] = useState(6);
     const [smallScreen, setSmallScreen] = useState(false);
@@ -18,40 +19,7 @@ export const Feed = () => {
     const [firstLoad, setFirstLoad] = useState(true);
     const [fade, setFade] = useState(false);
     const [loadedFarms, setLoadedFarms] = useState([
-        {
-            farmId: 1,
-            farmName: "Outback steak house",
-            farmImage: FarmImg,
-            farmDescription: "great farm with great produce",
-            items: [new item("bananssssa", "i am banana", "https://cdn1.sph.harvard.edu/wp-content/uploads/sites/30/2018/08/bananas-1354785_1920.jpg", 20, 2, 1),
-            new item("tractor", "This is a sentence that makes sense and isnt' just some nonsense spewed out onto the screen", "https://media.wired.com/photos/61d36f47f6b645152a4dc776/16:9/w_2400,h_1350,c_limit/Business_John%20Deere_r4f167410.jpg", 20, 2, 1),
-            new item("pearssssss", "i am epar", "https://cdn1.sph.harvard.edu/wp-content/uploads/sites/30/2018/08/bananas-1354785_1920.jpg", 20, 2, 22),
-            new item("great horse", "6'5 rows for uc davis", horse, 200, 1, 1, ["livestock"]),
-            new item("banana", "i am banana", solar, 20, 2, 1),
-            new item("banana", "i am banana", solar, 20, 2, 1),
-            new item("banana", "i am banana", solar, 20, 2, 1),
-            new item("banana", "i am banana", solar, 20, 2, 1),
-            new item("banana", "i am banana", solar, 20, 2, 1),
-            new item("banana", "i am banana", solar, 20, 2, 1),
-            ]
-        },
-        {
-            FarmId: 2,
-            farmName: "Greenville Farm",
-            farmImage: FarmImg2,
-            farmDescription: "great farm with great produce",
-            items: [new item("bananssssa", "i am banana", banana, 20, 2, 1),
-            new item("banana d d d dd d dddddddddd ddd d", "This is a sentence that makes sense and isnt' just some nonsense spewed out onto the screen", banana, 20, 2, 1),
-            new item("pearssssss", "i am epar", banana, 20, 2, 22),
-            new item("great horse", "6'5 rows for uc davis", horse, 200, 1, 1, ["livestock"]),
-            new item("banana", "i am banana", solar, 20, 2, 1),
-            new item("banana", "i am banana", solar, 20, 2, 1),
-            new item("banana", "i am banana", solar, 20, 2, 1),
-            new item("banana", "i am banana", solar, 20, 2, 1),
-            new item("banana", "i am banana", solar, 20, 2, 1),
-            new item("banana", "i am banana", solar, 20, 2, 1),
-            ]
-        }
+        
     ])
     const titleRef = useRef(null);
 
@@ -74,7 +42,15 @@ export const Feed = () => {
     useEffect(() => {
 
         //TODO get the first ten farm items
-        console.log(searchParams);
+        getFarmById(1).then(res => setLoadedFarms([
+            ...loadedFarms, {
+            farmId: res.data.farmInfo[0].farmer_id,
+            farmName: res.data.farmInfo[0].farm_name,
+            farmDescription: res.data.farmInfo[0].farm_description,
+            farmImage: res.data.farmInfo[0].farm_image_url,
+            items: res.data.products,
+            events: res.data.events}
+        ]));
     }, [searchParams])
 
     useEffect(() => {

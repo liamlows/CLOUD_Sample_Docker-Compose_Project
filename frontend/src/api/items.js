@@ -11,10 +11,7 @@ const apiConfig = {
 
 }
 
-//MAke sure the farmer can't add the same item twice, it hsould update stock ?
-
-//get all items, Used for adding items to farms
-export const getItems = () => {
+export const getItems = (params) => {
     let _apiConfig = apiConfig;
     if (params) {
         _apiConfig.params = params;
@@ -23,28 +20,15 @@ export const getItems = () => {
 }
 
 export const addItemToFarm = (itemDetails) => {
-    return axios.post(`${apiEndpoint}/`, {
-        product_name: itemDetails.name,
-        product_price: itemDetails.price,
-        product_stock: itemDetails.stock,
-        product_category: "Fruit",
-        product_description: itemDetails.itemDescription,
-        product_image_url: itemDetails.image,
-        farmer_id: itemDetails.farmId
-    }, apiConfig)
+    console.log(itemDetails);
+    return axios.post(`${apiEndpoint}/`, itemDetails)
 }
 export const editFarmItem = (itemDetails) => {
-    return axios.post(`${apiEndpoint}/itemId`, {
-        product_name: itemDetails.name,
-        product_price: itemDetails.price,
-        product_stock: itemDetails.stock,
-        product_category: "Fruit",
-        product_description: itemDetails.itemDescription,
-        product_image_url: itemDetails.image,
-        farmer_id: itemDetails.farmId
-    }, apiConfig)
+    return axios.put(`${apiEndpoint}/${itemDetails.product_id}`, 
+        itemDetails
+    , apiConfig)
 }
 
 export const deleteItemFromFarm = (itemId) => {
-    return axios.delete(`${apiEndpoint}/search/${itemId}`, apiConfig)
+    return axios.delete(`${apiEndpoint}/${itemId}`, apiConfig)
 }
