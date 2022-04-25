@@ -18,7 +18,7 @@ import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 
 
 // Method Imports
-import { getAccountbyUsername, logout, sendEnrollmentRequest, updateAccountbyUsername, getAccountbyId, getCourseById, getCourseRequest, getCoursebyId, updateCoursebyId } from "../../APIFolder/loginApi";
+import { getAccountbyUsername, logout, sendEnrollmentRequest, updateAccountbyUsername, getAccountbyId, getCourseById, getCourseRequest, getCoursebyId, updateCoursebyId, getEnrollmentStatus } from "../../APIFolder/loginApi";
 
 export const ClassProfile = (props) => {
     // Navigate Object
@@ -72,21 +72,12 @@ export const ClassProfile = (props) => {
             setTAs(newTas);
             // get the table of friend requests
             if (account.account_type === "student") {
-                getEnrollmentRequests(account.account_id).then(res => {
+                getEnrollmentStatus(course.course_id).then(res => {
                     // Slight problem, I have no idea what the heck this returns so yikes
-                    for (const clss in res) {
-                        if (res[clss].course_id === course.course_id) {
-                            if (res[clss].status === 1) {
-                                status = 1
-                            }
-                            if (res[clss].status === -1) {
-                                status = -1
-                            }
-                        }
-                    }
-
-                    // console.log(res); 
+                    status = res;
+                    console.log(res);
                 }).catch(code => {
+                    //should never get hit
                     if (code === 404) {
                         status = 0;
                     }
@@ -150,6 +141,10 @@ export const ClassProfile = (props) => {
         else {
             window.alert("Please fill out all fields");
         }
+    }
+
+    const goToProfile = profile => {
+        navigate(`/users/${profile.username}`);
     }
 
     const cancel = () => {
@@ -366,7 +361,8 @@ export const ClassProfile = (props) => {
 
                         <div className="row mb-3">
                             <div className="col-6">
-                                <button type="button" className="btn btn-secondary col-4 contained m-1 float-end" onClick={() => { setMessage({}); setMessageMode(false); setReload(!reload)} }>Cancel</button>
+                                <button type="button" className="btn btn-secondary col-4 contained m-1 float-end" onClick={() => { setMessage({}); setMessageMode(false); setReload(!reload) }}>Cancel</button>
+                            </div>
                         </div>
                         <div className="col-6">
                             <button type="button" className="btn btn-success col-4 contained m-1 float-start" onClick={() => sendMessage()}>Save</button>
@@ -392,17 +388,17 @@ export const ClassProfile = (props) => {
                             <div className="col-7 float-start mt-1">
                                 <table className='table float-start'>
                                     <thead>
-                                        <th className="float-start col-3 fs-3 mt-2 text-start">{account.username}</th>
-                                        {account.account_type === "student" && account.status === -1 && <th className="col-2 pb-2">
-                                            <Button variant="contained" className="bg-success" onClick={() => sendEnrollmentRequestFunc()} endIcon={<Add />}>Waitlist</Button>
-                                        </th>}
+                                        <th className="float-start col-11 fs-3 mt-2 text-start">{course.course_name} ({course.course_number})</th>
+                                        {/* Student is not in class or waitlist */}
                                         {account.account_type === "student" && account.status === 0 && <th className="col-2 pb-2">
                                             <Button variant="contained" className="bg-success" onClick={() => sendEnrollmentRequestFunc()} endIcon={<Add />}>Enroll</Button>
                                         </th>}
-                                        {account.account_type === "student" && account.status === 1 && <th className="col-2 pb-2">
-                                            <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Waitlist</Button>
+                                        {/* Student is on the waitlist */}
+                                        {account.account_type === "student" && account.status === -1 && <th className="col-2 pb-2">
+                                            <Button variant="contained" disabled endIcon={<Add color='disabled' />}>On Waitlist</Button>
                                         </th>}
-                                        {account.status === 2 && <div className="float-end col-2 mb-1 mt-2">
+                                        {/* Student is in class */}
+                                        {account.status === 1 && <div className="float-end col-2 mb-1 mt-2">
                                             <div className="clearfix p-0"></div>
                                             <th className="col-1 rounded bg-success border-0 p-1">
                                                 <div className="bg-success text-white">
@@ -470,8 +466,6 @@ export const ClassProfile = (props) => {
                 </div>
             }
 
-
-            {/* <ReviewList/>  To be implemented, need to check if user is eligible to submit review (has not submitted before, and either currently enrolled or previously enrolled*/}
         </section >
     }
     return <>Loading...</>;
