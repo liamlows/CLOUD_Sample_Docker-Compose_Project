@@ -317,6 +317,9 @@ export const Profile = (props) => {
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td><TextAreaField label="Bio :" value={account.bio} setValue={bio => changeAccount({ bio })}/></td>
+                                    </tr>
+                                    <tr>
                                         <td>
                                             <div className="roundered">
                                                 <label for="file-upload" class="custom-file-upload">
@@ -360,8 +363,7 @@ export const Profile = (props) => {
                                     <td className="col-3 fs-6 text-start">
                                         <span className="p-0 text-capitalize">{account.first_name} </span><span className="p-0 text-capitalize" >{account.last_name}</span>
                                     </td>
-                                    {/* <h2>Email :</h2>
-                            <p>{account.email}</p> */}
+                                    <td>{account.bio}</td>
                                 </tbody>
                             </table>
                         </div>
