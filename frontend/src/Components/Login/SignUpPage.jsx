@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { PasswordField, SelectField, TextField } from "../common";
 
 // Method Imports
-import { getAccountbyUsername, registerAccount } from "../../APIFolder/loginApi";
+import { getAccountbyId, registerAccount } from "../../APIFolder/loginApi";
 
 export const SignUpPage = (props) => {
     // Navigate Object

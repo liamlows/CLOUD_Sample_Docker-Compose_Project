@@ -17,7 +17,7 @@ import PeopleTwoToneIcon from '@mui/icons-material/PeopleTwoTone';
 import HomeIcon from '@mui/icons-material/Home';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
-export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, username, profileNav, accountNav }) => {
+export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, account_id}) => {
   const location = useLocation();
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);

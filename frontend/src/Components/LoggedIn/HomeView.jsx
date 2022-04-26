@@ -9,7 +9,7 @@ import { Button } from "@mui/material";
 import { LoggedInResponsiveAppBar } from "../common/LoggedInResponsiveAppBar";
 
 // Method Imports
-import { deleteNotification, getAccountbyUsername, getNotifications, logout } from "../../APIFolder/loginApi";
+import { deleteNotification, getAccountbyId, getNotifications, logout } from "../../APIFolder/loginApi";
 
 import ClearIcon from '@mui/icons-material/Clear';
 
@@ -37,9 +37,9 @@ export const HomeView = (props) => {
 
     // Conditions
     if (JSON.stringify(account) === "{}") {
-        let username = Cookies.get("username");
-        if (username) {
-            getAccountbyUsername(username)
+        let account_id = Cookies.get("account_id");
+        if (account_id) {
+            getAccountbyId(account_id)
                 .then(account => {
                     if (account) {
                         localStorage.setItem("currUser", JSON.stringify(account));
@@ -62,12 +62,6 @@ export const HomeView = (props) => {
             localStorage.setItem("currUser", "{}")
             navigate('/');
         });
-    }
-    const profileNav = () => {
-        navigate(`users/${account.username}`);
-    }
-    const accountNav = () => {
-        navigate(`accounts/${account.username}`);
     }
 
     const removeNotification = (id) => {
