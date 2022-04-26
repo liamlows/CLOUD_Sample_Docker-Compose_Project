@@ -34,20 +34,62 @@ const createOrder = async (firstName, lastName, address, city, state, zip, cardN
     const query3 = knex('transactions').where({transaction_id: result2[0].recentOrder});
     console.log('Raw query for getOrder:', query3.toString());
     const result3 = await query3;
-    return result3;
+    //get products from cart
+    const query4 = knex('cart').where({customer_id});
+    console.log('Raw query for getCart:', query4.toString());
+    const result4 = await query4;
+    //add products to transaction
+    for(let i=0;i<result4.length;i++){
+        const query0 = knex('transaction_products').insert({ transaction_id: result2[0].recentOrder, product_id: result4[i].product_id, quantity: result4[i].quantity});
+        console.log('Raw query for addProductsToTransaction:', query0.toString());
+        const result0 = await query0;
+    }
+    //remove products from cart
+    const query5 = knex('cart').where({customer_id}).del();
+    console.log('Raw query for deleteCart:', query5.toString());
+    const result5 = await query5;
+    //get transaction products
+    const query6 = knex('transaction_products').where({transaction_id: result2[0].recentOrder});
+    console.log('Raw query for getTransactionProducts:', query6.toString());
+    const result6 = await query6;
+    return result3+result6;
 }
 //get product by cart
-const fetchCartProducts = async (user_id) => {
+const fetchCartProducts = async (customer_id) => {
     //return product
-    const query = knex('cart').join('product','product_id','cart.product_id').select().where({customer_id:user_id});
+    const query = knex('cart').join('product','product_id','cart.product_id').select().where({customer_id});
     console.log('Raw query for getProduct:', query.toString());
     const result = await query;
     return result;
 };
+//clear cart
+const clearCart = async (customer_id) => {
+    const query = await knex('cart').where({customer_id}).del();
+    console.log('Raw query for clearCart:', query.toString());
+    return null;
+}
+//delete item from cart
+const deleteCartProduct = async (cart_id) => {
+    const query = knex('cart').where({cart_id}).del();
+    console.log('Raw query for deleteCartProdcut:', query.toString());
+    const result = await query;
+
+    return result;
+};
+//update cart quantity
+const updateCartQuantity = async (cart_id,quantity) => {
+    const query = await knex('cart').where({cart_id}).update({quantity});
+    console.log('Raw query for deleteCartProdcut:', query.toString());
+    const result = await query;
+    return null;
+}
 
 module.exports = {
     createCart,
     fetchProductByID,
     createOrder,
-    fetchCartProducts
+    fetchCartProducts,
+    clearCart,
+    deleteCartProduct,
+    updateCartQuantity
 };

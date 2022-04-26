@@ -11,15 +11,15 @@ const createFarm = async (farmer_id, farm_name, farm_description, farm_image_url
     const result = await query;
     return result;
 };
-//find farm by name
-const findFarmByName = async (farm_name) => {
-    const query = knex('farmer').where({ farm_name });
-    const result = await query;
-    return result;
-}
 //find farm by ID
 const findFarmByID = async (farmer_id) => {
     const query = knex('farmer').where({ farmer_id });
+    const result = await query;
+    return result;
+}
+//find farm by name
+const findFarmByName = async (farm_name) => {
+    const query = knex('farmer').where({ farm_name });
     const result = await query;
     return result;
 }
@@ -33,7 +33,12 @@ const findFarmEstablishedByFarmID = async(farm_id) => {
     const result = knex(FARM_TABLE).select(date_founded).where('farmer_id', farmer_id);
     return result;
 }
-
+//find farm by establish year
+const findFarmByDateFounded = async (date_founded) => {
+    const query = knex('farmer').where({ date_founded });
+    const result = await query;
+    return result;
+}
 //delete farm
 const deleteFarm = async (farm_name) => {
     const query = knex('event').where({farm_name}).del();
@@ -41,7 +46,6 @@ const deleteFarm = async (farm_name) => {
     const result = await query;
     return result;
 };
-
 const getFarmInformation = async(farmer_id) =>{
     const query = knex('farmer').select().where('farmer_id', farmer_id);
     return query;
@@ -60,6 +64,7 @@ module.exports = {
     findFarmByID,
     findFarmRatingByFarmID,
     findFarmEstablishedByFarmID,
+    findFarmByDateFounded,
     deleteFarm,
     updateFarmInformation
 };

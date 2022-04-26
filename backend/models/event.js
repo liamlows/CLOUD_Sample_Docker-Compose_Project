@@ -49,6 +49,13 @@ const findEventByName = async (event_name) => {
     const result = await query;
     return result;
 }
+
+//find event by date
+const findEventByDate = async (date) => {
+    const query = knex('event').where({ date });
+    const result = await query;
+    return result;
+}
 //delete event
 const deleteEvent = async (event_id) => {
     const query = knex('event').where({event_id}).del();
@@ -64,6 +71,7 @@ module.exports = {
 
     createEvent,
     findEventByName,
+    findEventByDate,
     deleteEvent,
     updateEvent,
     getFarmEvents,
