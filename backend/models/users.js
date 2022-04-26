@@ -67,11 +67,17 @@ const deleteAccount = async (user_id) => {
     return null;
 }
 
+const userIDFromEmail = async(email)=>{
+    const result = await knex(USER_TABLE).select('user_id').where({email});
+    return result;
+}
+
 module.exports = {
     createNewUser,
     findUserByID,
     findUserByEmail,
     authenticateUser,
     updatePassword,
-    deleteAccount
+    deleteAccount,
+    userIDFromEmail
 };
