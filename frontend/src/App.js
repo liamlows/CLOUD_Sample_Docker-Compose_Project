@@ -132,7 +132,7 @@ function App() {
           <Route path='/signup' element={<SignUpPage
             setNavigated={x => setNavigated(x)} />} />
 
-          <Route path="/users/:username" element={<Profile
+          <Route path="/users/:account_id" element={<Profile
             pages={loggedInPages}
             settings={settings}
             setNavigated={x => setNavigated(x)} />} />
