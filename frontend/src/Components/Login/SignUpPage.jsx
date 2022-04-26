@@ -75,7 +75,7 @@ export const SignUpPage = (props) => {
 
     // HTML
     return <section id="loginView">
-        <h1 class="text-success">Sign Up</h1>
+        <h1 className="text-success">Sign Up</h1>
         <form className="container">
 
             <TextField label="First Name"
@@ -106,7 +106,7 @@ export const SignUpPage = (props) => {
                 type="button"
                 onClick={() => clickAddAccount()}
                 variant="contained"
-                class="btn btn-success text-light">
+                className="btn btn-success text-light">
                 Sign Up
             </button>
         </form>
