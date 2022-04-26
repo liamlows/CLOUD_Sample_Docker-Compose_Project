@@ -3,7 +3,7 @@ const knex = require('../database/knex');
 //Get all transactions by user
 const fetchTransactions = async (user_id) => {
     //get transactions by user
-    const query = knex('transactions').where({farmer_id: user_id}).orWhere({customer_id: user_id});
+    const query = knex('transactions').where({customer_id: user_id});
     const result = await query;
     //get transaction + products for each transaction
     var transactions = [];
