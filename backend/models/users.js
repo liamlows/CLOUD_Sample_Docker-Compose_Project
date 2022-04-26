@@ -141,7 +141,6 @@ const adjustFunds = async (id, funds, op) => {
     const query = knex(USER_TABLE).where({ id }).update('balance', updated);
     const result = await query;
     return result;
-
 }
 
 module.exports = {

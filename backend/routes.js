@@ -176,7 +176,7 @@ app.get('/message', async (req, res, next) => {
 })  
 
 
-app.get('/nft/:min/:max/:how', async (req, res, next) => {
+app.get('/nft/:min/:max/:how', async (req, res) => {
   try {
     const params = req.params;
 
@@ -189,11 +189,19 @@ app.get('/nft/:min/:max/:how', async (req, res, next) => {
 
   } catch (err) {
       console.error("Failed to get NFTs by price: ", err);
-      // res.status(500).
   }
+})
 
+app.get('/nft/search/:term', async (req, res) => {
+  try {
+    const term = req.params.term;
 
-  next();
+    const result = await req.models.nft.searchByTerm(term);
+    res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to get NFTs by description: ", err);
+  }
 })
 
 
