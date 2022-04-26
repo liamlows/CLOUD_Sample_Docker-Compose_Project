@@ -28,7 +28,7 @@ router.get('/transactions/:transaction_id', async (req, res, next) => {
     next();
 })
 //7.2 get interested events by customer
-router.get('/interested_events/:userid', async (req, res, next) => {
+router.get('/interested_events/:user_id', async (req, res, next) => {
     try{
         const body = req.body;
         result = await dash.fetchInterestedEvents(body.user_id);
@@ -41,11 +41,11 @@ router.get('/interested_events/:userid', async (req, res, next) => {
     next();
 });
 //7.3 delete interested event
-router.delete('/interested_events/:customer_event_interests_id', async (req, res, next) => {
+router.delete('/interested_events/:event_id', async (req, res, next) => {
     try {
-        const customer_event_interests_id=req.params.customer_event_interests_id;
-        console.log(customer_event_interests_id);
-        const result = await dash.deleteInterestedEvent(customer_event_interests_id);
+        const event_id=req.params.event_id;
+        const body = req.body;
+        const result = await dash.deleteInterestedEvent(event_id, body.user_id);
         res.status(204).json(result);
     } catch (err) {
         console.error('Failed to delete interested event:', err);

@@ -6,13 +6,13 @@ const fetchTransactions = async (user_id) => {
     const query = knex('transactions').where({farmer_id: user_id}).orWhere({customer_id: user_id});
     const result = await query;
     //get transaction + products for each transaction
-    //let 
-    //FIX
-    for(let i=0;i<result4.length;i++){
-
+    let transactions = await fetchTransactionWithProducts(result[0].transaction_id);
+    for(let i=1;i<result.length;i++){
+        const txn = await fetchTransactionWithProducts(result[i].transaction_id);
+        transactions = {transactions, txn};
     }
-    return result;
-}
+    return transactions;
+};
 //get most common customers    //untested
 const fetchMostCommonCustomers = async (farmer_id) => {
     //return transaction
@@ -29,8 +29,8 @@ const fetchInterestedEvents = async (user_id) => {
     return result;
 }
 //delete interested events
-const deleteInterestedEvent = async (customer_event_interests_id) => {
-    const query = knex('customer_event_interests').where({customer_event_interests_id}).del();
+const deleteInterestedEvent = async (event_id,customer_id) => {
+    const query = knex('customer_event_interests').where({event_id}).andWhere({customer_id}).del();
     console.log('Raw query for delete interested event:', query.toString());
     const result = await query;
 
