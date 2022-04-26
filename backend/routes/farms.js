@@ -11,7 +11,7 @@ router.get('/:farmer_id', async (req, res) =>{
     try{
         const farmInfo = await Farm.getFarmInformation(req.params.farmer_id);
         const events = await Events.getFarmEvents(req.params.farmer_id);
-        const products = await Products.getProductThroughFarmName(req.params.farmer_id);
+        const products = await Products.getProductThroughFarmID(req.params.farmer_id);
         const result = {farmInfo, events, products};
         res.status(201).json(result);
     }catch (err){

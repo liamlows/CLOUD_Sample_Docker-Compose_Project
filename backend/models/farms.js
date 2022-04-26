@@ -62,6 +62,11 @@ const updateFarmInformation = async(farmer_id, farm_name, farm_description, farm
     return result;
 };
 
+const getFarmIDsThroughName = async(farm_name) =>{
+    const result = knex(FARM_TABLE).select('farmer_id').where('farm_name','like', farm_name);
+    return result;
+}
+
 module.exports = {
 
     getFarmInformation,
@@ -73,5 +78,5 @@ module.exports = {
     findFarmByDateFounded,
     deleteFarm,
     updateFarmInformation,
-    findFarmByOwner
-};
+    findFarmByOwner,
+    getFarmIDsThroughName
