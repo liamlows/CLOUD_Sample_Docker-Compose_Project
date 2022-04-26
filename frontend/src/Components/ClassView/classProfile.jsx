@@ -9,7 +9,7 @@ import Add from "@mui/icons-material/Add";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import ClearIcon from '@mui/icons-material/Clear';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import "./classProfile.css";
+import "./ClassProfile.css";
 
 
 // Component Imports
