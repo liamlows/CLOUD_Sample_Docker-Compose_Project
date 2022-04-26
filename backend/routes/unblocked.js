@@ -1,10 +1,11 @@
 // Message board and leaderboard routes go here
+const MessageController = require('../controllers/messages');
 
 const express = require('express');
 
 const router = express.Router();
 
-// POST /session/ attempts to create a new session
+// Test API call to see if a user is blocked
 router.get('/', async (req, res, next) => {
     try {
         const responseBody = "Good :)";
@@ -15,5 +16,7 @@ router.get('/', async (req, res, next) => {
     }
     
 });
+
+// Add relevant message board and leaderboard API calls here
 
 module.exports = router;
