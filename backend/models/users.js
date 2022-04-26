@@ -9,15 +9,16 @@ const createNewUser = async (first_name, last_name, email, password, isFarmer) =
         const query = knex('users').insert({ first_name, last_name, email, password, isFarmer: 1 });
         console.log('Raw query for createFarmer:', query.toString());
         const result = await query;
-        return result;
+        const users = await findUserByEmail(email);
+        return users[0];
     }
     //create customer
     else{
         //add customer to table
         const query = knex('users').insert({ first_name, last_name, email, password, isFarmer: 0 });
         console.log('Raw query for createCustomer:', query.toString());
-        const result = await query;
-        return result;
+        const users = await findUserByEmail(email);
+        return users[0];
     }
 };
 //find user
