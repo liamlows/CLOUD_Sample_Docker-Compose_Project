@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { Rating, SelectField, TextAreaField, TextField } from "../common";
+import { SelectField, TextField } from ".";
+import { Rating } from "./Rating";
+import { TextAreaField } from "./TextAreaField";
 
 
-export const ReviewForm = (onReviewAdded) => {
+export const ReviewForm = (props) => {
 
     const [userName, setUserName] = useState('');
     const [rating, setRating] = useState(0);
-    const [comment, setComment] = useState('');
+    const [message, setMessage] = useState('');
     const [ratingOption] = useState([
         { value: 1, label: "1 star" },
         { value: 2, label: "2 stars" },
@@ -15,39 +17,49 @@ export const ReviewForm = (onReviewAdded) => {
         { value: 5, label: "5 stars" }
     ]);
 
+    const addReview = () => {
+        props.addReview({
+            rating: rating, message: message, sender_id: props.account_id
+        });
+
+        setRating(0);
+        setMessage('');
+    }
+
+    const clear = () => {
+
+        setRating(0);
+        setMessage('');
+    }
+
     return <div className="border rounded list-group">
         <h2 className="p-3 text-white bg-secondary list-group-item fs-4 m-0">Add Review</h2>
 
         <div className="p-3 col-12 list-group-item bg-light">
-            <div className="col-7 m-1 float-start">
-                <TextField value={userName} setValue={x => setUserName(x)} label="Your Name" />
+            <div className="row">
+            <div className="col-7 m-4 mt-1 mb-1">
+                <TextAreaField value={message} setValue={x => setMessage(x)} label="Message" />
             </div>
-            <div className="col-2 m-4 float-end">
-                <Rating value={rating} />
-            </div>
-            <div className="col-1 float-end">
+            <div className="col-1"></div>
+            <div className="col-1">
                 <SelectField value={rating} setValue={x => setRating(x)} label="Rating" options={ratingOption} optionValueKey="value" optionLabelKey="label" />
             </div>
-            <div className="clearfix"></div>
+            <div className="col-2 m-4">
 
-            <div className="m-1">
-                <TextAreaField value={comment} setValue={x => setComment(x)} label="Comment" />
-                <button className="btn btn-primary rounded border-0  col-1" onClick={() => {
-                    onReviewAdded.onReviewAdded({
-                        userName, rating, comment, date: new Date().toLocaleString("en-US", {
-                            month: "short",
-                            day: "numeric",
-                            year: "numeric"
-                        })
-                    });
-                    setUserName('');
-                    setRating(0);
-                    setComment('');
-                }}>
-                    Submit
-                </button>
+                <Rating value={rating} />
             </div>
+            </div>
+
+
+            <button className="btn btn-secondary rounded border-0  col-1" onClick={() => {
+                clear()
+            }}>Cancel</button>
+            <button className="btn btn-primary rounded border-0  col-1" onClick={() => {
+                addReview()
+            }}>
+                Submit
+            </button>
         </div>
-    </div>
+    </div >
 
 }
