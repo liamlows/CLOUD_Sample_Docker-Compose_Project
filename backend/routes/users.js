@@ -82,5 +82,15 @@ router.post('/transfer', async (req, res, next) => {
     }
 });
 
+router.post('/update', async (req, res, next) => {
+    try {
+        const user = req.user;
+        const body = req.body;
+    }
+
+
+});
+
+
 module.exports = router;
 
