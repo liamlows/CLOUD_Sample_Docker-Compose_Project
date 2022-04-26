@@ -65,6 +65,7 @@ CREATE TABLE `db`.`accounts` (
     `offline_mode` BOOLEAN NOT NULL DEFAULT 0,
     `email` VARCHAR(255),
     `bio` VARCHAR(1000),
+    'pfp_url' VARCHAR(1000),
     PRIMARY KEY (`account_id`),
     FOREIGN KEY (`school_id`) REFERENCES schools(`school_id`),
     FOREIGN KEY (`role_id`) REFERENCES roles(`role_id`)
@@ -112,6 +113,7 @@ CREATE TABLE `db`.`announcements` (
 CREATE TABLE `db`.`enrollments` (
     `account_id` BIGINT UNSIGNED NOT NULL,
     `course_id` BIGINT UNSIGNED NOT NULL,
+    'grade' INT UNSIGNED,
     PRIMARY KEY (`account_id`, `course_id`),
     FOREIGN KEY (`account_id`) REFERENCES accounts(`account_id`),
     FOREIGN KEY (`course_id`) REFERENCES courses(`course_id`)
@@ -141,6 +143,30 @@ CREATE TABLE `db`.`notifications` (
     FOREIGN KEY (`sender`) REFERENCES accounts(`account_id`),
     FOREIGN KEY (`recipient`) REFERENCES accounts(`account_id`),
     FOREIGN KEY (`course`) REFERENCES courses(`course_id`)
+);
+
+-- COURSE REVIEWS TABLE
+CREATE TABLE `db`.`course_reviews`(
+    `course_reviews_id` SERIAL,
+    `course_id` BIGINT UNSIGNED NOT NULL,
+    `review` VARCHAR(1000),
+    `rating` INT CHECK (`rating` <= 5 AND `rating` >= 0) NOT NULL,
+    `poster_id` BIGINT UNSIGNED NOT NULL,
+    PRIMARY KEY (`course_reviews_id`),
+    FOREIGN KEY (`course_id`) REFERENCES courses(`course_id`),
+    FOREIGN KEY (`poster_id`) REFERENCES accounts(`account_id`)
+);
+
+-- TEACHER REVIEWS TABLE
+CREATE TABLE `db`.`teacher_reviews`(
+    `teacher_reviews_id` SERIAL,
+    `teacher_id` BIGINT UNSIGNED NOT NULL,
+    `review` VARCHAR(1000),
+    `rating` INT CHECK (`rating` <= 5 AND `rating` >= 0) NOT NULL,
+    `poster_id` BIGINT UNSIGNED NOT NULL,
+    PRIMARY KEY (`teacher_reviews_id`),
+    FOREIGN KEY (`teacher_id`) REFERENCES accounts(`account_id`),
+    FOREIGN KEY (`poster_id`) REFERENCES accounts(`account_id`)
 );
 
 

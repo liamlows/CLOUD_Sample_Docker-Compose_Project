@@ -114,4 +114,25 @@ router.delete("/:account_id/:course_id", async (req, res, next) => {
     res.status(200).json();
 });
 
+/*
+AVERAGE GRADE
+*/
+async function getAverage(courseID){
+    let [rows, fields] = await pool.execute('SELECT AVG(grade) FROM `enrollments` WHERE `course_id` = ? & `grade` IS NOT NULL', [courseID]);
+    return rows;
+}
+router.get("/average/:course_id", async (req, res, next) => {
+    let courseID = req.params.course_id;
+
+    let result;
+    try{
+        result = await getAverage(courseID);
+    } catch (error) {
+        return next(error);
+    }
+
+    res.status(200).json(result);
+
+});
+
 module.exports = router;

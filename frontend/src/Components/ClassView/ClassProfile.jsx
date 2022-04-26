@@ -18,8 +18,10 @@ import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 
 
 // Method Imports
+
 import { getAccountbyUsername, logout, sendEnrollmentRequest, updateAccountbyUsername, getAccountbyId, getCourseById, getCourseRequest, getCoursebyId, updateCoursebyId, getEnrollmentStatus, sendNotification, dropCourse } from "../../APIFolder/loginApi";
 import { TextAreaField } from "../common/TextAreaField";
+
 
 export const ClassProfile = (props) => {
     // Navigate Object
@@ -90,9 +92,9 @@ export const ClassProfile = (props) => {
 
     // Conditions
     if (JSON.stringify(account) === "{}") {
-        let username = Cookies.get("username");
-        if (username) {
-            getAccountbyUsername(username)
+        let account_id = Cookies.get("account_id");
+        if (account_id) {
+            getAccountbyId(account_id)
                 .then(account => {
                     if (account) {
                         localStorage.setItem("currUser", JSON.stringify(account));
@@ -141,14 +143,6 @@ export const ClassProfile = (props) => {
         });
     }
 
-    const profileNav = () => {
-        navigate(`users/${account.username}`);
-    }
-
-    const accountNav = () => {
-        navigate(`accounts/${account.username}`);
-    }
-
     const sendEnrollmentRequestFunc = () => {
         sendEnrollmentRequest()
         setReload(!reload)
@@ -193,9 +187,7 @@ export const ClassProfile = (props) => {
                 pages={props.pages}
                 settings={props.settings}
                 signOut={() => signOut()}
-                username={account.username}
-                profileNav={() => profileNav()}
-                account={() => accountNav()} />
+                account_id={account.account_id} />
 
             {/* Viewing editable class (EDITING) */}
             {canEdit() === true && editMode === true &&

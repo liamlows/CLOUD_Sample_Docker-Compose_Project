@@ -20,7 +20,7 @@ import { ClassProfile } from './Components/ClassView/ClassProfile';
 import { Waitlist } from './Components/AdminView/Waitlist';
 
 // Method Imports
-import { getAccountbyUsername } from './APIFolder/loginApi';
+import { getAccountbyId } from './APIFolder/loginApi';
 
 // React functional component
 function App() {
@@ -39,7 +39,7 @@ function App() {
   const [loggedInPages] = useState([
     { label: 'Dashboard', route: `/` },
     { label: 'Classes', route: `/classes` },
-    { label: 'Friends', route: `/users/:username/friends` },
+    { label: 'Friends', route: `/users/:account_id/friends` },
   ]);
   const [basePages] = useState([
     { label: 'Info', route: `/info` },
@@ -58,11 +58,11 @@ function App() {
     localStorage.setItem("currUser", "{}");
     console.log("Initial State Set");
 
-    let username = Cookies.get("username");
+    let account_id = Cookies.get("account_id");
 
-    if (username) {
+    if (account_id) {
       setNavigated(false);
-      getAccountbyUsername(username)
+      getAccountbyId(account_id)
         .then(account => {
           if (account) {
             console.log("account found");
@@ -119,7 +119,7 @@ function App() {
           {/* TODO: Account Settings (Probably later on) */}
 
 
-          <Route path="/users/:username/friends" element={<FriendsList
+          <Route path="/users/:account_id/friends" element={<FriendsList
             pages={loggedInPages}
             settings={settings}
             setNavigated={x => setNavigated(x)} />} />
@@ -132,7 +132,7 @@ function App() {
           <Route path='/signup' element={<SignUpPage
             setNavigated={x => setNavigated(x)} />} />
 
-          <Route path="/users/:username" element={<Profile
+          <Route path="/users/:account_id" element={<Profile
             pages={loggedInPages}
             settings={settings}
             setNavigated={x => setNavigated(x)} />} />

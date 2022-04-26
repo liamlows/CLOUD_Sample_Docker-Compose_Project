@@ -7,6 +7,8 @@ const cors = require('cors');
 const { log, ExpressAPILogMiddleware } = require('@rama41222/node-logger');
 const routes = require('./routes');
 const util = require('./util');
+const fileUpload = require('express-fileupload');
+
 
 // set up some configs for express.
 const config = {
@@ -39,10 +41,19 @@ else{
   };
 }
 
+
+// enable files upload
+app.use(fileUpload({
+  limits: {
+    fileSize: 2 * 1024 * 1024 * 1024 // 2MB max file(s) size
+  },
+}));
+
 app.use(cors(corOptions));
 
-
 app.use(ExpressAPILogMiddleware(logger, { request: true }));
+
+app.use('/static', express.static('public'))
 
 
 const session = require('express-session');

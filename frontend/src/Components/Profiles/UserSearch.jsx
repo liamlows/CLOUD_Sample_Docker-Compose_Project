@@ -12,7 +12,9 @@ import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 import { TextField } from "../common";
 
 // Method Imports
-import { getAccountbyUsername, getFriendRequests, getProfiles, getStudents, handleFriendRequest, logout, sendFriendRequest } from "../../APIFolder/loginApi"
+
+import {getAccountbyId, getFriendRequests, getProfiles, getStudents, handleFriendRequest, logout, sendFriendRequest } from "../../APIFolder/loginApi"
+
 
 
 export const UserSearch = ({ pages, settings, setNavigated }) => {
@@ -83,9 +85,9 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
 
     // Conditions
     if (JSON.stringify(account) === "{}") {
-        let username = Cookies.get("username");
-        if (username) {
-            getAccountbyUsername(username)
+        let account_id = Cookies.get("account_id");
+        if (account_id) {
+            getAccountbyId(account_id)
                 .then(account => {
                     if (account) {
                         localStorage.setItem("currUser", JSON.stringify(account));
@@ -129,14 +131,6 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
         });
     }
 
-    const profileNav = () => {
-        navigate(`users/${account.username}`);
-    }
-
-    const accountNav = () => {
-        navigate(`accounts/${account.username}`);
-    }
-
     const displayUser = (profile) => {
         if (profile.status === 3) {
             console.log("already friends");
@@ -172,9 +166,7 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
                 pages={pages}
                 settings={settings}
                 signOut={() => signOut()}
-                username={account.username}
-                profileNav={() => profileNav()}
-                account={() => accountNav()} />
+                account_id={account.account_id} />
 
             <div className="container border-0 mt-3">
                 <button type="button" className="float-end btn btn-success mt-3" onClick={goToFriendsList}>Friends List</button>

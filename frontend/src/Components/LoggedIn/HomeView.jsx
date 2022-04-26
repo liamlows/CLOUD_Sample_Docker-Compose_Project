@@ -9,7 +9,7 @@ import { Button } from "@mui/material";
 import { LoggedInResponsiveAppBar } from "../common/LoggedInResponsiveAppBar";
 
 // Method Imports
-import { deleteNotification, getAccountbyUsername, getNotifications, logout } from "../../APIFolder/loginApi";
+import { deleteNotification, getAccountbyId, getNotifications, logout } from "../../APIFolder/loginApi";
 
 import ClearIcon from '@mui/icons-material/Clear';
 
@@ -37,9 +37,9 @@ export const HomeView = (props) => {
 
     // Conditions
     if (JSON.stringify(account) === "{}") {
-        let username = Cookies.get("username");
-        if (username) {
-            getAccountbyUsername(username)
+        let account_id = Cookies.get("account_id");
+        if (account_id) {
+            getAccountbyId(account_id)
                 .then(account => {
                     if (account) {
                         localStorage.setItem("currUser", JSON.stringify(account));
@@ -62,12 +62,6 @@ export const HomeView = (props) => {
             localStorage.setItem("currUser", "{}")
             navigate('/');
         });
-    }
-    const profileNav = () => {
-        navigate(`users/${account.username}`);
-    }
-    const accountNav = () => {
-        navigate(`accounts/${account.username}`);
     }
 
     const removeNotification = (id) => {
@@ -93,9 +87,7 @@ export const HomeView = (props) => {
             pages={props.loggedInPages}
             settings={props.settings}
             signOut={() => signOut()}
-            username={account.username}
-            profileNav={() => profileNav()}
-            accountNav={() => accountNav()} />
+            account_id={account.account_id} />
         <div className="col-6 p-0"><div className="col-1 p-0"></div><h1 className="col-6 mt-4 fs-2">Welcome {account.firstName}</h1></div>
         <div className="clearfix p-0"></div>
         <div className="row mt-5 m-3">

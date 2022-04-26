@@ -1,8 +1,6 @@
 import axios from 'axios';
 axios.defaults.withCredentials = true
-
-
-const BACKEND_ENDPOINT = "http://localhost:8000";
+export const BACKEND_ENDPOINT = "http://localhost:8000";
 
 
 export const registerAccount = async (credentials) =>  {
@@ -34,28 +32,17 @@ export const logout = async () => {
     }
 }
 
-export const getAccountbyUsername = async (username) => {
-    if(username === undefined || username === null){
+export const getAccountbyId = async (account_id) => {
+    if(account_id === undefined || account_id === null){
         return null;
     }
 
-    const res = await axios.get(`${BACKEND_ENDPOINT}/api/users/${username}`);
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/users/${account_id}`);
     if(res.status !== 200){
-        console.log(`Couldn't find user: ${username}`)
+        console.log(`Couldn't find user: ${account_id}`)
         return null;
     }
     return res.data;
-}
-
-export const getUsernameById = async (id) => {
-    const res = await axios.get(`${BACKEND_ENDPOINT}/api/username/${id}`);
-    return res.data;
-}
-
-export const getAccountbyId = async (id) => {
-    let res = await getUsernameById(id);
-    let res2 = await getAccountbyUsername(res.username);
-    return {...res, ...res2};
 }
 
 //Still work in progress. Account editing is not fully implemented
@@ -66,6 +53,7 @@ export const updateAccountbyUsername = async (account) => {
 
 export const getStudents = async () => {
     const res = await axios.get(`${BACKEND_ENDPOINT}/api/users?account_type=student`);
+
     if(res.status !== 200){
         console.log("Couldn't find users");
         return null;
@@ -186,23 +174,14 @@ export const getClasses = async () => {
 
 export const uploadPP = async (pp) => {
     console.log(typeof(pp), pp)
-
     let formData = new FormData();
-    let reader = new FileReader();
-
-    if(pp){
-        reader.readAsDataURL(pp);
-    }
-
-    reader.onload = (event) => {
-        formData.append("image", event.target.result);
-    
-        axios.put(`${BACKEND_ENDPOINT}/api/account`, event.target.result).then(() => {
-            console.log("hi");
-        })
-    }
-
-    return;
+    formData.set("profilePic", pp);
+    await axios.post(`${BACKEND_ENDPOINT}/api/account/pfp`, formData,
+        {
+            headers: {
+                "Content-type": "multipart/form-data",
+            }
+        });
     // return res.data;
 }
 
