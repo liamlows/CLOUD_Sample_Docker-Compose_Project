@@ -12,15 +12,15 @@ import { Base } from './Components/BaseView/Base';
 import { Profile } from './Components/Profiles/Profile';
 import { UserSearch } from './Components/Profiles/UserSearch';
 import { FriendsList } from './Components/Profiles/FriendsList';
-import { ClassMenu } from './Components/ClassView/classMenu';
+import { ClassMenu } from './Components/ClassView/ClassMenu';
 import { NoPages } from './Components/NoPages';
 import { AddClasses } from './Components/ClassView/AddClasses';
+import { ClassProfile } from './Components/ClassView/ClassProfile';
 
 import { Waitlist } from './Components/AdminView/Waitlist';
 
 // Method Imports
 import { getAccountbyUsername } from './APIFolder/loginApi';
-import { ClassProfile } from "./Components/ClassView/classProfile";
 
 // React functional component
 function App() {
