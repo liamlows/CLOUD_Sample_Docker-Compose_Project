@@ -29,18 +29,19 @@ router.get('/session', async (req, res, next) => {
     }
 }); 
 
-// Check for payment info
-router.get('/purchase', async (req, res, next) => {
-    try {
-        const user = req.user;
-        const result = await User.purchaseNFT(user.id);
-        res.status(200).json(result);
-    } catch(err){
-        console.error('No payment info available: ', err);
-        res.sendStatus(404).json({ message: err.toString() });
-    }
+// // Check for payment info
+// router.get('/purchase', async (req, res, next) => {
+//     try {
+//         const user = req.user;
+//         const boyd = req.body;
+//         const result = await User.purchaseNFT(user.id, body.nft);
+//         res.status(200).json(result);
+//     } catch(err){
+//         console.error('No payment info available: ', err);
+//         res.sendStatus(404).json({ message: err.toString() });
+//     }
 
-});
+// });
 
 // Add payment info
 router.post('/paymentInfo', async (req, res, next) => {
