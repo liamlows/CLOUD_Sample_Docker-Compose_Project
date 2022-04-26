@@ -20,48 +20,48 @@ const deleteProduct = async (product_id) => {
 }
 
 const getProductsAllFilters = async(farm_id, product_category, product_name)=>{
-    const result = knex(PRODUCT_TABLE).join('farmer','farmer.farmer_id','product.farmer_id').join('event','event.farmer_id','product.farmer_id').select().whereIn('product.farmer_id', farm_id).whereIn('product_category', product_category).where('product_name', 'like', product_name);
+    const result = knex(PRODUCT_TABLE).select().whereIn('product.farmer_id', farm_id).whereIn('product_category', product_category).where('product_name', 'like', product_name);
     return result;
 }
 
 const getProductThroughFarmNameCategory = async(farm_id, product_category)=>{
-    const result = knex(PRODUCT_TABLE).join('farmer','farmer.farmer_id','product.farmer_id').join('event','event.farmer_id','product.farmer_id').select().whereIn('product.farmer_id', farm_id).whereIn('product_category', product_category);
+    const result = knex(PRODUCT_TABLE).select().whereIn('product.farmer_id', farm_id).whereIn('product_category', product_category);
     return result;
 }
 
 const getThroughFarmNameProductName = async(farm_id, product_name)=>{
-    const result = knex(PRODUCT_TABLE).join('farmer','farmer.farmer_id','product.farmer_id').join('event','event.farmer_id','product.farmer_id').select().whereIn('product.farmer_id', farm_id).where('product_name','like', product_name);
+    const result = knex(PRODUCT_TABLE).select().whereIn('product.farmer_id', farm_id).where('product_name','like', product_name);
     return result;
 }
 
 const getProductThroughCategoryName = async(product_category, product_name)=>{
-    const result = knex(PRODUCT_TABLE).join('farmer','farmer.farmer_id','product.farmer_id').join('event','event.farmer_id','product.farmer_id').select().whereIn('product_category', product_category).where('product_name','like', product_name);
+    const result = knex(PRODUCT_TABLE).select().whereIn('product_category', product_category).where('product_name','like', product_name);
     return result;
 }//
 
 const getProductThroughCategory = async(product_category)=>{
-    const result = knex(PRODUCT_TABLE).join('farmer','farmer.farmer_id','product.farmer_id').join('event','event.farmer_id','product.farmer_id').select().whereIn('product_category', product_category);
+    const result = knex(PRODUCT_TABLE).select().whereIn('product_category', product_category);
     return result;
 }//
 
 const getProductThroughName = async( product_name)=>{
-    const result = knex(PRODUCT_TABLE).join('farmer','farmer.farmer_id','product.farmer_id').join('event','event.farmer_id','product.farmer_id').select().where('product_name','like', product_name);
+    const result = knex(PRODUCT_TABLE).select().where('product_name','like', product_name);
     return result;
 }//
 
 const getProductThroughFarmName = async(farmer_id) => {
-    const result = knex(PRODUCT_TABLE).join('farmer','farmer.farmer_id','product.farmer_id').join('event','event.farmer_id','product.farmer_id').select().whereIn('product.farmer_id', farmer_id);
+    const result = knex(PRODUCT_TABLE).select().whereIn('product.farmer_id', farmer_id);
     return result;
 }
 
 const getProductThroughFarmID = async(farmer_id) => {
-    const result = knex(PRODUCT_TABLE).join('farmer','farmer.farmer_id','product.farmer_id').join('event','event.farmer_id','product.farmer_id').select().where('product.farmer_id', farmer_id);
+    const result = knex(PRODUCT_TABLE).select().where('product.farmer_id', farmer_id);
     return result;
 }
 
 
 const getAvailableProducts = async() => {
-    const result = knex(PRODUCT_TABLE).join('farmer','farmer.farmer_id','product.farmer_id').join('event','event.farmer_id','product.farmer_id').select().where('product_stock', '>', 0);
+    const result = knex(PRODUCT_TABLE).select().where('product_stock', '>', 0);
     return result;
 }//
 
