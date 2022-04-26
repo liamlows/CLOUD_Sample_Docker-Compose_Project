@@ -45,11 +45,10 @@ export const Profile = (props) => {
     // Initial Load
     useEffect(() => {
         let status = 0;
-        getStatusByUsername(params.username).then((status) => setOnline(!!status.logged_in));
 
 
-
-        getAccountbyId(params.account_id).then( async loaded => {
+        getAccountbyId(params.account_id).then(async loaded => {
+            getStatusByUsername(loaded.username).then((status) => setOnline(!!status.logged_in));
 
             // get the table of friend requests
             if (loaded.username !== JSON.parse(localStorage.getItem("currUser")).username) {
@@ -115,12 +114,10 @@ export const Profile = (props) => {
         })
     }, [editMode, reload]); //lol the useEffect is just here now.
 
-    if (account.username && account.username !== params.username) {
+    if (account.account_id && account.account_id !== params.account_id) {
         let status = 0;
-        getStatusByUsername(params.username).then((status) => setOnline(!!status.logged_in));
-
-
-        getAccountbyId(params.account_id).then( async loaded => {
+        getAccountbyId(params.account_id).then(async loaded => {
+            getStatusByUsername(loaded.username).then((status) => setOnline(!!status.logged_in));
 
             // get the table of friend requests
             if (loaded.username !== JSON.parse(localStorage.getItem("currUser")).username) {
