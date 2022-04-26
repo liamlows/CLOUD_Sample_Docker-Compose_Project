@@ -62,10 +62,34 @@ const fetchCartProducts = async (customer_id) => {
     const result = await query;
     return result;
 };
+//clear cart
+const clearCart = async (customer_id) => {
+    const query1 = await knex('cart').where({customer_id}).del();
+    console.log('Raw query for clearCart:', query1.toString());
+    return null;
+}
+//delete item from cart
+const deleteCartProduct = async (cart_id) => {
+    const query1 = await knex('cart').where({cart_id}).del();
+    console.log('Raw query for deleteCartProdcut:', query.toString());
+    const result = await query;
+
+    return result;
+};
+//update cart quantity
+const updateCartQuantity = async (cart_id,quantity) => {
+    const query1 = await knex('cart').where({cart_id}).update({quantity});
+    console.log('Raw query for deleteCartProdcut:', query.toString());
+    const result = await query;
+    return null;
+}
 
 module.exports = {
     createCart,
     fetchProductByID,
     createOrder,
-    fetchCartProducts
+    fetchCartProducts,
+    clearCart,
+    deleteCartProduct,
+    updateCartQuantity
 };

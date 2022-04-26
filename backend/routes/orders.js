@@ -55,5 +55,47 @@ router.post('/checkout', async (req, res, next) => {
 
     next();
 })
+//delete cart
+router.delete('/clear', async (req, res, next) => {
+    try {
+        const body = req.body;
+        const result = await Product.clearCart(body.user_id);
+        res.status(204).json(result);
+    } catch (err) {
+        console.error('Failed to clear cart:', err);
+        res.status(500).json({ message: err.toString() });
+    }
+
+    next();
+})
+//delete item from cart
+router.delete('/clear/:cart_id', async (req, res, next) => {
+    try {
+        const cart_id=req.params.cart_id;
+        console.log(cart_id);
+        const result = await Product.deleteCartProduct(cart_id);
+        res.status(204).json(result);
+    } catch (err) {
+        console.error('Failed to delete product from cart:', err);
+        res.status(500).json({ message: err.toString() });
+    }
+
+    next();
+})
+//update quantity for product in cart
+router.put('/:cart_id', async (req, res, next) => {
+    try {
+        const cart_id=req.params.cart_id;
+        const body = req.body;
+        console.log(cart_id);
+        const result = await Product.updateCartQuantity(cart_id,body.quantity);
+        res.status(200).json(result);
+    } catch (err) {
+        console.error('Failed to update cart quantity:', err);
+        res.status(500).json({ message: err.toString() });
+    }
+
+    next();
+})
 
 module.exports = router;
