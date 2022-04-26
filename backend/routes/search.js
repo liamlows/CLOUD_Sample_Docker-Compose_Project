@@ -1,5 +1,6 @@
 const express = require('express');
 const Product = require('../models/products');
+const Farm = require('../models/farms');
 
 
 const router = express.Router();
@@ -53,12 +54,16 @@ router.get('/', async(req, res) =>{
         var isFarmName = false;
         var isFilters = false;
         var isItemName = false;
-        console.log(req.body.farmName);
-
+        var farm_name = '%' + req.body.farmName + '%';
+        var farmerIDArray = [];
+        var farmerIDJSON;
         var result;
-
         if(req.body.farmName != ""){
             isFarmName = true;
+            farmerIDJSON = await Farm.getFarmIDsThroughName(farm_name);
+            for(var i = 0; i < farmerIDJSON.length; i++){
+                farmerIDArray.push(farmerIDJSON[i].farmer_id);
+            }
         }
         if(req.body.filters != ""){
             isFilters = true;
@@ -69,17 +74,17 @@ router.get('/', async(req, res) =>{
         var product_name = '%' + req.body.itemName +'%';
 
         if(isFarmName & isFilters & isItemName){
-            result = await Product.getProductsAllFilters(req.body.farmName, req.body.filters[0], product_name);
+            result = await Product.getProductsAllFilters(farmerIDArray, req.body.filters, product_name);
         }else if(isFarmName & isFilters){
-            result = await Product.getProductThroughFarmNameCategory(req.body.farmName, req.body.filters[0]);
+            result = await Product.getProductThroughFarmNameCategory(farmerIDArray, req.body.filters);
         }else if(isFarmName & isItemName){
-            result = await Product.getThroughFarmNameProductName(req.body.farmName, product_name);
+            result = await Product.getThroughFarmNameProductName(farmerIDArray, product_name);
         }else if(isFilters & isItemName){
-            result = await Product.getProductThroughCategoryName(req.body.filters[0], product_name);
+            result = await Product.getProductThroughCategoryName(req.body.filters, product_name);
         }else if(isFarmName){
-            result = await Product.getProductThroughFarmName(req.body.farmName);
+            result = await Product.getProductThroughFarmName(farmerIDArray);
         } else if(isFilters){
-            result = await Product.getProductThroughCategory(req.body.filters[0]);
+            result = await Product.getProductThroughCategory(req.body.filters);
         }else if(isItemName){
             result = await Product.getProductThroughName(product_name);
         }else{
