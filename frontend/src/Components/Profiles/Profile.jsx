@@ -37,6 +37,7 @@ export const Profile = (props) => {
     const [online, setOnline] = useState(false);
     const [reload, setReload] = useState(false);
     const [classes, setClasses] = useState([]);
+    const [currUser, setCurrUser] = useState({})
 
     const [pp, setPP] = useState(undefined);
     const params = useParams();
@@ -188,14 +189,14 @@ export const Profile = (props) => {
         })
     }
     // Conditions
-    if (JSON.stringify(account) === "{}") {
+    if (JSON.stringify(currUser) === "{}") {
         let account_id = Cookies.get("account_id");
         if (account_id) {
             getAccountbyId(account_id)
                 .then(account => {
                     if (account) {
                         localStorage.setItem("currUser", JSON.stringify(account));
-                        setAccount(account);
+                        setCurrUser(account);
                     }
                     else {
                         console.log("User is null after request");

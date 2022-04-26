@@ -52,7 +52,7 @@ export const updateAccount = async (account) => {
 
 
 export const getStudents = async () => {
-    const res = await axios.get(`${BACKEND_ENDPOINT}/api/users?account_type=student`);
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/d/accounts/account_type/student`);
 
     if(res.status !== 200){
         console.log("Couldn't find users");
