@@ -20,7 +20,7 @@ import { ClassProfile } from './Components/ClassView/ClassProfile';
 import { Waitlist } from './Components/AdminView/Waitlist';
 
 // Method Imports
-import { getAccountbyUsername } from './APIFolder/loginApi';
+import { getAccountbyId } from './APIFolder/loginApi';
 
 // React functional component
 function App() {
@@ -58,11 +58,11 @@ function App() {
     localStorage.setItem("currUser", "{}");
     console.log("Initial State Set");
 
-    let username = Cookies.get("username");
+    let account_id = Cookies.get("account_id");
 
-    if (username) {
+    if (account_id) {
       setNavigated(false);
-      getAccountbyUsername(username)
+      getAccountbyId(account_id)
         .then(account => {
           if (account) {
             console.log("account found");

@@ -12,7 +12,7 @@ import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 import { TextField } from "../common";
 
 // Method Imports
-import { getAccountbyUsername, getFriendRequests, getProfiles, handleFriendRequest, logout, sendFriendRequest } from "../../APIFolder/loginApi"
+import {getAccountbyId, getFriendRequests, getProfiles, handleFriendRequest, logout, sendFriendRequest } from "../../APIFolder/loginApi"
 
 
 export const UserSearch = ({ pages, settings, setNavigated }) => {
@@ -83,9 +83,9 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
 
     // Conditions
     if (JSON.stringify(account) === "{}") {
-        let username = Cookies.get("username");
-        if (username) {
-            getAccountbyUsername(username)
+        let account_id = Cookies.get("account_id");
+        if (account_id) {
+            getAccountbyId(account_id)
                 .then(account => {
                     if (account) {
                         localStorage.setItem("currUser", JSON.stringify(account));

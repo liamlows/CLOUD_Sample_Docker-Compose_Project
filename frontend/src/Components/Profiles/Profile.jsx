@@ -19,7 +19,7 @@ import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 
 
 // Method Imports
-import { getFriendRequests, getStatusByUsername, getAccountbyUsername, handleFriendRequest, logout, sendFriendRequest, updateAccountbyUsername, getFriendRequest, getFriendsClasses, uploadPP } from "../../APIFolder/loginApi";
+import { getFriendRequests, getStatusByUsername, handleFriendRequest, logout, sendFriendRequest, updateAccountbyUsername, getFriendRequest, getFriendsClasses, uploadPP } from "../../APIFolder/loginApi";
 
 
 export const Profile = (props) => {
@@ -46,7 +46,7 @@ export const Profile = (props) => {
         getStatusByUsername(params.username).then((status) => setOnline(!!status.logged_in));
 
 
-        getAccountbyUsername(params.username).then(loaded => {
+        getAccountbyId(params.account_id).then(loaded => {
             // get the table of friend requests
             if (loaded.username !== JSON.parse(localStorage.getItem("currUser")).username) {
 
@@ -117,7 +117,7 @@ export const Profile = (props) => {
         let status = 0;
         getStatusByUsername(params.username).then((status) => setOnline(!!status.logged_in));
 
-        getAccountbyUsername(params.username).then(loaded => {
+        getAccountbyId(params.account_id).then(loaded => {
             // get the table of friend requests
             if (loaded.username !== JSON.parse(localStorage.getItem("currUser")).username) {
                 getFriendRequest(loaded.account_id).then(res => {
@@ -184,9 +184,9 @@ export const Profile = (props) => {
     }
     // Conditions
     if (JSON.stringify(account) === "{}") {
-        let username = Cookies.get("username");
-        if (username) {
-            getAccountbyUsername(username)
+        let account_id = Cookies.get("account_id");
+        if (account_id) {
+            getAccountbyId(account_id)
                 .then(account => {
                     if (account) {
                         localStorage.setItem("currUser", JSON.stringify(account));

@@ -18,7 +18,7 @@ import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 
 
 // Method Imports
-import { getAccountbyUsername, logout, sendEnrollmentRequest, updateAccountbyUsername, getAccountbyId, getCourseById, getCourseRequest, getCoursebyId } from "../../APIFolder/loginApi";
+import { logout, sendEnrollmentRequest, updateAccountbyUsername, getAccountbyId, getCourseById, getCourseRequest, getCoursebyId } from "../../APIFolder/loginApi";
 
 export const ClassProfile = (props) => {
     // Navigate Object
@@ -87,9 +87,9 @@ export const ClassProfile = (props) => {
 
     // Conditions
     if (JSON.stringify(account) === "{}") {
-        let username = Cookies.get("username");
-        if (username) {
-            getAccountbyUsername(username)
+        let account_id = Cookies.get("account_id");
+        if (account_id) {
+            getAccountbyId(account_id)
                 .then(account => {
                     if (account) {
                         localStorage.setItem("currUser", JSON.stringify(account));
