@@ -93,12 +93,13 @@ const transfer = async(id, amount) => {
 
 const updateInfo = async(id, name, photo) => {
     if(name){
-        const result = await updateName(id, name);
+        const result = await User.updateName(id, name);
     }
     if(photo){
-        const result = await updatePhoto(id, photo);
+        const result = await User.updatePhoto(id, photo);
     }
-    return;
+    const rez = await User.findUserByID(id);
+    return rez;
 }
 
 module.exports = {

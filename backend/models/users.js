@@ -29,6 +29,13 @@ const findUserByEmail = async (email) => {
     return result;
 }
 
+// Locates a user record by email
+const findUserByID = async (id) => {
+    const query = knex(USER_TABLE).where({ id });
+    const result = await query;
+    return result;
+}
+
 const getAdmin = async (email) => {
     const query = knex(USER_TABLE).where({ email }).whereRaw('privileges = 2');
     const result = await query;
@@ -149,6 +156,7 @@ const adjustFunds = async (id, funds, op) => {
 module.exports = {
     createNewUser,
     findUserByEmail,
+    findUserByID,
     authenticateUser,
     deleteUser, 
     updateName,

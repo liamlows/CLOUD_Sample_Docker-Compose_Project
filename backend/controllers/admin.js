@@ -1,5 +1,5 @@
 const Admin = require('../models/admin');
-const User = require('../models/users');
+const User = require('./users');
 
 // Change user's status to blocked
 const blockUser = async (email) => {
@@ -46,35 +46,26 @@ const promoteUser = async (email) => {
 }
 
 const updateInfo = async(admin_id, id, name, photo) => {
-    
     if(id){
         const result = await Admin.findUserByID(id);
         if(result.length === 0){
-            if(name){
-                const val = await User.updateName(id, name);
-            }
-            if(photo){
-                const val1 = await User.updatePhoto(id, photo);
-            }
+            const val = User.updateInfo(id, name, photo);
+            return val;
         } else {
-            return res.sendStatus(404);
+            console.log(result);
+            return res.sendStatus(403);
         }
         
     } else {
-        if(name){
-            const val2 = await User.updateName(admin_id, name);
-        }
-        if(photo){
-            const val34 = await User.updatePhoto(admin_id, photo);
-        }
+        const val = User.updateInfo(admin_id, name, photo);
+        return val;
     }
-    
-    return;
 }
 
 module.exports = {
     blockUser,
     disableUser,
     promoteUser,
-    enableUser
+    enableUser,
+    updateInfo
 };
