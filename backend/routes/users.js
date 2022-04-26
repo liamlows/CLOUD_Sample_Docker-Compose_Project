@@ -16,4 +16,14 @@ router.post('/', async (req, res, next) => {
     next();
 })
 
+router.get('/:user_email', async(req, res) =>{
+    try {
+        const result = await User.userIDFromEmail(req.params.user_email);
+        res.status(200).json(result);
+    } catch (err) {
+        console.error('Failed to get user ID:', err);
+        res.status(500).json({ message: err.toString() });
+    }
+})
+
 module.exports = router;
