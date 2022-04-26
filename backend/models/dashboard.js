@@ -6,10 +6,10 @@ const fetchTransactions = async (user_id) => {
     const query = knex('transactions').where({farmer_id: user_id}).orWhere({customer_id: user_id});
     const result = await query;
     //get transaction + products for each transaction
-    let transactions = await fetchTransactionWithProducts(result[0].transaction_id);
+    var transactions = [];
     for(let i=1;i<result.length;i++){
         const txn = await fetchTransactionWithProducts(result[i].transaction_id);
-        transactions = {transactions, txn};
+        transactions.push(txn);
     }
     return transactions;
 };
