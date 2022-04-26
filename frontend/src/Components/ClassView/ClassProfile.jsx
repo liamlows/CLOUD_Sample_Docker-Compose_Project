@@ -82,7 +82,7 @@ export const ClassProfile = (props) => {
             
             setCourse(loaded)
             // get the table of friend requests
-            if (account.account_type === "student") {
+            if (account.role.role_type === "student") {
                 let status = await getEnrollmentStatus(course.course_id)
                 console.log("Adding status to course", status);
                 changeCourse(status);
@@ -159,7 +159,7 @@ export const ClassProfile = (props) => {
 
     const canEdit = () => {
         //check if listed as professor or ta for the class
-        if (account.account_type === "admin") {
+        if (account.role.role_type === "admin") {
             console.log("user is an admin")
             return true;
         }
@@ -372,11 +372,11 @@ export const ClassProfile = (props) => {
                                     <thead>
                                         <th className="float-start col-11 fs-3 mt-2 text-start">{course.course_name} ({course.department})</th>
                                         {/* Student is not in class or waitlist */}
-                                        {account.account_type === "student" && account.status === 0 && <th className="col-2 pb-2">
+                                        {account.role.role_type === "student" && account.status === 0 && <th className="col-2 pb-2">
                                             <Button variant="contained" className="bg-success" onClick={() => sendEnrollmentRequestFunc()} endIcon={<Add />}>Enroll</Button>
                                         </th>}
                                         {/* Student is on the waitlist */}
-                                        {account.account_type === "student" && account.status === -1 && <th className="col-2 pb-2">
+                                        {account.role.role_type === "student" && account.status === -1 && <th className="col-2 pb-2">
                                             <Button variant="contained" disabled endIcon={<Add color='disabled' />}>On Waitlist</Button>
                                             <Button variant="contained" className="col-1 bg-danger" onClick={() => dropCourse(account.account_id, course.course_id)}><ClearIcon /></Button>
                                         </th>}
@@ -464,7 +464,7 @@ export const ClassProfile = (props) => {
                     type="Course"
                     account_id={account.account_id}
                     search_id={course.course_id}
-                    account_type={account.account_typed} />
+                    account_type={account.role.role_type} />
             </div>
         </section >
     }
