@@ -339,6 +339,9 @@ router.put("/api/account", async(req, res, next) => {
 
     query += sets.join(',');
 
+    query += ' WHERE account_id = ?';
+    props.push(req.session.accountId);
+
     try {
         await pool.execute(query, props);
     } catch(error){
