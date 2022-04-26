@@ -4,9 +4,9 @@ const knex = require('../database/knex');
 const FARM_TABLE = 'farmer';
 
 //create new farm
-const createFarm = async (farmer_id, farm_name, farm_description, farm_image_url,date_founded, farm_rating,owner_id ) => {
+const createFarm = async (farm_name, farm_description, farm_image_url,date_founded,owner_id ) => {
     //add farm to table
-    const query = knex('farmer').insert({farmer_id, farm_name, farm_description, farm_image_url,date_founded, farm_rating,owner_id });
+    const query = knex('farmer').insert({farm_name, farm_description, farm_image_url,date_founded,owner_id });
     console.log('Raw query for createFarm:', query.toString());
     const result = await query;
     return result;
