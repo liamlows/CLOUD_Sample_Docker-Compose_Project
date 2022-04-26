@@ -61,8 +61,8 @@ export const getStudents = async () => {
     return res.data;
 }
 
-export const getStatusByUsername = async (username) => {
-    const res = await axios.get(`${BACKEND_ENDPOINT}/api/users/${username}/status`);
+export const getStatusById = async (account_id) => {
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/users/${account_id}/status`);
     if(res.status !== 200){
         console.log("Couldn't find user status");
         return null;

@@ -19,7 +19,7 @@ import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 
 
 // Method Imports
-import { getFriendRequests, getStatusByUsername, getAccountbyUsername, handleFriendRequest, logout, sendFriendRequest, updateAccountbyUsername, getFriendRequest, getFriendsClasses, uploadPP, getAccountbyId } from "../../APIFolder/loginApi";
+import { getFriendRequests, getStatusById, handleFriendRequest, logout, sendFriendRequest, updateAccountbyUsername, getFriendRequest, getFriendsClasses, uploadPP, getAccountbyId } from "../../APIFolder/loginApi";
 import { TextAreaField } from "../common/TextAreaField";
 
 
@@ -48,7 +48,7 @@ export const Profile = (props) => {
 
 
         getAccountbyId(params.account_id).then(async loaded => {
-            getStatusByUsername(loaded.username).then((status) => setOnline(!!status.logged_in));
+            getStatusById(loaded.account_id).then((status) => setOnline(!!status.logged_in));
 
             // get the table of friend requests
             if (loaded.username !== JSON.parse(localStorage.getItem("currUser")).username) {
@@ -114,10 +114,10 @@ export const Profile = (props) => {
         })
     }, [editMode, reload]); //lol the useEffect is just here now.
 
-    if (account.account_id && account.account_id !== params.account_id) {
+    if (account.account_id && account.account_id != params.account_id) {
         let status = 0;
         getAccountbyId(params.account_id).then(async loaded => {
-            getStatusByUsername(loaded.username).then((status) => setOnline(!!status.logged_in));
+            getStatusById(loaded.account_id).then((status) => setOnline(!!status.logged_in));
 
             // get the table of friend requests
             if (loaded.username !== JSON.parse(localStorage.getItem("currUser")).username) {
