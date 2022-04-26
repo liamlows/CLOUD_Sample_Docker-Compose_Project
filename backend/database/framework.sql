@@ -100,13 +100,9 @@ SELECT * FROM farmer;
 INSERT INTO users(email, password, first_name, last_name, isFarmer)
 VALUES ('smu@email.edu', 'Password123', 'John', 'Deere', 1),
        ('cool@gmail.com', 'password', 'Mark', 'Fontenot', 0);
-INSERT INTO users(email, password, first_name, last_name, isFarmer)
-VALUES('email@gmail.com', 'password', 'Brandon', 'Wheeless', 1);
 
 INSERT INTO farmer(farm_name, farm_description, farm_image_url, date_founded, owner_id)
 VALUES ('Johns Farm', 'LETS GOOOOO', 'https://st.depositphotos.com/1333205/2857/i/600/depositphotos_28571959-stock-photo-farm-building.jpg', '1999-03-23', 1);
-INSERT INTO farmer(farm_name, farm_description, farm_image_url, date_founded, owner_id)
-VALUES('Brandons J Farm', 'LETS GOOOOO', 'https://ak-d.tripcdn.com/images/fd/hotelintl/g5/M05/18/AE/CggYsFcvV-aAQS9qAADtKXLk0a0868_Z_550_412_R5_Q70_D.jpg', '1999-03-23', 4);
 
 INSERT INTO event(event_name,event_description, event_image_url,farmer_id,date,time)
 VALUES
@@ -134,9 +130,8 @@ VALUES('Apples', 1.00, 20, 'Fruit', 'Apples, now available in red color.', 'http
        ('Pears', 2.00, 10, 'Fruit', 'They are peary good!', 'https://images-prod.healthline.com/hlcmsresource/images/AN_images/benefits-of-pears-1296x728-feature.jpg', 1),
        ('4066M Heavy Duty Compact Utility Tractor', 54930.00, 3, 'Heavy Duty Equipment', 'Factory-installed 440R Quick Park™ Loader Mounting System included, Turbocharged diesel engine, eHydrostatic Transmission, Standard mid and rear hydraulics, Category 1 and 2, Three-point hitch', 'https://www.deere.com/assets/images/region-4/products/tractors/utility-tractors/4-family-compact-utility-tractors/4066m-heavy-duty/4066m_heavyduty_4seriestractor_studio_r4f093227_r2_1024x576_large_7c64dcb98d85b7743313560c171cf119fd92fc6a.jpg', 1);
 
-SELECT * FROM users;
+SELECT * FROM farmer;
 SELECT * FROM event;
 SELECT * FROM customer_event_interests;
-SELECT * FROM product WHERE product_category IN ('Fruit', 'Heavy Duty Equipment');
 SELECT * FROM customer_event_interests INNER JOIN event ON event.event_id = customer_event_interests.event_id WHERE customer_id = 2;
 SELECT customer_event_interests.event_id, event.event_name,event.event_description, event.event_image_url, event.farmer_id, event.date, event.time FROM customer_event_interests INNER JOIN event ON event.event_id = customer_event_interests.event_id WHERE customer_id = 2;

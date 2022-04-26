@@ -13,10 +13,11 @@ const createNewUser = async (first_name, last_name, email, password, isFarmer) =
         return users[0];
     }
     //create customer
-    else{
+    else if(isFarmer==="0"){
         //add customer to table
         const query = knex('users').insert({ first_name, last_name, email, password, isFarmer: 0 });
         console.log('Raw query for createCustomer:', query.toString());
+        const result = await query;
         const users = await findUserByEmail(email);
         return users[0];
     }
