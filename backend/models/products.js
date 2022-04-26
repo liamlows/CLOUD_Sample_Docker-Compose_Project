@@ -52,6 +52,11 @@ const getProductThroughFarmName = async(farmer_id) => {
     return result;
 }
 
+const getProductThroughFarmID = async(farmer_id) => {
+    const result = knex(PRODUCT_TABLE).select().where('farmer_id', farmer_id);
+    return result;
+}
+
 
 const getAvailableProducts = async() => {
     const result = knex(PRODUCT_TABLE).select().where('product_stock', '>', 0);
@@ -69,5 +74,6 @@ module.exports = {
     getProductThroughCategoryName,
     getThroughFarmNameProductName,
     getProductThroughFarmNameCategory,
-    updateProduct
+    updateProduct,
+    getProductThroughFarmID
 };
