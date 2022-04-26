@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 
 const USER_TABLE = 'user';
 const PAYMENT_TABLE = 'cardInfo';
+const NFT_TABLE = 'nft';
 
 const accessTokenSecret =  process.env.TOKEN;
 
@@ -24,6 +25,13 @@ const createNewUser = async (username, name, email, password, privileges, photo)
 // Locates a user record by email
 const findUserByEmail = async (email) => {
     const query = knex(USER_TABLE).where({ email });
+    const result = await query;
+    return result;
+}
+
+// Locates a user record by email
+const findUserByID = async (id) => {
+    const query = knex(USER_TABLE).where({ id });
     const result = await query;
     return result;
 }
@@ -143,9 +151,11 @@ const adjustFunds = async (id, funds, op) => {
     return result;
 }
 
+
 module.exports = {
     createNewUser,
     findUserByEmail,
+    findUserByID,
     authenticateUser,
     deleteUser, 
     updateName,

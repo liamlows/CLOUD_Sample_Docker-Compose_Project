@@ -20,6 +20,18 @@
     cursor: pointer;
 }
 
+.navBalance{
+  color: darkblue;
+  display: flex;
+  font-weight: bold;
+  align-items: center;
+  text-decoration: none;
+  padding: 0 1rem;
+  height: 100%;
+  cursor: pointer;
+}
+
+
 .navBtn {
   display: flex;
   align-items: center;
