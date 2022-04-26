@@ -62,10 +62,13 @@ export const ReviewList = ({ type, account_id }) => {
         console.log("reviews2", reviews2)
         setReviews([...reviews2])
         if (type === "Course") {
-            // postCourseReview(params.course_id,review)
+            review = {...review, course_id: Number(params.course_id)}
+            console.log("review to post",review)
+            postCourseReview(params.course_id,review)
         }
         else if (type === "Professor") {
-            // postProfessorReview(params.account_id,review)
+            review = {...review, account_id: Number(params.account_id)}
+            postProfessorReview(params.account_id,review)
         }
     }
 
