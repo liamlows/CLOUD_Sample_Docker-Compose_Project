@@ -14,6 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import "./ResponsiveAppBar.css";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import logo from '../../logo.jpg'
 
 export const BaseResponsiveAppBar = ({ pages, signIn, signUp }) => {
   const location = useLocation();
@@ -92,7 +93,7 @@ export const BaseResponsiveAppBar = ({ pages, signIn, signUp }) => {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
           >
-            LOGO
+            <img src={logo} alt='Logo' className='img-thumbnail w-25 h-25'/>;
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
