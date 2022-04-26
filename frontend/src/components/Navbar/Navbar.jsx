@@ -26,6 +26,9 @@ export const Navbar = () => {
           <div className="navLink">
             <Link to='/notifications'>Notifications</Link>
           </div>
+          <h5 className="navBalance">
+            Balance: $$
+          </h5>
         </div>
             <Link to='/' className="navBtnLink">
               <button type="button" className="navBtn">

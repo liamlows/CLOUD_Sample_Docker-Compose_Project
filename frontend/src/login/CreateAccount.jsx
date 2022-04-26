@@ -7,10 +7,10 @@ import { createAccount } from "../api/UsersAPI";
 
 export const CreateAccount = () => {
 
-    const [username, setUsername]=useState('');
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+  const [username, setUsername]=useState('');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
  
   // States for checking the errors
   const [submitted, setSubmitted] = useState(false);
