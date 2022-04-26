@@ -221,7 +221,7 @@ router.post("/api/account/login", async (req, res, next) => {
 
 
 // GET /account/logout
-router.get("/api/account/logout", async (req, res, next) => {
+router.get("/api/account/logout", isUserAuthenticated, async (req, res, next) => {
     // Clear the login session.
 
     let username = req.session.username;
@@ -231,6 +231,7 @@ router.get("/api/account/logout", async (req, res, next) => {
     try {
         await setStatusOffline(username);
     } catch(error) {
+        logger.info("Failed to update status to offline.");
         return next(error);
     }
 
