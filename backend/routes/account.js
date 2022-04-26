@@ -4,7 +4,7 @@ const pool = require('../db');
 const secret = 'not-a-secret';
 const crypto = require('crypto');
 const util = require('../util');
-const {getUsernameFromId} = require("../util");
+const {getUsernameFromId, isUserAuthenticated} = require("../util");
 
 /* TODO
 
@@ -278,7 +278,7 @@ router.get("/api/users/:username", async (req, res, next) => {
     let rows, fields;
     try{
         [rows, fields] = await pool.execute(
-            'SELECT username, first_name, last_name, account_id FROM `accounts` WHERE `username` = ?',
+            'SELECT username, first_name, last_name, account_id, pfp_url, last_logged_in FROM `accounts` WHERE `username` = ?',
             [req.params.username]);
     } catch(error){
         return next(error);
@@ -328,6 +328,34 @@ router.get("/api/users/:username/status/", async (req, res, next) => {
     let user = rows[0];
     res.status(200).json(user);
 });
+
+
+router.post("/api/account/pfp", isUserAuthenticated, async (req, res, next)=> {
+    if (!req.files || Object.keys(req.files).length === 0) {
+        return res.status(400).send('No files were uploaded.');
+    }
+
+    if(req.files.profilePic === undefined){
+        return res.status(400).send("No profile picture uploaded.");
+    }
+
+    let profilePic = req.files.profilePic;
+    let extension = profilePic.name.split('.').pop();
+    let filepath = `images/${req.session.accountId}.${extension}`
+    let uploadPath = `${__dirname}/../public/${filepath}`;
+
+    // Use the mv() method to place the file somewhere on your server
+    try {
+        await profilePic.mv(uploadPath);
+        await pool.execute(
+            'UPDATE `accounts` SET `pfp_url` = ? WHERE `account_id` = ?',
+            [filepath, req.session.accountId]);
+    } catch(error) {
+        return next(error);
+    }
+
+    res.status(200).send('File was sucessfully uploaded.');
+})
 
 
 module.exports = router;
