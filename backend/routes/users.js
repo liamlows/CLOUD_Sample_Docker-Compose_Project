@@ -26,7 +26,7 @@ router.get('/session', async (req, res, next) => {
         console.error('No matching user:', err);
         res.sendStatus(401).json({ message: err.toString() });
     }
-});
+}); 
 
 module.exports = router;
 
