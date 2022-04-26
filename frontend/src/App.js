@@ -12,7 +12,7 @@ import { Base } from './Components/BaseView/Base';
 import { Profile } from './Components/Profiles/Profile';
 import { UserSearch } from './Components/Profiles/UserSearch';
 import { FriendsList } from './Components/Profiles/FriendsList';
-import { ClassMenu } from './Components/ClassView/classMenu';
+import { ClassMenu } from './Components/ClassView/ClassMenu';
 import { NoPages } from './Components/NoPages';
 import { AddClasses } from './Components/ClassView/AddClasses';
 
@@ -20,7 +20,7 @@ import { AddClasses } from './Components/ClassView/AddClasses';
 
 // Method Imports
 import { getAccountbyUsername } from './APIFolder/loginApi';
-import { ClassProfile } from "./Components/ClassView/classProfile";
+import { ClassProfile } from "./Components/ClassView/ClassProfile";
 
 // React functional component
 function App() {

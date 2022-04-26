@@ -171,6 +171,7 @@ export const getFriendRequest = async (id) => {
 }
 
 export const getFriendsClasses = async (id) => {
+    console.log(id)
     const res = await axios.get(`${BACKEND_ENDPOINT}/api/enrollments/${id}`);
 
     return res.data;
