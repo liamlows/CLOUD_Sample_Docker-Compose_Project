@@ -21,9 +21,9 @@ const fetchProductByID = async (product_id) => {
     return result;
 };
 //create new order
-const createOrder = async (firstName, lastName, address, city, state, zip, cardName, cardNumber, cardExprDate, farmer_id, customer_id) => {
+const createOrder = async (firstName, lastName, address, city, state, zip, cardName, cardNumber, cardExprDate, customer_id) => {
     //add order to table
-    const query = knex('transactions').insert({ firstName, lastName, address, city, state, zip, cardName, cardNumber, cardExprDate, farmer_id, customer_id });
+    const query = knex('transactions').insert({ firstName, lastName, address, city, state, zip, cardName, cardNumber, cardExprDate, customer_id });
     console.log('Raw query for createOrder:', query.toString());
     const result = await query;
     console.log('result:',result);
