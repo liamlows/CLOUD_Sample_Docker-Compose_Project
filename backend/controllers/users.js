@@ -1,5 +1,5 @@
 const User = require('../models/users');
-const Purchase = require('../models/payment');
+
 
 // Create new user if email and password are provided
 const createUser = async (username, name, email, password, privileges, photo) => {
@@ -42,6 +42,11 @@ const updatePhoto = async (id, photo) => {
     return result; 
 } 
 
+const balance = async(id) => {
+    const result = await User.getBalance(id);
+    return result;
+}
+
 const purchaseNFT = async(id) => {
     const result = await Purchase.validatePurchase(id);
     return result;
@@ -52,10 +57,6 @@ const paymentInfo = async(id, cardType, cardNum, name, cvv, exp) => {
     return result;
 }
 
-const balance = async(id) => {
-    const result = await User.getBalance(id);
-    return result;
-}
 
 module.exports = {
     createUser,
@@ -64,7 +65,7 @@ module.exports = {
     deleteUserById,
     updateName,
     updatePhoto,
+    balance,
     purchaseNFT,
-    paymentInfo,
-    balance
+    paymentInfo
 };

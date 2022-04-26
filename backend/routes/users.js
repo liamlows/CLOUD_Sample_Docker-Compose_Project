@@ -1,5 +1,6 @@
 const express = require('express');
 const User = require('../controllers/users');
+// const Purchase = require('../controllers/purchases');
 
 const router = express.Router();
 
@@ -46,6 +47,7 @@ router.post('/paymentInfo', async (req, res, next) => {
     try {
         const user = req.user;
         const body = req.body;
+        console.log(body);
         const result = await User.paymentInfo(user.id, body.type, body.num, body.name, body.cvv, body.exp);
         res.status(200).json(result);
     } catch (err){
