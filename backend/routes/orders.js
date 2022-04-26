@@ -17,10 +17,10 @@ router.post('/', async (req, res, next) => {
     next();
 })
 //4.1 get cart
-router.get('/', async (req, res, next) => {
+router.get('/:user_id', async (req, res, next) => {
     try {
-        const body = req.body;
-        const result = await Product.fetchCartProducts(body.user_id);
+        const user_id=req.params.user_id;
+        const result = await Product.fetchCartProducts(user_id);
         res.status(200).json(result);
     } catch (err) {
         console.error('Failed to get products in cart:', err); 
