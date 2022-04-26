@@ -79,5 +79,18 @@ router.post('/promote', async (req, res, next) => {
 
 })
 
+router.post('/update', async (req, res, next) => {
+    try {
+        const user = req.user;
+        const body = req.body;
+        const result = await AdminController.updateInfo(user.id, body.id, body.name, body.photo);
+        res.status(200).json(result);
+    } catch (err){
+        console.error("Could not update info: ", err);
+        res.sendStatus(401).json({ message: err.toString() });e
+    }
+
+});
+
 
 module.exports = router;
