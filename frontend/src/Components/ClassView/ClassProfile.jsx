@@ -128,7 +128,7 @@ export const ClassProfile = (props) => {
     }
 
     const goToProfile = profile => {
-        navigate(`/users/${profile.username}`);
+        navigate(`/users/${profile.account_id}`);
     }
 
     const cancel = () => {
@@ -303,7 +303,7 @@ export const ClassProfile = (props) => {
                                         <Button variant="contained"
                                             className="btn bg-secondary"
                                             endIcon={<ArrowForwardIcon />}
-                                            onClick={() => navigate(`/users/${professor.username}`)}>
+                                            onClick={() => navigate(`/users/${professor.account_id}`)}>
                                             View Profile
                                         </Button>
                                     </th>
@@ -417,7 +417,7 @@ export const ClassProfile = (props) => {
                                             <Button variant="contained"
                                                 className="btn bg-secondary"
                                                 endIcon={<ArrowForwardIcon />}
-                                                onClick={() => navigate(`/users/${professor.username}`)}>
+                                                onClick={() => navigate(`/users/${professor.account_id}`)}>
                                                 View Profile
                                             </Button>
                                         </th>
