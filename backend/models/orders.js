@@ -69,16 +69,16 @@ const clearCart = async (customer_id) => {
     return null;
 }
 //delete item from cart
-const deleteCartProduct = async (cart_id) => {
-    const query = knex('cart').where({cart_id}).del();
+const deleteCartProduct = async (product_id,customer_id) => {
+    const query = knex('cart').where({product_id}).andWhere({customer_id}).del();
     console.log('Raw query for deleteCartProdcut:', query.toString());
     const result = await query;
 
     return result;
 };
 //update cart quantity
-const updateCartQuantity = async (cart_id,quantity) => {
-    const query = await knex('cart').where({cart_id}).update({quantity});
+const updateCartQuantity = async (product_id,customer_id,quantity) => {
+    const query = await knex('cart').where({product_id}).andWhere({customer_id}).update({quantity});
     console.log('Raw query for deleteCartProdcut:', query.toString());
     const result = await query;
     return null;
