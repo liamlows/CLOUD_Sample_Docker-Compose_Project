@@ -447,7 +447,8 @@ export const ClassProfile = (props) => {
                 <ReviewList 
                  type="Course" 
                  account_id={account.account_id}
-                 search_id={course.course_id} />
+                 search_id={course.course_id}
+                 account_type={account.account_typed} />
             </div>
         </section >
     }
