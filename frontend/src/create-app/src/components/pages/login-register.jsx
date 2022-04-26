@@ -23,6 +23,7 @@ export const Login = (props) => {
           <button type="button" className="btn btn-md btn-primary"
           onClick={() => {
             setAccount({username:loginUsername, password:loginPassword});
+            setScreen(1);
           }}>Login</button>}
         </div>
         <div className='col ms-3'>
@@ -34,7 +35,8 @@ export const Login = (props) => {
           {registerUsername !='' && registerPassword != '' &&
           <button type="button" className="btn btn-md btn-primary"
           onClick={() => {
-
+            setAccount({username:loginUsername, password:loginPassword});
+            setScreen(1);
           }}>Register</button>}
         </div>
         <div className='col-2'></div>

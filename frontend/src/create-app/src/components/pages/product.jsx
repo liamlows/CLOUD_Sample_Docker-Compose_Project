@@ -10,9 +10,6 @@ export const Product = () => {
 
   return <>
     <div className="container-xxl pb-1">
-      <nav className="mb-3 bg-opacity-25 navbar align-items-center bg-secondary justify-content-xxl-start rounded">
-        <p className="ps-3 pt-1 navbar-item text-primary">Tasty snacks<span className="text-black-50"> / {name}</span></p>
-      </nav>
     <div className="container-fluid">
       <div className="row justify-content-sm-left">
         <div className="col-auto">

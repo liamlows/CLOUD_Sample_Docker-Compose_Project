@@ -20,13 +20,14 @@ export const CreatePost = (props) => {
           <TextAreaField label="Comment" value={description} setValue={setDescription} />
         </div>
       </div>
+      <div className="row pb-2">
+        <div className="col">
+          {(title == '' || description == '') && <button type="button" className="btn btn-md btn-primary" disabled>Submit</button>}
+          {title != '' && description != '' && <btn className="btn btn-primary" onClick={() => {
+            setScreen(1);
+          }}>Submit</btn>}
+        </div>
+      </div>
     </div>
   </>;
 }
-// {(comment == '' || rating == '' || userName == '') && <button type="button" className="btn btn-md bg-primary text-white" disabled>Submit</button>}
-// {comment != '' && rating != '' && userName != '' && <button type="button" className="btn btn-md btn-primary" enabled onClick={() => {
-//     onReviewAdded({userName: userName, rating: rating, comment: comment, date: new Date()});
-//     setUserName('');
-//     setRating('');
-//     setComment('');
-//   }}>Submit</button>}
