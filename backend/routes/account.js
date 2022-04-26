@@ -223,7 +223,7 @@ router.post("/api/account/login", async (req, res, next) => {
     req.session.roleType = roleType;
     res.cookie('username', username);
     res.cookie('roleType', roleType);
-    res.cookie('accountId', accountId);
+    res.cookie('account_id', accountId);
 
     try {
         await setStatusOnline(username);
