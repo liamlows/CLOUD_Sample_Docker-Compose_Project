@@ -17,6 +17,12 @@ const findFarmByID = async (farmer_id) => {
     const result = await query;
     return result;
 }
+//find farm by owner
+const findFarmByOwner = async (owner_id) => {
+    const query = knex('farmer').where({ owner_id });
+    const result = await query;
+    return result;
+}
 //find farm by name
 const findFarmByName = async (farm_name) => {
     const query = knex('farmer').where({ farm_name });
@@ -72,5 +78,5 @@ module.exports = {
     findFarmByDateFounded,
     deleteFarm,
     updateFarmInformation,
+    findFarmByOwner,
     getFarmIDsThroughName
-};

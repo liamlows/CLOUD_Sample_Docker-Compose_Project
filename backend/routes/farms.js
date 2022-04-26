@@ -120,4 +120,17 @@ router.delete('/:farm_name', async (req, res) =>{
     }
 })
 
+//find farm by owner
+router.get('/farmByOwner/:owner_id', async (req, res, next) => {
+    try {
+        const owner_id=req.params.owner_id;
+        const result = await Farm.findFarmByOwner(owner_id);
+        res.status(200).json(result);
+    } catch (err) {
+        console.error('Failed to get farm establishment by owner:', err);
+        res.status(500).json({ message: err.toString() });
+    }
+    next();
+})
+
 module.exports = router;
