@@ -1,10 +1,9 @@
 .nav {
   background: #ce9aec;
+  display: flex;
   height: 4rem;
-  display:flex ;
   justify-content:space-between;
   padding: 0.2rem;
-  z-index:12;
 }
 
 .menu {
@@ -24,8 +23,6 @@
 .navBtn {
   display: flex;
   align-items: center;
-  margin-right: 2rem;
-  margin-top: .4rem;
   background: #591baa;
   color: #fffefe;
   font-size: x-large;
@@ -33,7 +30,9 @@
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   text-decoration: none;
-  margin-left: 24px;
+  margin-right: 2rem;
+  margin-top: .4rem;
+  margin-left: 10rem;
 }
 
 .navBtnLink {
@@ -52,7 +51,7 @@
   display: flex;
   align-items: center;
   text-decoration: none;
-  padding: 0 1rem;
+  padding: 0% 2%;
   height: 100%;
   cursor: pointer;
 }
