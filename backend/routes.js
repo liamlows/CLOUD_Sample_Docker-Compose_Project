@@ -176,4 +176,25 @@ app.get('/message', async (req, res, next) => {
 })  
 
 
+app.get('/nft/:min/:max/:how', async (req, res, next) => {
+  try {
+    const params = req.params;
+
+    if (params.min === undefined) params.min = 0
+    if (params.max === undefined) params.max = Infinity
+    if (params.how === undefined) params.how = true
+
+    const result = await req.models.nft.getAllByPrice(params.min, params.max, params.how);
+    res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to get NFTs by price: ", err);
+      // res.status(500).
+  }
+
+
+  next();
+})
+
+
 }

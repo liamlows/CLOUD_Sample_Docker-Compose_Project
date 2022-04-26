@@ -93,6 +93,15 @@ const deleteNFT = async (id) => {
     return result;
 }
 
+const getAllByPrice = async (min, max, how) => {
+    var query;
+    if (how) query = knex(NFT_TABLE).where( 'price', '>', min ).andWhere( 'price', '<', max ).orderBy( 'price' )
+    else query = knex(NFT_TABLE).where( 'price', '>', min ).andWhere( 'price', '<', max ).orderBy( 'price', 'desc' )
+
+    const result = await query;
+    return result;
+}
+
 module.exports = {
     createNFT, 
     getNFT,
@@ -105,6 +114,7 @@ module.exports = {
     updateCreatorId,
     updateSellerId,
     updateOwnerId,
-    updateForSale 
+    updateForSale,
+    getAllByPrice,
 }
 
