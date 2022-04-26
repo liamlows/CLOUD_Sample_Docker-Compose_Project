@@ -25,7 +25,6 @@ CREATE TABLE farmer (
 CREATE TABLE transactions(
 	transaction_id integer auto_increment, primary key(transaction_id),
     customer_id INTEGER NOT NULL, FOREIGN KEY (customer_id) REFERENCES users(user_id),
-    farmer_id INTEGER NOT NULL, FOREIGN KEY (farmer_id) REFERENCES farmer(farmer_id),
     is_complete tinyint(1) NOT NULL DEFAULT FALSE,
     purchaseDate TIMESTAMP,
     firstName VARCHAR(50),

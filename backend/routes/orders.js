@@ -46,7 +46,7 @@ router.get('/product/:product_id', async (req, res, next) => {
 router.post('/checkout', async (req, res, next) => {
     try {
         const body = req.body;
-        const result = await Product.createOrder(body.firstName,body.lastName,body.address,body.city,body.state,body.zip,body.cardName,body.cardNumber,body.cardExprDate,body.farmer_id,body.customer_id);
+        const result = await Product.createOrder(body.firstName,body.lastName,body.address,body.city,body.state,body.zip,body.cardName,body.cardNumber,body.cardExprDate,body.customer_id);
         res.status(201).json(result);
     } catch (err) {
         console.error('Failed to create new order:', err);

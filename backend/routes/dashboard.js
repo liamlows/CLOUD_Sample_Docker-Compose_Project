@@ -1,20 +1,20 @@
 const express = require('express');
 const dash = require('../models/dashboard');
 const router = express.Router();
-//7.2 get transactions by customer
-router.get('/transactions', async (req, res, next) => {
+//7.1 + 7.2 get transactions by user
+router.get('/transactions/:user_id', async (req, res, next) => {
     try{
-        const body = req.body;
-        result = await dash.fetchTransactions(body.user_id);
+        const user_id=req.params.user_id;
+        result = await dash.fetchTransactions(user_id);
         res.status(200).json(result);
     } catch (err) {
-        console.error('Failed to get customer transactions', err);
+        console.error('Failed to get transactions', err);
         res.status(500).json({ message: err.toString() });
     }
 
     next();
 });
-//7.5 get transaction by id
+//7.4 + 7.5 get transaction by id
 router.get('/transactions/:transaction_id', async (req, res, next) => {
     try {
         const transaction_id=req.params.transaction_id;
