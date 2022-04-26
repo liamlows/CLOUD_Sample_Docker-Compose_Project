@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 
 const USER_TABLE = 'user';
 const PAYMENT_TABLE = 'cardInfo';
+const NFT_TABLE = 'nft';
 
 const accessTokenSecret =  process.env.TOKEN;
 
@@ -143,6 +144,7 @@ const adjustFunds = async (id, funds, op) => {
     return result;
 
 }
+
 
 module.exports = {
     createNewUser,

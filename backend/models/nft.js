@@ -110,7 +110,16 @@ const getAllByPrice = async (min, max, how) => {
     var query;
     if (how) query = knex(NFT_TABLE).where( 'price', '>', min ).andWhere( 'price', '<', max ).orderBy( 'price' )
     else query = knex(NFT_TABLE).where( 'price', '>', min ).andWhere( 'price', '<', max ).orderBy( 'price', 'desc' )
+}
 
+const userLeaderboard = async () => {
+    const query = knex.raw("SELECT owner_id, SUM(price) AS val FROM nft WHERE owner_id NOT IN (SELECT id FROM user WHERE privileges < 1) GROUP BY owner_id ORDER BY val DESC;");
+    const result = await query;
+    return result;
+}
+
+const nftLeaderboard= async () => {
+    const query = knex.raw("SELECT * FROM nft WHERE owner_id NOT IN (SELECT id FROM user WHERE privileges < 1) AND for_sale = 1 ORDER BY price DESC LIMIT 10;");
     const result = await query;
     return result;
 }
@@ -127,9 +136,10 @@ module.exports = {
     updateCreatorId,
     updateSellerId,
     updateOwnerId,
-    updateForSale ,
+    updateForSale,
     getNFTCost,
     getNFTSeller,
     getAllByPrice,
+    userLeaderboard,
+    nftLeaderboard
 }
-
