@@ -5,6 +5,7 @@ const secret = 'not-a-secret';
 const crypto = require('crypto');
 const util = require('../util');
 const {getUsernameFromId, isUserAuthenticated} = require("../util");
+const {uploadImage} = require("../s3");
 
 /* TODO
 
@@ -230,7 +231,7 @@ router.post("/api/account/login", async (req, res, next) => {
         return next(error);
     }
 
-    res.json({success: 1, error: "", username: username});
+    res.json({success: 1, error: "", username: username, accountId: user.account_id});
 });
 
 
@@ -343,13 +344,12 @@ router.post("/api/account/pfp", isUserAuthenticated, async (req, res, next)=> {
     let extension = profilePic.name.split('.').pop();
     let filepath = `images/${req.session.accountId}.${extension}`
     let uploadPath = `${__dirname}/../public/${filepath}`;
-
-    // Use the mv() method to place the file somewhere on your server
     try {
-        await profilePic.mv(uploadPath);
+        let data = await uploadImage(req.session.accountId, profilePic, extension);
+        logger.info("Uploaded profile picture to:" + data.Location);
         await pool.execute(
             'UPDATE `accounts` SET `pfp_url` = ? WHERE `account_id` = ?',
-            [filepath, req.session.accountId]);
+            [data.Location, req.session.accountId]);
     } catch(error) {
         return next(error);
     }
