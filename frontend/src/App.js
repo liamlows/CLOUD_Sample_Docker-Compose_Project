@@ -15,6 +15,7 @@ import { FriendsList } from './Components/Profiles/FriendsList';
 import { ClassMenu } from './Components/ClassView/ClassMenu';
 import { NoPages } from './Components/NoPages';
 import { AddClasses } from './Components/ClassView/AddClasses';
+import { ClassProfile } from './Components/ClassView/ClassProfile';
 
 // import { Waitlist } from './Components/AdminView/Waitlist';
 

@@ -130,9 +130,13 @@ export const getCoursebyId = async (courseID) => {
     return res.data;
 }
 
+export const getCourseNameById = async (courseID) => {
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/courses/${courseID}/name`)
+}
+
 export const updateCoursebyId = async (course) => {
     //TODO: is this right???
-    const res = await axios.put(`${BACKEND_ENDPOINT}/api/d/course_id/${course.course_id}`);
+    const res = await axios.put(`${BACKEND_ENDPOINT}/api/d/courses/course_id/${course.course_id}`, course);
     if(res.status !== 200){
         console.log("Couldn't find course");
         return null;
