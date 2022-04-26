@@ -60,9 +60,7 @@ const createOrder = async (firstName, lastName, address, city, state, zip, cardN
     console.log('Raw query for deleteCart:', query5.toString());
     const result5 = await query5;
     //get transaction products FIX
-    const query6 = knex('transaction').where({transaction_id: result2[0].recentOrder});
-    console.log('Raw query for getTransactionProducts:', query6.toString());
-    const result6 = await query6;
+    const result6 = await fetchTransactionWithProducts(result2[0].recentOrder);
     return result6;
 }
 //get product by cart
@@ -94,6 +92,18 @@ const updateCartQuantity = async (product_id,customer_id,quantity) => {
     const result = await query;
     return null;
 }
+//get transaction with products
+const fetchTransactionWithProducts = async (transaction_id) => {
+    //get order
+    const query1 = knex('transactions').where({transaction_id});
+    console.log('Raw query for getTransaction:', query1.toString());
+    const result1 = await query1;
+    //return product
+    const query2 = knex('transaction_products').join('product','product.product_id','transaction_products.product_id').select().where({transaction_id});
+    console.log('Raw query for getProduct:', query2.toString());
+    const result2 = await query2;
+    return {result1, result2};
+};
 
 module.exports = {
     createCart,
@@ -102,5 +112,6 @@ module.exports = {
     fetchCartProducts,
     clearCart,
     deleteCartProduct,
-    updateCartQuantity
+    updateCartQuantity,
+    fetchTransactionWithProducts
 };

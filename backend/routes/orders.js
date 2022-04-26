@@ -96,5 +96,18 @@ router.put('/:product_id', async (req, res, next) => {
 
     next();
 })
+//get transaction
+router.get('/transaction/:transaction_id', async (req, res, next) => {
+    try {
+        const transaction_id=req.params.transaction_id;
+        const result = await Product.fetchTransactionWithProducts(transaction_id);
+        res.status(200).json(result);
+    } catch (err) {
+        console.error('Failed to get transaction with products:', err); 
+        res.status(500).json({ message: err.toString() });
+    }
+
+    next();
+})
 
 module.exports = router;

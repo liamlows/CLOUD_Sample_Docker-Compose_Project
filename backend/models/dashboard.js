@@ -2,19 +2,17 @@ const knex = require('../database/knex');
 
 //Get all transactions by user
 const fetchTransactions = async (user_id) => {
+    //get transactions by user
     const query = knex('transactions').where({farmer_id: user_id}).orWhere({customer_id: user_id});
     const result = await query;
+    //get transaction + products for each transaction
+    //let 
+    //FIX
+    for(let i=0;i<result4.length;i++){
+
+    }
     return result;
 }
-//get transaction by ID
-const fetchTransactionByID = async (transaction_id) => {
-    //return transaction
-    const query = knex('transactions').where({transaction_id});
-    console.log('Raw query for getTransaction:', query.toString());
-    const result = await query;
-    return result;
-};
-
 //get most common customers    //untested
 const fetchMostCommonCustomers = async (farmer_id) => {
     //return transaction
@@ -46,13 +44,23 @@ const deleteAllInterestedEvents = async (customer_id) => {
 
     return result;
 };
+//get transaction with products
+const fetchTransactionWithProducts = async (transaction_id) => {
+    //get order
+    const query1 = knex('transactions').where({transaction_id});
+    console.log('Raw query for getTransaction:', query1.toString());
+    const result1 = await query1;
+    //return product
+    const query2 = knex('transaction_products').join('product','product.product_id','transaction_products.product_id').select().where({transaction_id});
+    console.log('Raw query for getProduct:', query2.toString());
+    const result2 = await query2;
+    return {result1, result2};
+};
 
 module.exports = {
     fetchTransactions,
-    fetchTransactionByID,
-
+    fetchTransactionWithProducts,
     fetchMostCommonCustomers,
-
     fetchInterestedEvents,
     deleteInterestedEvent,
     deleteAllInterestedEvents

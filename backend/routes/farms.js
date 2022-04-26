@@ -70,7 +70,7 @@ router.post('/', async (req, res) =>{
 //
     try{
         const body = req.body;
-        const result = await Product.createEvent(body.farmer_id,body.farm_name,body.farm_description,body.image_url, body.farm_image_url, body.date_founded, body.owner_id);
+        const result = await Farm.createFarm(body.farmer_id,body.farm_name,body.farm_description, body.farm_image_url, body.date_founded,body.farm_rating, body.owner_id);
         res.status(201).json(result);
     }catch (err){
         console.error('Failed to create new farm:', err);

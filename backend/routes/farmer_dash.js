@@ -18,7 +18,7 @@ router.get('/transactions', async (req, res, next) => {
 router.get('/transactions/:transaction_id', async (req, res, next) => {
     try {
         const transaction_id=req.params.transaction_id;
-        const result = await dash.fetchTransactionByID(transaction_id);
+        const result = await dash.fetchTransactionWithProducts(transaction_id);
         res.status(200).json(result);
     } catch (err) {
         console.error('Failed to get transaction by ID:', err); 
