@@ -63,6 +63,7 @@ router.post('/enable', async (req, res, next) => {
 
 })
 
+
 // Promote a given users account to admin
 router.post('/promote', async (req, res, next) => {
     try {
