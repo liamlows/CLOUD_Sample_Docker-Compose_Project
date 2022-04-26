@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { Rating, SelectField, TextAreaField, TextField } from "../common";
+import { SelectField, TextField } from ".";
+import { Rating } from "./Rating";
+import { TextAreaField } from "./TextAreaField";
 
 
-export const ReviewForm = (onReviewAdded) => {
+export const ReviewForm = (props) => {
 
     const [userName, setUserName] = useState('');
     const [rating, setRating] = useState(0);
@@ -14,6 +16,25 @@ export const ReviewForm = (onReviewAdded) => {
         { value: 4, label: "4 stars" },
         { value: 5, label: "5 stars" }
     ]);
+
+    const addReview = () => {
+        props.addReview({
+            userName, rating, comment, date: new Date().toLocaleString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric"
+            })
+        });
+        setUserName('');
+        setRating(0);
+        setComment('');
+    }
+
+    const clear = () => {
+        setUserName('');
+        setRating(0);
+        setComment('');
+    }
 
     return <div className="border rounded list-group">
         <h2 className="p-3 text-white bg-secondary list-group-item fs-4 m-0">Add Review</h2>
@@ -32,17 +53,11 @@ export const ReviewForm = (onReviewAdded) => {
 
             <div className="m-1">
                 <TextAreaField value={comment} setValue={x => setComment(x)} label="Comment" />
+                <button className="btn btn-secondary rounded border-0  col-1" onClick={() => {
+                    clear()
+                }}>Cancel</button>
                 <button className="btn btn-primary rounded border-0  col-1" onClick={() => {
-                    onReviewAdded.onReviewAdded({
-                        userName, rating, comment, date: new Date().toLocaleString("en-US", {
-                            month: "short",
-                            day: "numeric",
-                            year: "numeric"
-                        })
-                    });
-                    setUserName('');
-                    setRating(0);
-                    setComment('');
+                    addReview()
                 }}>
                     Submit
                 </button>
