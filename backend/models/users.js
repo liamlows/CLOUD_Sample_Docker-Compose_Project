@@ -126,13 +126,22 @@ const addInfo = async(userID, cardType, cardNum, name, cvv, exp) => {
 }
 
 const transferFunds = async (id, funds) => {
-    const result = await validatePurchase(id);
-    if(result === 0){
-        return res.sendStatus(404);
-    }
     const query = knex(USER_TABLE).where({ id }).update('balance', funds);
-    const result1 = await query;
-    return result1;
+    const result = await query;
+    return result;
+}
+
+const adjustFunds = async (id, funds, op) => {
+    const curr = await getBalance(id);
+    if(op === 0){
+        const updated = curr - funds;
+    } else {
+        const updated = curr + funds;
+    }
+    const query = knex(USER_TABLE).where({ id }).update('balance', updated);
+    const result = await query;
+    return result;
+
 }
 
 module.exports = {
@@ -145,5 +154,6 @@ module.exports = {
     getBalance,
     validatePurchase,
     addInfo,
-    transferFunds
+    transferFunds,
+    adjustFunds
 };
