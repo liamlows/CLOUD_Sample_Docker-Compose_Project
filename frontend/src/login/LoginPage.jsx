@@ -1,45 +1,46 @@
 import { Button } from "@material-ui/core";
 import { TextField } from "@mui/material";
 import './login.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import {baseEndpoint} from '../urls/API'
-import { login } from "../api/UsersAPI";
+import { AppContext } from "../AppContext";
 
 export const LoginPage = () => {
-    let navigate = useNavigate();
+    const navigate = useNavigate();
 
     const [email, setEmail]=useState('');
     const [password, setPassword]=useState('');
 
-    // const checkAccount = () =>{
-    //     axios.post(baseEndpoint+'/session',{email:email, password:password})
-    //             .then(function(response){
-    //                 if(response.status===201){
-    //                     window.alert("Successfully logged in!");
-    //                     localStorage.token=response.data.token;
-    //                     <Link to='/home' className="createLink">Submit</Link>
-    //                 }
-    //                 else{
-    //                     window.alert("Logged with error");
-    //                 }
-    //             })
-    //             .catch(function(error){
-    //                 window.alert(error);
-    //         });
-    // }
+    const checkAccount = () =>{
+        axios.post(baseEndpoint+'/session',{email:email, password:password})
+                .then(function(response){
+                    if(response.status===201){
+                        window.alert("Successfully logged in!");
+                        localStorage.token=response.data.token;
+                        <Link to='/home' className="createLink">Submit</Link>
+                    }
+                    else{
+                        window.alert("Logged with error");
+                    }
+                })
+                .catch(function(error){
+                    window.alert(error);
+            });
+    }
+
     const handleChangeEmail=(e)=>{
-        setEmail(e.target.value)
+        setEmail(e.target.value);
     }
 
     const handleChangePW=(e)=>{
-        setPassword(e.target.value)
+        setPassword(e.target.value);
     }
     
     const handleSubmitClick=()=>{
-        //checkAccount();
-        login(email, password);
+        checkAccount();
+        //login(email, password);
         navigate('/home');
     }
 
@@ -55,7 +56,7 @@ export const LoginPage = () => {
         type='password' value={password} onChange={handleChangePW}/>
 
    <br/> <br/> <br/>
-   <Button variant="outlined" onClick={handleSubmitClick}>Submit</Button>
+   <Button variant="outlined" onClick={()=>handleSubmitClick()}>Submit</Button>
 
    <br/>
    <br/>
