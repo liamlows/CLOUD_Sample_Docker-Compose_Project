@@ -12,7 +12,7 @@ import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 import { TextField } from "../common";
 
 // Method Imports
-import { getAccountbyUsername, getAllCourses, getCoursebyId, logout } from "../../APIFolder/loginApi"
+import { getAllCourses, getCoursebyId, logout, getAccountbyId } from "../../APIFolder/loginApi"
 
 
 export const AddClasses = ({ pages, settings, setNavigated }) => {
