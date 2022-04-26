@@ -7,7 +7,7 @@ const fetchTransactions = async (user_id) => {
     const result = await query;
     //get transaction + products for each transaction
     var transactions = [];
-    for(let i=1;i<result.length;i++){
+    for(let i=0;i<result.length;i++){
         const txn = await fetchTransactionWithProducts(result[i].transaction_id);
         transactions.push(txn);
     }
