@@ -1,0 +1,19 @@
+.container{
+    padding-top: 2rem;
+    flex-direction:row;
+    flex-wrap:wrap;
+    justify-content: center;
+ }
+ .NFTInfo{
+     display:flex;
+     flex-direction:column;
+ }
+ .buttonRow{
+    justify-content:space-around;
+ }
+ p {
+    text-align: left;
+}
+.NFT{
+    word-break: break-all;
+}

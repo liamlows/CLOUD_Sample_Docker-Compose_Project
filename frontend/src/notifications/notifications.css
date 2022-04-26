@@ -1,0 +1,16 @@
+.container {
+    padding-left: 2rem;
+  }
+
+.notifHead {
+    padding-top: 2rem;
+    padding-left: 1rem;
+    font-weight: bold;
+    color: rgb(112, 5, 126);
+    text-align: left;
+}
+
+.createLink {
+    color:rgb(28, 146, 146);
+    text-decoration: none;
+}

@@ -8,12 +8,10 @@ export const Navbar = () => {
       <div className= "nav">
 
 
-      <div className="title"> <h1 className="setColor">NFTShop</h1> </div>
-
+      <div className="title"> <h1 className="setColor"> 
+      <Link to='/home' className="nftLink">NFTShop</Link>
+      </h1> </div>
         <div className="menu">
-          <div className="navLink">
-            <Link to='/home'>Home</Link>
-          </div>
           <div className="navLink">
             <Link to='/profile'>My Account</Link>
           </div>
@@ -22,6 +20,9 @@ export const Navbar = () => {
           </div>
           <div className="navLink">
             <Link to='/search'>Search</Link>
+          </div>
+          <div className="navLink">
+            <Link to='/rankings'>Rankings</Link>
           </div>
           <div className="navLink">
             <Link to='/notifications'>Notifications</Link>

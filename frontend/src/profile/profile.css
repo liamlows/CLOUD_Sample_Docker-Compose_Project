@@ -1,0 +1,60 @@
+.profileContainer {
+    padding: 1rem 2rem;
+  }
+
+p {
+    text-align: center;
+}
+
+.colorChange {
+    font-weight: bold;
+    color:rgb(28, 146, 146);
+}
+
+.createLink {
+    color:rgb(28, 146, 146);
+    text-decoration: none;
+}
+.postLink {
+    color:white;
+    text-decoration: none;
+}
+
+.imgLink{
+    text-decoration: none;
+}
+
+.post {
+    width: 13rem;
+    height: 13rem;
+    border:3px solid rgb(110, 61, 110);
+  -moz-box-shadow: 10px 10px 5px rgb(14, 11, 11);
+  -webkit-box-shadow: 10px 10px 5px rgb(27, 16, 16);
+  box-shadow: 10px 10px 5px rgb(255, 255, 255);
+  -moz-border-radius:25px;
+  -webkit-border-radius:25px;
+  border-radius:25px;
+}
+
+.addIcon {
+    position:fixed;
+    bottom:0;
+    right:0;
+}
+
+.editHead {
+    padding-top: 2rem;
+    font-weight: bold;
+    color: rgb(112, 5, 126);
+}
+
+.followHead {
+    padding-top: 2rem;
+    font-weight: bold;
+    color: rgb(112, 5, 126);
+    text-align: center;
+}
+
+.avatarButton {
+    float: right;
+}
