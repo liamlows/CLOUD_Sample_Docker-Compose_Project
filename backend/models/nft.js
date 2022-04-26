@@ -85,11 +85,33 @@ const getNFT = async (id) => {
     return result;
 }
 
+const getNFTCost = async (id) => {
+    const query = knex(NFT_TABLE).select('price').where({ id });
+    // (NFT_TABLE).where({ name })
+    const result = await query;
+    return result;
+}
+
+const getNFTSeller = async (id) => {
+    const query = knex(NFT_TABLE).select('seller_id').where({ id });
+    const result = await query;
+    return result;
+}
+
 const deleteNFT = async (id) => {
     const query = knex(NFT_TABLE).where({ id }).del();
     // (NFT_TABLE).where({ name })
     const result = await query;
 
+    return result;
+}
+
+const getAllByPrice = async (min, max, how) => {
+    var query;
+    if (how) query = knex(NFT_TABLE).where( 'price', '>', min ).andWhere( 'price', '<', max ).orderBy( 'price' )
+    else query = knex(NFT_TABLE).where( 'price', '>', min ).andWhere( 'price', '<', max ).orderBy( 'price', 'desc' )
+
+    const result = await query;
     return result;
 }
 
@@ -105,6 +127,9 @@ module.exports = {
     updateCreatorId,
     updateSellerId,
     updateOwnerId,
-    updateForSale 
+    updateForSale ,
+    getNFTCost,
+    getNFTSeller,
+    getAllByPrice,
 }
 

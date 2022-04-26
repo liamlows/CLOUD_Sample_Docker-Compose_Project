@@ -35,7 +35,7 @@ function App () {
       <Route exact path="/search" element={<Search/>} />
       <Route exact path="/notifications" element={<Notifications/>} />
       <Route exact path="/edit-profile" element={<EditProfile/>} />
-      <Route exact path="/NFT-details" element={<NFTDetail/>}/>
+      <Route exact path="/NFT-details/:id" element={<NFTDetail/>}/>
       <Route exact path="/followers" element={<Followers/>} />
       <Route exact path="/following" element={<Following/>} />
       <Route exact path="/changePw" element={<ChangePassword/>} />

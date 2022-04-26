@@ -1,1 +1,7 @@
-
+h1.header-align {
+    text-align: center;
+}
+div.nft-container{
+    display:flex;
+    justify-content:center;
+}
