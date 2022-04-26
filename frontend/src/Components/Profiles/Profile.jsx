@@ -54,7 +54,13 @@ export const Profile = (props) => {
             // get the table of friend requests
             if (loaded.username !== JSON.parse(localStorage.getItem("currUser")).username) {
 
-                let res = await getFriendRequest(loaded.account_id)
+                let res;
+                try {
+                    res = await getFriendRequest(loaded.account_id);
+                }
+                catch {
+                    res = {};
+                }
                 // convert it to an array
                 if (res.requester_id === loaded.account_id) {
                     // if the friend request has not been accepted
