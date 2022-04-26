@@ -1,5 +1,5 @@
 const express = require('express');
-const Farm = require('../models/events');
+const Farm = require('../models/event');
 
 
 const router = express.Router();
@@ -40,15 +40,15 @@ router.put('/:event_id', async (req, res) =>{
 })
 
 //find event by date
-router.get('/farm/:date', async (req, res, next) => {
-    try {
-        const date=req.params.date;
-        const result = await req.models.dash.findEvent ByDate(date);
-        res.status(200).json(result);
-    } catch (err) {
-        console.error('Failed to get farm rating by farm_ID:', err);
-        res.status(500).json({ message: err.toString() });
-    }
-    next();
-
+// router.get('/farm/:date', async (req, res, next) => {
+//     try {
+//         const date=req.params.date;
+//         const result = await req.models.dash.findEvent ByDate(date);
+//         res.status(200).json(result);
+//     } catch (err) {
+//         console.error('Failed to get farm rating by farm_ID:', err);
+//         res.status(500).json({ message: err.toString() });
+//     }
+//     next();
+// })
 module.exports = router;

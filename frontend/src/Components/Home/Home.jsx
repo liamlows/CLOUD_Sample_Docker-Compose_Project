@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import Timeline from '@mui/lab/Timeline';
 import "./Home.css";
@@ -19,8 +18,9 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import { Divider, Link, Grid, Slide, Typography, useMediaQuery, useTheme } from '@material-ui/core';
-import { createTheme, ThemeProvider } from "@material-ui/core/styles";
+import { Divider, Grid, Slide, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 
 export const Home = () => {
     const theme = createTheme({

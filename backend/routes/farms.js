@@ -65,7 +65,7 @@ router.get('/farm/:date_founded', async (req, res, next) => {
     next();
 
 
-
+})
 
 //6.1 , 6.2 , 6.3 creating farm
 router.post('/', async (req, res) =>{
@@ -94,7 +94,7 @@ router.get('/farm/:farmer_id', async (req, res, next) => {
     }
     next();
 
-
+})
 //6.8
 router.get('/farm/:farm_established', async (req, res, next) => {
     try {
@@ -106,6 +106,7 @@ router.get('/farm/:farm_established', async (req, res, next) => {
         res.status(500).json({ message: err.toString() });
     }
     next();
+})
 
 
 //delete farm
