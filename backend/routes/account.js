@@ -231,7 +231,7 @@ router.post("/api/account/login", async (req, res, next) => {
         return next(error);
     }
 
-    res.json({success: 1, error: "", username: username, accountId: user.account_id});
+    res.json({success: 1, error: "", username: username, account_id: user.account_id});
 });
 
 
