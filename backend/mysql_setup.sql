@@ -164,6 +164,7 @@ CREATE TABLE `db`.`teacher_reviews`(
     `review` VARCHAR(1000),
     `rating` INT CHECK (`rating` <= 5 AND `rating` >= 0) NOT NULL,
     `poster_id` BIGINT UNSIGNED NOT NULL,
+    'flagged' BOOLEAN,
     PRIMARY KEY (`teacher_reviews_id`),
     FOREIGN KEY (`teacher_id`) REFERENCES accounts(`account_id`),
     FOREIGN KEY (`poster_id`) REFERENCES accounts(`account_id`)
