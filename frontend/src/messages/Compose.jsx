@@ -12,9 +12,8 @@ export const Compose = () => {
         <br/><br/>
         <TextField id="outlined-multiline-flexible" rows={10} fullWidth multiline label="Your Message"/>
         <Grid container justifyContent="flex-end">
-            <Link className="messageLink" to='/messages'><Button color="secondary">Back</Button></Link>
-            <Button color="secondary">Send</Button>
-            <Button color="secondary">Delete</Button>
+            <Link className="messageLink" to='/messages'><Button color="secondary">Send</Button></Link>
+            <Link className="messageLink" to='/messages'><Button color="secondary">Delete</Button></Link>
 
         </Grid>
     </div>
