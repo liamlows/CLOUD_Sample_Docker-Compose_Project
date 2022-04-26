@@ -18,7 +18,10 @@ import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 
 
 // Method Imports
-import { logout, sendEnrollmentRequest, updateAccountbyUsername, getAccountbyId, getCourseById, getCourseRequest, getCoursebyId } from "../../APIFolder/loginApi";
+
+import { getAccountbyUsername, logout, sendEnrollmentRequest, updateAccountbyUsername, getAccountbyId, getCourseById, getCourseRequest, getCoursebyId, updateCoursebyId, getEnrollmentStatus, sendNotification, dropCourse } from "../../APIFolder/loginApi";
+import { TextAreaField } from "../common/TextAreaField";
+
 
 export const ClassProfile = (props) => {
     // Navigate Object
@@ -37,10 +40,10 @@ export const ClassProfile = (props) => {
         // course_id: 1
     });
     const [professor, setProfessor] = useState({
-        // first_name: "Wes",
-        // last_name: "Anderson",
-        // username: "wes",
-        // account_id: 1
+        first_name: "Wes",
+        last_name: "Anderson",
+        username: "wes",
+        account_id: 1
     });
     const [tas, setTAs] = useState([
         // { first_name: "first1", last_name: "last1", account_id: 10 },
@@ -48,6 +51,8 @@ export const ClassProfile = (props) => {
         // { first_name: "first2", last_name: "last2", account_id: 20 }
     ]);
     const [account, setAccount] = useState({})
+    const [messageMode, setMessageMode] = useState(false);
+    const [message, setMessage] = useState("")
 
     const params = useParams();
 
@@ -58,29 +63,29 @@ export const ClassProfile = (props) => {
         // if (JSON.stringify(account) === "{}")
         //     setAccount(JSON.parse(localStorage.getItem("currUser")));
         console.log(params.course_id)
-        getCoursebyId(params.course_id).then(loaded => {
+        getCoursebyId(params.course_id).then(async loaded => {
             console.log(loaded);
-            // get the table of friend requests
-            // getCourseRequest(loaded.course_id).then(res => {
 
-            // }).catch(code => {
-            //     if (code === 404) {
-            //         status = 0;
-            //     }
-
-            // }).then(() => {
-            //     console.log("Adding status to course");
-            //     setCourse({ ...loaded, status: status });
-            //     console.log(course);
-            // }).then(() => {
-            getAccountbyId(course.professor_id).then(account => setProfessor(account));
+            // let prof = await getAccountbyId(course.professor_id)
+            // setProfessor(prof));
             setTAs([]);
             let newTas = []
-            for (const ta in course.tas) {
-                getAccountbyId(course.tas[ta]).then(person => newTas.push(person))
+            if (course.tas !== undefined) {
+                for (const ta in course.tas) {
+                    let person = await getAccountbyId(course.tas[ta])
+                    newTas.push(person)
+                }
             }
             setTAs(newTas);
-            // });
+            setCourse(loaded)
+            // get the table of friend requests
+            if (account.account_type === "student") {
+                let status = await getEnrollmentStatus(course.course_id)
+                console.log("Adding status to course", status);
+                changeCourse(status);
+                console.log("YUH")
+                console.log(course);
+            }
         })
     }, [editMode, reload]);
 
@@ -115,11 +120,15 @@ export const ClassProfile = (props) => {
     const doneEditing = () => {
         if (course.course_name && course.course_number && course.description) {
             updateCoursebyId(course).then(setEditMode(false));
-            localStorage.setItem("currUser", JSON.stringify(account));
+            localStorage.setItem("currUser", JSON.stringify(account));//dont think this ever gets hit or matters in the slightest
         }
         else {
             window.alert("Please fill out all fields");
         }
+    }
+
+    const goToProfile = profile => {
+        navigate(`/users/${profile.username}`);
     }
 
     const cancel = () => {
@@ -143,8 +152,13 @@ export const ClassProfile = (props) => {
     }
 
     const sendEnrollmentRequestFunc = () => {
-        console.log("sending friend request");
         sendEnrollmentRequest()
+        setReload(!reload)
+    }
+
+    const sendMessage = () => {
+        sendNotification(message)
+        setMessageMode(false)
         setReload(!reload)
     }
 
@@ -206,18 +220,39 @@ export const ClassProfile = (props) => {
                                     </tr>
                                     <tr className="border-0">
                                         <td className="col-3 fs-6 text-start border-0">
-                                            <TextField label="Course Number :" value={course.course_number} setValue={course_number => changeCourse({ course_number })} />
+                                            <TextField label="Course Department :" value={course.department} setValue={department => changeCourse({ department })} />
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
-                                            {/* Probably should make this a text area and move down to where the description actually is */}
-                                            <TextField label="Course Description :" value={course.description} setValue={description => changeCourse({ description })} />
-                                        </td>
+                                        <td className="col-4 text-start">Teaching Assistants</td>
                                     </tr>
+                                    {
+                                        tas.map((profile, idx) => {
+
+                                            return <tr key={idx} className="container">
+                                                <td>
+                                                    <span className="p-0 text-capitalize">{profile.first_name} </span><span className="p-0 text-capitalize" >{profile.last_name}</span>
+                                                </td>
+                                                <td>
+                                                    <Button variant="contained"
+                                                        className="btn bg-secondary"
+                                                        endIcon={<ArrowForwardIcon />}
+                                                        onClick={() => goToProfile(profile)}>
+                                                        View Profile
+                                                    </Button>
+                                                </td>
+                                            </tr>
+                                        })
+                                    }
                                 </tbody>
                             </table>
                         </div>
+
+                        <div className="row p-4 bg-light mt-0">
+                            <TextAreaField label="Course Description :" value={course.description} setValue={description => changeCourse({ description })} />
+
+                        </div>
+
                         <div className="row mb-3">
                             <div className="col-6">
                                 <button type="button" className="btn btn-secondary col-4 contained m-1 float-end" onClick={() => cancel()}>Cancel</button>
@@ -237,11 +272,36 @@ export const ClassProfile = (props) => {
                             <table className='table float-start'>
                                 <thead>
 
-                                    <th className="float-start col-11 fs-3 mt-2 text-start">{course.course_name} ({course.course_number})</th>
+                                    <th className="float-start col-11 fs-3 mt-2 text-start">{course.course_name} ({course.department})</th>
                                     <th className="col-1">
                                         <button type="button" className="btn btn-light" onClick={() => startEditing()}>Edit Course</button>
                                     </th>
                                 </thead>
+                                <tbody>
+                                <tr>
+                                        <td className="col-4 text-start">Teaching Assistants</td>
+                                    </tr>
+                                   
+                                        {tas.length === 0 && <p>No Teaching Assistants Listed</p>}
+                                        {tas.length !== 0 && tas.map((profile, idx) => {
+
+                                                return <tr key={idx} className="container">
+                                                    <td>
+                                                        <span className="p-0 text-capitalize">{profile.first_name} </span><span className="p-0 text-capitalize" >{profile.last_name}</span>
+                                                    </td>
+                                                    <td>
+                                                        <Button variant="contained"
+                                                            className="btn bg-secondary"
+                                                            endIcon={<ArrowForwardIcon />}
+                                                            onClick={() => goToProfile(profile)}>
+                                                            View Profile
+                                                        </Button>
+                                                    </td>
+                                                </tr>
+                                            })
+                                        }
+                            
+                                </tbody>
                             </table>
                         </div>
                         <div className="ProfessorProfile col-5 mt-1 bg-light2">
@@ -268,16 +328,40 @@ export const ClassProfile = (props) => {
                         </div>
                     </div>
                     <div className="row p-4 bg-light mt-0">
-
+                    <p className="text-start">
+                            Course Description : 
+                        </p>
+                        <p className="text-start">
+                            {course.description}
+                        </p>
                     </div>
-                </div>}
+
+                    {!messageMode && <Button onClick={() => { setMessageMode(true); setReload(!reload) }}>Send Annoucement</Button>}
+                    {messageMode && <div>
+                        <TextField label="Message Title :" value={message.title} setValue={title => setMessage({ ...message, title: title })} />
+                        <TextAreaField label="Message Body :" value={message.body} setValue={body => setMessage({ ...message, body: body })} />
+
+                        <div className="row mb-3">
+                            <div className="col-6">
+                                <button type="button" className="btn btn-secondary col-4 contained m-1 float-end" onClick={() => { setMessage({}); setMessageMode(false); setReload(!reload) }}>Cancel</button>
+                            </div>
+                        </div>
+                        <div className="col-6">
+                            <button type="button" className="btn btn-success col-4 contained m-1 float-start" onClick={() => sendMessage()}>Save</button>
+                        </div>
+                    </div>}
+
+
+                </div>
+            }
 
             {/* Viewing non editable class */}
-            {!canEdit() &&
+            {
+                !canEdit() &&
                 <div>
                     <div className="row">
                         <div className="col-3 float-end">
-                            <Button variant="contained" className="m-3" onClick={() => navigate('/classes/enrollment')} startIcon={<KeyboardBackspaceIcon />}>Return to Search</Button>
+                            <Button variant="contained" className="m-3" onClick={() => navigate('/classes/enrollment')} startIcon={<KeyboardBackspaceIcon />}>Return to Class Search</Button>
                         </div>
                     </div>
                     <div className="clearfix p-0"></div>
@@ -286,40 +370,90 @@ export const ClassProfile = (props) => {
                             <div className="col-7 float-start mt-1">
                                 <table className='table float-start'>
                                     <thead>
-                                        <th className="float-start col-3 fs-3 mt-2 text-start">{account.username}</th>
-                                        {accountType === "student" && account.status === -1 && <th className="col-2 pb-2">
-                                            <Button variant="contained" className="bg-success" onClick={() => sendEnrollmentRequestFunc()} endIcon={<Add />}>Waitlist</Button>
-                                        </th>}
-                                        {accountType === "student" && account.status === 0 && <th className="col-2 pb-2">
+                                        <th className="float-start col-11 fs-3 mt-2 text-start">{course.course_name} ({course.course_number})</th>
+                                        {/* Student is not in class or waitlist */}
+                                        {account.account_type === "student" && account.status === 0 && <th className="col-2 pb-2">
                                             <Button variant="contained" className="bg-success" onClick={() => sendEnrollmentRequestFunc()} endIcon={<Add />}>Enroll</Button>
                                         </th>}
-                                        {accountType === "student" && account.status === 1 && <th className="col-2 pb-2">
-                                            <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Waitlist</Button>
+                                        {/* Student is on the waitlist */}
+                                        {account.account_type === "student" && account.status === -1 && <th className="col-2 pb-2">
+                                            <Button variant="contained" disabled endIcon={<Add color='disabled' />}>On Waitlist</Button>
+                                            <Button variant="contained" className="col-1 bg-danger" onClick={() => dropCourse(account.account_id, course.course_id)}><ClearIcon/></Button>
                                         </th>}
-                                        {account.status === 2 && <div className="float-end col-2 mb-1 mt-2">
+                                        {/* Student is in class */}
+                                        {account.status === 1 && <div className="float-end col-2 mb-1 mt-2">
                                             <div className="clearfix p-0"></div>
                                             <th className="col-1 rounded bg-success border-0 p-1">
                                                 <div className="bg-success text-white">
                                                     Enrolled <Check className='mb-1 m-1 mt-0' />
                                                 </div>
+                                            <Button variant="contained" className="col-1 bg-danger" onClick={() => dropCourse(account.account_id, course.course_id)}><ClearIcon/></Button>
                                             </th>
                                         </div>}
 
                                     </thead>
                                     <tbody>
-                                        <td className="col-3 fs-6 text-start">
-                                            <span className="p-0 text-capitalize">{account.first_name} </span><span className="p-0 text-capitalize" >{account.last_name}</span>
-                                        </td>
+                                    <tr>
+                                        <td className="col-4 text-start">Teaching Assistants</td>
+                                    </tr>
+                                   
+                                        {tas.length === 0 && <p>No Teaching Assistants Listed</p>}
+                                        {tas.length !== 0 && tas.map((profile, idx) => {
+
+                                                return <tr key={idx} className="container">
+                                                    <td>
+                                                        <span className="p-0 text-capitalize">{profile.first_name} </span><span className="p-0 text-capitalize" >{profile.last_name}</span>
+                                                    </td>
+                                                    <td>
+                                                        <Button variant="contained"
+                                                            className="btn bg-secondary"
+                                                            endIcon={<ArrowForwardIcon />}
+                                                            onClick={() => goToProfile(profile)}>
+                                                            View Profile
+                                                        </Button>
+                                                    </td>
+                                                </tr>
+                                            })
+                                        }
                                     </tbody>
                                 </table>
                             </div>
+                            <div className="ProfessorProfile col-5 mt-1 bg-light2">
+                                <table className='table float-start'>
+                                    <thead>
+
+                                        <th className="float-start col-11 fs-4 mt-2 text-start">Professor</th>
+                                        <th className="col-1">
+                                            <Button variant="contained"
+                                                className="btn bg-secondary"
+                                                endIcon={<ArrowForwardIcon />}
+                                                onClick={() => navigate(`/users/${professor.username}`)}>
+                                                View Profile
+                                            </Button>
+                                        </th>
+                                    </thead>
+                                    <tbody>
+                                        <td className="col-3 fs-6 text-start">
+                                            <span className="p-0 text-capitalize">{professor.first_name} </span><span className="p-0 text-capitalize" >{professor.last_name}</span>
+                                        </td>
+                                    </tbody>
+                                </table>
+
+                            </div>
                         </div>
+                        <div className="row p-4 bg-light mt-0">
+                            <p>
+                                {course.description}
+                            </p>
+                        </div>
+
+
                     </div>
-                </div>}
 
+                </div>
+            }
 
-            {/* <ReviewList/>  To be implemented, need to check if user is eligible to submit review (has not submitted before, and either currently enrolled or previously enrolled*/}
-        </section>
+        </section >
     }
-    return <></>;
+    return <>Loading...</>;
 }

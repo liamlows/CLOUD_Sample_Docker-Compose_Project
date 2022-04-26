@@ -12,7 +12,9 @@ import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 import { TextField } from "../common";
 
 // Method Imports
+
 import {getAccountbyId, getFriendRequests, getProfiles, handleFriendRequest, logout, sendFriendRequest } from "../../APIFolder/loginApi"
+
 
 
 export const UserSearch = ({ pages, settings, setNavigated }) => {
@@ -30,7 +32,7 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
     useEffect(() => {
         console.log("running");
         // setProfiles(false);
-        getProfiles().then(res => {
+        getStudents().then(res => {
             console.log("Getting requests")
             getFriendRequests().then(frRes => {
                 // convert it to an array
@@ -156,6 +158,14 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
         }
         return false;
     }
+    const find = (profile) =>
+    {
+        if(profile.username.indexOf(username) !== -1)
+        {
+            return true;
+        }
+        return false
+    }
 
     // HTML
     if (readyToDisplay()) {
@@ -171,7 +181,7 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
             <div className="container border-0 mt-3">
                 <button type="button" className="float-end btn btn-success mt-3" onClick={goToFriendsList}>Friends List</button>
                 <div className="container border-0 col-3 float-start">
-                    <TextField label="Search by Username" value={username} setValue={setUsername} />
+                    <TextField label="Search by Username (Case Sensitive)" value={username} setValue={setUsername} />
                 </div>
                 <div className="clearfix"></div>
             </div>
@@ -189,7 +199,7 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
                 <tbody>
                     {console.log("RENDER", typeof (profiles))}
                     {profiles.map((profile, idx) => {
-                        return (displayUser(profile) && <tr key={idx} className="container">
+                        return (displayUser(profile) && find(profile) && <tr key={idx} className="container">
 
                             <td>{profile.username}</td>
                             <td>{profile.first_name}</td>

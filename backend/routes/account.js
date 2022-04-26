@@ -272,14 +272,14 @@ router.get("/api/username/:id", async (req, res, next) => {
 
 
 
-router.get("/api/users/:username", async (req, res, next) => {
+router.get("/api/users/:account_id", async (req, res, next) => {
     // Query DB for user
 
     let rows, fields;
     try{
         [rows, fields] = await pool.execute(
-            'SELECT username, first_name, last_name, account_id FROM `accounts` WHERE `username` = ?',
-            [req.params.username]);
+            'SELECT username, first_name, last_name, account_id FROM `accounts` WHERE `account_id` = ?',
+            [req.params.account_id]);
     } catch(error){
         return next(error);
     }
@@ -310,13 +310,13 @@ router.put("/api/account", async(req, res, next) => {
     res.status(200).json(req.files);
 });
 
-router.get("/api/users/:username/status/", async (req, res, next) => {
+router.get("/api/users/:account_id/status/", async (req, res, next) => {
     // Query DB for user
     let rows, fields;
     try{
         [rows, fields] = await pool.execute(
-            'SELECT username, last_logged_in, logged_in FROM `accounts` WHERE `username` = ?',
-            [req.params.username]);
+            'SELECT username, last_logged_in, logged_in FROM `accounts` WHERE `account_id` = ?',
+            [req.params.account_id]);
     } catch(error){
         return next(error);
     }
