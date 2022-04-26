@@ -125,6 +125,16 @@ const addInfo = async(userID, cardType, cardNum, name, cvv, exp) => {
     return result;
 }
 
+const transferFunds = async (id, funds) => {
+    const result = await validatePurchase(id);
+    if(result === 0){
+        return res.sendStatus(404);
+    }
+    const query = knex(USER_TABLE).where({ id }).update('balance', funds);
+    const result1 = await query;
+    return result1;
+}
+
 module.exports = {
     createNewUser,
     findUserByEmail,
@@ -134,5 +144,6 @@ module.exports = {
     updatePhoto,
     getBalance,
     validatePurchase,
-    addInfo
+    addInfo,
+    transferFunds
 };

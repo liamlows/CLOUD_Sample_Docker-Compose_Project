@@ -58,6 +58,11 @@ const paymentInfo = async(id, cardType, cardNum, name, cvv, exp) => {
     return result;
 }
 
+const transfer = async(id, amount) => {
+    const result = await User.transferFunds(id, amount);
+    return result;
+}
+
 
 module.exports = {
     createUser,
@@ -68,5 +73,6 @@ module.exports = {
     updatePhoto,
     balance,
     purchaseNFT,
-    paymentInfo
+    paymentInfo,
+    transfer
 };

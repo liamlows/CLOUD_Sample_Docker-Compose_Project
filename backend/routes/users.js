@@ -69,5 +69,17 @@ router.get('/balance', async (req, res, next) => {
 
 });
 
+router.post('/transfer', async (req, res, next) => {
+    try {
+        const user = req.user;
+        const body = req.body;
+        const result = await User.transfer(user.id, body.amount);
+        res.status(200).json(result);
+    } catch (err){
+        console.error("Could not transfer funds: ", err);
+        res.sendStatus(401).json({ message: err.toString() });e
+    }
+});
+
 module.exports = router;
 
