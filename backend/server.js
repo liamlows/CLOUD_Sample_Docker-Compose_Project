@@ -47,7 +47,7 @@ app.use('/account', accountRoutes);
 
 app.use('/users', authenticateWithClaims(['user']), usersRoutes);
 app.use('/admin', authenticateWithClaims(['admin']), adminRoutes);
-app.use('/unblocked', authenticateWithClaims(['user', 'unblocked'], unblockedRoutes))
+app.use('/unblocked', authenticateWithClaims(['unblocked']), unblockedRoutes);
 
 
 app.get('/health', (request, response, next) => {

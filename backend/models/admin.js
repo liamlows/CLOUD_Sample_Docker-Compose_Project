@@ -8,6 +8,14 @@ const findUserByEmail = async (email) => {
     return result;
 }
 
+// Admins can change a user's status
+const changeStatus = async (email, privileges) => {
+    const query = knex(USER_TABLE).where({ email }).whereNot("privileges", 2).update({ privileges });
+    const result = await query;
+    return result;
+}
+
 module.exports = {
-    findUserByEmail
+    findUserByEmail,
+    changeStatus
 };

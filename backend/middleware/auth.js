@@ -37,9 +37,12 @@ const authenticateWithClaims = (claims) => (req, res, next) => {
     if (err) {
       return res.sendStatus(403);
     }
+    console.log("Searching claims...");
+    console.log(claims);
     for (let claim of claims) {
       console.log(claim);
       if (user.claims.includes(claim)) {
+        console.log("User found.");
         req.user = user;
         return next();
       }

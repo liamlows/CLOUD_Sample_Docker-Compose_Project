@@ -39,6 +39,12 @@ const getBlocked = async (email) => {
     return result;
 }
 
+const getDisabled = async (email) => {
+    const query = knex(USER_TABLE).where({ email }).whereRaw('privileges = -1');
+    const result = await query;
+    return result;
+}
+
 // Authenticates user and returns a JWT
 const authenticateUser = async (email, password) => {
     const users = await findUserByEmail(email);
@@ -54,6 +60,11 @@ const authenticateUser = async (email, password) => {
     // If the password is valid, returns a JWT
     if (validPassword) {
         delete user.password;
+        const disabled = await getDisabled(email);
+        if(disabled.length != 0){
+            console.error(`Account is disabled.`);
+            throw EvalError;
+        }
         const admin = await getAdmin(email);
         const blocked = await getBlocked(email);
         // If not admin and not blocked
