@@ -16,8 +16,12 @@ const createEvent = async (event_name, event_description, event_image_url, farme
     return result;
 };
 
+const deleteUserInterestedEvents = async(event_id)=>{
+    const result = knex('customer_event_interests').where({event_id}).del();
+    return result;
+}
+
 const getUsersInterestedEvents = async (user_id) => {
-    console.log(user_id);
 //SELECT customer_event_interests.event_id, event.event_name,event.event_description, event.event_image_url, event.farmer_id, event.date, event.time FROM customer_event_interests JOIN event ON event.event_id = customer_event_interests.event_id WHERE customer_id = 2;
     const query = knex('customer_event_interests').join('event','event.event_id','customer_event_interests.event_id').select().where({customer_id: user_id});
     return query;
@@ -45,6 +49,13 @@ const findEventByName = async (event_name) => {
     const result = await query;
     return result;
 }
+
+//find event by date
+const findEventByDate = async (date) => {
+    const query = knex('event').where({ date });
+    const result = await query;
+    return result;
+}
 //delete event
 const deleteEvent = async (event_id) => {
     const query = knex('event').where({event_id}).del();
@@ -60,10 +71,12 @@ module.exports = {
 
     createEvent,
     findEventByName,
+    findEventByDate,
     deleteEvent,
     updateEvent,
     getFarmEvents,
     getUsersInterestedEvents,
     getAllUserEvents,
-    signUserForEvent
+    signUserForEvent,
+    deleteUserInterestedEvents
 };
