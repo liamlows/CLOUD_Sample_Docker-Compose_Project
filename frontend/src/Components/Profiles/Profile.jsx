@@ -55,7 +55,13 @@ export const Profile = (props) => {
             // get the table of friend requests
             if (loaded.username !== JSON.parse(localStorage.getItem("currUser")).username) {
 
-                let res = await getFriendRequest(loaded.account_id)
+                let res;
+                try {
+                    res = await getFriendRequest(loaded.account_id);
+                }
+                catch {
+                    res = {};
+                }
                 // convert it to an array
                 if (res.requester_id === loaded.account_id) {
                     // if the friend request has not been accepted
@@ -480,10 +486,12 @@ export const Profile = (props) => {
                 //satisfying the review professor
                 //honestly we may be able to get away with doing the flagging be a note saying "flagged reviews are seen as false or overly critical by professor"
                 account.account_type === "professor" && 
+
                 <ReviewList
                  type="Professor"
                  account_id={localStorage.getItem("currUser").account_id}
                  search_id={account.account_id} />
+
             }
         </section>
     }

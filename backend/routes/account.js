@@ -279,7 +279,7 @@ router.get("/api/users/:account_id", async (req, res, next) => {
     let rows, fields;
     try{
         [rows, fields] = await pool.execute(
-            'SELECT username, first_name, last_name, account_id FROM `accounts` WHERE `account_id` = ?',
+            'SELECT username, first_name, last_name, account_id, pfp_url, bio FROM `accounts` WHERE `account_id` = ?',
             [req.params.account_id]);
     } catch(error){
         return next(error);
