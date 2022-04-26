@@ -5,20 +5,27 @@ import { getNFTs } from '../api/NFTApi';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
-import {HashRouter} from 'react-router-dom';
-import {baseEndpoint} from '../urls/API';
-import { NFTDetail } from './NFTDetail';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 export const HomePage = () => {
     
     const[ NFTs, setNFTs ]=useState([]);
+    
     useEffect(() => {
         getNFTs().then(x => setNFTs(x));
     }, [ ]);
 
     if(!NFTs){
-        return<>Loading...</>
+        return<><Box sx={{ mx:"auto"}}>
+        <CircularProgress color="secondary" />
+        </Box></>
     }
+    // const handleDelay =()=>{
+    //     <Box sx={{ mx:"auto"}}>
+    //     <CircularProgress color="secondary" />
+    //     </Box>
+    // }
 
     return (<div className="container my-4">
         <h1 className="header-align">Discover, collect, and sell extra ordinary NFTs</h1>
@@ -30,7 +37,7 @@ export const HomePage = () => {
                         <img className="card-img-top" src={NFT.image_url} alt="Card cap" ></img>
                         </Link>
                         {/* history.push(pathname:`/NFT-details/${NFT.id}`); */}
-                        <Link to='/NFT-details' className="NFT">
+                        <Link to={`/NFT-details/${NFT.id}`} className="NFT">
                         <ImageListItemBar title={NFT.name} />
                         </Link>
                     </ImageListItem>)
