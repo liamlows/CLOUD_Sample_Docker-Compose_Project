@@ -124,7 +124,7 @@ exports.parseWeekFlags = (course) => {
 
     for(let i = 0; i < DAYS.length; i++){
         // check each bit
-        if(course.week_flags & (1 << (i + 1))){
+        if(course.week_flags & (1 << i)){
             course.days.push(DAYS[i]);
         }
     }

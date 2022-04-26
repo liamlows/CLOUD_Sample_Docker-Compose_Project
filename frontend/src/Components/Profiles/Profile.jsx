@@ -20,6 +20,7 @@ import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 
 // Method Imports
 import { getFriendRequests, getStatusByUsername, getAccountbyUsername, handleFriendRequest, logout, sendFriendRequest, updateAccountbyUsername, getFriendRequest, getFriendsClasses, uploadPP } from "../../APIFolder/loginApi";
+import { TextAreaField } from "../common/TextAreaField";
 
 
 export const Profile = (props) => {
@@ -46,141 +47,134 @@ export const Profile = (props) => {
         getStatusByUsername(params.username).then((status) => setOnline(!!status.logged_in));
 
 
-        getAccountbyUsername(params.username).then(loaded => {
+        getAccountbyUsername(params.username).then(async loaded => {
             // get the table of friend requests
             if (loaded.username !== JSON.parse(localStorage.getItem("currUser")).username) {
 
-                getFriendRequest(loaded.account_id).then(res => {
-                    // convert it to an array
-                    if (res.requester_id === loaded.account_id) {
-                        // if the friend request has not been accepted
-                        if (res.status === -1) {
-                            status = 2; // display accept request button
-                            console.log("changing status to a 2", status);
-                        }
-                        // if the request has been accepted
-                        else if (res.status === 1) {
-                            status = 3; // display friend tag
-                            console.log("changing status to a 3", status);
-                        }
-                        else if (res.status === 0) {
-                            status = 4;
-                            console.log("changing status to a 4", status);
-                        }
+                let res = await getFriendRequest(loaded.account_id)
+                // convert it to an array
+                if (res.requester_id === loaded.account_id) {
+                    // if the friend request has not been accepted
+                    if (res.status === -1) {
+                        status = 2; // display accept request button
+                        console.log("changing status to a 2", status);
                     }
-                    // check if the request is from the user
-                    else if (res.requested_id === loaded.account_id) {
-                        // if the request has not been accepted
-                        if (res.status === -1) {
-                            status = 1; // display disabled button
-                            console.log("changing status to a 1", status);
-                        }
-                        // if the request has been accepted
-                        else if (res.status === 1) {
-                            status = 3; // display friend tag
-                            console.log("changing status to a 3", status);
-                        }
-                        else if (res.status === 0) {
-                            status = 4;
-                            console.log("changing status to a 4", status);
-                        }
+                    // if the request has been accepted
+                    else if (res.status === 1) {
+                        status = 3; // display friend tag
+                        console.log("changing status to a 3", status);
                     }
-                }).catch(code => {
-                    setAccount({ ...loaded, status: 0 });
+                    else if (res.status === 0) {
+                        status = 4;
+                        console.log("changing status to a 4", status);
+                    }
+                }
+                // check if the request is from the user
+                else if (res.requested_id === loaded.account_id) {
+                    // if the request has not been accepted
+                    if (res.status === -1) {
+                        status = 1; // display disabled button
+                        console.log("changing status to a 1", status);
+                    }
+                    // if the request has been accepted
+                    else if (res.status === 1) {
+                        status = 3; // display friend tag
+                        console.log("changing status to a 3", status);
+                    }
+                    else if (res.status === 0) {
+                        status = 4;
+                        console.log("changing status to a 4", status);
+                    }
+                }
 
 
-                }).then(() => {
-                    if (account.account_id !== JSON.parse(localStorage.getItem("currUser")).account_id) {
-                        console.log(status, loaded);
-                        if (account.status !== status) {
-                            console.log("Adding status to account");
-                            setAccount({ ...loaded, status: status });
-                            console.log(account);
-                        }
+
+                if (account.account_id !== JSON.parse(localStorage.getItem("currUser")).account_id) {
+                    console.log(status, loaded);
+                    if (account.status !== status) {
+                        console.log("Adding status to account");
+                        setAccount({ ...loaded, status: status });
+                        console.log(account);
                     }
-                }).then(() => {
-                    if (status === 3) {
-                        getFriendsClasses().then(res => {
-                            setClasses(...res);
-                        })
-                    }
-                });
+                }
+
+                if (status === 3) {
+                    let res2 = await getFriendsClasses(loaded.account_id)
+                    setClasses(...res2);
+
+                }
+
             }
-            else
-            {
+            else {
                 console.log("profiles are the same")
                 setAccount({ ...loaded, status: 3 });
-            }})
+            }
+        })
     }, [editMode, reload]); //lol the useEffect is just here now.
 
     if (account.username && account.username !== params.username) {
         let status = 0;
         getStatusByUsername(params.username).then((status) => setOnline(!!status.logged_in));
 
-        getAccountbyUsername(params.username).then(loaded => {
+        getAccountbyUsername(params.username).then(async loaded => {
             // get the table of friend requests
             if (loaded.username !== JSON.parse(localStorage.getItem("currUser")).username) {
-                getFriendRequest(loaded.account_id).then(res => {
-                    // convert it to an array
-                    if (res.requester_id === loaded.account_id) {
-                        // if the friend request has not been accepted
-                        if (res.status === -1) {
-                            status = 2; // display accept request button
-                            console.log("changing status to a 2", status);
-                        }
-                        // if the request has been accepted
-                        else if (res.status === 1) {
-                            status = 3; // display friend tag
-                            console.log("changing status to a 3", status);
-                        }
-                        else if (res.status === 0) {
-                            status = 4;
-                            console.log("changing status to a 4", status);
-                        }
+                let res = await getFriendRequest(loaded.account_id)
+                // convert it to an array
+                if (res.requester_id === loaded.account_id) {
+                    // if the friend request has not been accepted
+                    if (res.status === -1) {
+                        status = 2; // display accept request button
+                        console.log("changing status to a 2", status);
                     }
-                    // check if the request is from the user
-                    else if (res.requested_id === loaded.account_id) {
-                        // if the request has not been accepted
-                        if (res.status === -1) {
-                            status = 1; // display disabled button
-                            console.log("changing status to a 1", status);
-                        }
-                        // if the request has been accepted
-                        else if (res.status === 1) {
-                            status = 3; // display friend tag
-                            console.log("changing status to a 3", status);
-                        }
-                        else if (res.status === 0) {
-                            status = 4;
-                            console.log("changing status to a 4", status);
-                        }
+                    // if the request has been accepted
+                    else if (res.status === 1) {
+                        status = 3; // display friend tag
+                        console.log("changing status to a 3", status);
                     }
-                }).catch(code => {
-                    setAccount({ ...loaded, status: 0 });
+                    else if (res.status === 0) {
+                        status = 4;
+                        console.log("changing status to a 4", status);
+                    }
+                }
+                // check if the request is from the user
+                else if (res.requested_id === loaded.account_id) {
+                    // if the request has not been accepted
+                    if (res.status === -1) {
+                        status = 1; // display disabled button
+                        console.log("changing status to a 1", status);
+                    }
+                    // if the request has been accepted
+                    else if (res.status === 1) {
+                        status = 3; // display friend tag
+                        console.log("changing status to a 3", status);
+                    }
+                    else if (res.status === 0) {
+                        status = 4;
+                        console.log("changing status to a 4", status);
+                    }
+                }
 
+                if (account.account_id !== JSON.parse(localStorage.getItem("currUser")).account_id) {
+                    console.log(status, loaded);
+                    if (account.status !== status) {
+                        console.log("Adding status to account");
+                        setAccount({ ...loaded, status: status });
+                        console.log(account);
+                    }
+                }
 
-                }).then(() => {
-                    if (account.account_id !== JSON.parse(localStorage.getItem("currUser")).account_id) {
-                        console.log(status, loaded);
-                        if (account.status !== status) {
-                            console.log("Adding status to account");
-                            setAccount({ ...loaded, status: status });
-                            console.log(account);
-                        }
-                    }
-                }).then(() => {
-                    if (status === 3) {
-                        getFriendsClasses().then(res => {
-                            setClasses(...res);
-                        })
-                    }
-                });
+                if (status === 3) {
+                    let res2 = await getFriendsClasses(loaded.account_id)
+                    setClasses(...res2);
+                }
+
             }
-            else
-            {
+            else {
                 console.log("profiles are the same")
                 setAccount({ ...loaded, status: 3 });
-            }})
+            }
+        })
     }
     // Conditions
     if (JSON.stringify(account) === "{}") {
@@ -297,7 +291,7 @@ export const Profile = (props) => {
                             <table className='table float-start'>
                                 <thead>
                                     {online && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
-                                    {online && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
+                                    {!online && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
                                     <th className="float-start col-3 fs-3 mt-2 text-start"><span className="text-start p-0">{account.username}</span></th>
 
                                     <th className="col-1">
@@ -317,12 +311,15 @@ export const Profile = (props) => {
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td><TextAreaField label="Bio :" value={account.bio} setValue={bio => changeAccount({ bio })} /></td>
+                                    </tr>
+                                    <tr>
                                         <td>
                                             <div className="roundered">
                                                 <label for="file-upload" class="custom-file-upload">
                                                     <i class="fa fa-cloud-upload"></i> Upload
                                                 </label>
-                                                <input id="file-upload" type="file" onChange={(event) => onFileChange(event)} />
+                                                <input id="file-upload" type="file" accept=".gif,.jpg,.jpeg,.png" onChange={(event) => onFileChange(event)} />
                                             </div>
                                         </td>
                                     </tr>
@@ -360,8 +357,7 @@ export const Profile = (props) => {
                                     <td className="col-3 fs-6 text-start">
                                         <span className="p-0 text-capitalize">{account.first_name} </span><span className="p-0 text-capitalize" >{account.last_name}</span>
                                     </td>
-                                    {/* <h2>Email :</h2>
-                            <p>{account.email}</p> */}
+                                    <td>{account.bio}</td>
                                 </tbody>
                             </table>
                         </div>
@@ -383,7 +379,7 @@ export const Profile = (props) => {
                             {account.profile_picture === undefined && <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
                             <div className="col-7 float-start mt-5">
                                 <table className='table float-start'>
-                                    <thead>
+                                    <thead className="col-12">
                                         {online === true && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
                                         {online === false && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
                                         <th className="float-start col-3 fs-3 mt-2 text-start">{account.username}</th>
@@ -416,8 +412,7 @@ export const Profile = (props) => {
                                         <td className="col-3 fs-6 text-start">
                                             <span className="p-0 text-capitalize">{account.first_name} </span><span className="p-0 text-capitalize" >{account.last_name}</span>
                                         </td>
-                                        {/* <h2>Email :</h2>
-                        <p>{account.email}</p> */}
+                                        <td>{account.bio}</td>
                                     </tbody>
                                 </table>
                             </div>
@@ -462,7 +457,7 @@ export const Profile = (props) => {
                                         className="btn bg-secondary"
                                         endIcon={<ArrowForwardIcon />}
                                         onClick={() => goToClass(clss)}>
-                                        View Profile
+                                        View Course
                                     </Button>
                                 </td>
 
@@ -472,6 +467,14 @@ export const Profile = (props) => {
                     </tbody>
                 </table>
             </div>}
+
+
+
+            {/* {
+                //satisfying the review professor
+                //honestly we may be able to get away with doing the flagging be a note saying "flagged reviews are seen as false or overly critical by professor"
+                account.account_type === "professor" && <ReviewList></ReviewList>
+            } */}
         </section>
     }
     return <></>;

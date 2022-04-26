@@ -12,7 +12,7 @@ import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 import { TextField } from "../common";
 
 // Method Imports
-import { getAccountbyUsername, getAllCourses, getFriendRequests, getProfiles, handleFriendRequest, logout, sendFriendRequest } from "../../APIFolder/loginApi"
+import { getAccountbyUsername, getAllCourses, getCoursebyId, getFriendRequests, getProfiles, handleFriendRequest, logout, sendFriendRequest } from "../../APIFolder/loginApi"
 
 
 export const AddClasses = ({ pages, settings, setNavigated }) => {
@@ -30,55 +30,22 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
     useEffect(() => {
         console.log("running");
         // setProfiles(false);
-        getAllCourses().then(res => {
+        let temp_courses = []
+        getAllCourses().then(clssRes => {
             console.log("Getting requests")
-            console.log(res);
-            setCourses(res);
-            // getAllCourses().then(clssRes => {
-            //     let status = [];
-            //     // loop through each request
-            //     for (const profile in res) {
-            //         status[profile] = 0;
-            //         for (const req in frReq) {
-            //             // check if the request is to the current user
-            //             if (frReq[req].requester_id === res[profile].account_id) {
-            //                 // if the friend request has not been accepted
-            //                 if (frReq[req].status === -1) {
-            //                     status[profile] = 2; // display accept request button
-            //                     console.log("changing status to a 2", status);
-            //                 }
-            //                 // if the request has been accepted
-            //                 else if (frReq[req].status === 1) {
-            //                     status[profile] = 3; // display friend tag
-            //                     console.log("changing status to a 3", status);
-            //                 }
-            //                 else if(frReq[req].status === 0){
-            //                     status[profile] = 4; 
-            //                     console.log("changing status to a 4", status);
-            //                 }
-            //             }
-            //             // check if the request is from the user
-            //             else if (frReq[req].requested_id === res[profile].account_id) {
-            //                 // if the request has not been accepted
-            //                 if (frReq[req].status === -1 || frReq[req].status === 0) {
-            //                     status[profile] = 1; // display disabled button
-            //                     console.log("changing status to a 1", status);
-            //                 }
-            //                 // if the request has been accepted
-            //                 else if (frReq[req].status === 1) {
-            //                     status[profile] = 3; // display friend tag
-            //                     console.log("changing status to a 3", status);
-            //                 }
-            //                 else if(frReq[req].status === 0){
-            //                     status[profile] = 4; 
-            //                     console.log("changing status to a 4", status);
-            //                 }
-            //             }
-            //         }
-            //     }
-            //     addStatusToProfiles(res, status);
-            // });
-        });
+            // console.log(res);
+            
+            for(const i in clssRes){
+                getCoursebyId(clssRes[i].course_id).then(course => {
+                    temp_courses.push(course)
+                    console.log(course)
+                })
+            }
+            
+            
+        }).then(() => {
+            setCourses(temp_courses);
+        })
     }, [dummy]);
 
     // Conditions
@@ -108,17 +75,8 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
     }
 
     const goToSchedule = () => {
-        navigate(`/classes/eronll`);
+        navigate(`/classes/enroll`);
     }
-
-    // const addStatusToProfiles = (dummy, statuses) => {
-    //     console.log("Adding status to profile")
-    //     let profiles2 = [];
-    //     for (const profile in dummy) {
-    //         profiles2.push({ ...dummy[profile], status: statuses[profile] });
-    //     }
-    //     setProfiles(profiles2);
-    // }
 
 
     const signOut = () => {
@@ -137,17 +95,6 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
         navigate(`accounts/${account.username}`);
     }
 
-    // const displayUser = (profile) => {
-    //     if (profile.status === 3) {
-    //         console.log("already friends");
-    //         return false;
-    //     }
-    //     if (profile.account_id === account.account_id) {
-    //         return false;
-    //     }
-    //     return true;
-
-    // }
 
     // const readyToDisplay = () => {
     //     console.log("profiles", profiles);
