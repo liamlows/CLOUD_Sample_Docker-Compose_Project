@@ -41,10 +41,10 @@ export const ClassProfile = (props) => {
         // course_id: 1
     });
     const [professor, setProfessor] = useState({
-        first_name: "Wes",
-        last_name: "Anderson",
-        username: "wes",
-        account_id: 1
+        // first_name: "Wes",
+        // last_name: "Anderson",
+        // username: "wes",
+        // account_id: 1
     });
     const [tas, setTAs] = useState([
         // { first_name: "first1", last_name: "last1", account_id: 10 },
@@ -65,19 +65,26 @@ export const ClassProfile = (props) => {
         //     setAccount(JSON.parse(localStorage.getItem("currUser")));
         console.log(params.course_id)
         getCoursebyId(params.course_id).then(async loaded => {
-            console.log(loaded);
+            console.log(loaded)
+            console.log(loaded.professors.length === 0);
 
-            // let prof = await getAccountbyId(course.professor_id)
-            // setProfessor(prof));
+
+            if (loaded.professors.length === 0) {
+                setProfessor("none")
+            }
+            else if (loaded.professors.length !== 0) {
+                let prof = await getAccountbyId(course.professors[0])
+                setProfessor(prof);
+            }
             setTAs([]);
             let newTas = []
             if (course.tas !== undefined) {
                 for (const ta in course.tas) {
                     let person = await getAccountbyId(course.tas[ta])
                     newTas.push(person)
+                    setTAs(newTas);
                 }
             }
-            setTAs(newTas);
             setCourse(loaded)
             // get the table of friend requests
             if (account.account_type === "student") {
@@ -182,7 +189,7 @@ export const ClassProfile = (props) => {
 
     console.log("Account before if statement", account);
     // NOTE - IN FUTURE ADD BUTTON TO SEND FRIEND REQUEST...ONLY IF FUNCTIONALITY IS IMPLEMENTED
-    if (JSON.stringify(account) !== "{}" && course.course_id !== undefined ) {
+    if (JSON.stringify(account) !== "{}" && course.course_id !== undefined) {
         return <section className="classProfile">
             <LoggedInResponsiveAppBar
                 pages={props.pages}
@@ -269,29 +276,29 @@ export const ClassProfile = (props) => {
                                     </th>
                                 </thead>
                                 <tbody>
-                                <tr>
+                                    <tr>
                                         <td className="col-4 text-start">Teaching Assistants</td>
                                     </tr>
-                                   
-                                        {tas.length === 0 && <p>No Teaching Assistants Listed</p>}
-                                        {tas.length !== 0 && tas.map((profile, idx) => {
 
-                                                return <tr key={idx} className="container">
-                                                    <td>
-                                                        <span className="p-0 text-capitalize">{profile.first_name} </span><span className="p-0 text-capitalize" >{profile.last_name}</span>
-                                                    </td>
-                                                    <td>
-                                                        <Button variant="contained"
-                                                            className="btn bg-secondary"
-                                                            endIcon={<ArrowForwardIcon />}
-                                                            onClick={() => goToProfile(profile)}>
-                                                            View Profile
-                                                        </Button>
-                                                    </td>
-                                                </tr>
-                                            })
-                                        }
-                            
+                                    {tas.length === 0 && <p>No Teaching Assistants Listed</p>}
+                                    {tas.length !== 0 && tas.map((profile, idx) => {
+
+                                        return <tr key={idx} className="container">
+                                            <td>
+                                                <span className="p-0 text-capitalize">{profile.first_name} </span><span className="p-0 text-capitalize" >{profile.last_name}</span>
+                                            </td>
+                                            <td>
+                                                <Button variant="contained"
+                                                    className="btn bg-secondary"
+                                                    endIcon={<ArrowForwardIcon />}
+                                                    onClick={() => goToProfile(profile)}>
+                                                    View Profile
+                                                </Button>
+                                            </td>
+                                        </tr>
+                                    })
+                                    }
+
                                 </tbody>
                             </table>
                         </div>
@@ -300,27 +307,34 @@ export const ClassProfile = (props) => {
                                 <thead>
 
                                     <th className="float-start col-11 fs-4 mt-2 text-start">Professor</th>
-                                    <th className="col-1">
-                                        <Button variant="contained"
-                                            className="btn bg-secondary"
-                                            endIcon={<ArrowForwardIcon />}
-                                            onClick={() => navigate(`/users/${professor.account_id}`)}>
-                                            View Profile
-                                        </Button>
-                                    </th>
+                                    {professor !== "none" &&
+                                        <th className="col-1">
+                                            <Button variant="contained"
+                                                className="btn bg-secondary"
+                                                endIcon={<ArrowForwardIcon />}
+                                                onClick={() => navigate(`/users/${professor.account_id}`)}>
+                                                View Profile
+                                            </Button>
+                                        </th>}
                                 </thead>
                                 <tbody>
-                                    <td className="col-3 fs-6 text-start">
-                                        <span className="p-0 text-capitalize">{professor.first_name} </span><span className="p-0 text-capitalize" >{professor.last_name}</span>
-                                    </td>
+                                    {professor !== "none" &&
+                                        <td className="col-3 fs-6 text-start">
+                                            <span className="p-0 text-capitalize">{professor.first_name} </span><span className="p-0 text-capitalize" >{professor.last_name}</span>
+                                        </td>}
+                                    {professor === "none" &&
+                                        <td className="col-3 fs-6 text-start">
+                                            No Professor Listed
+                                        </td>
+                                    }
                                 </tbody>
                             </table>
 
                         </div>
                     </div>
                     <div className="row p-4 bg-light mt-0">
-                    <p className="text-start">
-                            Course Description : 
+                        <p className="text-start">
+                            Course Description :
                         </p>
                         <p className="text-start">
                             {course.description}
@@ -369,7 +383,7 @@ export const ClassProfile = (props) => {
                                         {/* Student is on the waitlist */}
                                         {account.account_type === "student" && account.status === -1 && <th className="col-2 pb-2">
                                             <Button variant="contained" disabled endIcon={<Add color='disabled' />}>On Waitlist</Button>
-                                            <Button variant="contained" className="col-1 bg-danger" onClick={() => dropCourse(account.account_id, course.course_id)}><ClearIcon/></Button>
+                                            <Button variant="contained" className="col-1 bg-danger" onClick={() => dropCourse(account.account_id, course.course_id)}><ClearIcon /></Button>
                                         </th>}
                                         {/* Student is in class */}
                                         {account.status === 1 && <div className="float-end col-2 mb-1 mt-2">
@@ -378,33 +392,33 @@ export const ClassProfile = (props) => {
                                                 <div className="bg-success text-white">
                                                     Enrolled <Check className='mb-1 m-1 mt-0' />
                                                 </div>
-                                            <Button variant="contained" className="col-1 bg-danger" onClick={() => dropCourse(account.account_id, course.course_id)}><ClearIcon/></Button>
+                                                <Button variant="contained" className="col-1 bg-danger" onClick={() => dropCourse(account.account_id, course.course_id)}><ClearIcon /></Button>
                                             </th>
                                         </div>}
 
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td className="col-4 text-start">Teaching Assistants</td>
-                                    </tr>
-                                   
+                                        <tr>
+                                            <td className="col-4 text-start">Teaching Assistants</td>
+                                        </tr>
+
                                         {tas.length === 0 && <p>No Teaching Assistants Listed</p>}
                                         {tas.length !== 0 && tas.map((profile, idx) => {
 
-                                                return <tr key={idx} className="container">
-                                                    <td>
-                                                        <span className="p-0 text-capitalize">{profile.first_name} </span><span className="p-0 text-capitalize" >{profile.last_name}</span>
-                                                    </td>
-                                                    <td>
-                                                        <Button variant="contained"
-                                                            className="btn bg-secondary"
-                                                            endIcon={<ArrowForwardIcon />}
-                                                            onClick={() => goToProfile(profile)}>
-                                                            View Profile
-                                                        </Button>
-                                                    </td>
-                                                </tr>
-                                            })
+                                            return <tr key={idx} className="container">
+                                                <td>
+                                                    <span className="p-0 text-capitalize">{profile.first_name} </span><span className="p-0 text-capitalize" >{profile.last_name}</span>
+                                                </td>
+                                                <td>
+                                                    <Button variant="contained"
+                                                        className="btn bg-secondary"
+                                                        endIcon={<ArrowForwardIcon />}
+                                                        onClick={() => goToProfile(profile)}>
+                                                        View Profile
+                                                    </Button>
+                                                </td>
+                                            </tr>
+                                        })
                                         }
                                     </tbody>
                                 </table>
@@ -414,19 +428,26 @@ export const ClassProfile = (props) => {
                                     <thead>
 
                                         <th className="float-start col-11 fs-4 mt-2 text-start">Professor</th>
-                                        <th className="col-1">
-                                            <Button variant="contained"
-                                                className="btn bg-secondary"
-                                                endIcon={<ArrowForwardIcon />}
-                                                onClick={() => navigate(`/users/${professor.account_id}`)}>
-                                                View Profile
-                                            </Button>
-                                        </th>
+                                        {professor !== "none" &&
+                                            <th className="col-1">
+                                                <Button variant="contained"
+                                                    className="btn bg-secondary"
+                                                    endIcon={<ArrowForwardIcon />}
+                                                    onClick={() => navigate(`/users/${professor.account_id}`)}>
+                                                    View Profile
+                                                </Button>
+                                            </th>}
                                     </thead>
                                     <tbody>
-                                        <td className="col-3 fs-6 text-start">
-                                            <span className="p-0 text-capitalize">{professor.first_name} </span><span className="p-0 text-capitalize" >{professor.last_name}</span>
-                                        </td>
+                                        {professor !== "none" &&
+                                            <td className="col-3 fs-6 text-start">
+                                                <span className="p-0 text-capitalize">{professor.first_name} </span><span className="p-0 text-capitalize" >{professor.last_name}</span>
+                                            </td>}
+                                        {professor === "none" &&
+                                            <td className="col-3 fs-6 text-start">
+                                                No Professor Listed
+                                            </td>
+                                        }
                                     </tbody>
                                 </table>
 
@@ -444,11 +465,11 @@ export const ClassProfile = (props) => {
                 </div>
             }
             <div className="Reviews">
-                <ReviewList 
-                 type="Course" 
-                 account_id={account.account_id}
-                 search_id={course.course_id}
-                 account_type={account.account_typed} />
+                <ReviewList
+                    type="Course"
+                    account_id={account.account_id}
+                    search_id={course.course_id}
+                    account_type={account.account_typed} />
             </div>
         </section >
     }
