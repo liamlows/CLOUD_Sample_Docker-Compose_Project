@@ -5,26 +5,28 @@ import { Link } from 'react-router-dom';
 import { getNFTById } from '../api/NFTApi';
 import { blue } from '@mui/material/colors';
 import './NFTDetail.css';
+import{React} from 'react';
+import {useParams } from 'react-router-dom';
 
 
-export const NFTDetail = ({ }) => {
+export const NFTDetail = () => {
     
     const [NFT, setNFT]=useState(undefined);
-
-    const id=4;
+    const params =useParams();
 
     useEffect(()=>{
-        getNFTById(id).then(x => setNFT(x));
-    },[id]);
+        if(params.id){
+        getNFTById(params.id).then(x => setNFT(x));
+        }
+    },[]);
 
     if(!NFT){
         return<>Loading...</>
     }
-    
     return<>
-        <div className="container">
-            <div className="image_url">
-                <img className="rounded float-start" src="	https://5.imimg.com/data5/GV/NJ/MY-20565232/modern-art-paintings-250x250.jpg" alt="Card cap"></img>
+        <div className="container-nft">
+            <div className="nft_image_url">
+                <img className="rounded float-start" src={NFT[0].image_url} alt="Card cap"></img>
             </div>
             <div className="NFTInfo">
                 <div className="NFT"><h3>ID: {NFT[0].id}</h3></div>
@@ -44,7 +46,5 @@ export const NFTDetail = ({ }) => {
         </div>
     
     </>
-
-
 
 }
