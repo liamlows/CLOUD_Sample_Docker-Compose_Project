@@ -163,11 +163,12 @@ CREATE TABLE `db`.`teacher_reviews`(
     `review` VARCHAR(1000),
     `rating` INT CHECK (`rating` <= 5 AND `rating` >= 0) NOT NULL,
     `poster_id` BIGINT UNSIGNED NOT NULL,
-    'flagged' BOOLEAN,
+    `flagged` BOOLEAN DEFAULT 0,
     PRIMARY KEY (`teacher_reviews_id`),
     FOREIGN KEY (`teacher_id`) REFERENCES accounts(`account_id`),
     FOREIGN KEY (`poster_id`) REFERENCES accounts(`account_id`)
 );
 
+DROP TABLE `teacher_reviews`;
 
 INSERT INTO `roles`(role_type) VALUES('admin');

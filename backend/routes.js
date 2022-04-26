@@ -36,6 +36,13 @@ router.post('/api/d/:table/:variable/:value', async (req, res, next) => {
     return next(error);
   }
 });
+router.post('/api/d/:table/', async (req, res, next) => {
+  try{
+    await controller.post(req, res);
+  } catch(error){
+    return next(error);
+  }
+});
 
 // Dynamic Put
 // /api/d/{table}/{variable}/put
