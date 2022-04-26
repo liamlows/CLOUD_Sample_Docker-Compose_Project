@@ -51,6 +51,13 @@ router.get("/:course_id", async (req, res, next) => {
 
     course = {...course, ...metadata};
 
+    let [role_users, _] = await pool.execute(
+        "SELECT first_name, last_name, role_type, account_id FROM `accounts` LEFT JOIN `roles` ON `roles`.role_id = `accounts`.role_id WHERE `roles`.course_id = ?",
+        [courseId]);
+
+    course.tas = role_users.filter(user => user.role_type === "ta");
+    course.professors = role_users.filter(user => user.role_type === "professor");
+
     res.status(200).json(course);
 });
 
