@@ -17,11 +17,10 @@ import { NoPages } from './Components/NoPages';
 import { AddClasses } from './Components/ClassView/AddClasses';
 import { ClassProfile } from './Components/ClassView/ClassProfile';
 
-// import { Waitlist } from './Components/AdminView/Waitlist';
+import { Waitlist } from './Components/AdminView/Waitlist';
 
 // Method Imports
 import { getAccountbyUsername } from './APIFolder/loginApi';
-import { ClassProfile } from "./Components/ClassView/ClassProfile";
 
 // React functional component
 function App() {
