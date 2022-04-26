@@ -41,8 +41,7 @@ export const ReviewList = ({ type, account_id }) => {
 
     const find = (id) => {
         for (const i in reviews) {
-            if(reviews[i].sender === account_id)
-            {
+            if (reviews[i].sender_id === account_id) {
                 return true
             }
         }
@@ -85,13 +84,11 @@ export const ReviewList = ({ type, account_id }) => {
                     <div className="mb-3" key={index}>
                         <div className="border rounded list-group">
                             <div className="list-group-item border-bot bg-light">
-                                {/* <Rating value={review.rating} /> */}
+                                <Rating value={review.rating} />
                             </div>
                             <div className="list-group-item bg-light  pt-3 pb-3">
-                                <p className="float-end text-secondary m-2">{review.date}</p>
                                 <div className="float-start"></div>
-                                {/* <p className="text-secondary m-2">{review.userName}</p> */}
-                                <p className="m-2">"{review.comment}"</p>
+                                <p className="m-2">"{review.message}"</p>
                                 <div className="clearfix"></div>
                             </div>
                         </div>
@@ -101,7 +98,7 @@ export const ReviewList = ({ type, account_id }) => {
 
 
             {!find(account_id) &&
-                <ReviewForm addReview={review => addReview(review)}/>
+                <ReviewForm addReview={review => addReview(review)} account_id={account_id} />
             }
         </div >
     }

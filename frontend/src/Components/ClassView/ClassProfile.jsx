@@ -446,7 +446,7 @@ export const ClassProfile = (props) => {
             <div className="Reviews">
                 <ReviewList 
                  type="Course" 
-                 account_id={localStorage.getItem("currUser").account_id}
+                 account_id={account.account_id}
                  search_id={course.course_id} />
             </div>
         </section >
