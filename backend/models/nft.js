@@ -11,9 +11,11 @@ const fetchNFT = async () => {
     return result;
 }
 
-const createNFT = async (name, image_url, price, description) => {
+const createNFT = async (name, image_url, price, description, creator_id, 
+    seller_id, owner_id, for_sale) => {
 
-    const query = knex(NFT_TABLE).insert({ name, image_url, price, description });
+    const query = knex(NFT_TABLE).insert({ name, image_url, price, description, 
+        creator_id, seller_id, owner_id, for_sale});
     const result = await query;
 
     return result;

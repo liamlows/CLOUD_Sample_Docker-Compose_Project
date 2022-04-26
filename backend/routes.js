@@ -15,7 +15,8 @@ app.post('/nft', async (req, res, next) => {
       const body = req.body;
       console.log(body);
 
-      const result = await req.models.nft.createNFT(body.name, body.image_url, body.price, body.description);
+      const result = await req.models.nft.createNFT(body.name, body.image_url, body.price, body.description
+        , body.creator_id, body.seller_id, body.owner_id, body.for_sale);
       res.status(201).json(result);
 
   } catch (err) {
