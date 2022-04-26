@@ -93,6 +93,9 @@ router.get('/farm/:farmer_id', async (req, res, next) => {
         res.status(500).json({ message: err.toString() });
     }
     next();
+})
+
+
 
 })
 //6.8
@@ -108,7 +111,6 @@ router.get('/farm/:farm_established', async (req, res, next) => {
     next();
 })
 
-
 //delete farm
 router.delete('/:farm_name', async (req, res) =>{
 //
@@ -120,7 +122,5 @@ router.delete('/:farm_name', async (req, res) =>{
         res.status(500).json({message: err.toString()});
     }
 })
-
-
 
 module.exports = router;
