@@ -485,9 +485,9 @@ export const Profile = (props) => {
                 //satisfying the review professor
                 //honestly we may be able to get away with doing the flagging be a note saying "flagged reviews are seen as false or overly critical by professor"
                 account.account_type === "professor" && 
-                <ReviewList
+                {/*<ReviewList
                  type="professor"
-                 account_id={localStorage.getItem("currUser").account_id} />
+            account_id={localStorage.getItem("currUser").account_id} />*/}
             }
         </section>
     }
