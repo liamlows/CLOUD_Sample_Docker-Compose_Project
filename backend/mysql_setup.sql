@@ -112,6 +112,7 @@ CREATE TABLE `db`.`announcements` (
 CREATE TABLE `db`.`enrollments` (
     `account_id` BIGINT UNSIGNED NOT NULL,
     `course_id` BIGINT UNSIGNED NOT NULL,
+    'grade' INT UNSIGNED,
     PRIMARY KEY (`account_id`, `course_id`),
     FOREIGN KEY (`account_id`) REFERENCES accounts(`account_id`),
     FOREIGN KEY (`course_id`) REFERENCES courses(`course_id`)
