@@ -152,10 +152,10 @@ function App() {
             setNavigated={x => setNavigated(x)} />} />
 
           {/* Admin loading */}
-          {/* <Route path="/waitlist/:course_id" element={<Waitlist
+          <Route path="/waitlist/:course_id" element={<Waitlist
           pages={loggedInPages}
           settings={settings}
-          setNavigated={x => setNavigated(x)}/>} /> */}
+          setNavigated={x => setNavigated(x)}/>} />
 
           <Route path="*" element={<NoPages />} />
 

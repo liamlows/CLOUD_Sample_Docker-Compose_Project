@@ -103,7 +103,6 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
                 <div className="clearfix"></div>
             </div>
 
-            {/* TODO: Want to implement virtulized table eventually but regular table for now */}
             <table className="table">
                 <thead>
                     <tr>
@@ -114,7 +113,6 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {/* {console.log("RENDER", typeof (profiles))} */}
                     {courses.map((course, idx) => {
                         return (<tr key={idx} className="container">
                             <td>{course.course_name}{console.log(course)}</td>
@@ -124,22 +122,6 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
                             })}{course.professors.length === 0 && `No Professor`}</td>
 
                             <td className="col-3 pb-2">
-                                {/* Need to get the actual status back first. May not be impplemented by demo time but whatever */}
-                                {/* {course.status === 2 &&
-                                    <Button variant="contained" className="bg-primary col-7 m-1 mt-0 mb-0" onClick={() => { handleFriendRequest(course.account_id, 1).then(setDummy(dummy + 1)) }} endIcon={<Add />}>Accept Request</Button>
-                                }
-                                {course.status === 2 &&
-                                    <Button variant="contained" className="bg-danger col-2" onClick={() => { handleFriendRequest(course.account_id, 0).then(setDummy(dummy + 1)) }}><ClearIcon /></Button>
-                                }
-                                {course.status === 1 &&
-                                    <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Sent Request</Button>
-                                }
-                                {course.status === 0 &&
-                                    <Button variant="contained" className="bg-success" onClick={() => { sendFriendRequest(course.account_id).then(setDummy(dummy + 1)) }} endIcon={<Add />}>Add Friend </Button>
-                                }
-                                {course.status === 4 &&
-                                    <Button variant="contained" disabled endIcon={<ClearIcon color='disabled' />}>Redacted</Button>
-                                } */}
                                 <Button variant="contained"
                                     className="btn bg-secondary"
                                     endIcon={<ArrowForwardIcon />}
