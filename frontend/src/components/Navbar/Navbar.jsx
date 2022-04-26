@@ -7,7 +7,6 @@ export const Navbar = () => {
     <>
       <div className= "nav">
 
-
       <div className="title"> <h1 className="setColor"> 
       <Link to='/home' className="nftLink">NFTShop</Link>
       </h1> </div>

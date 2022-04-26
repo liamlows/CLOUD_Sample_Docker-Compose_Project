@@ -15,3 +15,20 @@ export const createAccount = (userName, Name, Email, Password) => new Promise((r
             reject(x);
         });
 });
+
+export const login = (Email, Password) => new Promise((resolve, reject) => {
+
+    axios.get('http://localhost:8000' + '/session', {email: Email, password: Password})
+        .then(function(response){
+            if(response.status===201){
+                window.alert("Successfully logged in!");
+                localStorage.token=response.data.token;
+            }
+            else{
+                window.alert("Logged with error");
+            }
+        })
+        .catch(function(error){
+            window.alert(error);
+    });
+});
