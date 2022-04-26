@@ -21,6 +21,7 @@ import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 // Method Imports
 import { getFriendRequests, getStatusById, handleFriendRequest, logout, sendFriendRequest, updateAccountbyUsername, getFriendRequest, getFriendsClasses, uploadPP, getAccountbyId } from "../../APIFolder/loginApi";
 import { TextAreaField } from "../common/TextAreaField";
+import { ReviewList } from "../common/ReviewList";
 
 
 
@@ -296,8 +297,8 @@ export const Profile = (props) => {
             {JSON.parse(localStorage.getItem("currUser")).username === account.username && editMode === true &&
                 <div className="container border-0 mt-5">
                     <div className="row bg-light pb-4">
-                        {account.pfp_url !== null && <img src={`${account.pfp_url}`} className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
-                        {account.pfp_url === null && <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
+                        {account.pfp_url !== undefined && <img src={`${account.pfp_url}`} className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
+                        {account.pfp_url === undefined && <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
                         <div className="col-7 float-start mt-5">
                             <table className='table float-start'>
                                 <thead>
@@ -352,8 +353,8 @@ export const Profile = (props) => {
             {JSON.parse(localStorage.getItem("currUser")).username === account.username && editMode === false &&
                 <div className="container border-0 mt-5">
                     <div className="row bg-light pb-4">
-                        {account.pfp_url !== null && <img src={`${account.pfp_url}`} className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
-                        {account.pfp_url === null && <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
+                        {account.pfp_url !== undefined && <img src={`${account.pfp_url}`} className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
+                        {account.pfp_url === undefined && <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
                         <div className="col-7 float-start mt-5">
                             <table className='table float-start'>
                                 <thead>
@@ -386,8 +387,8 @@ export const Profile = (props) => {
                     <div className="clearfix p-0"></div>
                     <div className="container border-0 mt-3">
                         <div className="row bg-light pb-4">
-                            {account.pfp_url !== null && <img src={`${account.pfp_url}`} className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
-                            {account.pfp_url === null && <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
+                            {account.pfp_url !== undefined && <img src={`${account.pfp_url}`} className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
+                            {account.pfp_url === undefined && <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
                             <div className="col-7 float-start mt-5">
                                 <table className='table float-start'>
                                     <thead className="col-12">
@@ -485,9 +486,12 @@ export const Profile = (props) => {
                 //satisfying the review professor
                 //honestly we may be able to get away with doing the flagging be a note saying "flagged reviews are seen as false or overly critical by professor"
                 account.account_type === "professor" && 
-                {/*<ReviewList
-                 type="professor"
-            account_id={localStorage.getItem("currUser").account_id} />*/}
+
+                <ReviewList
+                 type="Professor"
+                 account_id={localStorage.getItem("currUser").account_id}
+                 search_id={account.account_id} />
+
             }
         </section>
     }

@@ -21,6 +21,7 @@ import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 
 import { getAccountbyUsername, logout, sendEnrollmentRequest, updateAccountbyUsername, getAccountbyId, getCourseById, getCourseRequest, getCoursebyId, updateCoursebyId, getEnrollmentStatus, sendNotification, dropCourse } from "../../APIFolder/loginApi";
 import { TextAreaField } from "../common/TextAreaField";
+import { ReviewList } from "../common/ReviewList";
 
 
 export const ClassProfile = (props) => {
@@ -181,7 +182,7 @@ export const ClassProfile = (props) => {
 
     console.log("Account before if statement", account);
     // NOTE - IN FUTURE ADD BUTTON TO SEND FRIEND REQUEST...ONLY IF FUNCTIONALITY IS IMPLEMENTED
-    if (JSON.stringify(account) !== "{}") {
+    if (JSON.stringify(account) !== "{}" && course.course_id !== undefined ) {
         return <section className="classProfile">
             <LoggedInResponsiveAppBar
                 pages={props.pages}
@@ -442,7 +443,12 @@ export const ClassProfile = (props) => {
 
                 </div>
             }
-
+            <div className="Reviews">
+                <ReviewList 
+                 type="Course" 
+                 account_id={account.account_id}
+                 search_id={course.course_id} />
+            </div>
         </section >
     }
     return <>Loading...</>;
