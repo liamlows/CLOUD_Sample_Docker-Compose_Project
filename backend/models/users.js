@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 
 const USER_TABLE = 'user';
 
+
 const accessTokenSecret =  process.env.TOKEN;
 
 // Creates a new system user with a secure password
@@ -105,6 +106,12 @@ const updatePhoto = async (id, photo) => {
     return result;
 } 
 
+const getBalance = async (id) => {
+    const query = knex(USER_TABLE).select('balance').where({ id });
+    const result = await query;
+    return result;
+} 
+
  
 
 module.exports = {
@@ -113,5 +120,6 @@ module.exports = {
     authenticateUser,
     deleteUser, 
     updateName,
-    updatePhoto
+    updatePhoto,
+    getBalance
 };
