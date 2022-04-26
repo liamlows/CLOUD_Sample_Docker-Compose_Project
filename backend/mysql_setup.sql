@@ -144,5 +144,29 @@ CREATE TABLE `db`.`notifications` (
     FOREIGN KEY (`course`) REFERENCES courses(`course_id`)
 );
 
+-- COURSE REVIEWS TABLE
+CREATE TABLE `db`.`course_reviews`(
+    `course_reviews_id` SERIAL,
+    `course_id` BIGINT UNSIGNED NOT NULL,
+    `review` VARCHAR(1000),
+    `rating` INT CHECK (`rating` <= 5 AND `rating` >= 0) NOT NULL,
+    `poster_id` BIGINT UNSIGNED NOT NULL,
+    PRIMARY KEY (`course_reviews_id`),
+    FOREIGN KEY (`course_id`) REFERENCES courses(`course_id`),
+    FOREIGN KEY (`poster_id`) REFERENCES accounts(`account_id`)
+);
+
+-- TEACHER REVIEWS TABLE
+CREATE TABLE `db`.`teacher_reviews`(
+    `teacher_reviews_id` SERIAL,
+    `teacher_id` BIGINT UNSIGNED NOT NULL,
+    `review` VARCHAR(1000),
+    `rating` INT CHECK (`rating` <= 5 AND `rating` >= 0) NOT NULL,
+    `poster_id` BIGINT UNSIGNED NOT NULL,
+    PRIMARY KEY (`teacher_reviews_id`),
+    FOREIGN KEY (`teacher_id`) REFERENCES accounts(`account_id`),
+    FOREIGN KEY (`poster_id`) REFERENCES accounts(`account_id`)
+);
+
 
 INSERT INTO `roles`(role_type) VALUES('admin');
