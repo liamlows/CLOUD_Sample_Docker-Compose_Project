@@ -106,11 +106,11 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
 
     // Component Methods
     const goToProfile = profile => {
-        navigate(`/users/${profile.username}`);
+        navigate(`/users/${profile.account_id}`);
     }
 
     const goToFriendsList = () => {
-        navigate(`/users/${account.username}/friends`);
+        navigate(`/users/${account.account_id}/friends`);
     }
 
     const addStatusToProfiles = (dummy, statuses) => {

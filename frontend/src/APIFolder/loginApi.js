@@ -1,8 +1,6 @@
 import axios from 'axios';
 axios.defaults.withCredentials = true
-
-
-const BACKEND_ENDPOINT = "http://localhost:8000";
+export const BACKEND_ENDPOINT = "http://localhost:8000";
 
 
 export const registerAccount = async (credentials) =>  {
@@ -63,8 +61,8 @@ export const getStudents = async () => {
     return res.data;
 }
 
-export const getStatusByUsername = async (username) => {
-    const res = await axios.get(`${BACKEND_ENDPOINT}/api/users/${username}/status`);
+export const getStatusById = async (account_id) => {
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/users/${account_id}/status`);
     if(res.status !== 200){
         console.log("Couldn't find user status");
         return null;
@@ -176,23 +174,14 @@ export const getClasses = async () => {
 
 export const uploadPP = async (pp) => {
     console.log(typeof(pp), pp)
-
     let formData = new FormData();
-    let reader = new FileReader();
-
-    if(pp){
-        reader.readAsDataURL(pp);
-    }
-
-    reader.onload = (event) => {
-        formData.append("image", event.target.result);
-    
-        axios.put(`${BACKEND_ENDPOINT}/api/account`, event.target.result).then(() => {
-            console.log("hi");
-        })
-    }
-
-    return;
+    formData.set("profilePic", pp);
+    await axios.post(`${BACKEND_ENDPOINT}/api/account/pfp`, formData,
+        {
+            headers: {
+                "Content-type": "multipart/form-data",
+            }
+        });
     // return res.data;
 }
 

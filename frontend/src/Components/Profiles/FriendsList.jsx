@@ -59,7 +59,7 @@ export const FriendsList = (props) => {
 
     // Component Methods
     const goToProfile = (friend) => {
-        navigate(`/users/${friend.username}`);
+        navigate(`/users/${friend.account_id}`);
     }
 
     const signOut = () => {

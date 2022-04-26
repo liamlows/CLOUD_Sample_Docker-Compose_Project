@@ -12,9 +12,7 @@ import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 import { TextField } from "../common";
 
 // Method Imports
-
-import { getAccountbyId, getAllCourses, getCoursebyId, getFriendRequests, getProfiles, handleFriendRequest, logout, sendFriendRequest } from "../../APIFolder/loginApi"
-
+import { getAllCourses, getCoursebyId, logout, getAccountbyId } from "../../APIFolder/loginApi"
 
 
 export const AddClasses = ({ pages, settings, setNavigated }) => {
@@ -25,29 +23,24 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
 
     // Component Variables
     const [account, setAccount] = useState({});
-    const [courses, setCourses] = useState([]);
+    const [courses, setCourses] = useState(false);
     const [cName, setCName] = useState('');
     const [dummy, setDummy] = useState(0);
 
     useEffect(() => {
         console.log("running");
-        // setProfiles(false);
-        let temp_courses = []
-        getAllCourses().then(clssRes => {
+        var temp_courses = [];
+        getAllCourses().then(async clssRes => {
             console.log("Getting requests")
-            // console.log(res);
             
             for(const i in clssRes){
-                getCoursebyId(clssRes[i].course_id).then(course => {
-                    temp_courses.push(course)
-                    console.log(course)
-                })
+                let course = await getCoursebyId(clssRes[i].course_id)
+                temp_courses.push(course);
             }
-            
-            
-        }).then(() => {
+            console.log("temp_courses", temp_courses);
             setCourses(temp_courses);
-        })
+        });
+        
     }, [dummy]);
 
     // Conditions
@@ -93,34 +86,14 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
         });
     }
 
-    const profileNav = () => {
-        navigate(`users/${account.username}`);
-    }
-
-    const accountNav = () => {
-        navigate(`accounts/${account.username}`);
-    }
-
-
-    // const readyToDisplay = () => {
-    //     console.log("profiles", profiles);
-    //     if (profiles !== undefined && profiles[0] !== undefined && profiles[0].status !== undefined) {
-    //         return true;
-    //     }
-    //     return false;
-    // }
-
     // HTML
-    // if (readyToDisplay()) {
-        if(courses !== []){
+    if(!!courses && courses.length !== 0) {
         return <div>
             <LoggedInResponsiveAppBar
                 pages={pages}
                 settings={settings}
                 signOut={() => signOut()}
-                username={account.username}
-                profileNav={() => profileNav()}
-                account={() => accountNav()} />
+                account_id={account.account_id} />
 
             <div className="container border-0 mt-3">
                 <button type="button" className="float-end btn btn-success mt-3" onClick={() => goToSchedule()}>Schedule</button>
@@ -130,7 +103,6 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
                 <div className="clearfix"></div>
             </div>
 
-            {/* TODO: Want to implement virtulized table eventually but regular table for now */}
             <table className="table">
                 <thead>
                     <tr>
@@ -141,31 +113,15 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {/* {console.log("RENDER", typeof (profiles))} */}
                     {courses.map((course, idx) => {
-                        return <tr key={idx} className="container">
-
-                            <td>{course.course_name}</td>
+                        return (<tr key={idx} className="container">
+                            <td>{course.course_name}{console.log(course)}</td>
                             <td>{course.department}</td>
-                            <td>{course.professor.last_name}, {course.professor.first_name}</td>
+                            <td>{course.professors.length !== 0 && course.professors.map((professor) => {
+                                return `${professor.last_name}, ${professor.last_name}\n`;
+                            })}{course.professors.length === 0 && `No Professor`}</td>
 
                             <td className="col-3 pb-2">
-                                {/* Need to get the actual status back first. May not be impplemented by demo time but whatever */}
-                                {/* {course.status === 2 &&
-                                    <Button variant="contained" className="bg-primary col-7 m-1 mt-0 mb-0" onClick={() => { handleFriendRequest(course.account_id, 1).then(setDummy(dummy + 1)) }} endIcon={<Add />}>Accept Request</Button>
-                                }
-                                {course.status === 2 &&
-                                    <Button variant="contained" className="bg-danger col-2" onClick={() => { handleFriendRequest(course.account_id, 0).then(setDummy(dummy + 1)) }}><ClearIcon /></Button>
-                                }
-                                {course.status === 1 &&
-                                    <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Sent Request</Button>
-                                }
-                                {course.status === 0 &&
-                                    <Button variant="contained" className="bg-success" onClick={() => { sendFriendRequest(course.account_id).then(setDummy(dummy + 1)) }} endIcon={<Add />}>Add Friend </Button>
-                                }
-                                {course.status === 4 &&
-                                    <Button variant="contained" disabled endIcon={<ClearIcon color='disabled' />}>Redacted</Button>
-                                } */}
                                 <Button variant="contained"
                                     className="btn bg-secondary"
                                     endIcon={<ArrowForwardIcon />}
@@ -182,12 +138,11 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
                                 </Button>
                             </td>
 
-                        </tr>
+                        </tr>)
                     })}
                 </tbody>
             </table>
         </div>
-
     }
     else {
         return <>Loading...</>
