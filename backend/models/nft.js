@@ -106,8 +106,14 @@ const deleteNFT = async (id) => {
     return result;
 }
 
-const leaderboard = async () => {
+const userLeaderboard = async () => {
     const query = knex.raw("SELECT owner_id, SUM(price) AS val FROM nft WHERE owner_id NOT IN (SELECT id FROM user WHERE privileges < 1) GROUP BY owner_id ORDER BY val DESC;");
+    const result = await query;
+    return result;
+}
+
+const nftLeaderboard= async () => {
+    const query = knex.raw("SELECT owner_id, price, name FROM nft WHERE owner_id NOT IN (SELECT id FROM user WHERE privileges < 1) ORDER BY price DESC LIMIT 10;");
     const result = await query;
     return result;
 }
@@ -127,6 +133,7 @@ module.exports = {
     updateForSale ,
     getNFTCost,
     getNFTSeller,
-    leaderboard
+    userLeaderboard,
+    nftLeaderboard
 }
 
