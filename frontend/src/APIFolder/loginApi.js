@@ -215,3 +215,12 @@ export const dropCourse = async (account_id, id) => {
     await axios.delete(`${BACKEND_ENDPOINT}/api/enrollments/${account_id}/${id}`);
     return;
 }
+
+export const getCourseReviews = async (course_id) => {
+    await axios.get(`${BACKEND_ENDPOINT}/api/d/reviews/course_id/${course_id}`);
+    return;
+}
+export const getProfessorReviews = async (teacher_id) => {
+    await axios.get(`${BACKEND_ENDPOINT}/api/d/reviews/teacher_id/${teacher_id}`);
+    return;
+}
