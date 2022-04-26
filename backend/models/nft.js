@@ -106,6 +106,12 @@ const deleteNFT = async (id) => {
     return result;
 }
 
+const leaderboard = async () => {
+    const query = knex.raw("SELECT owner_id, SUM(price) AS val FROM nft WHERE owner_id NOT IN (SELECT id FROM user WHERE privileges < 1) GROUP BY owner_id ORDER BY val DESC;");
+    const result = await query;
+    return result;
+}
+
 module.exports = {
     createNFT, 
     getNFT,
@@ -120,6 +126,7 @@ module.exports = {
     updateOwnerId,
     updateForSale ,
     getNFTCost,
-    getNFTSeller
+    getNFTSeller,
+    leaderboard
 }
 
