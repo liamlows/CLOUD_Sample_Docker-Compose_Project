@@ -224,3 +224,14 @@ export const getProfessorReviews = async (teacher_id) => {
     await axios.get(`${BACKEND_ENDPOINT}/api/d/reviews/teacher_id/${teacher_id}`);
     return;
 }
+
+
+//need poster id, message, rating
+export const postCourseReview = async (course_id, review) => {
+    await axios.post(`${BACKEND_ENDPOINT}/api/d/reviews/course_id/${course_id}`, review);
+    return;
+}
+export const postProfessorReview = async (teacher_id, review) => {
+    await axios.post(`${BACKEND_ENDPOINT}/api/d/reviews/teacher_id/${teacher_id}`, review);
+    return;
+}
