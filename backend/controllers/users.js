@@ -89,7 +89,18 @@ const transfer = async(id, amount) => {
     }
     const result1 = await User.transferFunds(id, amount);
     return result1;
-} 
+}
+
+const updateInfo = async(id, name, photo) => {
+    if(name){
+        const result = await User.updateName(id, name);
+    }
+    if(photo){
+        const result = await User.updatePhoto(id, photo);
+    }
+    const rez = await User.findUserByID(id);
+    return rez;
+}
 
 module.exports = {
     createUser,
@@ -101,5 +112,6 @@ module.exports = {
     balance,
     // purchaseNFT,
     paymentInfo,
-    transfer
+    transfer,
+    updateInfo
 };
