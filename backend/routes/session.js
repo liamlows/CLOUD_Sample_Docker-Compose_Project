@@ -13,6 +13,9 @@ router.post('/', async (req, res, next) => {
         const body = req.body;
         
         const result = await User.authenticateUser(body.email, body.password);
+        if(result.length === 0){
+            res.status(500).json({ message: 'Invalid login information' });
+        }
         res.status(201).json(result);
     } catch (err) {
         console.error('Failed to create new session:', err);

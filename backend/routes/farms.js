@@ -52,6 +52,20 @@ router.get('/products/:farm_id', async(req, res) =>{
     }
 })
 
+//find farm by establish year
+router.get('/farm/:date_founded', async (req, res, next) => {
+    try {
+        const date_founded=req.params.date_founded;
+        const result = await req.models.dash.findFarmByDateFounded(date_founded);
+        res.status(200).json(result);
+    } catch (err) {
+        console.error('Failed to get farm establishment by date_founded:', err);
+        res.status(500).json({ message: err.toString() });
+    }
+    next();
+
+
+})
 
 //6.1 , 6.2 , 6.3 creating farm
 router.post('/', async (req, res) =>{
@@ -67,6 +81,7 @@ router.post('/', async (req, res) =>{
 
 })
 
+
 //6.7
 router.get('/farm/:farmer_id', async (req, res, next) => {
     try {
@@ -80,6 +95,9 @@ router.get('/farm/:farmer_id', async (req, res, next) => {
     next();
 })
 
+
+
+})
 //6.8
 router.get('/farm/:farm_established', async (req, res, next) => {
     try {
