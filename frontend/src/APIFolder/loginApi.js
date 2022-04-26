@@ -46,8 +46,8 @@ export const getAccountbyId = async (account_id) => {
 }
 
 //Still work in progress. Account editing is not fully implemented
-export const updateAccountbyUsername = async (account) => {
-    return axios.put(`${BACKEND_ENDPOINT}/api/account`, {account: account} );
+export const updateAccount = async (account) => {
+    return axios.put(`${BACKEND_ENDPOINT}/api/account`, {firstName: account.first_name, lastName: account.last_name, bio: account.bio} );
 }
 
 
