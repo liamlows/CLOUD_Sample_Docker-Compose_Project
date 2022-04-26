@@ -21,6 +21,7 @@ const app = express();
 
 // Importing route handlers
 const usersRoutes = require('./routes/users');
+const unblockedRoutes = require('./routes/unblocked');
 const sessionRoutes = require('./routes/session');
 const accountRoutes = require('./routes/account');
 const adminRoutes = require('./routes/admin');
@@ -40,8 +41,10 @@ const { authenticateJWT, authenticateWithClaims } = require('./middleware/auth')
 app.use('/session', sessionRoutes);
 app.use('/account', accountRoutes);
 
+
 app.use('/users', authenticateWithClaims(['user']), usersRoutes);
 app.use('/admin', authenticateWithClaims(['admin']), adminRoutes);
+app.use('/unblocked', authenticateWithClaims(['user', 'unblocked'], unblockedRoutes))
 
 
 app.get('/health', (request, response, next) => {

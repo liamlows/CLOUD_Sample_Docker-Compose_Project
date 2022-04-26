@@ -38,6 +38,7 @@ const authenticateWithClaims = (claims) => (req, res, next) => {
       return res.sendStatus(403);
     }
     for (let claim of claims) {
+      console.log(claim);
       if (user.claims.includes(claim)) {
         req.user = user;
         return next();
@@ -47,4 +48,31 @@ const authenticateWithClaims = (claims) => (req, res, next) => {
   });
 }
 
+const authenticateWithoutClaims = (claims) => (req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    console.log("No authHeader");
+    
+  }
+
+  const token = authHeader.split(" ")[1];
+
+  jwt.verify(token, accessTokenSecret, (err, user) => {
+    if (err) {
+      return res.sendStatus(403);
+    }
+    for (let claim of claims) {
+      console.log(claim);
+      if (user.claims.includes(claim)) {
+        return res.sendStatus(401);
+        
+      }
+    }
+    req.user = user;
+    return next();
+  });
+}
+
 module.exports = { authenticateJWT, authenticateWithClaims };
+

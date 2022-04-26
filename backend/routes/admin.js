@@ -3,7 +3,7 @@ const UserController = require('../controllers/users');
 
 const router = express.Router();
 
-// POST /account/ creates a new user
+// POST /admin/new creates a new admin
 router.post('/new', async (req, res, next) => {
     try {
         const body = req.body;
