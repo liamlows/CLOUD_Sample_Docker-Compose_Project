@@ -50,7 +50,7 @@ export const Profile = (props) => {
 
 
 
-        getAccountbyId(params.account_id).then( async loaded => {
+        getAccountbyId(params.account_id).then(async loaded => {
 
             // get the table of friend requests
             if (loaded.username !== JSON.parse(localStorage.getItem("currUser")).username) {
@@ -121,7 +121,7 @@ export const Profile = (props) => {
         getStatusByUsername(params.username).then((status) => setOnline(!!status.logged_in));
 
 
-        getAccountbyId(params.account_id).then( async loaded => {
+        getAccountbyId(params.account_id).then(async loaded => {
 
             // get the table of friend requests
             if (loaded.username !== JSON.parse(localStorage.getItem("currUser")).username) {
@@ -425,19 +425,19 @@ export const Profile = (props) => {
                     </div>
                 </div>}
 
-            {
+            {account.account_type === "student" &&
                 classes.length === 0 && (account.status === 3 || account.account_id === JSON.parse(localStorage.getItem("currUser")).account_id) && <div>
                     <h1>Classes</h1>
                     <p>{account.username} is not enrolled in any classes</p>
                 </div>
             }
-            {
+            {account.account_type === "student" &&
                 classes.length === 0 && account.status !== 3 && account.account_id !== JSON.parse(localStorage.getItem("currUser")).account_id && <div>
                     <h1>Classes</h1>
                     <p>You must be friends with {account.username} to view their classes</p>
                 </div>
             }
-            {classes.length !== 0 && <div>
+            {account.account_type === "student" && classes.length !== 0 && <div>
                 <h1>Classes</h1>
                 <table>
                     <thead>
@@ -475,11 +475,14 @@ export const Profile = (props) => {
 
 
 
-            {/* {
+            {
                 //satisfying the review professor
                 //honestly we may be able to get away with doing the flagging be a note saying "flagged reviews are seen as false or overly critical by professor"
-                account.account_type === "professor" && <ReviewList></ReviewList>
-            } */}
+                account.account_type === "professor" && 
+                <ReviewList
+                 type="professor"
+                 account_id={localStorage.getItem("currUser").account_id} />
+            }
         </section>
     }
     return <></>;
