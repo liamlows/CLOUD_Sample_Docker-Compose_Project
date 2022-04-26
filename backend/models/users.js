@@ -119,7 +119,8 @@ const validatePurchase = async (userID) => {
 }
 
 const addInfo = async(userID, cardType, cardNum, name, cvv, exp) => {
-    const query = knex(PAYMENT_TABLE).insert({ userID }, { cardType }, { cardNum }, { name }, { cvv }, { exp });
+    console.log(userID, cardType, cardNum, name, cvv, exp);
+    const query = knex(PAYMENT_TABLE).insert([{ userID, cardType, cardNum, name, cvv, exp }]);
     const result = await query;
     return result;
 }

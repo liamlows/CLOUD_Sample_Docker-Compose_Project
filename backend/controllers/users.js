@@ -48,12 +48,13 @@ const balance = async(id) => {
 }
 
 const purchaseNFT = async(id) => {
-    const result = await Purchase.validatePurchase(id);
+    const result = await User.validatePurchase(id);
     return result;
 }
 
 const paymentInfo = async(id, cardType, cardNum, name, cvv, exp) => {
-    const result = await Purchase.addInfo(id, cardType, cardNum, name, cvv, exp);
+    console.log(id, cardType, cardNum, name, cvv, exp);
+    const result = await User.addInfo(id, cardType, cardNum, name, cvv, exp);
     return result;
 }
 
