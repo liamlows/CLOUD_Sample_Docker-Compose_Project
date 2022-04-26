@@ -65,6 +65,7 @@ CREATE TABLE `db`.`accounts` (
     `offline_mode` BOOLEAN NOT NULL DEFAULT 0,
     `email` VARCHAR(255),
     `bio` VARCHAR(1000),
+    'pfp_url' VARCHAR(1000),
     PRIMARY KEY (`account_id`),
     FOREIGN KEY (`school_id`) REFERENCES schools(`school_id`),
     FOREIGN KEY (`role_id`) REFERENCES roles(`role_id`)

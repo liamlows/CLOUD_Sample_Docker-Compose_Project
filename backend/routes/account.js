@@ -4,7 +4,8 @@ const pool = require('../db');
 const secret = 'not-a-secret';
 const crypto = require('crypto');
 const util = require('../util');
-const {getUsernameFromId} = require("../util");
+const {getUsernameFromId, isUserAuthenticated} = require("../util");
+const {uploadImage} = require("../s3");
 
 /* TODO
 
@@ -230,7 +231,7 @@ router.post("/api/account/login", async (req, res, next) => {
         return next(error);
     }
 
-    res.json({success: 1, error: "", username: username});
+    res.json({success: 1, error: "", username: username, accountId: user.account_id});
 });
 
 
@@ -328,6 +329,33 @@ router.get("/api/users/:account_id/status/", async (req, res, next) => {
     let user = rows[0];
     res.status(200).json(user);
 });
+
+
+router.post("/api/account/pfp", isUserAuthenticated, async (req, res, next)=> {
+    if (!req.files || Object.keys(req.files).length === 0) {
+        return res.status(400).send('No files were uploaded.');
+    }
+
+    if(req.files.profilePic === undefined){
+        return res.status(400).send("No profile picture uploaded.");
+    }
+
+    let profilePic = req.files.profilePic;
+    let extension = profilePic.name.split('.').pop();
+    let filepath = `images/${req.session.accountId}.${extension}`
+    let uploadPath = `${__dirname}/../public/${filepath}`;
+    try {
+        let data = await uploadImage(req.session.accountId, profilePic, extension);
+        logger.info("Uploaded profile picture to:" + data.Location);
+        await pool.execute(
+            'UPDATE `accounts` SET `pfp_url` = ? WHERE `account_id` = ?',
+            [data.Location, req.session.accountId]);
+    } catch(error) {
+        return next(error);
+    }
+
+    res.status(200).send('File was sucessfully uploaded.');
+})
 
 
 module.exports = router;

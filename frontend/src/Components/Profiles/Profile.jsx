@@ -19,6 +19,7 @@ import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 
 
 // Method Imports
+import { BACKEND_ENDPOINT, getFriendRequests, getStatusByUsername, getAccountbyUsername, handleFriendRequest, logout, sendFriendRequest, updateAccountbyUsername, getFriendRequest, getFriendsClasses, uploadPP } from "../../APIFolder/loginApi";
 
 import { getFriendRequests, getStatusByUsername, getAccountbyUsername, handleFriendRequest, logout, sendFriendRequest, updateAccountbyUsername, getFriendRequest, getFriendsClasses, uploadPP, getAccountbyId } from "../../APIFolder/loginApi";
 import { TextAreaField } from "../common/TextAreaField";
@@ -216,7 +217,9 @@ export const Profile = (props) => {
         console.log(pp.size);
         if (account.first_name && account.last_name) {
             if (pp !== undefined) {
-                uploadPP(pp);
+                uploadPP(pp).then(() => {
+                    window.location.reload();
+                });
                 setPP(undefined);
             }
             // updateAccountbyUsername(account).then(setEditMode(false));
@@ -290,8 +293,8 @@ export const Profile = (props) => {
             {JSON.parse(localStorage.getItem("currUser")).username === account.username && editMode === true &&
                 <div className="container border-0 mt-5">
                     <div className="row bg-light pb-4">
-                        {account.profile_picture !== undefined && <img src={`${account.profile_picture}.${account.profile_picture_type}`} className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
-                        {account.profile_picture === undefined && <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
+                        {account.pfp_url !== null && <img src={`${account.pfp_url}`} className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
+                        {account.pfp_url === null && <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
                         <div className="col-7 float-start mt-5">
                             <table className='table float-start'>
                                 <thead>
@@ -346,8 +349,8 @@ export const Profile = (props) => {
             {JSON.parse(localStorage.getItem("currUser")).username === account.username && editMode === false &&
                 <div className="container border-0 mt-5">
                     <div className="row bg-light pb-4">
-                        {account.profile_picture !== undefined && <img src={`${account.profile_picture}.${account.profile_picture_type}`} className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
-                        {account.profile_picture === undefined && <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
+                        {account.pfp_url !== null && <img src={`${account.pfp_url}`} className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
+                        {account.pfp_url === null && <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
                         <div className="col-7 float-start mt-5">
                             <table className='table float-start'>
                                 <thead>
@@ -380,8 +383,8 @@ export const Profile = (props) => {
                     <div className="clearfix p-0"></div>
                     <div className="container border-0 mt-3">
                         <div className="row bg-light pb-4">
-                            {account.profile_picture !== undefined && <img src={`${account.profile_picture}.${account.profile_picture_type}`} className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
-                            {account.profile_picture === undefined && <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
+                            {account.pfp_url !== null && <img src={`${account.pfp_url}`} className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
+                            {account.pfp_url === null && <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
                             <div className="col-7 float-start mt-5">
                                 <table className='table float-start'>
                                     <thead className="col-12">
