@@ -1,0 +1,9 @@
+.reset-container{
+    display: flex;
+    flex-direction: column;
+    
+    margin: 5rem auto;
+    width:80%;
+    max-width: 800px;
+
+}

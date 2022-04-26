@@ -10,7 +10,7 @@ import {
 
 import axios from 'axios';
 import { NavBar } from './Components/NavBar/NavBar';
-// import { Home } from './Components/Home/Home';
+import { Home } from './Components/Home/Home';
 import { Feed } from './Components/Feed/Feed';
 import Login from './Components/Login/Login';
 import FarmPage from './Components/FarmPage/FarmPage';
@@ -20,7 +20,7 @@ import { SignUp } from './Components/SignUp/SignUp';
 import Dashboard from './Components/Dashboard/Dashboard';
 import { PROTECTED_ROUTES } from './Components/ProtectedRoutes';
 import { EventProvider } from './Components/EventContext';
-import { Home } from './Components/Home/Home';
+import Reset from './Components/Reset/Reset';
 
 // React functional component
 function App() {
@@ -57,6 +57,7 @@ function App() {
 
             <Route path='/login' element={<Login />} />
             <Route path='/signup' element={<SignUp />} />
+            <Route path='/reset' element={<Reset />} />
             {
               PROTECTED_ROUTES.map((route, index) => {
                 return <Route path={route.path}
