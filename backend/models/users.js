@@ -3,6 +3,7 @@ const knex = require('../knex');
 const bcrypt = require('bcryptjs');
 
 const USER_TABLE = 'user';
+const PAYMENT_TABLE = 'cardInfo';
 
 const accessTokenSecret =  process.env.TOKEN;
 
@@ -105,7 +106,43 @@ const updatePhoto = async (id, photo) => {
     return result;
 } 
 
- 
+const getBalance = async (id) => {
+    const query = knex(USER_TABLE).select('balance').where({ id });
+    const result = await query;
+    return result;
+} 
+
+const validatePurchase = async (userID) => {
+    const query = knex(PAYMENT_TABLE).where({ userID });
+    const result = await query;
+    return result;
+}
+
+const addInfo = async(userID, cardType, cardNum, name, cvv, exp) => {
+    console.log(userID, cardType, cardNum, name, cvv, exp);
+    const query = knex(PAYMENT_TABLE).insert([{ userID, cardType, cardNum, name, cvv, exp }]);
+    const result = await query;
+    return result;
+}
+
+const transferFunds = async (id, funds) => {
+    const query = knex(USER_TABLE).where({ id }).update('balance', funds);
+    const result = await query;
+    return result;
+}
+
+const adjustFunds = async (id, funds, op) => {
+    const curr = await getBalance(id);
+    if(op === 0){
+        const updated = curr - funds;
+    } else {
+        const updated = curr + funds;
+    }
+    const query = knex(USER_TABLE).where({ id }).update('balance', updated);
+    const result = await query;
+    return result;
+
+}
 
 module.exports = {
     createNewUser,
@@ -113,5 +150,10 @@ module.exports = {
     authenticateUser,
     deleteUser, 
     updateName,
-    updatePhoto
+    updatePhoto,
+    getBalance,
+    validatePurchase,
+    addInfo,
+    transferFunds,
+    adjustFunds
 };
