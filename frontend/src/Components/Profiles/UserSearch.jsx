@@ -13,7 +13,7 @@ import { TextField } from "../common";
 
 // Method Imports
 
-import {getAccountbyId, getFriendRequests, getProfiles, handleFriendRequest, logout, sendFriendRequest } from "../../APIFolder/loginApi"
+import {getAccountbyId, getFriendRequests, getProfiles, getStudents, handleFriendRequest, logout, sendFriendRequest } from "../../APIFolder/loginApi"
 
 
 
@@ -131,14 +131,6 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
         });
     }
 
-    const profileNav = () => {
-        navigate(`users/${account.username}`);
-    }
-
-    const accountNav = () => {
-        navigate(`accounts/${account.username}`);
-    }
-
     const displayUser = (profile) => {
         if (profile.status === 3) {
             console.log("already friends");
@@ -174,9 +166,7 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
                 pages={pages}
                 settings={settings}
                 signOut={() => signOut()}
-                username={account.username}
-                profileNav={() => profileNav()}
-                account={() => accountNav()} />
+                account_id={account.account_id} />
 
             <div className="container border-0 mt-3">
                 <button type="button" className="float-end btn btn-success mt-3" onClick={goToFriendsList}>Friends List</button>

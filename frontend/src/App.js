@@ -39,7 +39,7 @@ function App() {
   const [loggedInPages] = useState([
     { label: 'Dashboard', route: `/` },
     { label: 'Classes', route: `/classes` },
-    { label: 'Friends', route: `/users/:username/friends` },
+    { label: 'Friends', route: `/users/:account_id/friends` },
   ]);
   const [basePages] = useState([
     { label: 'Info', route: `/info` },
@@ -119,7 +119,7 @@ function App() {
           {/* TODO: Account Settings (Probably later on) */}
 
 
-          <Route path="/users/:username/friends" element={<FriendsList
+          <Route path="/users/:account_id/friends" element={<FriendsList
             pages={loggedInPages}
             settings={settings}
             setNavigated={x => setNavigated(x)} />} />

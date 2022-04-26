@@ -20,7 +20,7 @@ import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 
 // Method Imports
 
-import { getFriendRequests, getStatusByUsername, getAccountbyUsername, handleFriendRequest, logout, sendFriendRequest, updateAccountbyUsername, getFriendRequest, getFriendsClasses, uploadPP } from "../../APIFolder/loginApi";
+import { getFriendRequests, getStatusByUsername, getAccountbyUsername, handleFriendRequest, logout, sendFriendRequest, updateAccountbyUsername, getFriendRequest, getFriendsClasses, uploadPP, getAccountbyId } from "../../APIFolder/loginApi";
 import { TextAreaField } from "../common/TextAreaField";
 
 
@@ -284,8 +284,7 @@ export const Profile = (props) => {
                 pages={props.pages}
                 settings={props.settings}
                 signOut={() => signOut()}
-                username={JSON.parse(localStorage.getItem("currUser")).username}
-                profileNav={() => profileNav()} />
+                account_id={JSON.parse(localStorage.getItem("currUser")).account_id} />
 
             {/* Viewing own profile (EDITING) */}
             {JSON.parse(localStorage.getItem("currUser")).username === account.username && editMode === true &&

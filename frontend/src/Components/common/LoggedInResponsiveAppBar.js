@@ -82,11 +82,11 @@ export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, username, p
             >
               {pages.map((page) => (
                 <div key={page.label}>
-                  {page.route === '/users/:username/friends' && <MenuItem key={page.label} component={Link} to={`/users/${username}/friends`} onClick={handleCloseNavMenu}>
+                  {page.route === '/users/:account_id/friends' && <MenuItem key={page.label} component={Link} to={`/users/${account_id}/friends`} onClick={handleCloseNavMenu}>
                     <PeopleTwoToneIcon />
                     <Typography className="m-1" textAlign="center">{page.label}</Typography>
                   </MenuItem>}
-                  {page.route === '/classes' && <MenuItem key={page.label} component={Link} to={`users/${username}/classes`} onClick={handleCloseNavMenu}>
+                  {page.route === '/classes' && <MenuItem key={page.label} component={Link} to={`users/${account_id}/classes`} onClick={handleCloseNavMenu}>
                     <ShoppingCartIcon />
                     <Typography className="m-1" textAlign="center">{page.label}</Typography>
                   </MenuItem>}
@@ -110,10 +110,10 @@ export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, username, p
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <div key={page.label}>
-                {page.route === '/users/:username/friends' && <Button
+                {page.route === '/users/:account_id/friends' && <Button
                   key={page.label}
                   component={Link}
-                  to={`/users/${username}/friends`}
+                  to={`/users/${account_id}/friends`}
                   onClick={handleCloseNavMenu}
                   sx={{ my: 2, color: 'white', display: 'block' }}
                 >
@@ -169,7 +169,7 @@ export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, username, p
             >
               {settings.map((setting) => (
                 <div key={setting.label}>
-                  {setting.route === '/users' && <MenuItem textAlign="center" component={Link} to={`${setting.route}/${username}`} onClick={() => profileNav()}>{setting.label}</MenuItem>}
+                  {setting.route === '/users' && <MenuItem textAlign="center" component={Link} to={`${setting.route}/${account_id}`}>{setting.label}</MenuItem>}
                   {setting.route === '/signout' && <MenuItem textAlign="center" component={Link} to={location.pathname} onClick={signOut}>{setting.label}</MenuItem>}
                 </div>
               ))}

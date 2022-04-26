@@ -143,14 +143,6 @@ export const ClassProfile = (props) => {
         });
     }
 
-    const profileNav = () => {
-        navigate(`users/${account.username}`);
-    }
-
-    const accountNav = () => {
-        navigate(`accounts/${account.username}`);
-    }
-
     const sendEnrollmentRequestFunc = () => {
         sendEnrollmentRequest()
         setReload(!reload)
@@ -195,9 +187,7 @@ export const ClassProfile = (props) => {
                 pages={props.pages}
                 settings={props.settings}
                 signOut={() => signOut()}
-                username={account.username}
-                profileNav={() => profileNav()}
-                account={() => accountNav()} />
+                account_id={account.account_id} />
 
             {/* Viewing editable class (EDITING) */}
             {canEdit() === true && editMode === true &&

@@ -57,7 +57,7 @@ export const SignUpPage = (props) => {
                         window.alert(`Failed to Sign Up. ${res.error}`);
                     }
                     else {
-                        getAccountbyUsername(res.username)
+                        getAccountbyId(res.account_id)
                             .then(x => {
                                 localStorage.setItem("currUser", JSON.stringify(x));
                                 navigate('/');

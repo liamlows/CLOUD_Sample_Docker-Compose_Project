@@ -69,12 +69,6 @@ export const FriendsList = (props) => {
             navigate('/');
         });
     }
-    const profileNav = () => {
-        navigate(`users/${account.username}`);
-    }
-    const accountNav = () => {
-        navigate(`accounts/${account.username}`);
-    }
 
     // HTML
     return <div>
@@ -82,9 +76,7 @@ export const FriendsList = (props) => {
             pages={props.pages}
             settings={props.settings}
             signOut={() => signOut()}
-            username={account.username}
-            profileNav={() => profileNav()}
-            account={() => accountNav()} />
+            account_id={account.account_id} />
 
         <div className='container border-0 mb-3'>
             <h1 className='mt-3 col-6 float-start '>Friends List <span className='text-secondary'>({friends.length})</span></h1>
