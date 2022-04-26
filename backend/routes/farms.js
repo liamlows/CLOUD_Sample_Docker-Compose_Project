@@ -63,8 +63,6 @@ router.get('/farm/:date_founded', async (req, res, next) => {
         res.status(500).json({ message: err.toString() });
     }
     next();
-
-
 })
 
 //6.1 , 6.2 , 6.3 creating farm
@@ -78,38 +76,37 @@ router.post('/', async (req, res) =>{
         console.error('Failed to create new farm:', err);
         res.status(500).json({message: err.toString()});
     }
-
 })
 
 
 //6.7
-router.get('/farm/:farmer_id', async (req, res, next) => {
-    try {
-        const farmer_id=req.params.farmer_id;
-        const result = await req.models.dash.findFarmRatingByFarmID(farmer_id);
-        res.status(200).json(result);
-    } catch (err) {
-        console.error('Failed to get farm rating by farm_ID:', err);
-        res.status(500).json({ message: err.toString() });
-    }
-    next();
-})
+// router.get('/farm/:farmer_id', async (req, res, next) => {
+//     try {
+//         const farmer_id=req.params.farmer_id;
+//         const result = await req.models.dash.findFarmRatingByFarmID(farmer_id);
+//         res.status(200).json(result);
+//     } catch (err) {
+//         console.error('Failed to get farm rating by farm_ID:', err);
+//         res.status(500).json({ message: err.toString() });
+//     }
+//     next();
+// })
 
 
 
-})
+// })
 //6.8
-router.get('/farm/:farm_established', async (req, res, next) => {
-    try {
-        const farmer_id=req.params.farmer_id;
-        const result = await req.models.dash.findFarmEstablishedByFarmID(farmer_id);
-        res.status(200).json(result);
-    } catch (err) {
-        console.error('Failed to get farm establishment by farmer_ID:', err);
-        res.status(500).json({ message: err.toString() });
-    }
-    next();
-})
+// router.get('/farm/:farm_established', async (req, res, next) => {
+//     try {
+//         const farmer_id=req.params.farmer_id;
+//         const result = await req.models.dash.findFarmEstablishedByFarmID(farmer_id);
+//         res.status(200).json(result);
+//     } catch (err){
+//         console.error('Failed to get farm establishment by farmer_ID:', err);
+//         res.status(500).json({ message: err.toString() });
+//     }
+//     next();
+// })
 
 //delete farm
 router.delete('/:farm_name', async (req, res) =>{
