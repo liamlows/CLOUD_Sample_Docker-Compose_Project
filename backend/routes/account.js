@@ -4,7 +4,7 @@ const pool = require('../db');
 const secret = 'not-a-secret';
 const crypto = require('crypto');
 const util = require('../util');
-const {getUsernameFromId, isUserAuthenticated} = require("../util");
+const {getUsernameFromId, isUserAuthenticated, getRoleById, validateBody} = require("../util");
 const {uploadImage} = require("../s3");
 
 /* TODO
@@ -18,21 +18,6 @@ PUT /users/:username/role
 GET /users/:username/status
 
  */
-
-
-async function findRoleById(roleId) {
-    let rows, fields;
-
-    [rows, fields] = await pool.execute('SELECT * FROM `roles` WHERE `role_id` = ?',
-        [roleId, ]);
-
-    if(rows.length){
-        return rows[0];
-    }
-    else {
-        return undefined;
-    }
-}
 
 async function findRole(roleType, schoolId, courseId){
     let rows, fields;
@@ -212,7 +197,7 @@ router.post("/api/account/login", async (req, res, next) => {
     let roleType = "";
 
     if(user.role_id) {
-        let role = findRoleById(user.role_id);
+        let role = await getRoleById(user.role_id);
         if(role)
             roleType = role.role_type;
     }
@@ -222,7 +207,7 @@ router.post("/api/account/login", async (req, res, next) => {
     req.session.username = username;
     req.session.roleType = roleType;
     res.cookie('username', username);
-    res.cookie('roleType', roleType);
+    res.cookie('role_type', roleType);
     res.cookie('account_id', accountId);
 
     try {
@@ -260,7 +245,7 @@ router.get("/api/username/:id", async (req, res, next) => {
     let accountId = parseInt(req.params.id);
 
     if(isNaN(accountId)){
-        return res.sendStatus(404);
+        return res.status(400).send("Invalid account ID");
     }
 
     let username = await getUsernameFromId(accountId);
@@ -279,17 +264,25 @@ router.get("/api/users/:account_id", async (req, res, next) => {
     let rows, fields;
     try{
         [rows, fields] = await pool.execute(
-            'SELECT username, first_name, last_name, account_id, pfp_url, bio FROM `accounts` WHERE `account_id` = ?',
+            'SELECT username, first_name, last_name, account_id, pfp_url, bio, role_id FROM `accounts` WHERE `account_id` = ?',
             [req.params.account_id]);
     } catch(error){
         return next(error);
     }
 
-    if(rows.length === 0){
+    if(rows.length === 0) {
         return res.sendStatus(404);
     }
 
     let user = rows[0];
+
+    let role;
+    if(user.role_id){
+        role = await getRoleById(user.role_id);
+    }
+    user.role = role;
+    delete user.role_id;
+
     res.status(200).json(user);
 });
 
@@ -307,8 +300,51 @@ router.get("/api/users/", async (req, res, next) => {
 
 
 router.put("/api/account", async(req, res, next) => {
-    logger.info(`Got put request for profile. ${JSON.stringify(req.files)}`);
-    res.status(200).json(req.files);
+    let optionalBody = {
+        first_name: req.body.firstName,
+        last_name: req.body.lastName,
+        bio: req.body.bio,
+    };
+
+    let maxLengths = {
+        first_name: 255,
+        last_name: 255,
+        bio: 1000
+    };
+    let body;
+    try {
+        body = validateBody({}, optionalBody, maxLengths);
+    }
+    catch (error) {
+        res.status(400).json({error: error});
+        return;
+    }
+
+    let query = 'UPDATE `accounts` SET ';
+    let sets = [];
+    let props = [];
+
+    for(const property in body){
+        if(body[property] !== null) {
+           sets.push(`${property} = ?`);
+           props.push(body[property]);
+        }
+    }
+
+    if(sets.length === 0){
+        res.sendStatus(200);
+        return;
+    }
+
+    query += sets.join(',');
+
+    try {
+        await pool.execute(query, props);
+    } catch(error){
+        return next(error);
+    }
+
+    res.sendStatus(200);
 });
 
 router.get("/api/users/:account_id/status/", async (req, res, next) => {
