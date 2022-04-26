@@ -73,7 +73,11 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
 
     // Component Methods
     const goToCourse = course => {
-        navigate(`/classes/${course.id}`);
+        navigate(`/classes/${course.course_id}`);
+    }
+
+    const goToWaitlist = course => {
+        navigate(`/waitlist/${course.course_id}`);
     }
 
     const goToSchedule = () => {
@@ -131,7 +135,7 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
                 <thead>
                     <tr>
                         <th className="col-3">Name</th>
-                        <th className="col-3">Number</th>
+                        <th className="col-3">Department</th>
                         <th className="col-3">Professor</th>
                         <th className="col-3"></th>
                     </tr>
@@ -141,9 +145,9 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
                     {courses.map((course, idx) => {
                         return <tr key={idx} className="container">
 
-                            <td>{course.username}</td>
-                            <td>{course.first_name}</td>
-                            <td>{course.last_name}</td>
+                            <td>{course.course_name}</td>
+                            <td>{course.department}</td>
+                            <td>{course.professor.last_name}, {course.professor.first_name}</td>
 
                             <td className="col-3 pb-2">
                                 {/* Need to get the actual status back first. May not be impplemented by demo time but whatever */}
@@ -162,6 +166,12 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
                                 {course.status === 4 &&
                                     <Button variant="contained" disabled endIcon={<ClearIcon color='disabled' />}>Redacted</Button>
                                 } */}
+                                <Button variant="contained"
+                                    className="btn bg-secondary"
+                                    endIcon={<ArrowForwardIcon />}
+                                    onClick={() => goToWaitlist(course)}>
+                                    View waitlist
+                                </Button>
                             </td>
                             <td className="col-3">
                                 <Button variant="contained"
