@@ -9,7 +9,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import LoggedInResponsiveAppBar from '../common/LoggedInResponsiveAppBar';
 
 // Method Imports
-import { getFriends, logout } from '../../APIFolder/loginApi';
+import { getAccountbyId, getFriends, logout } from '../../APIFolder/loginApi';
 
 export const FriendsList = (props) => {
     // Navigate Object
@@ -21,14 +21,35 @@ export const FriendsList = (props) => {
 
     // Initial Load
     useEffect(() => {
+
+        let temp_friends = []
         if (JSON.stringify(account) === "{}") {
             navigate('/');
             props.setNavigated(true);
         }
-        getFriends().then(res => { 
+        getFriends().then( async res => { 
             console.log(res);
-            setFriends(res);
-        });
+            for(const i in res){
+            console.log(res[i].friend_a,res[i].friend_b)
+                
+                if(res[i].friend_a === account.account_id)
+                {
+                    console.log("getting friend b")
+                    await getAccountbyId(res[i].friend_b).then(frRes => {
+                        console.log(frRes);
+                        temp_friends.push(frRes);
+                    })
+                }
+                else {
+                    console.log("getting friend a")
+                     await getAccountbyId(res[i].friend_a).then(frRes => {
+                        temp_friends.push(frRes);
+                    })
+                }
+            }
+            
+        }).then(() => {
+            setFriends(temp_friends)})
     }, []);
 
     // Conditions
@@ -38,7 +59,7 @@ export const FriendsList = (props) => {
 
     // Component Methods
     const goToProfile = (friend) => {
-        navigate(`/users/${friend.username}`);
+        navigate(`/users/${friend.account_id}`);
     }
 
     const signOut = () => {
@@ -48,12 +69,6 @@ export const FriendsList = (props) => {
             navigate('/');
         });
     }
-    const profileNav = () => {
-        navigate(`users/${account.username}`);
-    }
-    const accountNav = () => {
-        navigate(`accounts/${account.username}`);
-    }
 
     // HTML
     return <div>
@@ -61,9 +76,7 @@ export const FriendsList = (props) => {
             pages={props.pages}
             settings={props.settings}
             signOut={() => signOut()}
-            username={account.username}
-            profileNav={() => profileNav()}
-            account={() => accountNav()} />
+            account_id={account.account_id} />
 
         <div className='container border-0 mb-3'>
             <h1 className='mt-3 col-6 float-start '>Friends List <span className='text-secondary'>({friends.length})</span></h1>
@@ -78,13 +91,20 @@ export const FriendsList = (props) => {
         <div className='border-top mb-3'></div>
         {console.log(friends)}
         {friends.length > 0
-            && <table>
+            && <table className="table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>First</th>
+                        <th>Last</th>
+                    </tr>
+                </thead>
                 <tbody>
                     {friends.map(friend => 
-                        <tr key={friend.username}>
+                        <tr key={friend.username} className="container">
                             <td>{friend.username}</td>
-                            <td>{friend.firstName}</td>
-                            <td>{friend.lastName}</td>
+                            <td>{friend.first_name}</td>
+                            <td>{friend.last_name}</td>
 
                             <td>
                                 <Button variant="contained"

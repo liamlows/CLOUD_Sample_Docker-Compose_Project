@@ -28,11 +28,14 @@ CREATE TABLE `db`.`course_metadata` (
 -- COURSE TABLE
 CREATE TABLE `db`.`courses` (
     `course_id` SERIAL,
-    `course_meta_id` BIGINT UNSIGNED,
+    `course_meta_id` BIGINT UNSIGNED NOT NULL,
     `max_seats` INT NOT NULL,
     `start_date` DATE NOT NULL,
     `end_date` DATE NOT NULL,
     `canceled` BOOLEAN NOT NULL DEFAULT FALSE,
+    `week_flags` SMALLINT NOT NULL,
+    `start_time` TIME NOT NULL,
+    `end_time` TIME NOT NULL,
     PRIMARY KEY (`course_id`),
     FOREIGN KEY (`course_meta_id`) REFERENCES course_metadata(`course_meta_id`)
 );
@@ -61,6 +64,8 @@ CREATE TABLE `db`.`accounts` (
     `logged_in` BOOLEAN NOT NULL DEFAULT 0,
     `offline_mode` BOOLEAN NOT NULL DEFAULT 0,
     `email` VARCHAR(255),
+    `bio` VARCHAR(1000),
+    'pfp_url' VARCHAR(1000),
     PRIMARY KEY (`account_id`),
     FOREIGN KEY (`school_id`) REFERENCES schools(`school_id`),
     FOREIGN KEY (`role_id`) REFERENCES roles(`role_id`)
@@ -108,6 +113,7 @@ CREATE TABLE `db`.`announcements` (
 CREATE TABLE `db`.`enrollments` (
     `account_id` BIGINT UNSIGNED NOT NULL,
     `course_id` BIGINT UNSIGNED NOT NULL,
+    'grade' INT UNSIGNED,
     PRIMARY KEY (`account_id`, `course_id`),
     FOREIGN KEY (`account_id`) REFERENCES accounts(`account_id`),
     FOREIGN KEY (`course_id`) REFERENCES courses(`course_id`)
@@ -118,11 +124,52 @@ CREATE TABLE `db`.`enrollments` (
 CREATE TABLE `db`.`waitlists` (
     `account_id` BIGINT UNSIGNED NOT NULL,
     `course_id` BIGINT UNSIGNED NOT NULL,
-    `timestamp` DATETIME NOT NULL,
+    `timestamp` DATETIME DEFAULT NOW(),
     PRIMARY KEY (`account_id`, `course_id`),
     FOREIGN KEY (`account_id`) REFERENCES  accounts(`account_id`),
     FOREIGN KEY (`course_id`) REFERENCES courses(`course_id`)
 );
 
+-- NOTIFICATIONS TABLE
+CREATE TABLE `db`.`notifications` (
+    `notification_id` SERIAL,
+    `sender` BIGINT UNSIGNED NOT NULL,
+    `recipient` BIGINT UNSIGNED NOT NULL,
+    `title` VARCHAR(500) NOT NULL,
+    `body` VARCHAR(1000) NOT NULL,
+    `course` BIGINT UNSIGNED NOT NULL,
+    `timestamp` DATETIME DEFAULT NOW(),
+    PRIMARY KEY (`notification_id`),
+    FOREIGN KEY (`sender`) REFERENCES accounts(`account_id`),
+    FOREIGN KEY (`recipient`) REFERENCES accounts(`account_id`),
+    FOREIGN KEY (`course`) REFERENCES courses(`course_id`)
+);
+
+-- COURSE REVIEWS TABLE
+CREATE TABLE `db`.`course_reviews`(
+    `course_reviews_id` SERIAL,
+    `course_id` BIGINT UNSIGNED NOT NULL,
+    `review` VARCHAR(1000),
+    `rating` INT CHECK (`rating` <= 5 AND `rating` >= 0) NOT NULL,
+    `poster_id` BIGINT UNSIGNED NOT NULL,
+    PRIMARY KEY (`course_reviews_id`),
+    FOREIGN KEY (`course_id`) REFERENCES courses(`course_id`),
+    FOREIGN KEY (`poster_id`) REFERENCES accounts(`account_id`)
+);
+
+-- TEACHER REVIEWS TABLE
+CREATE TABLE `db`.`teacher_reviews`(
+    `teacher_reviews_id` SERIAL,
+    `teacher_id` BIGINT UNSIGNED NOT NULL,
+    `review` VARCHAR(1000),
+    `rating` INT CHECK (`rating` <= 5 AND `rating` >= 0) NOT NULL,
+    `poster_id` BIGINT UNSIGNED NOT NULL,
+    `flagged` BOOLEAN DEFAULT 0,
+    PRIMARY KEY (`teacher_reviews_id`),
+    FOREIGN KEY (`teacher_id`) REFERENCES accounts(`account_id`),
+    FOREIGN KEY (`poster_id`) REFERENCES accounts(`account_id`)
+);
+
+DROP TABLE `teacher_reviews`;
 
 INSERT INTO `roles`(role_type) VALUES('admin');

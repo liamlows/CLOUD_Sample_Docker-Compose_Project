@@ -24,24 +24,12 @@ export const Base = (props) => {
 
     // Conditions
 
-    // Component Methods
-    const onSignIn = () => {
-        console.log("signing in");
-        navigate('/login');
-    }
-    const onSignUp = () => {
-        console.log("signing up");
-        navigate('/signup');
-    }
-
     // HTML
     return <section className="baseView">
-        {props.navigated && <ErrorSnackBar></ErrorSnackBar>}
+        {props.navigated == 1 && <ErrorSnackBar></ErrorSnackBar>}
         {localStorage.getItem("currUser") === "{}" && <div>
             <BaseResponsiveAppBar 
-                pages={props.basePages}
-                signIn={() => onSignIn()}
-                signUp={() => onSignUp()} />
+                pages={props.basePages}/>
             <h1 className="mb-4">Welcome to</h1>
            {/* <h2 className="">This is the base page to be updated with logo and stuff</h2>*/}
            <img src={logo} alt='Logo' className='img-thumbnail w-25 h-25 border-0'/>

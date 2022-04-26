@@ -7,7 +7,7 @@ import { PasswordField, TextField } from "../common";
 import { GenericButton } from "../common/GenericButton"
 
 // Method Imports
-import { getAccountbyUsername, logIntoAccount } from "../../APIFolder/loginApi";
+import { getAccountbyId, logIntoAccount } from "../../APIFolder/loginApi";
 
 export const LoginPage = (props) => {
     // Navigate Object
@@ -44,9 +44,10 @@ export const LoginPage = (props) => {
         }
         else {
             console.log("logging in now...");
-            getAccountbyUsername(res.username)
+            getAccountbyId(res.account_id)
                 .then(x => {
                     localStorage.setItem("currUser", JSON.stringify(x));
+                    props.setNavigated(0);
                     navigate('/');
                 });
         }

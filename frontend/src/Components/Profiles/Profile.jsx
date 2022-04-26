@@ -1,6 +1,6 @@
 // Libary Imports
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import CircleIcon from '@mui/icons-material/Circle';
 import Cookies from "js-cookie";
 import { Button } from "@mui/material";
@@ -9,18 +9,25 @@ import Add from "@mui/icons-material/Add";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import ClearIcon from '@mui/icons-material/Clear';
 
+import "./Profile.css";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+
+
 // Component Imports
 import { TextField } from "../common";
 import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 
 
 // Method Imports
-import { getFriendRequests, getStatusByUsername, getAccountbyUsername, handleFriendRequest, logout, sendFriendRequest, updateAccountbyUsername, getFriendRequest, getFriendsClasses } from "../../APIFolder/loginApi";
+import { getFriendRequests, getStatusById, handleFriendRequest, logout, sendFriendRequest, updateAccountbyUsername, getFriendRequest, getFriendsClasses, uploadPP, getAccountbyId } from "../../APIFolder/loginApi";
+import { TextAreaField } from "../common/TextAreaField";
+import { ReviewList } from "../common/ReviewList";
+
+
 
 export const Profile = (props) => {
     // Navigate Object
     const navigate = useNavigate();
-    const location = useLocation();
     if (localStorage.getItem("currUser") === null)
         localStorage.setItem("currUser", "{}");
 
@@ -31,88 +38,160 @@ export const Profile = (props) => {
     const [reload, setReload] = useState(false);
     const [classes, setClasses] = useState([]);
 
+    const [pp, setPP] = useState(undefined);
+    const params = useParams();
+    const location = useLocation();
+
+
     // Initial Load
     useEffect(() => {
         let status = 0;
 
-        if (localStorage.getItem("currUser") === "{}") {
-            window.alert("Please log in to view profiles");
-            navigate('/');
-        }
-        else {
-            if (JSON.stringify(account) === "{}")
-                setAccount(JSON.parse(localStorage.getItem("currUser")));
 
-            getStatusByUsername(location.pathname.substring(7, location.pathname.length)).then((status) => setOnline(!!status.logged_in));
-
-            getAccountbyUsername(location.pathname.substring(7, location.pathname.length)).then(loaded => {
-                // get the table of friend requests
-                getFriendRequest(loaded.account_id).then(res => {
-                    // convert it to an array
-                    if (res.requester_id === loaded.account_id) {
-                        // if the friend request has not been accepted
-                        if (res.status === -1) {
-                            status = 2; // display accept request button
-                            console.log("changing status to a 2", status);
-                        }
-                        // if the request has been accepted
-                        else if (res.status === 1) {
-                            status = 3; // display friend tag
-                            console.log("changing status to a 3", status);
-                        }
-                        else if (res.status === 0) {
-                            status = 4;
-                            console.log("changing status to a 4", status);
-                        }
-                    }
-                    // check if the request is from the user
-                    else if (res.requested_id === loaded.account_id) {
-                        // if the request has not been accepted
-                        if (res.status === -1) {
-                            status = 1; // display disabled button
-                            console.log("changing status to a 1", status);
-                        }
-                        // if the request has been accepted
-                        else if (res.status === 1) {
-                            status = 3; // display friend tag
-                            console.log("changing status to a 3", status);
-                        }
-                        else if (res.status === 0) {
-                            status = 4;
-                            console.log("changing status to a 4", status);
-                        }
-                    }
-                }).catch(code => {
-                    if (code === 404) {
-                        status = 0;
-                    }
-
-                }).then(() => {
-                    if (account.account_id !== JSON.parse(localStorage.getItem("currUser")).account_id) {
-                        console.log(status, loaded);
-                        if (account.status !== status) {
-                            console.log("Adding status to account");
-                            setAccount({ ...loaded, status: status });
-                            console.log(account);
-                        }
-                    }
-                }).then(() => {
-                    if (status === 3) {
-                        getFriendsClasses().then(res => {
-                            setClasses(...res);
-                        })
-                    }
-                });
-            })
-        }
-    }, [editMode, reload, account, location.pathname]);
+        getAccountbyId(params.account_id).then(async loaded => {
+            getStatusById(loaded.account_id).then((status) => setOnline(!!status.logged_in));
 
 
+            // get the table of friend requests
+            if (loaded.username !== JSON.parse(localStorage.getItem("currUser")).username) {
+
+                let res;
+                try {
+                    res = await getFriendRequest(loaded.account_id);
+                }
+                catch {
+                    res = {};
+                }
+                // convert it to an array
+                if (res.requester_id === loaded.account_id) {
+                    // if the friend request has not been accepted
+                    if (res.status === -1) {
+                        status = 2; // display accept request button
+                        console.log("changing status to a 2", status);
+                    }
+                    // if the request has been accepted
+                    else if (res.status === 1) {
+                        status = 3; // display friend tag
+                        console.log("changing status to a 3", status);
+                    }
+                    else if (res.status === 0) {
+                        status = 4;
+                        console.log("changing status to a 4", status);
+                    }
+                }
+                // check if the request is from the user
+                else if (res.requested_id === loaded.account_id) {
+                    // if the request has not been accepted
+                    if (res.status === -1) {
+                        status = 1; // display disabled button
+                        console.log("changing status to a 1", status);
+                    }
+                    // if the request has been accepted
+                    else if (res.status === 1) {
+                        status = 3; // display friend tag
+                        console.log("changing status to a 3", status);
+                    }
+                    else if (res.status === 0) {
+                        status = 4;
+                        console.log("changing status to a 4", status);
+                    }
+                }
+
+
+
+                if (account.account_id !== JSON.parse(localStorage.getItem("currUser")).account_id) {
+                    console.log(status, loaded);
+                    if (account.status !== status) {
+                        console.log("Adding status to account");
+                        setAccount({ ...loaded, status: status });
+                        console.log(account);
+                    }
+                }
+
+                if (status === 3) {
+                    let res2 = await getFriendsClasses(loaded.account_id)
+                    setClasses(...res2);
+
+                }
+
+            }
+            else {
+                console.log("profiles are the same")
+                setAccount({ ...loaded, status: 3 });
+            }
+        })
+    }, [editMode, reload]); //lol the useEffect is just here now.
+
+    if (account.account_id && account.account_id != params.account_id) {
+        let status = 0;
+
+        getAccountbyId(params.account_id).then(async loaded => {
+            getStatusById(loaded.account_id).then((status) => setOnline(!!status.logged_in));
+
+            // get the table of friend requests
+            if (loaded.username !== JSON.parse(localStorage.getItem("currUser")).username) {
+                let res = await getFriendRequest(loaded.account_id)
+                // convert it to an array
+                if (res.requester_id === loaded.account_id) {
+                    // if the friend request has not been accepted
+                    if (res.status === -1) {
+                        status = 2; // display accept request button
+                        console.log("changing status to a 2", status);
+                    }
+                    // if the request has been accepted
+                    else if (res.status === 1) {
+                        status = 3; // display friend tag
+                        console.log("changing status to a 3", status);
+                    }
+                    else if (res.status === 0) {
+                        status = 4;
+                        console.log("changing status to a 4", status);
+                    }
+                }
+                // check if the request is from the user
+                else if (res.requested_id === loaded.account_id) {
+                    // if the request has not been accepted
+                    if (res.status === -1) {
+                        status = 1; // display disabled button
+                        console.log("changing status to a 1", status);
+                    }
+                    // if the request has been accepted
+                    else if (res.status === 1) {
+                        status = 3; // display friend tag
+                        console.log("changing status to a 3", status);
+                    }
+                    else if (res.status === 0) {
+                        status = 4;
+                        console.log("changing status to a 4", status);
+                    }
+                }
+
+                if (account.account_id !== JSON.parse(localStorage.getItem("currUser")).account_id) {
+                    console.log(status, loaded);
+                    if (account.status !== status) {
+                        console.log("Adding status to account");
+                        setAccount({ ...loaded, status: status });
+                        console.log(account);
+                    }
+                }
+
+                if (status === 3) {
+                    let res2 = await getFriendsClasses(loaded.account_id)
+                    setClasses(...res2);
+                }
+
+            }
+            else {
+                console.log("profiles are the same")
+                setAccount({ ...loaded, status: 3 });
+            }
+        })
+    }
     // Conditions
     if (JSON.stringify(account) === "{}") {
-        let username = Cookies.get("username");
-        if (username) {
-            getAccountbyUsername(username)
+        let account_id = Cookies.get("account_id");
+        if (account_id) {
+            getAccountbyId(account_id)
                 .then(account => {
                     if (account) {
                         localStorage.setItem("currUser", JSON.stringify(account));
@@ -124,7 +203,8 @@ export const Profile = (props) => {
                 });
         }
         else {
-            props.setNavigated(true);
+            console.log(props)
+            props.setNavigated(1);
             navigate('/');
         }
     }
@@ -136,9 +216,19 @@ export const Profile = (props) => {
     }
 
     const doneEditing = () => {
+        console.log(pp.name);
+        console.log(pp.type);
+        console.log(pp.size);
         if (account.first_name && account.last_name) {
-            updateAccountbyUsername(account).then(setEditMode(false));
-            localStorage.setItem("currUser", JSON.stringify(account));
+            if (pp !== undefined) {
+                uploadPP(pp).then(() => {
+                    window.location.reload();
+                });
+                setPP(undefined);
+            }
+            // updateAccountbyUsername(account).then(setEditMode(false));
+            // localStorage.setItem("currUser", JSON.stringify(account));
+            // window.location.reload();
         }
         else {
             window.alert("Please fill out both fields");
@@ -158,11 +248,9 @@ export const Profile = (props) => {
     }
 
     const profileNav = () => {
-        navigate(`users/${account.username}`);
-    }
-
-    const accountNav = () => {
-        navigate(`accounts/${account.username}`);
+        // setAccount(JSON.parse(localStorage.getItem("currUser")));
+        navigate(`/users/${JSON.parse(localStorage.getItem("currUser")).username}`);
+        // setReload(!reload);
     }
 
     const sendFriendRequestFunc = () => {
@@ -179,11 +267,23 @@ export const Profile = (props) => {
 
     const changeAccount = delta => setAccount({ ...account, ...delta });
 
+
+
+    const onFileChange = event => {
+
+        // Update the state
+        setPP(event.target.files[0]);
+
+    };
+
+    const goToClass = (clss) => {
+        navigate(`/classes/${clss.course_id}`);
+    }
+
     // Basically check if user is the same user as the loaded profile.
     // If so then allow them to edit with the edit button at the end (this edit button will update the database once done)
     // If not then display the profile without the edit buttons.
 
-    console.log("Account before if statement", account);
     // NOTE - IN FUTURE ADD BUTTON TO SEND FRIEND REQUEST...ONLY IF FUNCTIONALITY IS IMPLEMENTED
     if (JSON.stringify(account) !== "{}" && account.status !== undefined) {
         return <section className="userProfile">
@@ -191,20 +291,19 @@ export const Profile = (props) => {
                 pages={props.pages}
                 settings={props.settings}
                 signOut={() => signOut()}
-                username={account.username}
-                profileNav={() => profileNav()}
-                account={() => accountNav()} />
+                account_id={JSON.parse(localStorage.getItem("currUser")).account_id} />
 
             {/* Viewing own profile (EDITING) */}
             {JSON.parse(localStorage.getItem("currUser")).username === account.username && editMode === true &&
                 <div className="container border-0 mt-5">
                     <div className="row bg-light pb-4">
-                        <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3 mt-5 pb-5" alt="" />
+                        {account.pfp_url !== undefined && <img src={`${account.pfp_url}`} className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
+                        {account.pfp_url === undefined && <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
                         <div className="col-7 float-start mt-5">
                             <table className='table float-start'>
                                 <thead>
                                     {online && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
-                                    {online && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
+                                    {!online && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
                                     <th className="float-start col-3 fs-3 mt-2 text-start"><span className="text-start p-0">{account.username}</span></th>
 
                                     <th className="col-1">
@@ -223,11 +322,19 @@ export const Profile = (props) => {
                                             <TextField label="Last Name :" value={account.last_name} setValue={last_name => changeAccount({ last_name })} />
                                         </td>
                                     </tr>
-                                    {/* <tr>
-                                    <td>
-                                    <TextField label="Email :" value={account.email} setValue={x => changeEmail(x)} />
-                                    </td>
-                                </tr> */}
+                                    <tr>
+                                        <td><TextAreaField label="Bio :" value={account.bio} setValue={bio => changeAccount({ bio })} /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div className="roundered">
+                                                <label for="file-upload" class="custom-file-upload">
+                                                    <i class="fa fa-cloud-upload"></i> Upload
+                                                </label>
+                                                <input id="file-upload" type="file" accept=".gif,.jpg,.jpeg,.png" onChange={(event) => onFileChange(event)} />
+                                            </div>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -246,7 +353,8 @@ export const Profile = (props) => {
             {JSON.parse(localStorage.getItem("currUser")).username === account.username && editMode === false &&
                 <div className="container border-0 mt-5">
                     <div className="row bg-light pb-4">
-                        <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3 mt-5" alt="" />
+                        {account.pfp_url !== undefined && <img src={`${account.pfp_url}`} className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
+                        {account.pfp_url === undefined && <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
                         <div className="col-7 float-start mt-5">
                             <table className='table float-start'>
                                 <thead>
@@ -261,8 +369,7 @@ export const Profile = (props) => {
                                     <td className="col-3 fs-6 text-start">
                                         <span className="p-0 text-capitalize">{account.first_name} </span><span className="p-0 text-capitalize" >{account.last_name}</span>
                                     </td>
-                                    {/* <h2>Email :</h2>
-                            <p>{account.email}</p> */}
+                                    <td>{account.bio}</td>
                                 </tbody>
                             </table>
                         </div>
@@ -280,10 +387,11 @@ export const Profile = (props) => {
                     <div className="clearfix p-0"></div>
                     <div className="container border-0 mt-3">
                         <div className="row bg-light pb-4">
-                            <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3 mt-5" alt="" />
+                            {account.pfp_url !== undefined && <img src={`${account.pfp_url}`} className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
+                            {account.pfp_url === undefined && <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
                             <div className="col-7 float-start mt-5">
                                 <table className='table float-start'>
-                                    <thead>
+                                    <thead className="col-12">
                                         {online === true && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
                                         {online === false && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
                                         <th className="float-start col-3 fs-3 mt-2 text-start">{account.username}</th>
@@ -316,8 +424,7 @@ export const Profile = (props) => {
                                         <td className="col-3 fs-6 text-start">
                                             <span className="p-0 text-capitalize">{account.first_name} </span><span className="p-0 text-capitalize" >{account.last_name}</span>
                                         </td>
-                                        {/* <h2>Email :</h2>
-                        <p>{account.email}</p> */}
+                                        <td>{account.bio}</td>
                                     </tbody>
                                 </table>
                             </div>
@@ -325,20 +432,67 @@ export const Profile = (props) => {
                     </div>
                 </div>}
 
-            {classes.length !== 0 && <div>
+            {account.account_type === "student" &&
+                classes.length === 0 && (account.status === 3 || account.account_id === JSON.parse(localStorage.getItem("currUser")).account_id) && <div>
+                    <h1>Classes</h1>
+                    <p>{account.username} is not enrolled in any classes</p>
+                </div>
+            }
+            {account.account_type === "student" &&
+                classes.length === 0 && account.status !== 3 && account.account_id !== JSON.parse(localStorage.getItem("currUser")).account_id && <div>
+                    <h1>Classes</h1>
+                    <p>You must be friends with {account.username} to view their classes</p>
+                </div>
+            }
+            {account.account_type === "student" && classes.length !== 0 && <div>
                 <h1>Classes</h1>
                 <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Number</th>
+                            <th>Days</th>
+                            <th>Time</th>
+                            <th> </th>
+                        </tr>
+                    </thead>
                     <tbody>
                         {classes.map((clss, idx) => {
 
-                            <tr key={clss.name} className="container">
-                                
+                            return <tr key={idx} className="container">
+                                <td>{clss.name}</td>
+                                <td>{clss.number}</td>
+                                <td>{clss.days}</td>
+                                <td>{clss.time}</td>
+                                <td>
+                                    <Button variant="contained"
+                                        className="btn bg-secondary"
+                                        endIcon={<ArrowForwardIcon />}
+                                        onClick={() => goToClass(clss)}>
+                                        View Course
+                                    </Button>
+                                </td>
+
                             </tr>
 
                         })}
                     </tbody>
                 </table>
             </div>}
+
+
+
+            {
+                //satisfying the review professor
+                //honestly we may be able to get away with doing the flagging be a note saying "flagged reviews are seen as false or overly critical by professor"
+                account.account_type === "professor" && 
+
+                <ReviewList
+                 type="Professor"
+                 account_id={localStorage.getItem("currUser").account_id}
+                 search_id={account.account_id} />
+
+            }
         </section>
     }
     return <></>;

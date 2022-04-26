@@ -129,12 +129,12 @@ export const BaseResponsiveAppBar = ({ pages, signIn, signUp }) => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItem key='signIn' component={Link} to='/login' onClick={signIn}>
+              <MenuItem key='signIn' component={Link} to='/login'>
                 <Typography textAlign="center">
                   Log In
                 </Typography>
               </MenuItem>
-              <MenuItem key='signUp' component={Link} to='/signup' onClick={signUp}>
+              <MenuItem key='signUp' component={Link} to='/signup'>
                 <Typography textAlign="center">
                   Sign Up
                 </Typography>

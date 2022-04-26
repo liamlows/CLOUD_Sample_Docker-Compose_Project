@@ -12,7 +12,9 @@ import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 import { TextField } from "../common";
 
 // Method Imports
-import { getAccountbyUsername, getFriendRequests, getProfiles, handleFriendRequest, logout, sendFriendRequest } from "../../APIFolder/loginApi"
+
+import {getAccountbyId, getFriendRequests, getProfiles, getStudents, handleFriendRequest, logout, sendFriendRequest } from "../../APIFolder/loginApi"
+
 
 
 export const UserSearch = ({ pages, settings, setNavigated }) => {
@@ -30,7 +32,7 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
     useEffect(() => {
         console.log("running");
         // setProfiles(false);
-        getProfiles().then(res => {
+        getStudents().then(res => {
             console.log("Getting requests")
             getFriendRequests().then(frRes => {
                 // convert it to an array
@@ -83,9 +85,9 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
 
     // Conditions
     if (JSON.stringify(account) === "{}") {
-        let username = Cookies.get("username");
-        if (username) {
-            getAccountbyUsername(username)
+        let account_id = Cookies.get("account_id");
+        if (account_id) {
+            getAccountbyId(account_id)
                 .then(account => {
                     if (account) {
                         localStorage.setItem("currUser", JSON.stringify(account));
@@ -104,11 +106,11 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
 
     // Component Methods
     const goToProfile = profile => {
-        navigate(`/users/${profile.username}`);
+        navigate(`/users/${profile.account_id}`);
     }
 
     const goToFriendsList = () => {
-        navigate(`/users/${account.username}/friends`);
+        navigate(`/users/${account.account_id}/friends`);
     }
 
     const addStatusToProfiles = (dummy, statuses) => {
@@ -127,14 +129,6 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
             localStorage.setItem("currUser", "{}");
             navigate('/');
         });
-    }
-
-    const profileNav = () => {
-        navigate(`users/${account.username}`);
-    }
-
-    const accountNav = () => {
-        navigate(`accounts/${account.username}`);
     }
 
     const displayUser = (profile) => {
@@ -156,6 +150,14 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
         }
         return false;
     }
+    const find = (profile) =>
+    {
+        if(profile.username.indexOf(username) !== -1)
+        {
+            return true;
+        }
+        return false
+    }
 
     // HTML
     if (readyToDisplay()) {
@@ -164,14 +166,12 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
                 pages={pages}
                 settings={settings}
                 signOut={() => signOut()}
-                username={account.username}
-                profileNav={() => profileNav()}
-                account={() => accountNav()} />
+                account_id={account.account_id} />
 
             <div className="container border-0 mt-3">
                 <button type="button" className="float-end btn btn-success mt-3" onClick={goToFriendsList}>Friends List</button>
                 <div className="container border-0 col-3 float-start">
-                    <TextField label="Search by Username" value={username} setValue={setUsername} />
+                    <TextField label="Search by Username (Case Sensitive)" value={username} setValue={setUsername} />
                 </div>
                 <div className="clearfix"></div>
             </div>
@@ -189,7 +189,7 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
                 <tbody>
                     {console.log("RENDER", typeof (profiles))}
                     {profiles.map((profile, idx) => {
-                        return (displayUser(profile) && <tr key={idx} className="container">
+                        return (displayUser(profile) && find(profile) && <tr key={idx} className="container">
 
                             <td>{profile.username}</td>
                             <td>{profile.first_name}</td>

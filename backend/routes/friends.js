@@ -258,7 +258,7 @@ router.get("/status/:friendId", async (req, res, next) => {
     }
 
     if(rows.length === 0) {
-        res.sendStatus(404);
+        res.status(204).json({});
     }
     else {
         res.status(200).json(rows[0]);

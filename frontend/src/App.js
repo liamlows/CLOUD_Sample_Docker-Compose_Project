@@ -10,12 +10,17 @@ import { SignUpPage } from './Components/Login/SignUpPage';
 import { LoginPage } from './Components/Login/LoginPage';
 import { Base } from './Components/BaseView/Base';
 import { Profile } from './Components/Profiles/Profile';
-import { AccountInfo } from './Components/Profiles/AccountInfo';
 import { UserSearch } from './Components/Profiles/UserSearch';
 import { FriendsList } from './Components/Profiles/FriendsList';
+import { ClassMenu } from './Components/ClassView/ClassMenu';
+import { NoPages } from './Components/NoPages';
+import { AddClasses } from './Components/ClassView/AddClasses';
+import { ClassProfile } from './Components/ClassView/ClassProfile';
+
+import { Waitlist } from './Components/AdminView/Waitlist';
 
 // Method Imports
-import { getAccountbyUsername } from './APIFolder/loginApi';
+import { getAccountbyId } from './APIFolder/loginApi';
 
 // React functional component
 function App() {
@@ -27,14 +32,14 @@ function App() {
   const url = ec2 ? ec2_url : 'localhost'
 
   // Component Variables
-  const [cName, setCName ] = useState('dn');
+  const [cName, setCName] = useState('dn');
   //using to alert when navigated back to home page ( for when not signed in as user)
-  const [ navigated, setNavigated] = useState(false);
+  const [navigated, setNavigated] = useState(false);
   //Nav bar now made available from all views (at least thats the goal)
   const [loggedInPages] = useState([
     { label: 'Dashboard', route: `/` },
     { label: 'Classes', route: `/classes` },
-    { label: 'Friends', route: `/users/:username/friends` },
+    { label: 'Friends', route: `/users/:account_id/friends` },
   ]);
   const [basePages] = useState([
     { label: 'Info', route: `/info` },
@@ -44,7 +49,6 @@ function App() {
     // { label: 'Public Profile', route: `/users/${account.id}` }, Keep out until have an account id confirmed
     // { label: 'Account', route: `/accounts/${account.id}` }, 
     { label: 'Public Profile', route: `/users` },
-    { label: 'Account', route: `/accounts` },
     { label: 'Logout', route: '/signout' }
   ]);
 
@@ -54,11 +58,11 @@ function App() {
     localStorage.setItem("currUser", "{}");
     console.log("Initial State Set");
 
-    let username = Cookies.get("username");
+    let account_id = Cookies.get("account_id");
 
-    if (username) {
+    if (account_id) {
       setNavigated(false);
-      getAccountbyUsername(username)
+      getAccountbyId(account_id)
         .then(account => {
           if (account) {
             console.log("account found");
@@ -94,15 +98,15 @@ function App() {
           check what type of user when loading and return different based on which type user is...Seems decently simple to implement */}
 
           {/* TODO: Integrate Material UI */}
-          <Route path='/' element={<Base 
+          <Route path='/' element={<Base
             basePages={basePages}
             loggedInPages={loggedInPages}
-            settings={settings} 
-            navigated={navigated}/>} />
+            settings={settings}
+            navigated={navigated} />} />
 
           {/* TODO: Make home page nicer and more professional. */}
-          <Route path='/login' element={<LoginPage 
-            setNavigated={x => setNavigated(x)}/>} />
+          <Route path='/login' element={<LoginPage
+            setNavigated={x => setNavigated(x)} />} />
 
           {/* <Route path='/loggedIn' element={<LoggedIn />} /> */}
           {/* TODO: Classes tab */}
@@ -115,26 +119,47 @@ function App() {
           {/* TODO: Account Settings (Probably later on) */}
 
 
-          <Route path="/users/:username/friends" element={<FriendsList 
+          <Route path="/users/:account_id/friends" element={<FriendsList
             pages={loggedInPages}
             settings={settings}
-            setNavigated={x => setNavigated(x)}/>} />
-
-          <Route path="/users" element={<UserSearch 
-            pages={loggedInPages}
-            settings={settings}
-            setNavigated={x => setNavigated(x)}/>} />
-
-          <Route path='/signup' element={<SignUpPage 
-            setNavigated={x => setNavigated(x)}/>} />
-
-          <Route path="/users/:username" element={<Profile 
-            pages={loggedInPages}
-            settings={settings}
-            setNavigated={x => setNavigated(x)}/>} />
-            
-          <Route path="/accounts/:username" element={<AccountInfo 
             setNavigated={x => setNavigated(x)} />} />
+
+          <Route path="/users" element={<UserSearch
+            pages={loggedInPages}
+            settings={settings}
+            setNavigated={x => setNavigated(x)} />} />
+
+          <Route path='/signup' element={<SignUpPage
+            setNavigated={x => setNavigated(x)} />} />
+
+          <Route path="/users/:account_id" element={<Profile
+            pages={loggedInPages}
+            settings={settings}
+            setNavigated={x => setNavigated(x)} />} />
+
+
+
+
+          {/* Classes loading */}
+          <Route path="/classes" element={<ClassMenu />} />
+          <Route path="/classes/enrollment" element={<AddClasses
+            pages={loggedInPages}
+            settings={settings}
+            setNavigated={x => setNavigated(x)} />} />
+          <Route path="/classes/:course_id" element={<ClassProfile
+            pages={loggedInPages}
+            settings={settings}
+            setNavigated={x => setNavigated(x)} />} />
+
+          {/* Admin loading */}
+          <Route path="/waitlist/:course_id" element={<Waitlist
+          pages={loggedInPages}
+          settings={settings}
+          setNavigated={x => setNavigated(x)}/>} />
+
+          <Route path="*" element={<NoPages />} />
+
+
         </Routes>
       </BrowserRouter>
     </div>

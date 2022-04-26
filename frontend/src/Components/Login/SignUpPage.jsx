@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { PasswordField, SelectField, TextField } from "../common";
 
 // Method Imports
-import { getAccountbyUsername, registerAccount } from "../../APIFolder/loginApi";
+import { getAccountbyId, registerAccount } from "../../APIFolder/loginApi";
 
 export const SignUpPage = (props) => {
     // Navigate Object
@@ -44,7 +44,7 @@ export const SignUpPage = (props) => {
     const clickAddAccount = () => {
         if (username && password && firstName && lastName && email) {
             var temp = {
-                "username": username, 
+                "username": username,
                 "password": password,
                 "firstName": firstName,
                 "lastName": lastName,
@@ -57,11 +57,7 @@ export const SignUpPage = (props) => {
                         window.alert(`Failed to Sign Up. ${res.error}`);
                     }
                     else {
-                        getAccountbyUsername(res.username)
-                            .then(x => {
-                                localStorage.setItem("currUser", JSON.stringify(x));
-                                navigate('/');
-                            });
+                        navigate('/login');
                     }
                 })
         }

@@ -1,8 +1,6 @@
 import axios from 'axios';
 axios.defaults.withCredentials = true
-
-
-const BACKEND_ENDPOINT = "http://localhost:8000";
+export const BACKEND_ENDPOINT = "http://localhost:8000";
 
 
 export const registerAccount = async (credentials) =>  {
@@ -34,27 +32,28 @@ export const logout = async () => {
     }
 }
 
-export const getAccountbyUsername = async (username) => {
-    if(username === undefined || username === null){
+export const getAccountbyId = async (account_id) => {
+    if(account_id === undefined || account_id === null){
         return null;
     }
 
-    const res = await axios.get(`${BACKEND_ENDPOINT}/api/users/${username}`);
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/users/${account_id}`);
     if(res.status !== 200){
-        console.log(`Couldn't find user: ${username}`)
+        console.log(`Couldn't find user: ${account_id}`)
         return null;
     }
     return res.data;
 }
-
 
 //Still work in progress. Account editing is not fully implemented
 export const updateAccountbyUsername = async (account) => {
     return axios.put(`${BACKEND_ENDPOINT}/api/account`, {account: account} );
 }
 
-export const getProfiles = async () => {
-    const res = await axios.get(`${BACKEND_ENDPOINT}/api/users`);
+
+export const getStudents = async () => {
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/users?account_type=student`);
+
     if(res.status !== 200){
         console.log("Couldn't find users");
         return null;
@@ -62,8 +61,8 @@ export const getProfiles = async () => {
     return res.data;
 }
 
-export const getStatusByUsername = async (username) => {
-    const res = await axios.get(`${BACKEND_ENDPOINT}/api/users/${username}/status`);
+export const getStatusById = async (account_id) => {
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/users/${account_id}/status`);
     if(res.status !== 200){
         console.log("Couldn't find user status");
         return null;
@@ -74,6 +73,15 @@ export const getStatusByUsername = async (username) => {
 export const sendFriendRequest = async (targetId) => {
     console.log("Sending Friend Request")
     const res = await axios.post(`${BACKEND_ENDPOINT}/api/friends/requests`, { targetId: targetId });
+    return res.data;
+}
+export const getAllCourses = async() => {
+    //TODO: is this right???
+    const res = await axios.get('http://localhost:8000/api/courses');
+    if(res.status !== 200){
+        console.log("Couldn't find courses");
+        return null;
+    }
     return res.data;
 }
 
@@ -88,6 +96,52 @@ export const getFriends = async () => {
     return res.data;
 }
 
+export const getWaitlist = async (courseID) => {
+    var res;
+    try {
+        res = await axios.get(`${BACKEND_ENDPOINT}/api/d/waitlists/course_id/${courseID}`);
+    }
+    catch {
+        return [];
+    }
+    return res.data;
+}
+
+export const getCoursebyId = async (courseID) => {
+    //TODO: is this right???
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/courses/${courseID}`);
+    if(res.status !== 200){
+        console.log("Couldn't find course");
+        return null;
+    }
+    console.log(res);
+    return res.data;
+}
+
+export const updateCoursebyId = async (course) => {
+    //TODO: is this right???
+    const res = await axios.put(`${BACKEND_ENDPOINT}/api/d/courses/course_id/${course.course_id}`, course);
+    if(res.status !== 200){
+        console.log("Couldn't find course");
+        return null;
+    }
+
+    return res.data;
+}
+
+
+export const addCourse = async (course, account) =>  {
+    console.log("Adding..");
+
+    const res = await axios.post(`${BACKEND_ENDPOINT}/api/users/${account.username}/courses/${course.courseID}`, course.courseID, account);
+    if(res.status !== 200){
+       // console.log(`Couldn't register. ${res.status}`)
+        return null;
+    }
+    return res.data;
+};
+
+/**TODO: professor call?, indivual course call */
 // export const 
 export const getFriendRequests = async () => {
     const res = await axios.get(`${BACKEND_ENDPOINT}/api/friends/requests`);
@@ -105,6 +159,79 @@ export const getFriendRequest = async (id) => {
 }
 
 export const getFriendsClasses = async (id) => {
+    console.log(id)
     const res = await axios.get(`${BACKEND_ENDPOINT}/api/enrollments/${id}`);
+
     return res.data;
+}
+
+// api/users/professors/
+
+export const getClasses = async () => {
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/courses`);
+    return res.data;
+}
+
+export const uploadPP = async (pp) => {
+    console.log(typeof(pp), pp)
+    let formData = new FormData();
+    formData.set("profilePic", pp);
+    await axios.post(`${BACKEND_ENDPOINT}/api/account/pfp`, formData,
+        {
+            headers: {
+                "Content-type": "multipart/form-data",
+            }
+        });
+    // return res.data;
+}
+
+export const sendEnrollmentRequest = async (targetId) => {
+    const res = await axios.post(`${BACKEND_ENDPOINT}/api/enrollments/`, { targetId: targetId });
+    return res.data;
+}
+
+export const deleteNotification = async (id) => {
+    await axios.delete(`${BACKEND_ENDPOINT}/api/notifications/${id}`);
+    return;
+}
+
+export const getNotifications = async () => {
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/notifications`);
+    return res.data;
+}
+
+export const sendNotification = async (message) => {
+    const res = await axios.post(`${BACKEND_ENDPOINT}/api/notifications`, message);
+    return res.data;
+}
+
+//status for course
+export const getEnrollmentStatus = async (id) => {
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/enrollments/status/${id}`);
+    return res.data;
+}
+//drop course
+export const dropCourse = async (account_id, id) => {
+    await axios.delete(`${BACKEND_ENDPOINT}/api/enrollments/${account_id}/${id}`);
+    return;
+}
+
+export const getCourseReviews = async (course_id) => {
+    await axios.get(`${BACKEND_ENDPOINT}/api/d/course_reviews/course_id/${course_id}`);
+    return;
+}
+export const getProfessorReviews = async (teacher_id) => {
+    await axios.get(`${BACKEND_ENDPOINT}/api/d/teacher_reviews/teacher_id/${teacher_id}`);
+    return;
+}
+
+
+//need poster id, message, rating
+export const postCourseReview = async (course_id, review) => {
+    await axios.post(`${BACKEND_ENDPOINT}/api/d/course_reviews/course_id/${course_id}`, review);
+    return;
+}
+export const postProfessorReview = async (teacher_id, review) => {
+    await axios.post(`${BACKEND_ENDPOINT}/api/d/teacher_reviews/teacher_id/${teacher_id}`, review);
+    return;
 }
