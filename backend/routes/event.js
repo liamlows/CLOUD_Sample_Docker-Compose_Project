@@ -16,6 +16,16 @@ router.post('/', async (req, res) =>{
     }
 
 })
+router.put('/', async (req, res) =>{
+    try{
+        const body = req.body;
+        const result = await Event.updateEvent(body.event_id, body.event_name, body.event_description, body.event_image_url, body.farmer_id, body.date, body.time);
+        res.status(201).json(result);
+    }catch (err){
+        console.error('Failed to update event information:', err);
+        res.status(500).json({message: err.toString()});
+    }
+})
 
 
 router.delete('/:event_name', async (req, res) =>{

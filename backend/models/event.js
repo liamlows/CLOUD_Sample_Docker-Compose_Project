@@ -35,14 +35,11 @@ const signUserForEvent = async(user_id, event_id) => {
     const result = knex(USER_EVENT_TABLE).insert({event_id, customer_id: user_id});
     return result;
 }
-
-
 //edit event
 const updateEvent = async(event_id, event_name,event_description, event_image_url,farmer_id,date,time) => {
     const query = knex(EVENT_TABLE).where('event_id', event_id).update({event_name}).update({event_description}).update({event_image_url}).update({farmer_id}).update({date}).update({time});
     return query;
 }
-
 //find event by name
 const findEventByName = async (event_name) => {
     const query = knex('event').where({ event_name });
