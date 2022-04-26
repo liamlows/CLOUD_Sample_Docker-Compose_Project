@@ -57,7 +57,7 @@ const createOrder = async (firstName, lastName, address, city, state, zip, cardN
 //get product by cart
 const fetchCartProducts = async (customer_id) => {
     //return product
-    const query = knex('cart').join('product','.product.product_id','cart.product_id').select().where({customer_id});
+    const query = knex('cart').join('product','product.product_id','cart.product_id').select().where({customer_id});
     console.log('Raw query for getProduct:', query.toString());
     const result = await query;
     return result;
