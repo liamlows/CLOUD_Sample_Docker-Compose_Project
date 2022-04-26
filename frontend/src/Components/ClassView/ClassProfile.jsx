@@ -197,7 +197,7 @@ export const ClassProfile = (props) => {
                         <div className="col-7 float-start mt-1">
                             <table className='table float-start'>
                                 <thead>
-                                    <th className="float-start col-11 fs-3 mt-2 text-start"><span className="text-start p-0">{course.course_name} ({course.course_number})</span></th>
+                                    <th className="float-start col-11 fs-3 mt-2 text-start"><span className="text-start p-0">{course.course_name} ({course.department})</span></th>
 
                                     <th className="col-1">
                                         <button type="button" className="btn btn-light" onClick={() => startEditing()}>Edit Course</button>
@@ -361,7 +361,7 @@ export const ClassProfile = (props) => {
                             <div className="col-7 float-start mt-1">
                                 <table className='table float-start'>
                                     <thead>
-                                        <th className="float-start col-11 fs-3 mt-2 text-start">{course.course_name} ({course.course_number})</th>
+                                        <th className="float-start col-11 fs-3 mt-2 text-start">{course.course_name} ({course.department})</th>
                                         {/* Student is not in class or waitlist */}
                                         {account.account_type === "student" && account.status === 0 && <th className="col-2 pb-2">
                                             <Button variant="contained" className="bg-success" onClick={() => sendEnrollmentRequestFunc()} endIcon={<Add />}>Enroll</Button>
