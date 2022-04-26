@@ -1,20 +1,15 @@
 import axios from 'axios';
+import {baseEndpoint} from '../urls/API';
 
-axios.defaults.withCredentials = true;
 
-const baseEndpoint='';
-const apiConfig={
+const basePoint="http://localhost:8000"
 
-    // headers: {
-    //     Authorization: 'ali'
-    // }
-};
-
-export const getNFTById = (NFTId) =>new Promise((resolve,reject)=>{
-    axios.get(`${baseEndpoint}/${NFTId}`, apiConfig)
+export const getNFTById = (id) =>new Promise((resolve,reject)=>{
+    // axios.get(`${baseEndpoint}/nft/${id}`, apiConfig)
+    axios.get(`${basePoint}/nft/${id}`)
         .then(x => resolve(x.data))
         .catch(x => {
             alert(x);
             reject(x);
-        });
+     });
 });
