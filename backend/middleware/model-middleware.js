@@ -1,5 +1,6 @@
 const NFT = require('../models/nft');
 const MESSAGES = require('../models/messages');
+const TRANSACTION = require('../models/transaction')
 const USER = require('../models/users')
 
 /**
@@ -14,6 +15,7 @@ const createModelsMiddleware = async (req, res, next) => {
     req.models = {
         nft: NFT,
         messages: MESSAGES,
+        transaction: TRANSACTION
         user: USER
     }
     next();

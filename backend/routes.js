@@ -210,3 +210,53 @@ app.get('/user/list', async(req, res) => {
 
 }
 
+app.post('/transaction', async (req, res) => {
+  try {
+    const body = req.body;
+
+    const result = await req.models.transaction.createTransaction(body.nft, body.buyer, body.seller, body.amount);
+    res.status(201).json(result);
+
+  } catch (err) {
+    console.error("Failed to create transaction: ", err);
+  }
+})
+
+app.get('/transaction/nft/:nft', async (req, res) => {
+  try {
+    const params = req.params;
+
+    const result = await req.models.transaction.getTransaction1(params.nft);
+    res.status(201).json(result);
+
+  } catch (err) {
+    console.error("Failed to get transaction by NFT id: ", err);
+  }
+})
+
+app.get('/transaction/buyer/:buyer', async (req, res) => {
+  try {
+    const params = req.params;
+
+    const result = await req.models.transaction.getTransaction2(params.buyer);
+    res.status(201).json(result);
+
+  } catch (err) {
+    console.error("Failed to get transaction by NFT id: ", err);
+  }
+})
+
+app.get('/transaction/seller/:seller', async (req, res) => {
+  try {
+    const params = req.params;
+
+    const result = await req.models.transaction.getTransaction3(params.seller);
+    res.status(201).json(result);
+
+  } catch (err) {
+    console.error("Failed to get transaction by NFT id: ", err);
+  }
+})
+
+
+}
