@@ -66,31 +66,34 @@ export const ClassProfile = (props) => {
         console.log(params.course_id)
         getCoursebyId(params.course_id).then(async loaded => {
             console.log(loaded)
-            console.log(loaded.professors.length === 0);
+            // console.log(loaded.professors.length === 0);
 
 
             if (loaded.professors.length === 0) {
                 setProfessor("none")
             }
             else if (loaded.professors.length !== 0) {
-                let prof = await getAccountbyId(course.professors[0])
-                setProfessor(prof);
+                // let prof = await getAccountbyId(course.professors[0])
+                setProfessor(loaded.professors[0]);
             }
             setTAs(loaded.tas);
             console.log(tas);
-                
-            
+
+
             setCourse(loaded)
-            
-           
-            let status = await getEnrollmentStatus(loaded.course_id)
-            console.log("Adding status to course", status);
-            changeCourse(status);
-                
+
+
+
+
         })
     }, [editMode, reload]);
 
-
+    if (course !== undefined && course.status === undefined) {
+        getEnrollmentStatus(course.course_id).then(status => {
+            console.log("Adding status to course", status);
+            setCourse({ ...course, status: status.status });
+        })
+    }
     // Conditions
     if (JSON.stringify(account) === "{}") {
         let account_id = Cookies.get("account_id");
@@ -145,12 +148,14 @@ export const ClassProfile = (props) => {
     }
 
     const sendEnrollmentRequestFunc = () => {
-        sendEnrollmentRequest()
+        sendEnrollmentRequest(course.course_id, account.account_id)
         setReload(!reload)
     }
 
     const sendMessage = () => {
-        sendNotification(message)
+        console.log(message);
+        setMessage({});
+        sendNotification({ ...message, course: course.course_id })
         setMessageMode(false)
         setReload(!reload)
     }
@@ -176,6 +181,20 @@ export const ClassProfile = (props) => {
 
     const changeCourse = delta => setCourse({ ...account, ...delta });
 
+    const enrollable = () => {
+        console.log(course)
+        if (account.role.role_type === "student" || account.role.role_type === "ta") {
+            console.log("Enrollable")
+            return true;
+        }
+        console.log("Not Enrollable")
+        return false;
+    }
+    const drop = () => {
+        dropCourse(account.account_id, course.course_id)
+        setReload(!reload)
+    }
+
     // Basically check if user is the same user as the loaded profile.
     // If so then allow them to edit with the edit button at the end (this edit button will update the database once done)
     // If not then display the profile without the edit buttons.
@@ -198,11 +217,13 @@ export const ClassProfile = (props) => {
                         <div className="col-7 float-start mt-1">
                             <table className='table float-start'>
                                 <thead>
-                                    <th className="float-start col-11 fs-3 mt-2 text-start"><span className="text-start p-0">{course.course_name} ({course.department})</span></th>
+                                    <tr>
+                                        <th className="float-start col-11 fs-3 mt-2 text-start"><span className="text-start p-0">{course.course_name} ({course.department})</span></th>
 
-                                    <th className="col-1">
-                                        <button type="button" className="btn btn-light" onClick={() => startEditing()}>Edit Course</button>
-                                    </th>
+                                        <th className="col-1">
+                                            <button type="button" className="btn btn-light" onClick={() => startEditing()}>Edit Course</button>
+                                        </th>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                     <tr className="border-0">
@@ -215,27 +236,6 @@ export const ClassProfile = (props) => {
                                             <TextField label="Course Department :" value={course.department} setValue={department => changeCourse({ department })} />
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td className="col-4 text-start">Teaching Assistants</td>
-                                    </tr>
-                                    {
-                                        tas.map((profile, idx) => {
-
-                                            return <tr key={idx} className="container">
-                                                <td>
-                                                    <span className="p-0 text-capitalize">{profile.first_name} </span><span className="p-0 text-capitalize" >{profile.last_name}</span>
-                                                </td>
-                                                <td>
-                                                    <Button variant="contained"
-                                                        className="btn bg-success"
-                                                        endIcon={<ArrowForwardIcon />}
-                                                        onClick={() => goToProfile(profile)}>
-                                                        View Profile
-                                                    </Button>
-                                                </td>
-                                            </tr>
-                                        })
-                                    }
                                 </tbody>
                             </table>
                         </div>
@@ -299,25 +299,18 @@ export const ClassProfile = (props) => {
                         <div className="ProfessorProfile col-5 mt-1 bg-light2">
                             <table className='table float-start'>
                                 <thead>
-
-                                    <th className="float-start col-11 fs-4 mt-2 text-start">Professor</th>
-                                    <th className="col-1">
-                                        <Button variant="contained"
-                                            className="btn btn-secondary"
-                                            endIcon={<ArrowForwardIcon />}
-                                            onClick={() => navigate(`/users/${professor.account_id}`)}>
-                                            View Profile
-                                        </Button>
-                                    </th>
-                                    {professor !== "none" &&
-                                        <th className="col-1">
-                                            <Button variant="contained"
-                                                className="btn btn-secondary"
-                                                endIcon={<ArrowForwardIcon />}
-                                                onClick={() => navigate(`/users/${professor.account_id}`)}>
-                                                View Profile
-                                            </Button>
-                                        </th>}
+                                    <tr>
+                                        <th className="float-start col-11 fs-4 mt-2 text-start">Professor</th>
+                                        {professor !== "none" &&
+                                            <th className="col-1">
+                                                <Button variant="contained"
+                                                    className="btn btn-secondary"
+                                                    endIcon={<ArrowForwardIcon />}
+                                                    onClick={() => navigate(`/users/${professor.account_id}`)}>
+                                                    View Profile
+                                                </Button>
+                                            </th>}
+                                    </tr>
                                 </thead>
                                 <tbody>
                                     {professor !== "none" &&
@@ -352,9 +345,10 @@ export const ClassProfile = (props) => {
                             <div className="col-6">
                                 <button type="button" className="btn btn-secondary col-4 contained m-1 float-end" onClick={() => { setMessage({}); setMessageMode(false); setReload(!reload) }}>Cancel</button>
                             </div>
-                        </div>
-                        <div className="col-6">
-                            <button type="button" className="btn btn-success col-4 contained m-1 float-start" onClick={() => sendMessage()}>Save</button>
+
+                            <div className="col-6">
+                                <button type="button" className="btn btn-success col-4 contained m-1 float-start" onClick={() => sendMessage()}>Send</button>
+                            </div>
                         </div>
                     </div>}
 
@@ -377,28 +371,27 @@ export const ClassProfile = (props) => {
                             <div className="col-7 float-start mt-1">
                                 <table className='table float-start'>
                                     <thead>
-                                        <th className="float-start col-11 fs-3 mt-2 text-start">{course.course_name} ({course.department})</th>
-                                        {/* Student is not in class or waitlist */}
-                                        {account.role.role_type === "student" || account.role.role_type === "ta" && account.status === 0 && <th className="col-2 pb-2">
-                                            <Button variant="contained" className="bg-success" onClick={() => sendEnrollmentRequestFunc()} endIcon={<Add />}>Enroll</Button>
-                                        </th>}
-                                        {/* Student is on the waitlist */}
+                                        <tr>
+                                            <th className="float-start col-11 fs-3 mt-2 text-start">{course.course_name} ({course.department})</th>
+                                            {/* Student is not in class or waitlist */}
+                                            {enrollable() && course.status === 0 && <th className="col-2 pb-2">
+                                                <Button variant="contained" className="bg-success" onClick={() => sendEnrollmentRequestFunc()} endIcon={<Add />}>Enroll</Button>
+                                            </th>}
+                                            {/* Student is on the waitlist */}
 
-                                        {account.role.role_type === "student" || account.role.role_type === "ta" && account.status === -1 && <th className="col-2 pb-2">
-                                            <Button variant="contained" className="col-1 bg-warning" disabled endIcon={<Add color='disabled' />}>On Waitlist</Button>
-                                            <Button variant="contained" className="col-1 bg-danger" onClick={() => dropCourse(account.account_id, course.course_id)}><ClearIcon /></Button>
-                                        </th>}
-                                        {/* Student is in class */}
-                                        {account.status === 1 || account.role.role_type === "ta" && <div className="float-end col-2 mb-1 mt-2">
-                                            <div className="clearfix p-0"></div>
-                                            <th className="col-1 rounded bg-success border-0 p-1">
-                                                <div className="bg-success text-white">
-                                                    Enrolled <Check className='mb-1 m-1 mt-0' />
-                                                </div>
+                                            {enrollable() && course.status === -1 && <th className="col-2 pb-2">
+                                                <Button variant="contained" className="col-1 bg-warning" disabled endIcon={<Add color='disabled' />}>On Waitlist</Button>
                                                 <Button variant="contained" className="col-1 bg-danger" onClick={() => dropCourse(account.account_id, course.course_id)}><ClearIcon /></Button>
-                                            </th>
-                                        </div>}
+                                            </th>}
+                                            {/* Student is in class */}
+                                            {enrollable() && course.status === 1 &&
+                                                <th className="col-1 rounded border-0 p-1">
 
+                                                    <Button variant="contained" className="col-8 bg-warning float-start" disabled endIcon={<Check color='disabled' />}>Enrolled</Button>
+                                                    <Button variant="contained" className="col-1 bg-danger float-end" onClick={() => drop()}><ClearIcon /></Button>
+
+                                                </th>}
+                                        </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
@@ -429,25 +422,18 @@ export const ClassProfile = (props) => {
                             <div className="ProfessorProfile col-5 mt-1 bg-light2">
                                 <table className='table float-start'>
                                     <thead>
-
-                                        <th className="float-start col-11 fs-4 mt-2 text-start">Professor</th>
-                                        <th className="col-1">
-                                            <Button variant="contained"
-                                                className="btn bg-success"
-                                                endIcon={<ArrowForwardIcon />}
-                                                onClick={() => navigate(`/users/${professor.account_id}`)}>
-                                                View Profile
-                                            </Button>
-                                        </th>
-                                        {professor !== "none" &&
-                                            <th className="col-1">
-                                                <Button variant="contained"
-                                                    className="btn bg-success"
-                                                    endIcon={<ArrowForwardIcon />}
-                                                    onClick={() => navigate(`/users/${professor.account_id}`)}>
-                                                    View Profile
-                                                </Button>
-                                            </th>}
+                                        <tr>
+                                            <th className="float-start col-11 fs-4 mt-2 text-start">Professor</th>
+                                            {professor !== "none" &&
+                                                <th className="col-1">
+                                                    <Button variant="contained"
+                                                        className="btn bg-success"
+                                                        endIcon={<ArrowForwardIcon />}
+                                                        onClick={() => navigate(`/users/${professor.account_id}`)}>
+                                                        View Profile
+                                                    </Button>
+                                                </th>}
+                                        </tr>
                                     </thead>
                                     <tbody>
                                         {professor !== "none" &&

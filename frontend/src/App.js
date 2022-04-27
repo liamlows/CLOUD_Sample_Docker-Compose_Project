@@ -141,7 +141,10 @@ function App() {
 
 
           {/* Classes loading */}
-          <Route path="/classes" element={<ClassMenu />} />
+          <Route path="/classes" element={<ClassMenu
+            pages={loggedInPages}
+            settings={settings}
+            setNavigated={x => setNavigated(x)} />} />
           <Route path="/classes/enrollment" element={<AddClasses
             pages={loggedInPages}
             settings={settings}
@@ -153,9 +156,9 @@ function App() {
 
           {/* Admin loading */}
           <Route path="/waitlist/:course_id" element={<Waitlist
-          pages={loggedInPages}
-          settings={settings}
-          setNavigated={x => setNavigated(x)}/>} />
+            pages={loggedInPages}
+            settings={settings}
+            setNavigated={x => setNavigated(x)} />} />
 
           <Route path="*" element={<NoPages />} />
 

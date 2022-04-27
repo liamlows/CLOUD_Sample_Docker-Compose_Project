@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { PasswordField, SelectField, TextField } from "../common";
 
 // Method Imports
-import { getAccountbyId, registerAccount } from "../../APIFolder/loginApi";
+import { getAccountbyId, registerAccount, fetchSchools } from "../../APIFolder/loginApi";
 
 export const SignUpPage = (props) => {
     // Navigate Object
@@ -19,36 +19,35 @@ export const SignUpPage = (props) => {
     const [password, setPassword] = useState(undefined);
     const [firstName, setFirstName] = useState(undefined);
     const [lastName, setLastName] = useState(undefined);
-    const [email, setEmail] = useState(undefined);
     const [school, setSchool] = useState(undefined);
-    const [accountTypes] = useState([
-        "Student",
-        "Teacher"
-    ]);
-    const [schools] = useState([
-        "Yuh",
-        "Mega Yuh"
-    ]);
+
+    const [schools, setSchools] = useState([]);
 
     // Initial Load
     useEffect(() => {
         if (localStorage.getItem("currUser") !== "{}") {
             navigate('/');
-            props.setNavigated(true);
         }
-    });
+        fetchSchools().then(res=>{
+            console.log(res)
+            let temp_schools = []
+            for(const i in res){
+                temp_schools.push(res[i].school_name)
+            }
+            setSchools(temp_schools)
+        })
+    }, []);
 
     // Conditions
 
     // Component Methods
     const clickAddAccount = () => {
-        if (username && password && firstName && lastName && email) {
-            var temp = {
+        if (username && password && firstName && lastName && school) {
+            let temp = {
                 "username": username,
                 "password": password,
                 "firstName": firstName,
                 "lastName": lastName,
-                "email": email,
                 "school": school
             };
             registerAccount(temp)
@@ -61,7 +60,7 @@ export const SignUpPage = (props) => {
                     }
                 })
         }
-        else if (!username || !password || !firstName || !lastName || !email) {
+        else if (!username || !password || !firstName || !lastName || !school) {
             window.alert("Please fill out all fields");
         }
         else {
@@ -80,10 +79,6 @@ export const SignUpPage = (props) => {
             <TextField label="Last Name"
                 value={lastName}
                 setValue={x => setLastName(x)} />
-            <TextField label="Email"
-                value={email}
-                setValue={x => setEmail(x)} />
-            {/* May want to use for confirmations in the future? If we can figure it out */}
             <TextField label="Username"
                 value={username}
                 setValue={x => setUsername(x)} />
@@ -106,5 +101,14 @@ export const SignUpPage = (props) => {
                 Sign Up
             </button>
         </form>
+
+             <p className="fs-3" >Already Have an account?</p>
+             <button
+                type="button"
+                onClick={() => navigate('/login')}
+                variant="contained"
+                className="btn btn-secondary text-light">
+                Login
+            </button>
     </section>
 }

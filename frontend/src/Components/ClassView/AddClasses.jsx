@@ -85,6 +85,21 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
             navigate('/');
         });
     }
+    const find = (course) => {
+        if(course.course_name.indexOf(cName) !== -1)
+        {
+            return true;
+        }
+        return false
+    }
+    const enrollable = () => {
+        if (account.role.role_type === "student" || account.role.role_type === "ta") {
+            console.log("Enrollable")
+            return true;
+        }
+        console.log("Not Enrollable")
+        return false;
+    }
 
     // HTML
     if(!!courses && courses.length !== 0) {
@@ -97,9 +112,9 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
                 account_type={JSON.parse(localStorage.getItem("currUser")).role.role_type} />
 
             <div className="container border-0 mt-3">
-                <button type="button" className="float-end btn btn-success mt-3" onClick={() => goToSchedule()}>Schedule</button>
+                {enrollable() && <button type="button" className="float-end btn btn-success mt-3" onClick={() => goToSchedule()}>Schedule</button>}
                 <div className="container border-0 col-3 float-start">
-                    <TextField label="Search by Username" value={cName} setValue={setCName} />
+                    <TextField label="Course Name" value={cName} setValue={setCName} />
                 </div>
                 <div className="clearfix"></div>
             </div>
@@ -115,7 +130,7 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
                 </thead>
                 <tbody>
                     {courses.map((course, idx) => {
-                        return (<tr key={idx} className="container">
+                        return (find(course) &&<tr key={idx} className="container">
                             <td>{course.course_name}{console.log(course)}</td>
                             <td>{course.department}</td>
                             <td>{course.professors.length !== 0 && course.professors.map((professor) => {
@@ -123,12 +138,12 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
                             })}{course.professors.length === 0 && `No Professor`}</td>
 
                             <td className="col-3 pb-2">
-                                <Button variant="contained"
+                                {JSON.parse(localStorage.getItem("currUser")).role.role_type === "admin" && <Button variant="contained"
                                     className="btn bg-warning"
                                     endIcon={<ArrowForwardIcon />}
                                     onClick={() => goToWaitlist(course)}>
                                     View waitlist
-                                </Button>
+                                </Button>}
                             </td>
                             <td className="col-3">
                                 <Button variant="contained"

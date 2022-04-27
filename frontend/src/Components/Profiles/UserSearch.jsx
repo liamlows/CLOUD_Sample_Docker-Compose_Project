@@ -139,6 +139,7 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
         if (profile.account_id === account.account_id) {
             return false;
         }
+        console.log(profile)
         return true;
 
     }
@@ -158,6 +159,14 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
         }
         return false
     }
+    const enrollable = () => {
+        if (account.role.role_type === "student" || account.role.role_type === "ta") {
+            console.log("Enrollable")
+            return true;
+        }
+        console.log("Not Enrollable")
+        return false;
+    }
 
     // HTML
     if (readyToDisplay()) {
@@ -170,9 +179,9 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
                 account_type={JSON.parse(localStorage.getItem("currUser")).role.role_type} />
 
             <div className="container border-0 mt-3">
-                <button type="button" className="float-end btn btn-success mt-3" onClick={goToFriendsList}>Friends List</button>
+                {enrollable() && <button type="button" className="float-end btn btn-success mt-3" onClick={goToFriendsList}>Friends List</button>}
                 <div className="container border-0 col-3 float-start">
-                    <TextField label="Search by Username (Case Sensitive)" value={username} setValue={setUsername} />
+                    <TextField label="Username" value={username} setValue={setUsername} />
                 </div>
                 <div className="clearfix"></div>
             </div>
@@ -197,19 +206,19 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
                             <td>{profile.last_name}</td>
 
                             <td className="col-3 pb-2">
-                                {profile.status === 2 &&
+                                {enrollable() && profile.status === 2 &&
                                     <Button variant="contained" className="bg-primary col-7 m-1 mt-0 mb-0" onClick={() => { handleFriendRequest(profile.account_id, 1).then(setDummy(dummy + 1)) }} endIcon={<Add />}>Accept Request</Button>
                                 }
-                                {profile.status === 2 &&
+                                {enrollable() && profile.status === 2 &&
                                     <Button variant="contained" className="bg-danger col-2" onClick={() => { handleFriendRequest(profile.account_id, 0).then(setDummy(dummy + 1)) }}><ClearIcon /></Button>
                                 }
-                                {profile.status === 1 &&
+                                {enrollable() && profile.status === 1 &&
                                     <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Sent Request</Button>
                                 }
-                                {profile.status === 0 &&
+                                {enrollable() && profile.status === 0 &&
                                     <Button variant="contained" className="bg-success" onClick={() => { sendFriendRequest(profile.account_id).then(setDummy(dummy + 1)) }} endIcon={<Add />}>Add Friend </Button>
                                 }
-                                {profile.status === 4 &&
+                                {enrollable() && profile.status === 4 &&
                                     <Button variant="contained" disabled endIcon={<ClearIcon color='disabled' />}>Redacted</Button>
                                 }
                             </td>

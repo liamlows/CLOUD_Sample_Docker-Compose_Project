@@ -288,10 +288,20 @@ router.get("/api/users/:account_id", async (req, res, next) => {
 });
 
 router.get("/api/users/", async (req, res, next) => {
-    // Query DB for user
+    let role_type = req.query.role_type;
+    let query = 'SELECT username, first_name, last_name, account_id, role_type FROM `accounts` LEFT JOIN `roles` ON `accounts`.role_id = `roles`.role_id';
+
+    let props = [];
+
+    if(role_type !== undefined){
+        query += ' WHERE role_type = ?';
+        props.push(role_type);
+    }
+
+
     let rows, fields;
     try{
-        [rows, fields] = await pool.execute('SELECT username, first_name, last_name, account_id FROM `accounts`');
+        [rows, fields] = await pool.execute(query, props);
     } catch(error){
         return next(error);
     }

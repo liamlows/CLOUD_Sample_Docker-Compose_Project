@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { Button } from "@mui/material";
 
+import "./HomeView.css";
+
 
 // Component Imports
 import { LoggedInResponsiveAppBar } from "../common/LoggedInResponsiveAppBar";
@@ -21,12 +23,14 @@ export const HomeView = (props) => {
 
     // Component Variables
     const [account, setAccount] = useState({});
+    const [reload, setReload] = useState(false);
+
     const [notifications, setNotifications] = useState([]);
 
     // Initial Load
     useEffect(() => {
         // scedule?
-        console.log("RENDERING",props)
+        console.log("RENDERING", props)
         if (JSON.stringify(account) === "{}") {
             let account_id = Cookies.get("account_id");
             if (account_id) {
@@ -46,10 +50,13 @@ export const HomeView = (props) => {
                 navigate('/');
             }
         }
-        getNotifications(account.account_id).then(res => { setNotifications(res) })
+        getNotifications(account.account_id).then(res => {
+            console.log("NOTIFICATIONS", res)
+            setNotifications(res)
+        })
         console.log("Loading HomeView...");
-    }, [account]);
-    
+    }, [account, reload]);
+
 
     console.log(account);
 
@@ -66,14 +73,24 @@ export const HomeView = (props) => {
     }
 
     const removeNotification = (id) => {
-        let notifications2 = notifications
-        for (const idx in notifications2) {
-            if (notifications2[idx].notification_id === id) {
-                notifications2.splice(idx, 1);
-                setNotifications({ ...notifications2 });
-                deleteNotification(id);
-            }
-        }
+        console.log(id)
+        deleteNotification(id);
+        setReload(!reload);
+        // if (notifications.length === 0) {
+        //     setNotifications([]);
+        //     // deleteNotification(id);
+        // }
+        // else {
+        //     let notifications2 = notifications
+
+        //     for (const idx in notifications2) {
+        //         if (notifications2[idx].notification_id === id) {
+        //             notifications2.splice(idx, 1);
+        //             setNotifications({ ...notifications2 });
+        //             // deleteNotification(id);
+        //         }
+        //     }
+        // }
     }
     const removeAllNotification = () => {
         for (const i in notifications) {
@@ -89,19 +106,6 @@ export const HomeView = (props) => {
     }
 
     // HTML
-    return <div>
-        <LoggedInResponsiveAppBar
-            pages={props.loggedInPages}
-            settings={props.settings}
-            signOut={() => signOut()}
-            account_id={account.account_id} />
-        <div className="col-6 p-0"><div className="col-1 p-0"></div><h1 className="col-6 mt-4 fs-2 text-success">Lets get out of this pickle: {account.firstName}</h1></div>
-        <div className="clearfix p-0"></div>
-        <div className="row mt-5 m-3">
-            <div className="col-6 border p-5">
-                Add Classes Here
-            </div>
-            <div className="col-6 border p-5">
     if (readyToDisplay()) {
         return <div>
             <LoggedInResponsiveAppBar
@@ -110,34 +114,48 @@ export const HomeView = (props) => {
                 signOut={() => signOut()}
                 account_id={JSON.parse(localStorage.getItem("currUser")).account_id}
                 account_type={JSON.parse(localStorage.getItem("currUser")).role.role_type} />
-            <div className="col-6 p-0"><div className="col-1 p-0"></div><h1 className="col-6 mt-4 fs-2 text-success">Welcome {account.firstName}</h1></div>
+            <div className="col-6 p-0"><div className="col-1 p-0"></div><h1 className="col-6 mt-4 fs-2">Welcome {account.firstName}</h1></div>
             <div className="clearfix p-0"></div>
             <div className="row mt-5 m-3">
                 <div className="col-6 border p-5">
                     Add Classes Here
                 </div>
-                <div className="col-6 border p-5">
+                <div className="col-6 border p-5 notifications">
 
                     {/* Need to add api routes to clear notifications */}
-                    <table className="overflow-hidden">
+                    <table className="overflow-hidden col-12">
                         <thead>
                             <tr>
-                                <th>Notifications</th>
-                                {notifications.length !== 0 && <th>
-                                    <Button onClick={() => { removeAllNotification(account.account_id) }}>Clear All</Button>
-                                </th>}
+                                <th className="text-start fs-2">Notifications{notifications.length !== 0 && <div className="float-end">
+                                    <Button onClick={() => { removeAllNotification() }}>Clear All</Button>
+                                </div>}</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
                             {notifications.length !== 0 && notifications.map((notification, idx) => {
-                                return <div>
-                                    <tr className="row">
-                                        <h1 className="col-9">{notification.title}</h1>
-                                        <Button className="col-1" onClick={() => removeNotification(notification.id)}><ClearIcon /></Button>
-                                        <div className="p-0 m-0 border"></div>
-                                        <p>{notification.body}</p>
-                                    </tr>
-                                </div>
+                                return <tr className="col-12 mt-2 mb-2">
+                                    {console.log(notification)}
+
+                                    <table className="container col-12">
+                                        <thead>
+                                            <tr>
+                                                <th className="text-start">{notification.title}</th>
+
+                                                <th className="float-end"><Button className="col-1" onClick={() => removeNotification(notification.notification_id)}><ClearIcon /></Button></th>
+                                                <div className="clear-fix"></div>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td className="text-start">{notification.body}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+
+                                </tr>
+
                             })}
                             {
                                 notifications.length === 0 && <tr>
