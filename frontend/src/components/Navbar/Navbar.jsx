@@ -1,8 +1,21 @@
 import React from 'react';
 import './navbar.css';
 import { Link } from 'react-router-dom';
+import{ getUserInfo } from '../../api/AuthenAPI';
+import{ useState,useEffect } from 'react';
       
 export const Navbar = () => {
+
+  const [user, setUser]=useState(undefined);
+
+  useEffect(()=>{
+      getUserInfo().then(x => setUser(x));
+
+  },[ ]);
+  if(!user){
+    return<>lOADING</>
+  }
+
   return (
     <>
       <div className= "nav">
@@ -27,7 +40,7 @@ export const Navbar = () => {
             <Link to='/notifications'>Notifications</Link>
           </div>
           <h5 className="navBalance">
-            Balance: $$
+            Balance: ${user[0].balance}
           </h5>
         </div>
             <Link to='/' className="navBtnLink">

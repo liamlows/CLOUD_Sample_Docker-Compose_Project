@@ -54,7 +54,7 @@ export const Profile = () => {
 
         <br/>
         <h2 className="userHead">
-            username!!
+            {user[0].name}
         </h2>
         <br/>
         <Grid container spacing={2}>
@@ -72,7 +72,7 @@ export const Profile = () => {
             </Grid>
         </Grid>
         <br/>
-        <h4 className="bioName">Bio Name</h4>
+        <h4 className="bioName">{user[0].name}</h4>
         <br/>
         <div className="bio"> Bioooo </div>
         <br></br><br></br>

@@ -190,6 +190,22 @@ app.get('/nft/:min/:max/:how', async (req, res) => {
   } catch (err) {
       console.error("Failed to get NFTs by price: ", err);
   }
+  next();
+})
+
+// Get: /user/:id
+app.get('/user/:id', async (req, res, next) => {
+  try {
+    const result = await req.models.users.findUserByID(req.params.id);
+    res.status(201).json(result);
+    //res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to get user by id: ", err);
+      // res.status(500).
+  }
+  next();
+
 })
 
 app.get('/nft/search/:term', async (req, res) => {
@@ -202,6 +218,7 @@ app.get('/nft/search/:term', async (req, res) => {
   } catch (err) {
       console.error("Failed to get NFTs by description: ", err);
   }
+
 })
 
 
