@@ -23,11 +23,10 @@ const { createModelsMiddleware } = require('./middleware/model-middleware');
 
 // Importing route handlers
 const usersRoutes = require('./routes/users');
-const unblockedRoutes = require('./routes/unblocked');
 const sessionRoutes = require('./routes/session');
 const accountRoutes = require('./routes/account');
 const adminRoutes = require('./routes/admin');
-const ubRoutes = require('./routes/messages');
+const ubRoutes = require('./routes/ub');
 
 // create a logger object.  Using logger is preferable to simply writing to the console.
 const logger = log({ console: true, file: false, label: config.name });
@@ -57,7 +56,6 @@ app.get('/health', (request, response, next) => {
   // next() is how we tell express to continue through the middleware chain
   next();
 });
-
 
 routes(app, logger);
 

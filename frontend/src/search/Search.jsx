@@ -4,13 +4,43 @@ import { Button, TextField, Box, Divider, Stack, Avatar } from '@mui/material';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { Link } from 'react-router-dom';
+import {useState, useEffect, useContext} from 'react';
+import { getUsers } from '../api/UsersAPI';
+import CircularProgress from '@mui/material/CircularProgress';
 
 export const Search = () => {
-    const [alignment, setAlignment] = React.useState('web');
+
+    const [alignment, setAlignment] = useState('web');
+    // const [usersChosen, setUsersChosen] = useState(true);
+    // const [NFTsChosen, setNFTsChosen] = useState(false);
+    const[ users, setUsers ] = useState([]);
+    const [username, setUsername] = useState(undefined);
+
 
     const handleChange = (event, newAlignment) => {
         setAlignment(newAlignment);
+        // if (usersChosen) {
+        //     setUsersChosen (false);
+        //     setNFTsChosen (true);
+        // } else {
+        //     setUsersChosen(true);
+        //     setNFTsChosen(false);
+        // }
     };
+
+    useEffect(() => {
+        getUsers({username}).then(x => setUsers(x));
+    }, [username]);
+
+    if(!users){
+        return<><Box sx={{ mx:"auto"}}>
+        <CircularProgress color="secondary" />
+        </Box></>
+    }
+
+    const handleChangeSearch=(e)=>{
+        setUsername(e.target.value);
+    }
 
     return(<div className="searchContainer">
         <h4 className="searchHead">Search for your favorite Users or NFTs!</h4>
@@ -26,37 +56,50 @@ export const Search = () => {
             <ToggleButton value="NFT">NFT</ToggleButton>
         </ToggleButtonGroup>
         </Box>
-        <div className="row">
-            <TextField id="outlined-basic" label="Begin Typing" variant="outlined" fullWidth/>
-            <Button>Search</Button>
-        </div>
+        <TextField id="outlined-basic" label="Begin Typing" variant="outlined" fullWidth
+        value={username} onChange={handleChangeSearch}/>
+        <br/>
+        <br/>
         <Divider/>
-        <h5 className="recent">Search results for: Query</h5>
-        <Stack justifyContent="center" alignItems="center" spacing={2}>
+        <br/><br/>
+        
+        {  users.map(user => <div key={user.username} class="row">
+                    <div class="col-4">
+                      <Link to={'/theirUser'} className="createLink">
+                          Username
+                      </Link>
+                    </div>
+                    <div class="col-4">
+                        Name
+                    </div>
+                    <div class="col-4">
+                        Short Description
+                    </div>
+                    </div>)
+        }
+
+        {/* <Stack justifyContent="center" alignItems="center" spacing={2}>
             <div className="item">
-                <Stack direction = "row" spacing={90}>
+                <Stack direction = "row" spacing={40}>
                     <h6><Link to='/theirUser' className='createLink'>Username</Link></h6>
-                    <Button color="secondary" onClick={() => {alert('User removed');}} variant="outlined">
-                        Remove
-                    </Button>
+                    <h6>Name</h6>
+                    <h6>Short Description</h6>
                 </Stack>
             </div>
             <div className="item">
-                <Stack direction = "row" spacing={90}>
+                <Stack direction = "row" spacing={40}>
                     <h6><Link to='/theirUser' className='createLink'>Username</Link></h6>
-                    <Button color="secondary" onClick={() => {alert('User removed');}} variant="outlined">
-                        Remove
-                    </Button>
+                    <h6>Name</h6>
+                    <h6>Short Description</h6>
                 </Stack>
             </div>
             <div className="item">
-                <Stack direction = "row" spacing={90}>
+                <Stack direction = "row" spacing={40}>
                     <h6><Link to='/theirUser' className='createLink'>Username</Link></h6>
-                    <Button color="secondary" onClick={() => {alert('User removed');}} variant="outlined">
-                        Remove
-                    </Button>
+                    <h6>Name</h6>
+                    <h6>Short Description</h6>
                 </Stack>
             </div>
-        </Stack>
+        </Stack> */}
     </div>);
 }

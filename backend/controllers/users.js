@@ -92,7 +92,16 @@ const transfer = async(id, amount) => {
     return result1;
 }
 
-const updateInfo = async(id, name, photo) => {
+const updateInfo = async(id, email, username, password, name, photo) => {
+    if(email) {
+        const result = await User.updateEmail(id, email);
+    }
+    if(username){
+        const result = await User.updateUsername(id, username);
+    }
+    if(password){
+        const result = await User.updatePassword(id, password);
+    }
     if(name){
         const result = await User.updateName(id, name);
     }
@@ -103,8 +112,13 @@ const updateInfo = async(id, name, photo) => {
     return rez;
 }
 
-const userSearch = async(username) => {
-    const result = await User.findUserByUsername(username);
+const userSearch = async(username, id, email) => {
+    const result = await User.findUser(username, id, email);
+    return result;
+}
+
+const hideNFT = async(id, nft) => {
+    const result = await User.hideNFT(id, nft);
     return result;
 }
 
@@ -120,5 +134,6 @@ module.exports = {
     paymentInfo,
     transfer,
     updateInfo,
-    userSearch
+    userSearch,
+    hideNFT
 };

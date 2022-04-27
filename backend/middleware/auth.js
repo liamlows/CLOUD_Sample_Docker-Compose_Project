@@ -79,4 +79,3 @@ const authenticateWithoutClaims = (claims) => (req, res, next) => {
 }
 
 module.exports = { authenticateJWT, authenticateWithClaims };
-

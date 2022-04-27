@@ -1,6 +1,7 @@
 
 const { query } = require('./db');
 const pool = require('./db')
+const User = require('./controllers/users')
 
 module.exports = function routes(app, logger) {
 
@@ -68,7 +69,7 @@ app.post('/nft/:id', async (req, res, next) => {
 })
 
 // GET: /nft/id
-app.get('/nft/:id', async (req, res, next) => {
+app.get('/nft/id/:id', async (req, res, next) => {
   try {
 
     const result = await req.models.nft.getNFT(req.params.id); 
@@ -97,7 +98,7 @@ app.get('/nft', async (req, res, next) => {
 })
 
 // DELETE: /nft/id
-app.delete('/nft/:id', async (req, res, next) => {
+app.delete('/nft/id/:id', async (req, res, next) => {
   try {
 
     const result = await req.models.nft.deleteNFT(req.params.id); 
@@ -111,87 +112,39 @@ app.delete('/nft/:id', async (req, res, next) => {
   next()
 }) 
 
-  // for messages
-// Post: create a message /message 
-app.post('/message', async (req, res, next) => {
-  try {
-      const body = req.body;
-      console.log(body);
-      const result = await req.models.messages.createMessage(body.message,body.send_id,body.recieve_id);
-      //const result = await req.models.message.createMessage(body.message, body.send_id, body.recieve_id);
-      res.status(201).json(result);
-
-  } catch (err) {
-      console.error("Failed to create new message: ", err);
-      // res.status(500).
-  } 
-}) 
-
-// DELETE: /message/id
-app.delete('/message/:id', async (req, res, next) => {
-  try {
-
-    const result = await req.models.messages.deleteMessage(req.params.id);
-    res.status(201).json(result);
-    //res.status(201).json(result);
-
-  } catch (err) {
-      console.error("Failed to delete message by id: ", err);
-      // res.status(500).
-  }
-
-  next()
-})
-
-// Get: /message/id
-app.get('/message/:send_id', async (req, res, next) => {
-  try {
-
-    const result = await req.models.messages.getMessage(req.params.send_id);
-    res.status(201).json(result);
-    //res.status(201).json(result);
-
-  } catch (err) {
-      console.error("Failed to get message by send id: ", err);
-      // res.status(500).
-  }
-
-  next()
-})
-
-// GET: /message
-app.get('/message', async (req, res, next) => {
-  try {
-
-    const result = await req.models.messages.fetchMessage();
-    res.status(201).json(result);
-    //res.status(201).json(result);
-
-  } catch (err) {
-      console.error("Failed to get message: ", err);
-      // res.status(500).
-  }
-
-  next()
-})  
-
-
-app.get('/nft/:min/:max/:how', async (req, res) => {
+// get NFTs with a price above min and/or below max in ascending order
+app.get('/nft/sort/:min/:max', async (req, res) => {
   try {
     const params = req.params;
 
     if (params.min === undefined) params.min = 0
     if (params.max === undefined) params.max = Infinity
-    if (params.how === undefined) params.how = true
 
-    const result = await req.models.nft.getAllByPrice(params.min, params.max, params.how);
+    const result = await req.models.nft.getAllByPrice(params.min, params.max);
     res.status(201).json(result);
 
   } catch (err) {
       console.error("Failed to get NFTs by price: ", err);
   }
+  next();
 })
 
+// Get: /user/:id
+app.get('/user/id/:id', async (req, res, next) => {
+  try {
+    const result = await req.models.user.findUserByID(req.params.id);
+    res.status(201).json(result);
+    //res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to get user by id: ", err);
+      // res.status(500).
+  }
+  next();
+
+})
+
+// search for NFTs with matching term in description
 app.get('/nft/search/:term', async (req, res) => {
   try {
     const term = req.params.term;
@@ -202,7 +155,105 @@ app.get('/nft/search/:term', async (req, res) => {
   } catch (err) {
       console.error("Failed to get NFTs by description: ", err);
   }
+
 })
 
+app.get('/nft/cd/:creator_id', async (req, res, next) => {
+  try {
+
+    const result = await req.models.nft.getNFTbyCreatorId(req.params.creator_id); 
+    res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to create get NFT by creator id: ", err);
+      // res.status(500).
+  }
+
+  next()
+})
+
+// Display top NFTS
+app.get('/nft/Leaderboard', async(req, res) => {
+  try {
+    const result = await req.models.nft.nftLeaderboard();
+    console.log(result);
+    res.status(201).json(result);
+  } catch (err){
+    console.error("Failed to display NFT leaderboard");
+    res.status(400).json({ message: err.toString() });
+  }
+})
+
+// Display top users
+app.get('/user/Leaderboard', async(req, res) => {
+  try{
+    const result = await req.models.nft.userLeaderboard();
+    res.status(201).json(result);
+  } catch (err){
+    console.error("Failed to display NFT leaderboard");
+    res.status(400).json({ message: err.toString() });
+  }
+})
+
+
+app.get('/user/list', async(req, res) => {
+  try{
+    const body = req.body;
+
+    const result = await req.models.user.findUser(body.username, body.id, body.email);
+    res.status(201).json(result);
+  } catch (err){
+    console.error("Failed to display NFT leaderboard");
+    res.status(400).json({ message: err.toString() });
+  }
+})
+
+app.post('/transaction', async (req, res) => {
+  try {
+    const body = req.body;
+
+    const result = await req.models.transaction.createTransaction(body.nft, body.buyer, body.seller, body.amount);
+    res.status(201).json(result);
+
+  } catch (err) {
+    console.error("Failed to create transaction: ", err);
+  }
+})
+
+app.get('/transaction/nft/:nft', async (req, res) => {
+  try {
+    const params = req.params;
+
+    const result = await req.models.transaction.getTransaction1(params.nft);
+    res.status(201).json(result);
+
+  } catch (err) {
+    console.error("Failed to get transaction by NFT id: ", err);
+  }
+})
+
+app.get('/transaction/buyer/:buyer', async (req, res) => {
+  try {
+    const params = req.params;
+
+    const result = await req.models.transaction.getTransaction2(params.buyer);
+    res.status(201).json(result);
+
+  } catch (err) {
+    console.error("Failed to get transaction by NFT id: ", err);
+  }
+})
+
+app.get('/transaction/seller/:seller', async (req, res) => {
+  try {
+    const params = req.params;
+
+    const result = await req.models.transaction.getTransaction3(params.seller);
+    res.status(201).json(result);
+
+  } catch (err) {
+    console.error("Failed to get transaction by NFT id: ", err);
+  }
+})
 
 }

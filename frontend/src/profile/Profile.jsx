@@ -10,7 +10,6 @@ import { Posts } from './Posts';
 import{ useState,useEffect } from 'react';
 import{getUserInfo} from '../api/AuthenAPI';
 
-
 export const Profile = () => {
 
   const useStyles = makeStyles((theme) => ({
@@ -65,9 +64,11 @@ export const Profile = () => {
         <br/>
         <div className="bio"> Bioooo </div>
         <br></br><br></br>
+
         <Button variant="outlined"><Link to={`/edit-profile/${user[0].id}`} className="createLink">Edit Profile</Link></Button>
         {/* in lab, ask how to make card pop up on click without changing link and while keeping profile in background*/}
         {/* possible option of making it dialog instead of card but still figure out how to make it appear */}
+
         <br/><br/>
         <Posts/>
 
