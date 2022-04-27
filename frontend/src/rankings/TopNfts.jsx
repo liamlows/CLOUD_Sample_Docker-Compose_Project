@@ -3,17 +3,24 @@ import * as React from 'react';
 import { Stack } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from "react";
-import { getAllNFTsByPrice, getNFTs } from '../api/NFTApi';
+import { getAllNFTsByPrice, getNFTs, } from '../api/NFTApi';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import { getUserById } from '../api/UsersAPI';
 
 export const TopNfts = () => {
 
     const[ NFTs, setNFTs ] = useState([]);
-    
+    const[ lbuser, setlbuser ] = useState(undefined);
+    var lbuserID;
+
     useEffect(() => {
         getNFTs().then(x => setNFTs(x));
     }, [ ]);
+
+    useEffect(() => {
+        getUserById(lbuserID).then(x => setlbuser(x));
+    }, [ lbuserID ]);
 
     if(!NFTs){
         return<><Box sx={{ mx:"auto"}}>

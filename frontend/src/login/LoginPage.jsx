@@ -13,23 +13,22 @@ export const LoginPage = () => {
     const [email, setEmail]=useState('');
     const [password, setPassword]=useState('');
 
-    
- const checkAccount = () =>{
-    axios.post(baseEndpoint+'/session',{email:email, password:password})
-            .then(function(response){
-                if(response.status===201){
-                    window.alert("Successfully logged in!");
-                    localStorage.token=response.data.token;
-                    <Link to='/home' className="createLink">Submit</Link>
-                }
-                else{
-                    window.alert("Logged with error");
-                }
-            })
-            .catch(function(error){
-                window.alert(error);
-        });
-}
+    const checkAccount = () =>{
+        axios.post(baseEndpoint+'/session',{email:email, password:password})
+                .then(function(response){
+                    if(response.status===201){
+                        window.alert("Successfully log in!!");
+                        localStorage.setItem('token',response.data);
+
+                    }
+                    else{
+                        window.alert("Logged with error");
+                    }
+                })
+                .catch(function(error){
+                    window.alert(error);
+            });
+    }
 
     const handleChangeEmail=(e)=>{
         setEmail(e.target.value);
@@ -57,7 +56,7 @@ export const LoginPage = () => {
         type='password' value={password} onChange={handleChangePW}/>
 
    <br/> <br/> <br/>
-   <Button variant="outlined" onClick={()=>handleSubmitClick()}>Submit</Button>
+   <Button variant="outlined" onClick={handleSubmitClick}><Link to='./home' className="createLink">Submit</Link></Button>
 
    <br/>
    <br/>

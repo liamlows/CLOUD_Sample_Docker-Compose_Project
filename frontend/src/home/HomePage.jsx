@@ -16,11 +16,11 @@ export const HomePage = () => {
         getNFTs().then(x => setNFTs(x));
     }, [ ]);
 
-    if(!NFTs){
-        return<><Box sx={{ mx:"auto"}}>
-        <CircularProgress color="secondary" />
-        </Box></>
-    }
+    // if(!NFTs){
+    //     return<><Box sx={{ mx:"auto"}}>
+    //     <CircularProgress color="secondary" />
+    //     </Box></>
+    // }
     // const handleDelay =()=>{
     //     <Box sx={{ mx:"auto"}}>
     //     <CircularProgress color="secondary" />
