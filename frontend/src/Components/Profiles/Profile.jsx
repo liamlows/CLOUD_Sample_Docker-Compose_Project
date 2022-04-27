@@ -19,7 +19,7 @@ import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 
 
 // Method Imports
-import { getFriendRequests, getStatusById, handleFriendRequest, logout, sendFriendRequest, updateAccountbyUsername, getFriendRequest, getFriendsClasses, uploadPP, getAccountbyId } from "../../APIFolder/loginApi";
+import { getFriendRequests, getStatusById, handleFriendRequest, logout, sendFriendRequest, updateAccountbyId, getFriendRequest, getFriendsClasses, uploadPP, getAccountbyId, updateAccount } from "../../APIFolder/loginApi";
 import { TextAreaField } from "../common/TextAreaField";
 import { ReviewList } from "../common/ReviewList";
 
@@ -37,6 +37,7 @@ export const Profile = (props) => {
     const [online, setOnline] = useState(false);
     const [reload, setReload] = useState(false);
     const [classes, setClasses] = useState([]);
+    const [currUser, setCurrUser] = useState({})
 
     const [pp, setPP] = useState(undefined);
     const params = useParams();
@@ -188,14 +189,14 @@ export const Profile = (props) => {
         })
     }
     // Conditions
-    if (JSON.stringify(account) === "{}") {
+    if (JSON.stringify(currUser) === "{}") {
         let account_id = Cookies.get("account_id");
         if (account_id) {
             getAccountbyId(account_id)
                 .then(account => {
                     if (account) {
                         localStorage.setItem("currUser", JSON.stringify(account));
-                        setAccount(account);
+                        setCurrUser(account);
                     }
                     else {
                         console.log("User is null after request");
@@ -216,22 +217,30 @@ export const Profile = (props) => {
     }
 
     const doneEditing = () => {
-        console.log(pp.name);
-        console.log(pp.type);
-        console.log(pp.size);
         if (account.first_name && account.last_name) {
-            if (pp !== undefined) {
+            if (pp != undefined) {
+                
                 uploadPP(pp).then(() => {
                     window.location.reload();
                 });
                 setPP(undefined);
             }
-            // updateAccountbyUsername(account).then(setEditMode(false));
-            // localStorage.setItem("currUser", JSON.stringify(account));
+            if(account.first_name.length > 255 || account.first_name.length > 255)
+            {
+                window.alert("First and last have a character limit of 255");
+            }
+            else if(account.bio.length > 1000)
+            {
+                window.alert("Bio has a character limit of 1000");
+            }
+            else{
+                updateAccount(account).then(() => {setEditMode(false)});
+                localStorage.setItem("currUser", JSON.stringify(account));
+            }
             // window.location.reload();
         }
         else {
-            window.alert("Please fill out both fields");
+            window.alert("First name and last name cannot be blank");
         }
     }
 
@@ -291,7 +300,8 @@ export const Profile = (props) => {
                 pages={props.pages}
                 settings={props.settings}
                 signOut={() => signOut()}
-                account_id={JSON.parse(localStorage.getItem("currUser")).account_id} />
+                account_id={JSON.parse(localStorage.getItem("currUser")).account_id}
+                account_type={JSON.parse(localStorage.getItem("currUser")).role.role_type} />
 
             {/* Viewing own profile (EDITING) */}
             {JSON.parse(localStorage.getItem("currUser")).username === account.username && editMode === true &&
@@ -366,10 +376,16 @@ export const Profile = (props) => {
                                     </th>
                                 </thead>
                                 <tbody>
-                                    <td className="col-3 fs-6 text-start">
-                                        <span className="p-0 text-capitalize">{account.first_name} </span><span className="p-0 text-capitalize" >{account.last_name}</span>
-                                    </td>
-                                    <td>{account.bio}</td>
+                                    <tr>
+                                        <td className="col-3 fs-6 text-start">
+                                            <span className="p-0 text-capitalize">{account.first_name} </span><span className="p-0 text-capitalize" >{account.last_name}</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="text-start">Bio:
+                                            <p>{account.bio}</p>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -420,31 +436,35 @@ export const Profile = (props) => {
                                         }
 
                                     </thead>
-                                    <tbody>
+                                    <tr>
                                         <td className="col-3 fs-6 text-start">
                                             <span className="p-0 text-capitalize">{account.first_name} </span><span className="p-0 text-capitalize" >{account.last_name}</span>
                                         </td>
-                                        <td>{account.bio}</td>
-                                    </tbody>
+                                    </tr>
+                                    <tr>
+                                        <td className="text-start">Bio:
+                                            <p>{account.bio}</p>
+                                        </td>
+                                    </tr>
                                 </table>
                             </div>
                         </div>
                     </div>
                 </div>}
 
-            {account.account_type === "student" &&
+            {account.role.role_type === "student" &&
                 classes.length === 0 && (account.status === 3 || account.account_id === JSON.parse(localStorage.getItem("currUser")).account_id) && <div>
                     <h1>Classes</h1>
                     <p>{account.username} is not enrolled in any classes</p>
                 </div>
             }
-            {account.account_type === "student" &&
+            {account.role.role_type === "student" &&
                 classes.length === 0 && account.status !== 3 && account.account_id !== JSON.parse(localStorage.getItem("currUser")).account_id && <div>
                     <h1>Classes</h1>
                     <p>You must be friends with {account.username} to view their classes</p>
                 </div>
             }
-            {account.account_type === "student" && classes.length !== 0 && <div>
+            {account.role.role_type === "student" && classes.length !== 0 && <div>
                 <h1>Classes</h1>
                 <table>
                     <thead>
@@ -485,12 +505,12 @@ export const Profile = (props) => {
             {
                 //satisfying the review professor
                 //honestly we may be able to get away with doing the flagging be a note saying "flagged reviews are seen as false or overly critical by professor"
-                account.account_type === "professor" && 
+                account.role.role_type === "professor" &&
 
                 <ReviewList
-                 type="Professor"
-                 account_id={localStorage.getItem("currUser").account_id}
-                 search_id={account.account_id} />
+                    type="Professor"
+                    account_id={localStorage.getItem("currUser").account_id}
+                    search_id={account.account_id} />
 
             }
         </section>

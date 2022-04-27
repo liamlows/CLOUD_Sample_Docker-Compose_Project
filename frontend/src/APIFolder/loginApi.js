@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Cookies from 'js-cookie';
 axios.defaults.withCredentials = true
 export const BACKEND_ENDPOINT = "http://localhost:8000";
 
@@ -27,6 +28,7 @@ export const logIntoAccount = async (credentials) => {
 export const logout = async () => {
     try {
         const res = await axios.get(`${BACKEND_ENDPOINT}/api/account/logout`);
+        Cookies.remove("account_id");
     } catch(e) {
         console.log(`Failed to logout.: ${e}`)
     }
@@ -46,13 +48,13 @@ export const getAccountbyId = async (account_id) => {
 }
 
 //Still work in progress. Account editing is not fully implemented
-export const updateAccountbyUsername = async (account) => {
-    return axios.put(`${BACKEND_ENDPOINT}/api/account`, {account: account} );
+export const updateAccount = async (account) => {
+    return axios.put(`${BACKEND_ENDPOINT}/api/account`, {firstName: account.first_name, lastName: account.last_name, bio: account.bio} );
 }
 
 
 export const getStudents = async () => {
-    const res = await axios.get(`${BACKEND_ENDPOINT}/api/users?account_type=student`);
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/users?role_type=student`);
 
     if(res.status !== 200){
         console.log("Couldn't find users");
@@ -227,11 +229,13 @@ export const getProfessorReviews = async (teacher_id) => {
 
 
 //need poster id, message, rating
-export const postCourseReview = async (course_id, review) => {
-    await axios.post(`${BACKEND_ENDPOINT}/api/d/course_reviews/course_id/${course_id}`, review);
+export const postCourseReview = async (review) => {
+    await axios.post(`${BACKEND_ENDPOINT}/api/reviews/course_reviews`, review);
+
     return;
 }
 export const postProfessorReview = async (teacher_id, review) => {
-    await axios.post(`${BACKEND_ENDPOINT}/api/d/teacher_reviews/teacher_id/${teacher_id}`, review);
-    return;
+    let res = await axios.post(`${BACKEND_ENDPOINT}/api/d/teacher_reviews/teacher_id/${teacher_id}`, review);
+    console.log(res);
+    return ;
 }

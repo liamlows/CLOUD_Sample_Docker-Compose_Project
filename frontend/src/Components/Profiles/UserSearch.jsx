@@ -99,7 +99,7 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
                 });
         }
         else {
-            setNavigated(true);
+            setNavigated(1);
             navigate('/');
         }
     }
@@ -166,7 +166,8 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
                 pages={pages}
                 settings={settings}
                 signOut={() => signOut()}
-                account_id={account.account_id} />
+                account_id={JSON.parse(localStorage.getItem("currUser")).account_id}
+                account_type={JSON.parse(localStorage.getItem("currUser")).role.role_type} />
 
             <div className="container border-0 mt-3">
                 <button type="button" className="float-end btn btn-success mt-3" onClick={goToFriendsList}>Friends List</button>

@@ -41,7 +41,7 @@ export const ReviewList = ({ type, account_id }) => {
 
     const find = (id) => {
         for (const i in reviews) {
-            if (reviews[i].sender_id === account_id) {
+            if (reviews[i].poster_id === account_id) {
                 return true
             }
         }
@@ -62,10 +62,13 @@ export const ReviewList = ({ type, account_id }) => {
         console.log("reviews2", reviews2)
         setReviews([...reviews2])
         if (type === "Course") {
-            // postCourseReview(params.course_id,review)
+            review = {...review, course_id: Number(params.course_id)}
+            console.log("review to post",review)
+            postCourseReview(params.course_id,review)
         }
         else if (type === "Professor") {
-            // postProfessorReview(params.account_id,review)
+            review = {...review, account_id: Number(params.account_id)}
+            postProfessorReview(params.account_id,review)
         }
     }
 
@@ -88,7 +91,7 @@ export const ReviewList = ({ type, account_id }) => {
                             </div>
                             <div className="list-group-item bg-light  pt-3 pb-3">
                                 <div className="float-start"></div>
-                                <p className="m-2">"{review.message}"</p>
+                                <p className="m-2">"{review.review}"</p>
                                 <div className="clearfix"></div>
                             </div>
                         </div>

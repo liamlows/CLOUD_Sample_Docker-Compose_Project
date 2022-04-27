@@ -17,7 +17,7 @@ import PeopleTwoToneIcon from '@mui/icons-material/PeopleTwoTone';
 import HomeIcon from '@mui/icons-material/Home';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
-export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, account_id}) => {
+export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, account_id, account_type }) => {
   const location = useLocation();
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -37,7 +37,7 @@ export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, account_id}
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
+  console.log(account_type);
   return (
     <AppBar position="static" sx={{ background: 'green' }}>
       <Container maxWidth="xl">
@@ -80,9 +80,14 @@ export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, account_id}
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
+              {pages.map((page) => {
+                return (
                 <div key={page.label}>
-                  {page.route === '/users/:account_id/friends' && <MenuItem key={page.label} component={Link} to={`/users/${account_id}/friends`} onClick={handleCloseNavMenu}>
+                  {(account_type === "professor" || account_type === "admin") && <MenuItem key={page.label} component={Link} to={`/users`} onClick={handleCloseNavMenu}>
+                    <PeopleTwoToneIcon />
+                    <Typography className="m-1" textAlign="center">{page.label}</Typography>
+                  </MenuItem>}
+                  {(account_type === "student" || account_type === "ta") && page.route === '/users/:account_id/friends' && <MenuItem key={page.label} component={Link} to={`/users/${account_id}/friends`} onClick={handleCloseNavMenu}>
                     <PeopleTwoToneIcon />
                     <Typography className="m-1" textAlign="center">{page.label}</Typography>
                   </MenuItem>}
@@ -96,7 +101,7 @@ export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, account_id}
                     <Typography className="m-1" textAlign="center">{page.label}</Typography>
                   </MenuItem>}
                 </div>
-              ))}
+              )})}
             </Menu>
           </Box>
           <Typography
@@ -110,7 +115,7 @@ export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, account_id}
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <div key={page.label}>
-                {page.route === '/users/:account_id/friends' && <Button
+                {(account_type === "student" || account_type === "ta") && page.route === '/users/:account_id/friends' && <Button
                   key={page.label}
                   component={Link}
                   to={`/users/${account_id}/friends`}
@@ -120,6 +125,15 @@ export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, account_id}
                 >
                   {page.label}
                 </Button>}
+                {(account_type === "professor" || account_type === "admin") && page.route === '/users/:account_id/friends' && <Button
+                  key={page.label}
+                  component={Link}
+                  to={`/users`}
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: 'white', display: 'block' }}
+                >
+                  People
+                  </Button>}
 
                 {page.route === '/classes' && <Button
                   key={page.label}

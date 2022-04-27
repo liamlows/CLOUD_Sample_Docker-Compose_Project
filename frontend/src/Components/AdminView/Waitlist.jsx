@@ -50,24 +50,17 @@ export const Waitlist = (props) => {
         });
     }
     const goToProfile = profile => {
-        navigate(`users/${profile.username}`);
-    }
-    const profileNav = () => {
-        navigate(`users/${account.username}`);
-    }
-    const accountNav = () => {
-        navigate(`accounts/${account.username}`);
+        navigate(`users/${profile.account_id}`);
     }
 
     // HTML
     return <div>
         <LoggedInResponsiveAppBar
-            pages={props.pages}
-            settings={props.settings}
-            signOut={() => signOut()}
-            username={account.username}
-            profileNav={() => profileNav()}
-            account={() => accountNav()} />
+                pages={props.pages}
+                settings={props.settings}
+                signOut={() => signOut()}
+                account_id={JSON.parse(localStorage.getItem("currUser")).account_id}
+                account_type={JSON.parse(localStorage.getItem("currUser")).role.role_type} />
 
         <div className='container border-0 mb-3'>
             <h1 className='mt-3 col-6 float-start '>Waitlist <span className='text-secondary'>({users.length})</span></h1>

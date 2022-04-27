@@ -19,7 +19,7 @@ export const ReviewForm = (props) => {
 
     const addReview = () => {
         props.addReview({
-            rating: rating, message: message, sender_id: props.account_id
+            rating: Number(rating), review: message, poster_id: props.account_id
         });
 
         setRating(0);
