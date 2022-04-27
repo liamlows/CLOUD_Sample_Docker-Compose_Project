@@ -10,14 +10,12 @@ import {useParams } from 'react-router-dom';
 
 export const EditProfile = () => {
     // const[user,setUser]=useState(undefined);
-    
+    const params=useParams();
     const [username, setUsername]=useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [submit,setSubmitted]=useState(false);
     const [error, setError] = useState(false);
-
-    const params=useParams();
     
     // useEffect(()=>{
     //     getUserInfo().then(x => setUser(x));
@@ -27,33 +25,33 @@ export const EditProfile = () => {
         setUsername(e.target.value);
         setSubmitted(false);
       };
-     
+
       // Handling the email change
-      const handleEmail = (e) => {
+    const handleEmail = (e) => {
         setEmail(e.target.value);
         setSubmitted(false);
       };
      
       // Handling the password change
-      const handlePassword = (e) => {
+    const handlePassword = (e) => {
         setPassword(e.target.value);
         setSubmitted(false);
       };
      
       // Handling the form submission
-      const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleSubmit = () => {
+        //e.preventDefault();
         if (username === '' || email === '' || password === '') {
           setError(true);
+          window.alert("Fail to Change!");
         } else {
             if(params.id){
             setSubmitted(true);
             setError(false);
-            updateUserById(params.id, username, email, password);
-            window.alert("Successfully Change!");
+            updateUserById(username, email, password);
             }
         }
-      };
+    };
     
 
     return (<div className="profileContainer">
@@ -72,7 +70,7 @@ export const EditProfile = () => {
     <br/>
     <br/>
     <br/>
-    <TextField id="demo-helper-text-misaligned" label="Change Password" type={password} value={password} onChange={handlePassword}/>
+    <TextField id="demo-helper-text-misaligned" label="Change Password" type='password' value={password} onChange={handlePassword}/>
     <br/>
     {/* make this text area */}
     {/* <TextField id="outlined-multiline-flexible" fullWidth multiline label="Change Bio"/> */}
@@ -83,7 +81,7 @@ export const EditProfile = () => {
 
     <Stack direction="row" spacing = {2}>
         <Button variant="outlined"><Link to='/profile' className="createLink">Cancel</Link></Button>
-        <Button variant="outlined" onChange={handleSubmit}><Link to='/profile' className="createLink">Save</Link></Button>
+        <Button variant="outlined" onClick={handleSubmit}><Link to='/' className="createLink">Save</Link></Button>
     </Stack>
     </div>);
 }
