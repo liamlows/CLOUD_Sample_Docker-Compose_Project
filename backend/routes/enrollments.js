@@ -35,11 +35,11 @@ router.get("/", async (req, res, next) => {
 });
 
 /*
-GET /enrollments/:student-id
-    Gets all enrollments by student id.
+GET /enrollments/:account_id
+    Gets all enrollments by account id.
  */
-router.get("/:student_id", async (req, res, next) => {
-    let accountId = req.params.accountId;
+router.get("/:account_id", async (req, res, next) => {
+    let accountId = req.params.account_id;
 
     let enrollments;
     try{
