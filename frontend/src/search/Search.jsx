@@ -8,6 +8,8 @@ import {useState, useEffect, useContext} from 'react';
 import { getUsers } from '../api/UsersAPI';
 import CircularProgress from '@mui/material/CircularProgress';
 
+// delete duplicates
+
 export const Search = () => {
 
     const [alignment, setAlignment] = useState('web');
