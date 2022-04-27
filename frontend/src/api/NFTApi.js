@@ -23,8 +23,8 @@ export const getNFTs = () => new Promise((resolve, reject) => {
         });
 });
 
-export const getAllNFTsByPrice = () => new Promise((resolve, reject) => {
-    axios.get(`${baseEndpoint}/nft/0/Infinity/true`)
+export const getNFTLB = () => new Promise((resolve, reject) => {
+    axios.get(`${baseEndpoint}/nft/Leaderboard`)
         .then(x => resolve(x.data))
         .catch(x => {
             alert(x);

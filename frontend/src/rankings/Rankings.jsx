@@ -18,7 +18,7 @@ export const Rankings = () => {
         </div>
 
 
-    <Card>
+    {/* <Card>
       <CardActionArea>
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
@@ -29,6 +29,6 @@ export const Rankings = () => {
           </Typography>
         </CardContent>
       </CardActionArea>
-    </Card>
+    </Card> */}
     </div>);
 }
