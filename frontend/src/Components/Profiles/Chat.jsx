@@ -122,8 +122,10 @@ export const Chat = (props) => {
         //do stuff
         let temp_message = { content: message, senderId: account.account_id }
         console.log("temp_message", temp_message);
-        setMessages([...messages, temp_message])
-        setMessage()
+        let temp_messages = {...messages}
+        temp_messages[selectedFriend.account_id].push(temp_message)
+        setMessages({...temp_messages})
+        setMessage('')
     }
 
     const readyToDisplay = () => {
