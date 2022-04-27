@@ -1,5 +1,6 @@
 const express = require('express');
 const User = require('../controllers/users');
+const Likes = require('../controllers/likeRecord')
 // const Purchase = require('../controllers/purchases');
 
 const router = express.Router();
@@ -116,6 +117,44 @@ router.get('/list', async (req, res, next) => {
     } catch (err){
         console.error("Could not get users: ", err);
         res.sendStatus(404).json({ message: err.toString() });e
+    }
+
+});
+
+router.post('/like', async (req, res, next) => {
+    try {
+        const user = req.user;
+        const body = req.body;
+        const result = await Like.likeNFT(body.nftID, user.id);
+        res.status(200).json(result);
+    } catch (err){
+        console.error("Could not like NFT; ", err);
+        res.sendStatus(401).json({ message: err.toString() });e
+    }
+
+});
+
+router.get('/likeRecord', async (req, res, next) => {
+    try {
+        const user = req.user;
+        const body = req.body;
+        const result = await Like.gerLikeRecord(body.nftID, user.id);
+        res.status(200).json(result);
+    } catch (err){
+        console.error("Could not view like record; ", err);
+        res.sendStatus(401).json({ message: err.toString() });e
+    }
+
+});
+
+router.get('/likeCount', async (req, res, next) => {
+    try {
+        const body = req.body;
+        const result = await Like.getLikeNum(body.nftID);
+        res.status(200).json(result);
+    } catch (err){
+        console.error("Could not view like num; ", err);
+        res.sendStatus(401).json({ message: err.toString() });e
     }
 
 });
