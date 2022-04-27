@@ -219,22 +219,20 @@ export const Profile = (props) => {
     const doneEditing = () => {
         if (account.first_name && account.last_name) {
             if (pp != undefined) {
-                
+
                 uploadPP(pp).then(() => {
                     window.location.reload();
                 });
                 setPP(undefined);
             }
-            if(account.first_name.length > 255 || account.first_name.length > 255)
-            {
+            if (account.first_name.length > 255 || account.first_name.length > 255) {
                 window.alert("First and last have a character limit of 255");
             }
-            else if(account.bio.length > 1000)
-            {
+            else if (account.bio.length > 1000) {
                 window.alert("Bio has a character limit of 1000");
             }
-            else{
-                updateAccount(account).then(() => {setEditMode(false)});
+            else {
+                updateAccount(account).then(() => { setEditMode(false) });
                 localStorage.setItem("currUser", JSON.stringify(account));
             }
             // window.location.reload();
@@ -256,11 +254,6 @@ export const Profile = (props) => {
         });
     }
 
-    const profileNav = () => {
-        // setAccount(JSON.parse(localStorage.getItem("currUser")));
-        navigate(`/users/${JSON.parse(localStorage.getItem("currUser")).username}`);
-        // setReload(!reload);
-    }
 
     const sendFriendRequestFunc = () => {
         console.log("sending friend request");
@@ -287,6 +280,19 @@ export const Profile = (props) => {
 
     const goToClass = (clss) => {
         navigate(`/classes/${clss.course_id}`);
+    }
+    const friendable = () => {
+        if (JSON.parse(localStorage.getItem("currUser")).role.role_type !== "student" && JSON.parse(localStorage.getItem("currUser")).role.role_type !== "ta") {
+            console.log("CurrUser is not student or ta")
+            return false;
+        }
+        if (account.role.role_type !== "student" && account.role.role_type !== "ta") {
+            console.log("Viewed Profile is not student or ta")
+            return false;
+        }
+        console.log("Viewed Profile is Friendable")
+        return true
+
     }
 
     // Basically check if user is the same user as the loaded profile.
@@ -411,20 +417,20 @@ export const Profile = (props) => {
                                         {online === true && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
                                         {online === false && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
                                         <th className="float-start col-3 fs-3 mt-2 text-start">{account.username}</th>
-                                        {account.status === 2 && <th className="col-2 pb-2">
+                                        {friendable() && account.status === 2 && <th className="col-2 pb-2">
                                             <Button variant="contained" className="bg-primary" onClick={() => { handleFriendRequestFunc(1) }} endIcon={<Add />}>Accept Request</Button>
                                             <Button variant="contained" className="bg-danger col-2" onClick={() => { handleFriendRequest(0) }}><ClearIcon /></Button>
                                         </th>}
-                                        {account.status === 1 && <th className="col-2 pb-2">
+                                        {friendable() && account.status === 1 && <th className="col-2 pb-2">
                                             <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Request Sent</Button>
                                         </th>}
-                                        {account.status === 4 && <th className="col-2 pb-2">
+                                        {friendable() && account.status === 4 && <th className="col-2 pb-2">
                                             <Button variant="contained" disabled endIcon={<ClearIcon color='disabled' />}>Redacted</Button>
                                         </th>}
-                                        {account.status === 0 && <th className="col-2 pb-2">
+                                        {friendable() && account.status === 0 && <th className="col-2 pb-2">
                                             <Button variant="contained" className="bg-success" onClick={() => sendFriendRequestFunc()} endIcon={<Add />}>Add Friend </Button>
                                         </th>}
-                                        {account.status === 3 &&
+                                        {friendable() && account.status === 3 &&
                                             <div className="float-end col-2 mb-1 mt-2">
                                                 <div className="clearfix p-0"></div>
                                                 <th className="col-1 rounded bg-success border-0 p-1">
