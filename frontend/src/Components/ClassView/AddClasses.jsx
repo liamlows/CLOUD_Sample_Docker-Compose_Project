@@ -9,7 +9,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 
 // Component Imports
 import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
-import {doSignOut, TextField} from "../common";
+import { doSignOut, TextField } from "../common";
 
 // Method Imports
 import { getAllCourses, getCoursebyId, logout, getAccountbyId } from "../../APIFolder/loginApi"
@@ -32,15 +32,15 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
         var temp_courses = [];
         getAllCourses().then(async clssRes => {
             console.log("Getting requests")
-            
-            for(const i in clssRes){
+
+            for (const i in clssRes) {
                 let course = await getCoursebyId(clssRes[i].course_id)
                 temp_courses.push(course);
             }
             console.log("temp_courses", temp_courses);
             setCourses(temp_courses);
         });
-        
+
     }, [dummy]);
 
     // Conditions
@@ -88,15 +88,15 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
     }
     const signOut = () => { doSignOut().then(() => navigate('/')) };
     const find = (course) => {
-            return true;
-        {
-        if(course.course_name.indexOf(cName) !== -1)
-        return false
+
+        if (course.course_name.indexOf(cName) !== -1) {
+            return true
         }
+        return false;
     }
 
     // HTML
-    if(!!courses && courses.length !== 0) {
+    if (!!courses && courses.length !== 0) {
         return <div>
             <LoggedInResponsiveAppBar
                 pages={pages}
@@ -124,7 +124,7 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
                 </thead>
                 <tbody>
                     {courses.map((course, idx) => {
-                        return (find(course) &&<tr key={idx} className="container">
+                        return (find(course) && <tr key={idx} className="container">
                             <td>{course.course_name}{console.log(course)}</td>
                             <td>{course.department}</td>
                             <td>{course.professors.length !== 0 && course.professors.map((professor) => {
