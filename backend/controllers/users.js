@@ -108,6 +108,11 @@ const userSearch = async(username, id, email) => {
     return result;
 }
 
+const hideNFT = async(id, nft) => {
+    const result = await User.hideNFT(id, nft);
+    return result;
+}
+
 module.exports = {
     createUser,
     authenticateUser,
@@ -120,5 +125,6 @@ module.exports = {
     paymentInfo,
     transfer,
     updateInfo,
-    userSearch
+    userSearch,
+    hideNFT
 };

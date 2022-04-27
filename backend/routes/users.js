@@ -95,6 +95,19 @@ router.post('/update', async (req, res, next) => {
 
 });
 
+router.post('/hide', async (req, res, next) => {
+    try {
+        const user = req.user;
+        const body = req.body;
+        const result = await User.hideNFT(user.id, body.nftID);
+        res.status(200).json(result);
+    } catch (err){
+        console.error("Could not hide NFT: ", err);
+        res.sendStatus(401).json({ message: err.toString() });e
+    }
+
+});
+
 router.get('/list', async (req, res, next) => {
     try {
         const body = req.body;
@@ -102,9 +115,8 @@ router.get('/list', async (req, res, next) => {
         res.status(200).json(result);
     } catch (err){
         console.error("Could not get users: ", err);
-        res.sendStatus(401).json({ message: err.toString() });e
+        res.sendStatus(404).json({ message: err.toString() });e
     }
-
 
 });
 
