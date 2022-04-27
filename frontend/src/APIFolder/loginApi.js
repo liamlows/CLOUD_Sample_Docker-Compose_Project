@@ -166,7 +166,10 @@ export const getFriendsClasses = async (id) => {
 
     return res.data;
 }
-
+export const getCurrUserClasses = async (id) => {
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/enrollments/${id}`);
+    return res.data;
+}
 // api/users/professors/
 
 export const getClasses = async () => {

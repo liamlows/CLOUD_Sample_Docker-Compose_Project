@@ -10,3 +10,7 @@ input[type="file"] {
     background-color: rgb(37, 37, 241);
     color: white;
 }
+img {
+    max-width: 100%;
+    height: auto;
+}

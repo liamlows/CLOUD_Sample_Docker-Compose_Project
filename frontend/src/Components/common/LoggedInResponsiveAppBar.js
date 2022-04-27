@@ -129,6 +129,7 @@ export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, account_id,
                   key={page.label}
                   component={Link}
                   to={`/users`}
+                  className="btn"
                   onClick={handleCloseNavMenu}
                   sx={{ my: 2, color: 'white', display: 'block' }}
                 >

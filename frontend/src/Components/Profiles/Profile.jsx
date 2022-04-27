@@ -313,8 +313,10 @@ export const Profile = (props) => {
             {JSON.parse(localStorage.getItem("currUser")).username === account.username && editMode === true &&
                 <div className="container border-0 mt-5">
                     <div className="row bg-light pb-4">
-                        {account.pfp_url !== undefined && <img src={`${account.pfp_url}`} className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
-                        {account.pfp_url === undefined && <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
+                        <div className="float-start col-4 m-3 mt-5 pb-5">
+                            {account.pfp_url !== undefined && <img src={`${account.pfp_url}`} alt="" />}
+                            {account.pfp_url === undefined && <img src="https://via.placeholder.com/300x300" alt="" />}
+                        </div>
                         <div className="col-7 float-start mt-5">
                             <table className='table float-start'>
                                 <thead>
@@ -328,12 +330,12 @@ export const Profile = (props) => {
                                 </thead>
                                 <tbody>
                                     <tr className="border-0">
-                                        <td className="col-3 fs-6 text-start border-0">
+                                        <td className="col-12 fs-6 text-start border-0">
                                             <TextField label="First Name :" value={account.first_name} setValue={first_name => changeAccount({ first_name })} />
                                         </td>
                                     </tr>
                                     <tr className="border-0">
-                                        <td className="col-3 fs-6 text-start border-0">
+                                        <td className="col-12 fs-6 text-start border-0">
 
                                             <TextField label="Last Name :" value={account.last_name} setValue={last_name => changeAccount({ last_name })} />
                                         </td>
@@ -345,10 +347,11 @@ export const Profile = (props) => {
                                         <td>
                                             <div className="roundered">
                                                 <label for="file-upload" class="custom-file-upload">
-                                                    <i class="fa fa-cloud-upload"></i> Upload
+                                                    <i class="fa fa-cloud-upload"></i> Upload Picture
                                                 </label>
                                                 <input id="file-upload" type="file" accept=".gif,.jpg,.jpeg,.png" onChange={(event) => onFileChange(event)} />
                                             </div>
+                                            {pp !== undefined && <p>{pp.name}</p>}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -369,8 +372,10 @@ export const Profile = (props) => {
             {JSON.parse(localStorage.getItem("currUser")).username === account.username && editMode === false &&
                 <div className="container border-0 mt-5">
                     <div className="row bg-light pb-4">
-                        {account.pfp_url !== undefined && <img src={`${account.pfp_url}`} className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
-                        {account.pfp_url === undefined && <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
+                        <div className="float-start col-4 m-3 mt-5 pb-5">
+                            {account.pfp_url !== undefined && <img src={`${account.pfp_url}`} alt="" />}
+                            {account.pfp_url === undefined && <img src="https://via.placeholder.com/300x300" alt="" />}
+                        </div>
                         <div className="col-7 float-start mt-5">
                             <table className='table float-start'>
                                 <thead>
@@ -409,8 +414,10 @@ export const Profile = (props) => {
                     <div className="clearfix p-0"></div>
                     <div className="container border-0 mt-3">
                         <div className="row bg-light pb-4">
-                            {account.pfp_url !== undefined && <img src={`${account.pfp_url}`} className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
-                            {account.pfp_url === undefined && <img src="https://via.placeholder.com/300x300" className="float-start col-4 m-3 mt-5 pb-5" alt="" />}
+                            <div className="float-start col-4 m-3 mt-5 pb-5">
+                                {account.pfp_url !== undefined && <img src={`${account.pfp_url}`} alt="" />}
+                                {account.pfp_url === undefined && <img src="https://via.placeholder.com/300x300" alt="" />}
+                            </div>
                             <div className="col-7 float-start mt-5">
                                 <table className='table float-start'>
                                     <thead className="col-12">

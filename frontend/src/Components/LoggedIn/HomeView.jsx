@@ -46,7 +46,9 @@ export const HomeView = (props) => {
                 navigate('/');
             }
         }
-        getNotifications(account.account_id).then(res => { setNotifications(res) })
+        getNotifications(account.account_id).then(res => { 
+            console.log("NOTIFICATIONS",res)
+            setNotifications(res) })
         console.log("Loading HomeView...");
     }, [account]);
     

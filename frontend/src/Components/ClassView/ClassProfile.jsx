@@ -234,27 +234,6 @@ export const ClassProfile = (props) => {
                                             <TextField label="Course Department :" value={course.department} setValue={department => changeCourse({ department })} />
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td className="col-4 text-start">Teaching Assistants</td>
-                                    </tr>
-                                    {
-                                        tas.map((profile, idx) => {
-
-                                            return <tr key={idx} className="container">
-                                                <td>
-                                                    <span className="p-0 text-capitalize">{profile.first_name} </span><span className="p-0 text-capitalize" >{profile.last_name}</span>
-                                                </td>
-                                                <td>
-                                                    <Button variant="contained"
-                                                        className="btn bg-success"
-                                                        endIcon={<ArrowForwardIcon />}
-                                                        onClick={() => goToProfile(profile)}>
-                                                        View Profile
-                                                    </Button>
-                                                </td>
-                                            </tr>
-                                        })
-                                    }
                                 </tbody>
                             </table>
                         </div>
