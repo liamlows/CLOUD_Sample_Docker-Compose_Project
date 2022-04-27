@@ -3,32 +3,15 @@ import { TextField } from "@mui/material";
 import './login.css';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { useContext, useState } from 'react';
-import {baseEndpoint} from '../urls/API'
-import { AppContext } from "../AppContext";
+import { useState } from 'react';
+import { checkAccount } from "../api/AuthenAPI";
 
 export const LoginPage = () => {
     const navigate = useNavigate();
 
+    localStorage.clear();
     const [email, setEmail]=useState('');
     const [password, setPassword]=useState('');
-
-    const checkAccount = () =>{
-        axios.post(baseEndpoint+'/session',{email:email, password:password})
-                .then(function(response){
-                    if(response.status===201){
-                        window.alert("Successfully log in!!");
-                        localStorage.setItem('token',response.data);
-
-                    }
-                    else{
-                        window.alert("Logged with error");
-                    }
-                })
-                .catch(function(error){
-                    window.alert(error);
-            });
-    }
 
     const handleChangeEmail=(e)=>{
         setEmail(e.target.value);
@@ -39,7 +22,7 @@ export const LoginPage = () => {
     }
     
     const handleSubmitClick=()=>{
-        checkAccount();
+        checkAccount(email,password);
         //login(email, password);
         navigate('/home');
     }
