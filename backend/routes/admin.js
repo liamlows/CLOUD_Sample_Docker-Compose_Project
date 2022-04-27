@@ -118,6 +118,7 @@ router.delete('/nft/id/:id', async (req, res, next) => {
   next()
 }) 
 
+// POST /admin/updateNFT
 router.post('/updateNFT', async (req, res, next) => {
   try {
         const result = await NFT.modifyNFT(body.id, body.name, body.image_url, body.price, body.description, body.creator_id, body.seller_id, body.owner_id, body.for_sale);

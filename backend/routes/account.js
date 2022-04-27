@@ -23,18 +23,19 @@ router.post('/new', async (req, res, next) => {
     next();
 })
 
-router.delete('/delete', async (req, res, next) => {
-    try {
-        const body = req.body;
-        console.log(body);
-        const result = await UserController.deleteUserById(body.id);
-        res.status(201).json(result);
-    } catch (err) {
-        console.error('Failed to delete user:', err);
-        res.status(400).json({ message: err.toString() });
-    }
-    next();
-})
+// // DELETE /account/a
+// router.delete('/delete', async (req, res, next) => {
+//     try {
+//         const body = req.body;
+//         console.log(body);
+//         const result = await UserController.deleteUserById(body.id);
+//         res.status(201).json(result);
+//     } catch (err) {
+//         console.error('Failed to delete user:', err);
+//         res.status(400).json({ message: err.toString() });
+//     }
+//     next();
+// })
 
 router.post('/:id', async (req, res, next) => {
     try {

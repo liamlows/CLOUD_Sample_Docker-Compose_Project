@@ -105,11 +105,53 @@ router.get('/followers', async (req, res, next) => {
   next()
 }) 
 
+// GET ub/followers returns list of user's followers
+router.get('/followerNum', async (req, res, next) => {
+  try {
+    const user = req.user;
+    const result = await Followers.getFollowerCount(user.id);
+    res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to get followers: ", err);
+  }
+
+  next()
+}) 
+
+// GET ub/followers returns list of user's followers
+router.get('/followers', async (req, res, next) => {
+  try {
+    const user = req.user;
+    const result = await Followers.getFollowC(user.id);
+    res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to get followers: ", err);
+  }
+
+  next()
+}) 
+
 // GET ub/following returns list of who user is following
 router.get('/following', async (req, res, next) => {
   try {
     const user = req.user;
     const result = await Followers.getFollowing(user.id);
+    res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to get following: ", err);
+  }
+
+  next()
+}) 
+
+// GET ub/following returns list of who user is following
+router.get('/followingNum', async (req, res, next) => {
+  try {
+    const user = req.user;
+    const result = await Followers.getFollowingCount(user.id);
     res.status(201).json(result);
 
   } catch (err) {

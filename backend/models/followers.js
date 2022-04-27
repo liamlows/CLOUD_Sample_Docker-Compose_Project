@@ -8,8 +8,20 @@ const getUserFollower = async (id) => {
     return result;
 }
 
+const getUserFollowerCount = async (id) => {
+    const query = knex(FOLLOWER_TABLE).where('userID', id).count();
+    const result = await query;
+    return result;
+}
+
 const getUserFollowing = async (id) => {
     const query = knex(FOLLOWER_TABLE).where('followerID', id);
+    const result = await query;
+    return result;
+}
+
+const getUserFollowingCount = async (id) => {
+    const query = knex(FOLLOWER_TABLE).where('followerID', id).count();
     const result = await query;
     return result;
 }
@@ -28,7 +40,9 @@ const unfollowUser = async (userID, followerID) => {
 
 module.exports = {
     getUserFollower,
+    getUserFollowerCount,
     getUserFollowing,
+    getUserFollowingCount,
     followUser,
     unfollowUser
 }
