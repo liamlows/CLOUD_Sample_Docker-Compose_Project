@@ -22,7 +22,8 @@ export const Navbar = () => {
 
       <div className="title"> <h1 className="setColor"> 
       <Link to='/home' className="nftLink">NFTShop</Link>
-      </h1> </div>
+      </h1> 
+      </div>
         <div className="menu">
           <div className="navLink">
             <Link to='/profile'>My Account</Link>
@@ -42,12 +43,12 @@ export const Navbar = () => {
           <h5 className="navBalance">
             Balance: ${user[0].balance}
           </h5>
-        </div>
-            <Link to='/' className="navBtnLink">
+          <Link to='/' className="navBtnLink">
               <button type="button" className="navBtn">
-                Sign In
+                Sign In/Log Out
               </button>
             </Link>
+        </div>
       </div>
     </>
   );
