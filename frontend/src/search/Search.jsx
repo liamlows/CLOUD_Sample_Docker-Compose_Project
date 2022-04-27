@@ -8,7 +8,7 @@ import {useState, useEffect, useContext} from 'react';
 import { getUsers } from '../api/UsersAPI';
 import CircularProgress from '@mui/material/CircularProgress';
 
-// delete duplicates
+// delete duplicate accounts
 
 export const Search = () => {
 
