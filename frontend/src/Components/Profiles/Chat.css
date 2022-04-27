@@ -1,0 +1,8 @@
+.sent{
+    background: rgb(0, 89, 190);
+    float: right;
+}
+.recieve{
+    background: rgb(170, 170, 170);
+    float: left;
+}
