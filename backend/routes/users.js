@@ -120,6 +120,4 @@ router.get('/list', async (req, res, next) => {
 
 });
 
-
 module.exports = router;
-
