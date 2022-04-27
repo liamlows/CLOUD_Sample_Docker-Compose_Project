@@ -1,5 +1,6 @@
 const User = require('../models/users');
-// const NFT = require('..models/nft');
+const NFT = require('../models/nft');
+const Purchase = require('../models/purchase');
 
 
 // Create new user if email and password are provided
@@ -48,33 +49,33 @@ const balance = async(id) => {
     return result;
 }
 
-// const purchaseNFT = async(id, nftID) => {
+const purchaseNFT = async(id, nftID) => {
 
-//     const valid = await User.validatePurchase(id);
-//     // Check for valid payment
-//     if(valid === 0){
-//         console.log("No payment information provided.");
-//         return res.sendStatus(404);
-//     }
-//     const balance = User.balance(id);
-//     const cost = NFT.getNFTCost(nftID);
-//     // Check for sufficient funds
-//     if(balance < cost){
-//         console.log("Insufficient funds.");
-//         return res.sendStatus(403);
-//     }
+    const valid = await User.validatePurchase(id);
+    // Check for valid payment
+    if(valid === 0){
+        console.log("No payment information provided.");
+        return res.sendStatus(404);
+    }
+    const balance = User.balance(id);
+    const cost = NFT.getNFTCost(nftID);
+    // Check for sufficient funds
+    if(balance < cost){
+        console.log("Insufficient funds.");
+        return res.sendStatus(403);
+    }
 
-//     // Transfer funds from buyer to seller
-//     const transfer1 = await User.adjustFunds(id, cost, 0);
-//     const seller = await NFT.getNFTSeller(nftID);
-//     const transfer2 = await User.adjustFunds(seller, cost, 1);
-//     // Transfer ownership
-//     const transfer3 = await NFT.updateSellerID(nftID, id);
-//     const transfer4 = await NFT.updateOwnerID(nftID, id);
-//     const sale = await NFT.updateForSale(nftID, 0);
+    // Transfer funds from buyer to seller
+    const transfer1 = await User.adjustFunds(id, cost, 0);
+    const seller = await NFT.getNFTSeller(nftID);
+    const transfer2 = await User.adjustFunds(seller, cost, 1);
+    // Transfer ownership
+    const transfer3 = await NFT.updateSellerID(nftID, id);
+    const transfer4 = await NFT.updateOwnerID(nftID, id);
+    const sale = await NFT.updateForSale(nftID, 0);
 
-//     return result;
-// }
+    return result;
+}
 
 const paymentInfo = async(id, cardType, cardNum, name, cvv, exp) => {
     console.log(id, cardType, cardNum, name, cvv, exp);
@@ -102,6 +103,11 @@ const updateInfo = async(id, name, photo) => {
     return rez;
 }
 
+const userSearch = async(username, id, email) => {
+    const result = await User.findUser(username, id, email);
+    return result;
+}
+
 module.exports = {
     createUser,
     authenticateUser,
@@ -110,8 +116,9 @@ module.exports = {
     updateName,
     updatePhoto,
     balance,
-    // purchaseNFT,
+    purchaseNFT,
     paymentInfo,
     transfer,
-    updateInfo
+    updateInfo,
+    userSearch
 };

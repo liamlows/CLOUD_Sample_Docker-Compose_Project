@@ -1,4 +1,5 @@
-const knex = require('../database/knex')
+const knex = require('../database/knex');
+const { getConnection } = require('../db');
 
 const NFT_TABLE = 'nft'
 
@@ -124,6 +125,14 @@ const nftLeaderboard= async () => {
     return result;
 }
 
+const searchByTerm = async (term) => {
+    const searchTerm = '%'+term+'%'
+    const query = knex(NFT_TABLE).select('*').whereLike( 'description', searchTerm );
+
+    const result = await query;
+    return result;
+}
+
 module.exports = {
     createNFT, 
     getNFT,
@@ -140,6 +149,8 @@ module.exports = {
     getNFTCost,
     getNFTSeller,
     getAllByPrice,
+    searchByTerm,
     userLeaderboard,
     nftLeaderboard
 }
+

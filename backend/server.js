@@ -27,6 +27,7 @@ const unblockedRoutes = require('./routes/unblocked');
 const sessionRoutes = require('./routes/session');
 const accountRoutes = require('./routes/account');
 const adminRoutes = require('./routes/admin');
+const ubRoutes = require('./routes/messages');
 
 // create a logger object.  Using logger is preferable to simply writing to the console.
 const logger = log({ console: true, file: false, label: config.name });
@@ -47,7 +48,7 @@ app.use('/account', accountRoutes);
 
 app.use('/users', authenticateWithClaims(['user']), usersRoutes);
 app.use('/admin', authenticateWithClaims(['admin']), adminRoutes);
-app.use('/unblocked', authenticateWithClaims(['unblocked']), unblockedRoutes);
+app.use('/ub', authenticateWithClaims(['unblocked']), ubRoutes);
 
 
 app.get('/health', (request, response, next) => {
@@ -59,7 +60,7 @@ app.get('/health', (request, response, next) => {
 
 
 //include routes
-routes(app, logger);
+// routes(app, logger);
 
 // connecting the express object to listen on a particular port as defined in the config object.
 app.listen(config.port, config.host, (e) => {
