@@ -126,7 +126,7 @@ const deleteUser = async (id) => {
 }
 
 const updateEmail = async(id, email) => {
-    const query = knex(USER_TABLE).update({eamil: email} ).where({ id });
+    const query = knex(USER_TABLE).update({email: email} ).where({ id });
     const result = await query;
     return result;
 }
@@ -135,9 +135,15 @@ const updateUsername = async(id, username) => {
     const query = knex(USER_TABLE).update({username: username} ).where({ id });
     const result = await query;
     return result;
-}
+} 
+
 const updatePassword = async(id, password) => {
-    const query = knex(USER_TABLE).update({password: password} ).where({ id });
+    console.log('Raw password:', password);
+    const salt = await bcrypt.genSalt(10);
+    console.log('Password salt', salt);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    console.log('Hashed password', hashedPassword);
+    const query = knex(USER_TABLE).update({password: hashedPassword} ).where({ id });
     const result = await query;
     return result;
 }
