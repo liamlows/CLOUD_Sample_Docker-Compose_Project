@@ -77,9 +77,9 @@ export const ClassMenu = ({ pages, settings, setNavigated }) => {
         account_id={JSON.parse(localStorage.getItem("currUser")).account_id}
         account_type={JSON.parse(localStorage.getItem("currUser")).role.role_type} />
 
-      <p>This is supposed to be a schedule viewer + grade accessor but we ran out of time</p>
-      {enrollable() && <Button variant="contained" className="bg-success mt-5" onClick={() => goToCourseAdd()} endIcon={<Add />}>Add Class</Button>}
-      {!enrollable() && <Button variant="contained" className="bg-success mt-5" onClick={() => goToCourseAdd()} endIcon={<ArrowForwardIcon />}>Course List</Button>}
+      <p className="mt-5">This is supposed to be a schedule viewer + grade accessor but we ran out of time</p>
+      {enrollable() && <Button variant="contained" className="bg-success m-3" onClick={() => goToCourseAdd()} endIcon={<Add />}>Add Class</Button>}
+      {!enrollable() && <Button variant="contained" className="bg-success m-3" onClick={() => goToCourseAdd()} endIcon={<ArrowForwardIcon />}>Course List</Button>}
 
       {enrollable() && courses.length > 0 && <table className="table">
         <thead>

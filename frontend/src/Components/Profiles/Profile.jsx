@@ -111,7 +111,7 @@ export const Profile = (props) => {
 
                 if (status === 3) {
                     let res2 = await getFriendsClasses(loaded.account_id)
-                    setClasses(...res2);
+                    setClasses([...res2]);
 
                 }
 
@@ -314,19 +314,17 @@ export const Profile = (props) => {
                 <div className="container border-0 mt-5">
                     <div className="row bg-light pb-4">
                         <div className="float-start col-4 m-3 mt-5 pb-5">
-                            {account.pfp_url !== undefined && <img src={`${account.pfp_url}`} alt="" />}
-                            {account.pfp_url === undefined && <img src="https://via.placeholder.com/300x300" alt="" />}
+                            {account.pfp_url !== null && <img src={`${account.pfp_url}`} alt="" />}
+                            {account.pfp_url === null && <img src="https://via.placeholder.com/300x300" alt="" />}
                         </div>
                         <div className="col-7 float-start mt-5">
                             <table className='table float-start'>
                                 <thead>
-                                    {online && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
-                                    {!online && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
-                                    <th className="float-start col-3 fs-3 mt-2 text-start"><span className="text-start p-0">{account.username}</span></th>
-
-                                    <th className="col-1">
-                                        <button type="button" className="btn btn-light" onClick={() => startEditing()}>Edit Profile</button>
-                                    </th>
+                                    <tr>
+                                        {online === true && <th className="float-start mt-3 mb-1 online"><CircleIcon className="online col-1" color='success' /></th>}
+                                        {online === false && <th className="float-start mt-3 mb-1 online"><CircleIcon className="online col-1" sx={{ color: 'red' }} /></th>}
+                                        <th className="float-start col-11 fs-3 mt-2 text-start"><span className="text-start p-0">{account.username}</span><button type="button" className="btn btn-light float-end col-3 p-0" onClick={() => startEditing()}>Edit Profile</button></th>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                     <tr className="border-0">
@@ -373,18 +371,17 @@ export const Profile = (props) => {
                 <div className="container border-0 mt-5">
                     <div className="row bg-light pb-4">
                         <div className="float-start col-4 m-3 mt-5 pb-5">
-                            {account.pfp_url !== undefined && <img src={`${account.pfp_url}`} alt="" />}
-                            {account.pfp_url === undefined && <img src="https://via.placeholder.com/300x300" alt="" />}
+                            {account.pfp_url !== null && <img src={`${account.pfp_url}`} alt="" />}
+                            {account.pfp_url === null && <img src="https://via.placeholder.com/300x300" alt="" />}
                         </div>
                         <div className="col-7 float-start mt-5">
                             <table className='table float-start'>
                                 <thead>
-                                    {online === true && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
-                                    {online === false && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
-                                    <th className="float-start col-3 fs-3 mt-2 text-start">{account.username}</th>
-                                    <th className="col-1">
-                                        <button type="button" className="btn btn-light" onClick={() => startEditing()}>Edit Profile</button>
-                                    </th>
+                                    <tr>
+                                        {online === true && <th className="float-start mt-3 mb-1 online"><CircleIcon className="online col-1" color='success' /></th>}
+                                        {online === false && <th className="float-start mt-3 mb-1 online"><CircleIcon className="online col-1" sx={{ color: 'red' }} /></th>}
+                                        <th className="float-start col-11 fs-3 mt-2 text-start">{account.username}<button type="button" className="btn btn-light float-end col-3 p-0" onClick={() => startEditing()}>Edit Profile</button></th>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
@@ -415,118 +412,118 @@ export const Profile = (props) => {
                     <div className="container border-0 mt-3">
                         <div className="row bg-light pb-4">
                             <div className="float-start col-4 m-3 mt-5 pb-5">
-                                {account.pfp_url !== undefined && <img src={`${account.pfp_url}`} alt="" />}
-                                {account.pfp_url === undefined && <img src="https://via.placeholder.com/300x300" alt="" />}
+                                {account.pfp_url !== null && <img src={`${account.pfp_url}`} alt="" />}
+                                {account.pfp_url === null && <img src="https://via.placeholder.com/300x300" alt="" />}
                             </div>
                             <div className="col-7 float-start mt-5">
                                 <table className='table float-start'>
                                     <thead className="col-12">
-                                        {online === true && <th className="float-start mt-3 mb-1"><CircleIcon color='success' /></th>}
-                                        {online === false && <th className="float-start mt-3 mb-1"><CircleIcon sx={{ color: 'red' }} /></th>}
-                                        <th className="float-start col-3 fs-3 mt-2 text-start">{account.username}</th>
-                                        {friendable() && account.status === 2 && <th className="col-2 pb-2">
+                                    <tr>
+                                    {online === true && <th className="float-start mt-3 mb-1 online"><CircleIcon className="online col-1" color='success' /></th>}
+                                    {online === false && <th className="float-start mt-3 mb-1 online"><CircleIcon className="online col-1" sx={{ color: 'red' }} /></th>}
+                                    <th className="float-start col-11 fs-3 mt-2 text-start">{account.username}
+                                        {friendable() && account.status === 2 && <div className="col-3 p-0 pb-2 float-end">
                                             <Button variant="contained" className="bg-primary" onClick={() => { handleFriendRequestFunc(1) }} endIcon={<Add />}>Accept Request</Button>
                                             <Button variant="contained" className="bg-danger col-2" onClick={() => { handleFriendRequest(0) }}><ClearIcon /></Button>
-                                        </th>}
-                                        {friendable() && account.status === 1 && <th className="col-2 pb-2">
+                                        </div>}
+                                        {friendable() && account.status === 1 && <div className="col-3 p-0 pb-2 float-end">
                                             <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Request Sent</Button>
-                                        </th>}
-                                        {friendable() && account.status === 4 && <th className="col-2 pb-2">
+                                        </div>}
+                                        {friendable() && account.status === 4 && <div className="col-3 p-0 pb-2 float-end">
                                             <Button variant="contained" disabled endIcon={<ClearIcon color='disabled' />}>Redacted</Button>
-                                        </th>}
-                                        {friendable() && account.status === 0 && <th className="col-2 pb-2">
+                                        </div>}
+                                        {friendable() && account.status === 0 && <div className="col-3 p-0  pb-2 float-end">
                                             <Button variant="contained" className="bg-success" onClick={() => sendFriendRequestFunc()} endIcon={<Add />}>Add Friend </Button>
-                                        </th>}
-                                        {friendable() && account.status === 3 &&
-                                            <div className="float-end col-2 mb-1 mt-2">
-                                                <div className="clearfix p-0"></div>
-                                                <th className="col-1 rounded bg-success border-0 p-1">
-                                                    <div className="bg-success text-white">
-                                                        Friends <Check className='mb-1 m-1 mt-0' />
-                                                    </div>
-                                                </th>
-                                            </div>
-                                        }
-
-                                    </thead>
-                                    <tr>
-                                        <td className="col-3 fs-6 text-start">
-                                            <span className="p-0 text-capitalize">{account.first_name} </span><span className="p-0 text-capitalize" >{account.last_name}</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td className="text-start">Bio:
-                                            <p>{account.bio}</p>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>}
-
-            {account.role.role_type === "student" &&
-                classes.length === 0 && (account.status === 3 || account.account_id === JSON.parse(localStorage.getItem("currUser")).account_id) && <div>
-                    <h1>Classes</h1>
-                    <p>{account.username} is not enrolled in any classes</p>
-                </div>
-            }
-            {account.role.role_type === "student" &&
-                classes.length === 0 && account.status !== 3 && account.account_id !== JSON.parse(localStorage.getItem("currUser")).account_id && <div>
-                    <h1>Classes</h1>
-                    <p>You must be friends with {account.username} to view their classes</p>
-                </div>
-            }
-            {account.role.role_type === "student" && classes.length !== 0 && <div>
-                <h1>Classes</h1>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Number</th>
-                            <th>Days</th>
-                            <th>Time</th>
-                            <th> </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {classes.map((clss, idx) => {
-
-                            return <tr key={idx} className="container">
-                                <td>{clss.name}</td>
-                                <td>{clss.number}</td>
-                                <td>{clss.days}</td>
-                                <td>{clss.time}</td>
-                                <td>
-                                    <Button variant="contained"
-                                        className="btn bg-secondary"
-                                        endIcon={<ArrowForwardIcon />}
-                                        onClick={() => goToClass(clss)}>
-                                        View Course
-                                    </Button>
+                                        </div>}
+                                        {friendable() && account.status === 3 && <div className="col-3 p-0  pb-2 float-end">
+                                            <Button variant="contained" className="col-8 bg-warning float-start" disabled endIcon={<Check color='disabled' />}>Friends</Button>
+                                            <Button variant="contained" className="col-1 bg-danger" onClick={() => handleFriendRequest(0)}><ClearIcon /></Button>
+                                        </div>}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <td className="col-3 fs-6 text-start">
+                                    <span className="p-0 text-capitalize">{account.first_name} </span><span className="p-0 text-capitalize" >{account.last_name}</span>
                                 </td>
-
                             </tr>
+                            <tr>
+                                <td className="text-start">Bio:
+                                    <p>{account.bio}</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                    </div>
+                </div >}
 
-                        })}
-                    </tbody>
-                </table>
-            </div>}
+{
+    account.role.role_type === "student" &&
+    classes.length === 0 && (account.status === 3 || account.account_id === JSON.parse(localStorage.getItem("currUser")).account_id) && <div>
+        <h1>Classes</h1>
+        <p>{account.username} is not enrolled in any classes</p>
+    </div>
+}
+{
+    account.role.role_type === "student" &&
+    classes.length === 0 && account.status !== 3 && account.account_id !== JSON.parse(localStorage.getItem("currUser")).account_id && <div>
+        <h1>Classes</h1>
+        <p>You must be friends with {account.username} to view their classes</p>
+    </div>
+}
+{
+    account.role.role_type === "student" && classes.length !== 0 && <div>
+        <h1>Classes</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Number</th>
+                    <th>Days</th>
+                    <th>Time</th>
+                    <th> </th>
+                </tr>
+            </thead>
+            <tbody>
+                {classes.map((clss, idx) => {
+
+                    return <tr key={idx} className="container">
+                        <td>{clss.name}</td>
+                        <td>{clss.number}</td>
+                        <td>{clss.days}</td>
+                        <td>{clss.time}</td>
+                        <td>
+                            <Button variant="contained"
+                                className="btn bg-secondary"
+                                endIcon={<ArrowForwardIcon />}
+                                onClick={() => goToClass(clss)}>
+                                View Course
+                            </Button>
+                        </td>
+
+                    </tr>
+
+                })}
+            </tbody>
+        </table>
+    </div>
+}
 
 
 
-            {
-                //satisfying the review professor
-                //honestly we may be able to get away with doing the flagging be a note saying "flagged reviews are seen as false or overly critical by professor"
-                account.role.role_type === "professor" &&
+{
+    //satisfying the review professor
+    //honestly we may be able to get away with doing the flagging be a note saying "flagged reviews are seen as false or overly critical by professor"
+    account.role.role_type === "professor" &&
 
-                <ReviewList
-                    type="Professor"
-                    account_id={localStorage.getItem("currUser").account_id}
-                    search_id={account.account_id} />
+        <ReviewList
+            type="Professor"
+            account_id={localStorage.getItem("currUser").account_id}
+            search_id={account.account_id} />
 
-            }
-        </section>
+}
+        </section >
     }
-    return <></>;
+return <></>;
 }

@@ -19,7 +19,6 @@ export const SignUpPage = (props) => {
     const [password, setPassword] = useState(undefined);
     const [firstName, setFirstName] = useState(undefined);
     const [lastName, setLastName] = useState(undefined);
-    const [email, setEmail] = useState(undefined);
     const [school, setSchool] = useState(undefined);
 
     const [schools, setSchools] = useState([]);
@@ -43,13 +42,12 @@ export const SignUpPage = (props) => {
 
     // Component Methods
     const clickAddAccount = () => {
-        if (username && password && firstName && lastName && email) {
-            var temp = {
+        if (username && password && firstName && lastName && school) {
+            let temp = {
                 "username": username,
                 "password": password,
                 "firstName": firstName,
                 "lastName": lastName,
-                "email": email,
                 "school": school
             };
             registerAccount(temp)

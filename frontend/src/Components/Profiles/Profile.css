@@ -14,3 +14,8 @@ img {
     max-width: 100%;
     height: auto;
 }
+.online{
+    /* This is the little online status that I do not want to be large */
+    max-height: 10px;
+    max-width: 10px;
+}
