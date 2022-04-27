@@ -61,6 +61,7 @@ export const Search = () => {
         <br/>
         <Divider/>
         <br/><br/>
+        
         {
                 users.map(user => <div key={user.id} class="row">
                     <div class="col-4">
