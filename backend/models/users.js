@@ -61,6 +61,15 @@ const findUser = async (username, id, email) => {
     return result;
 }
 
+const findUser2 = async (term) => {
+    const searchTerm = '%'+term+'%'
+    
+    const query = knex(USER_TABLE).where('username', 'like', searchTerm).orWhere('email', 'like', searchTerm);
+
+    const result = await query;
+    return result;
+}
+
 const getAdmin = async (email) => {
     const query = knex(USER_TABLE).where({ email }).whereRaw('privileges = 2');
     const result = await query;
@@ -221,7 +230,8 @@ module.exports = {
     adjustFunds,
     findUserByUsername,
     findUser,
+    findUser2,
     updateEmail,
     updateUsername,
-    updatePassword
+    updatePassword,
 };

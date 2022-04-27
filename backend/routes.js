@@ -222,6 +222,16 @@ app.get('/user/list', async(req, res) => {
   }
 })
 
+app.get('/user/list/:term', async (req, res, next) => {
+  try {
+      const result = await req.models.user.findUser2(req.params.term);
+      res.status(200).json(result);
+  } catch (err){
+      console.error("Could not get users: ", err);
+      res.sendStatus(404).json({ message: err.toString() });e
+  }
+})
+
 app.post('/transaction', async (req, res) => {
   try {
     const body = req.body;
