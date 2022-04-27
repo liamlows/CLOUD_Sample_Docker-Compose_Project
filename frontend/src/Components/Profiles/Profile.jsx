@@ -19,7 +19,7 @@ import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 
 
 // Method Imports
-import { getFriendRequests, getStatusById, handleFriendRequest, logout, sendFriendRequest, updateAccountbyId, getFriendRequest, getFriendsClasses, uploadPP, getAccountbyId, updateAccount } from "../../APIFolder/loginApi";
+import { getFriendRequests, getStatusById, handleFriendRequest, logout, sendFriendRequest, updateAccountbyId, getFriendRequest, getFriendsClasses, uploadPP, getAccountbyId, updateAccount, getCoursebyId } from "../../APIFolder/loginApi";
 import { TextAreaField } from "../common/TextAreaField";
 import { ReviewList } from "../common/ReviewList";
 
@@ -110,8 +110,17 @@ export const Profile = (props) => {
                 }
 
                 if (status === 3) {
-                    let res2 = await getFriendsClasses(loaded.account_id)
-                    setClasses([...res2]);
+                    getFriendsClasses(loaded.account_id).then(res => {
+                        let temp_courses = []
+                        for(const i in res)
+                        {
+                          getCoursebyId(res[i].course_id).then(course => {
+                            temp_courses.push(course)
+                            setClasses([...temp_courses])
+                          }) 
+                        }
+                      })
+                    
 
                 }
 
@@ -119,6 +128,18 @@ export const Profile = (props) => {
             else {
                 console.log("profiles are the same")
                 setAccount({ ...loaded, status: 3 });
+                getFriendsClasses(loaded.account_id).then(res => {
+                    let temp_courses = []
+                    for(const i in res)
+                    {
+                      getCoursebyId(res[i].course_id).then(course => {
+                        temp_courses.push(course)
+                        setClasses([...temp_courses])
+                      }) 
+                    }
+                    
+                  })
+                    
             }
         })
     }, [editMode, reload]); //lol the useEffect is just here now.
@@ -278,7 +299,7 @@ export const Profile = (props) => {
 
     };
 
-    const goToClass = (clss) => {
+    const goToCourse = (clss) => {
         navigate(`/classes/${clss.course_id}`);
     }
     const friendable = () => {
@@ -475,38 +496,39 @@ export const Profile = (props) => {
 {
     account.role.role_type === "student" && classes.length !== 0 && <div>
         <h1>Classes</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Number</th>
-                    <th>Days</th>
-                    <th>Time</th>
-                    <th> </th>
-                </tr>
-            </thead>
-            <tbody>
-                {classes.map((clss, idx) => {
+        <table className="table">
+        <thead>
+          <tr>
+            <th className="col-3">Name</th>
+            <th className="col-3">Department</th>
+            <th className="col-3">Professor</th>
+            <th className="col-3"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {classes.map((course, idx) => {
+            return (<tr key={idx} className="container">
+              <td>{course.course_name}{console.log(course)}</td>
+              <td>{course.department}</td>
+              <td>{course.professors.length !== 0 && course.professors.map((professor) => {
+                return `${professor.last_name}, ${professor.last_name}\n`;
+              })}{course.professors.length === 0 && `No Professor`}</td>
 
-                    return <tr key={idx} className="container">
-                        <td>{clss.name}</td>
-                        <td>{clss.number}</td>
-                        <td>{clss.days}</td>
-                        <td>{clss.time}</td>
-                        <td>
-                            <Button variant="contained"
-                                className="btn bg-secondary"
-                                endIcon={<ArrowForwardIcon />}
-                                onClick={() => goToClass(clss)}>
-                                View Course
-                            </Button>
-                        </td>
+              <td className="col-3 pb-2">
+              </td>
+              <td className="col-3">
+                <Button variant="contained"
+                  className="btn bg-secondary"
+                  endIcon={<ArrowForwardIcon />}
+                  onClick={() => goToCourse(course)}>
+                  View course
+                </Button>
+              </td>
 
-                    </tr>
-
-                })}
-            </tbody>
-        </table>
+            </tr>)
+          })}
+        </tbody>
+      </table>
     </div>
 }
 
