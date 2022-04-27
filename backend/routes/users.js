@@ -1,6 +1,7 @@
 const express = require('express');
 const User = require('../controllers/users');
-const Likes = require('../controllers/likeRecord')
+const Likes = require('../controllers/likeRecord');
+// const NFT = require('../controllers/nft');
 // const Purchase = require('../controllers/purchases');
 
 const router = express.Router();
@@ -30,7 +31,7 @@ router.get('/session', async (req, res, next) => {
     }
 }); 
 
-// Check for payment info
+// GET users/purchase purchases an NFT
 router.get('/purchase', async (req, res, next) => {
     try {
         const user = req.user;
@@ -44,7 +45,7 @@ router.get('/purchase', async (req, res, next) => {
 
 });
 
-// Add payment info
+// POST users/paymentInfo adds payment info
 router.post('/paymentInfo', async (req, res, next) => {
     try {
         const user = req.user;
@@ -59,6 +60,7 @@ router.post('/paymentInfo', async (req, res, next) => {
 
 });
 
+// GET users/balance checks user balance
 router.get('/balance', async (req, res, next) => {
     try {
         const user = req.user;
@@ -71,6 +73,7 @@ router.get('/balance', async (req, res, next) => {
 
 });
 
+// POST users/transfer transfers funds to account
 router.post('/transfer', async (req, res, next) => {
     try {
         const user = req.user;
@@ -83,6 +86,7 @@ router.post('/transfer', async (req, res, next) => {
     }
 });
 
+// POST users/update updates user profile
 router.post('/update', async (req, res, next) => {
     try {
         const user = req.user;
@@ -95,7 +99,7 @@ router.post('/update', async (req, res, next) => {
     }
 
 });
-
+// POST users/hide hides an NFT from the user's profile
 router.post('/hide', async (req, res, next) => {
     try {
         const user = req.user;
@@ -108,7 +112,7 @@ router.post('/hide', async (req, res, next) => {
     }
 
 });
-
+// GET users/list returns a list of users with given params
 router.get('/list', async (req, res, next) => {
     try {
         const body = req.body;
@@ -120,11 +124,12 @@ router.get('/list', async (req, res, next) => {
     }
 });
 
+// POST users/like likes an NFT
 router.post('/like', async (req, res, next) => {
     try {
         const user = req.user;
         const body = req.body;
-        const result = await Like.likeNFT(body.nftID, user.id);
+        const result = await Likes.likeNFT(body.nftID, user.id);
         res.status(200).json(result);
     } catch (err){
         console.error("Could not like NFT; ", err);
@@ -133,11 +138,12 @@ router.post('/like', async (req, res, next) => {
 
 });
 
+// GET users/likeRecord gets the like record for a given NFT
 router.get('/likeRecord', async (req, res, next) => {
     try {
         const user = req.user;
         const body = req.body;
-        const result = await Like.gerLikeRecord(body.nftID, user.id);
+        const result = await Likes.gerLikeRecord(body.nftID, user.id);
         res.status(200).json(result);
     } catch (err){
         console.error("Could not view like record; ", err);
@@ -145,11 +151,11 @@ router.get('/likeRecord', async (req, res, next) => {
     }
 
 });
-
+// GET users/likeCount returns the like count for a given NFT
 router.get('/likeCount', async (req, res, next) => {
     try {
         const body = req.body;
-        const result = await Like.getLikeNum(body.nftID);
+        const result = await Likes.getLikeNum(body.nftID);
         res.status(200).json(result);
     } catch (err){
         console.error("Could not view like num; ", err);
@@ -157,6 +163,41 @@ router.get('/likeCount', async (req, res, next) => {
     }
 
 });
+
+// DELETE: users/nft/id deletes the nft
+router.delete('/nft/id/:id', async (req, res, next) => {
+  try {
+      const result1 = await req.models.nft.getOwnerId;
+      if(result1 === req.user.id){
+            const result = await req.models.nft.deleteNFT(req.params.id); 
+            res.status(201).json(result);
+      }
+
+  } catch (err) {
+      console.error("Failed to delete NFT by id: ", err);
+      // res.status(500).
+  }
+
+  next()
+}) 
+
+// POST users/updateNFT updates nFT information
+router.post('/updateNFT', async (req, res, next) => {
+  try {
+      const result1 = await NFT.getOwnerId;
+      if(result1 === req.user.id){
+            const result = await User.modifyNFT(body.id, body.name, body.image_url, body.price, body.description, body.creator_id, body.seller_id, body.owner_id, body.for_sale);
+            res.status(201).json(result);
+      }
+
+  } catch (err) {
+      console.error("Failed to delete NFT by id: ", err);
+      // res.status(500).
+  }
+
+  next()
+}) 
+
 
 
 module.exports = router;

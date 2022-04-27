@@ -83,20 +83,6 @@ app.get('/nft', async (req, res, next) => {
   next()
 })
 
-// DELETE: /nft/id
-app.delete('/nft/id/:id', async (req, res, next) => {
-  try {
-
-    const result = await req.models.nft.deleteNFT(req.params.id); 
-    res.status(201).json(result);
-
-  } catch (err) {
-      console.error("Failed to delete NFT by id: ", err);
-      // res.status(500).
-  }
-
-  next()
-}) 
 
 // get NFTs with a price above min and/or below max in ascending order
 app.get('/nft/sort/:min/:max', async (req, res) => {
@@ -265,5 +251,4 @@ app.get('/transaction/seller/:seller', async (req, res) => {
     console.error("Failed to get transaction by NFT id: ", err);
   }
 })
-
 }
