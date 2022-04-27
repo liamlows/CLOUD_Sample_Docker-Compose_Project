@@ -42,7 +42,7 @@ export const NFTDetail = () => {
                 <div className="owner_id">Owner_id: {NFT[0].owner_id}</div>
                 <br></br>
                 <Stack spacing={2} direction="row">
-                <Button variant="contained" color="neutral"><Link to='/' className="loginPage">Buy Now</Link></Button>
+                <Button variant="contained" color="neutral"><Link to='/transaction' className="loginPage">Buy Now</Link></Button>
                 <Button variant="contained" color="neutral"><Link to='/home' className="nftLink">Back</Link></Button>
                 </Stack>
             </div>
