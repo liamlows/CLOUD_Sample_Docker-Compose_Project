@@ -22,8 +22,7 @@ export const Navbar = () => {
 
       <div className="title"> <h1 className="setColor"> 
       <Link to='/home' className="nftLink">NFTShop</Link>
-      </h1> 
-      </div>
+      </h1>  </div>
         <div className="menu">
           <div className="navLink">
             <Link to='/profile'>My Account</Link>
