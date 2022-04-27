@@ -93,7 +93,11 @@ export const BaseResponsiveAppBar = ({ pages, signIn, signUp }) => {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
           >
-            <img src={logo} alt='Logo' className='img-thumbnail w-25 h-25'/>;
+            <div className="row">
+            <div className='col-5'></div>
+            <img src={logo} alt='Logo' className='img-thumbnail col-2'/>
+              <div className='col-5'></div>
+            </div>
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (

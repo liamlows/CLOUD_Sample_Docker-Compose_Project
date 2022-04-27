@@ -16,6 +16,8 @@ import AccessibilityTwoToneIcon from '@mui/icons-material/AccessibilityTwoTone';
 import PeopleTwoToneIcon from '@mui/icons-material/PeopleTwoTone';
 import HomeIcon from '@mui/icons-material/Home';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import logo from '../../logo.jpg'
+
 
 export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, account_id, account_type }) => {
   const location = useLocation();
@@ -110,7 +112,11 @@ export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, account_id,
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
           >
-            LOGO
+            <div className="row">
+            <div className='col-5'></div>
+            <img src={logo} alt='Logo' className='img-thumbnail col-2'/>
+              <div className='col-5'></div>
+            </div>
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
