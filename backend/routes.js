@@ -257,6 +257,3 @@ app.get('/transaction/seller/:seller', async (req, res) => {
     console.error("Failed to get transaction by NFT id: ", err);
   }
 })
-
-
-}
