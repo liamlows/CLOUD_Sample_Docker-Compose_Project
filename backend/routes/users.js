@@ -1,7 +1,7 @@
 const express = require('express');
 const User = require('../controllers/users');
 const Likes = require('../controllers/likeRecord');
-const NFT = require('../controllers/nft');
+// const NFT = require('../controllers/nft');
 // const Purchase = require('../controllers/purchases');
 
 const router = express.Router();
@@ -186,7 +186,7 @@ router.post('/updateNFT', async (req, res, next) => {
   try {
       const result1 = await NFT.getOwnerId;
       if(result1 === req.user.id){
-            const result = await NFT.modifyNFT(body.id, body.name, body.image_url, body.price, body.description, body.creator_id, body.seller_id, body.owner_id, body.for_sale);
+            const result = await User.modifyNFT(body.id, body.name, body.image_url, body.price, body.description, body.creator_id, body.seller_id, body.owner_id, body.for_sale);
             res.status(201).json(result);
       }
 

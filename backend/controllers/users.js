@@ -149,6 +149,11 @@ const deleteComment = async (id, nftid, commentID) => {
     throw new Error("Cannot delete comment.");
 }
 
+const modifyNFT = async(id, name, image_url, price, description, creator_id, seller_id, owner_id, for_sale) => {
+    const result = await NFT.updateNFT(id, name, image_url, price, description, creator_id, seller_id, owner_id, for_sale);
+    return result;
+}
+
 module.exports = {
     createUser,
     authenticateUser,
@@ -162,5 +167,6 @@ module.exports = {
     transfer,
     updateInfo,
     userSearch,
-    hideNFT
+    hideNFT,
+    modifyNFT
 };
