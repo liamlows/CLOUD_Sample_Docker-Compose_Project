@@ -135,6 +135,13 @@ const searchByTerm = async (term) => {
     return result;
 }
 
+const getNFTbyCreatorId = async (creator_id) => {
+    const query = knex(NFT_TABLE).where({ creator_id }); 
+    const result = await query;
+
+    return result;
+} 
+
 module.exports = {
     createNFT, 
     getNFT,
@@ -153,6 +160,7 @@ module.exports = {
     getAllByPrice,
     searchByTerm,
     userLeaderboard,
-    nftLeaderboard
+    nftLeaderboard,
+    getNFTbyCreatorId
 }
 

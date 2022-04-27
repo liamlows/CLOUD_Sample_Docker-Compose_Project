@@ -157,6 +157,21 @@ app.get('/nft/search/:term', async (req, res) => {
 
 })
 
+// // GET: /nft/cd/:creator_id
+app.get('/nft/cd/:creator_id', async (req, res, next) => {
+  try {
+
+    const result = await req.models.nft.getNFTbyCreatorId(req.params.creator_id); 
+    res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to create get NFT by creator id: ", err);
+      // res.status(500).
+  }
+
+  next()
+})
+
 // Display top NFTS
 app.get('/nftLB', async(req, res) => {
   try {
