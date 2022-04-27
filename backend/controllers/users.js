@@ -1,5 +1,6 @@
 const User = require('../models/users');
 const NFT = require('../models/nft');
+const Purchase = require('../models/purchase');
 
 
 // Create new user if email and password are provided
@@ -102,6 +103,22 @@ const updateInfo = async(id, name, photo) => {
     return rez;
 }
 
+const userSearch = async(email, id, username) => {
+    if(email){
+        const result = await User.findUserByEmail(email);
+    }
+    if(id){
+        const result = await User.findUserByID(id);
+    }
+    if(username){
+        const result = await User.findUserByUsername(username);
+    }
+    const rez = await User.findUserByID(id);
+    return rez;
+
+
+}
+
 module.exports = {
     createUser,
     authenticateUser,
@@ -113,5 +130,6 @@ module.exports = {
     purchaseNFT,
     paymentInfo,
     transfer,
-    updateInfo
+    updateInfo,
+    userSearch
 };

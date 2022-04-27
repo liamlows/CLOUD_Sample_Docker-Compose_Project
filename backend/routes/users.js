@@ -95,6 +95,20 @@ router.post('/update', async (req, res, next) => {
 
 });
 
+router.get('/list', async (req, res, next) => {
+    try {
+        const user = req.user;
+        const body = req.body;
+        const result = await User.userSearch(body.email, body.id, body.username);
+        res.status(200).json(result);
+    } catch (err){
+        console.error("Could not update info: ", err);
+        res.sendStatus(401).json({ message: err.toString() });e
+    }
+
+
+});
+
 
 module.exports = router;
 
