@@ -72,6 +72,21 @@ router.get('/message', async (req, res, next) => {
   }
 
   next()
+})
+
+// for like record
+// POST /like
+router.post('/like', async (req, res) => {
+  try {
+      const body = req.body;
+      console.log(body);
+
+      const result = await req.models.likeRecord.createLikeRecord(body.liked_nft, body.liked_user_id);
+      res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to create new like record: ", err); 
+  }
 }) 
 
 module.exports = router;
