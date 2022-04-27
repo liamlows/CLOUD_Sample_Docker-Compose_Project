@@ -4,7 +4,7 @@ import {baseEndpoint} from '../urls/API';
 
 export const getUserInfo = () =>new Promise((resolve,reject)=>{
     // var myToken=localStorage.getItem('token');
-    window.alert(localStorage.token);
+    // window.alert(localStorage.token);
     let config;
         if( localStorage.token!=null){
         // console.log(localStorage.token)
