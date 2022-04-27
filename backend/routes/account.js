@@ -6,6 +6,7 @@ const crypto = require('crypto');
 const util = require('../util');
 const {getUsernameFromId, isUserAuthenticated, getRoleById, validateBody} = require("../util");
 const {uploadImage} = require("../s3");
+const {isUserOnline} = require('../websockets');
 
 /* TODO
 
@@ -53,14 +54,18 @@ async function getGlobalAdminRole(){
 }
 
 async function createRole(roleType, schoolId, courseId){
+    let result, _;
+
     try{
-        await pool.execute('INSERT INTO `roles`(role_type, course_id, school_id) VALUES (? ? ?)',
+        let [result, _] = await pool.execute('INSERT INTO `roles`(role_type, course_id, school_id) VALUES (?, ?, ?)',
             [roleType, courseId, schoolId]);
     } catch(error){
-        return false;
+        console.log(error);
+        return undefined;
     }
 
-    return true;
+
+    return result.insertId;
 }
 
 
@@ -87,7 +92,7 @@ router.post("/api/account/register", async (req, res, next) => {
     // Optional parameters
     let firstName = req.body.firstName;
     let lastName = req.body.lastName;
-    let schoolId = undefined; // req.body.schoolId;
+    let schoolId = req.body.schoolId;
     let roleId;
 
     if (firstName === undefined){
@@ -98,16 +103,30 @@ router.post("/api/account/register", async (req, res, next) => {
     }
 
     if(schoolId === undefined) {
-        schoolId = null;
+        res.status(400).send("Must specify school on registration.");
+        return;
     }
 
-    if(schoolId === null){
-        try {
-            roleId = await getGlobalAdminRole();
-        } catch(error) {
-            return next(error);
+    let roles;
+
+    try{
+        roles = await findRole(util.STUDENT_ROLE_TYPE, schoolId,  null);
+
+        if(!roles || roles.length === 0){
+            roleId = await createRole(util.STUDENT_ROLE_TYPE, schoolId, null);
+            if(roleId === undefined){
+                res.status(500).send("Failed to make new role");
+                return;
+            }
         }
+        else {
+            roleId = roles[0].role_id;
+        }
+
+    } catch(error) {
+        return next(error);
     }
+
 
     // Hash password
     const hash = crypto
@@ -126,33 +145,45 @@ router.post("/api/account/register", async (req, res, next) => {
     if(rows.length !== 0){
         // Account already exists.
         res.status(200).json({success: 0, error: "An account already exists with that username."});
-        return next();
+        return;
     }
 
     if(schoolId !== null){
         // Check if school exists
         try{
-            [rows, fields] = await pool.execute('SELECT * FROM `school` WHERE `school_id` = ?', [schoolId]);
+            [rows, fields] = await pool.execute('SELECT * FROM `schools` WHERE `school_id` = ?', [schoolId]);
         } catch(error){
             return next(error);
         }
 
         // School does not exist
         if(rows.length === 0){
-            res.status(200).json({success: 0, error: `School with ID ${schoolId} does not exist.`});
-            return next();
+            res.status(400).json({success: 0, error: `School with ID ${schoolId} does not exist.`});
+            return;
         }
     }
 
     // Insert new account into DB
+    let accountId;
     try {
-        await pool.execute('INSERT INTO `accounts`(username, password, first_name, last_name, school_id, role_id) VALUES (?, ?, ?, ?, ?, ?)',
+        let [result, _] = await pool.execute('INSERT INTO `accounts`(username, password, first_name, last_name, school_id, role_id) VALUES (?, ?, ?, ?, ?, ?)',
             [username, hash, firstName, lastName, schoolId, roleId]);
+
+        accountId = result.insertId;
+
+        if(accountId === 1){
+            // First account is always an admin.
+            console.log(`Setting ${username} as administrator.`);
+            roleId = await getGlobalAdminRole();
+            await pool.execute('UPDATE `accounts` SET role_id = ? WHERE account_id = ?',
+                [roleId, accountId]);
+        }
+
     } catch (error) {
         return next(error);
     }
 
-    res.status(200).json({success: 1, error: ""});
+    res.status(200).json({success: 1, error: "", accountId: accountId});
 });
 
 
@@ -227,6 +258,7 @@ router.get("/api/account/logout", isUserAuthenticated, async (req, res, next) =>
     let username = req.session.username;
 
     res.cookie('username', "");
+    res.cookie('account_id', "");
 
     try {
         await setStatusOffline(username);
@@ -237,6 +269,9 @@ router.get("/api/account/logout", isUserAuthenticated, async (req, res, next) =>
 
     req.session.destroy((err) => {
         if(err) return next(err);
+        res.clearCookie('connect.sid', {
+            path : "/"
+        });
         res.sendStatus(200);
     });
 });
@@ -363,21 +398,21 @@ router.put("/api/account", async(req, res, next) => {
 
 router.get("/api/users/:account_id/status/", async (req, res, next) => {
     // Query DB for user
-    let rows, fields;
-    try{
-        [rows, fields] = await pool.execute(
-            'SELECT username, last_logged_in, logged_in FROM `accounts` WHERE `account_id` = ?',
-            [req.params.account_id]);
-    } catch(error){
-        return next(error);
+    let accountId = req.params.account_id;
+    accountId = parseInt(accountId);
+    if(isNaN(accountId)){
+        res.status(400).json("Invalid account ID");
+        return;
     }
 
-    if(rows.length === 0){
-        return res.sendStatus(404);
-    }
+    let online = await isUserOnline(accountId);
 
-    let user = rows[0];
-    res.status(200).json(user);
+    if(online){
+        res.status(200).json({status: 1});
+    }
+    else {
+        res.status(200).json({status: 0});
+    }
 });
 
 

@@ -10,6 +10,7 @@ import LoggedInResponsiveAppBar from '../common/LoggedInResponsiveAppBar';
 
 // Method Imports
 import { getAccountbyId, getFriends, logout } from '../../APIFolder/loginApi';
+import {doSignOut} from "../common";
 import Cookies from "js-cookie";
 
 export const FriendsList = (props) => {
@@ -87,6 +88,7 @@ export const FriendsList = (props) => {
             navigate('/');
         });
     }
+
     const readyToDisplay = () => {
         console.log("Friends", friends)
         if(JSON.stringify(account) === "{}")

@@ -9,7 +9,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 
 // Component Imports
 import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
-import { TextField } from "../common";
+import {doSignOut, TextField} from "../common";
 
 // Method Imports
 import { getAllCourses, getCoursebyId, logout, getAccountbyId } from "../../APIFolder/loginApi"
@@ -78,20 +78,6 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
     }
 
 
-    const signOut = () => {
-        console.log("Logging out");
-        logout().then(() => {
-            localStorage.setItem("currUser", "{}");
-            navigate('/');
-        });
-    }
-    const find = (course) => {
-        if(course.course_name.indexOf(cName) !== -1)
-        {
-            return true;
-        }
-        return false
-    }
     const enrollable = () => {
         if (account.role.role_type === "student" || account.role.role_type === "ta") {
             console.log("Enrollable")
@@ -99,6 +85,14 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
         }
         console.log("Not Enrollable")
         return false;
+    }
+    const signOut = () => { doSignOut().then(() => navigate('/')) };
+    const find = (course) => {
+            return true;
+        {
+        if(course.course_name.indexOf(cName) !== -1)
+        return false
+        }
     }
 
     // HTML

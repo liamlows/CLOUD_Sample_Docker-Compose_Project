@@ -21,6 +21,8 @@ import { Waitlist } from './Components/AdminView/Waitlist';
 
 // Method Imports
 import { getAccountbyId } from './APIFolder/loginApi';
+import { WSEventHandler } from "./client-websocket";
+import {Snackbar} from "@mui/material";
 import { Chat } from "./Components/Profiles/Chat";
 
 // React functional component
@@ -54,6 +56,14 @@ function App() {
     { label: 'Logout', route: '/signout' }
   ]);
 
+
+  const [onlineNotification, setOnlineNotification] = useState(null);
+
+  const onUserOnline = (msg) => {
+    console.log("Got online notification:" + msg);
+    setOnlineNotification(msg);
+  };
+
   // Initial Load
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -83,6 +93,14 @@ function App() {
       localStorage.setItem("currUser", "{}");
       setCName(' ');
     }
+
+    WSEventHandler.on('onlineNotif', onUserOnline);
+
+    return () => {
+      // Cleanup
+      WSEventHandler.removeListener('onlineNotif', onUserOnline);
+    }
+
   }, []);
 
   // Conditions
@@ -170,6 +188,13 @@ function App() {
 
         </Routes>
       </BrowserRouter>
+      <Snackbar
+          anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
+          open={onlineNotification !== null}
+          message={onlineNotification === null ? "" : "Your friend \"" + onlineNotification.friendUsername + "\" is online!"}
+          autoHideDuration={3000}
+          onClose={() => setOnlineNotification(null)}
+      />
     </div>
   );
 }

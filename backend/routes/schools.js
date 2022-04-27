@@ -17,7 +17,7 @@ router.get("/", async (req, res, next) => {
         return next(error);
     }
 
-    res.status(200).json(rows).send();
+    res.status(200).json(rows);
 });
 
 // POST /schools/

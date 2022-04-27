@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
+const {validateBody} = require("../util");
 
 router.post("/course_reviews/", async (req, res, next) => {
 
