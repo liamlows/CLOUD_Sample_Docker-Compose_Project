@@ -31,7 +31,7 @@ router.get('/session', async (req, res, next) => {
     }
 }); 
 
-// Check for payment info
+// GET users/purchase purchases an NFT
 router.get('/purchase', async (req, res, next) => {
     try {
         const user = req.user;
@@ -45,7 +45,7 @@ router.get('/purchase', async (req, res, next) => {
 
 });
 
-// Add payment info
+// POST users/paymentInfo adds payment info
 router.post('/paymentInfo', async (req, res, next) => {
     try {
         const user = req.user;
@@ -60,6 +60,7 @@ router.post('/paymentInfo', async (req, res, next) => {
 
 });
 
+// GET users/balance checks user balance
 router.get('/balance', async (req, res, next) => {
     try {
         const user = req.user;
@@ -72,6 +73,7 @@ router.get('/balance', async (req, res, next) => {
 
 });
 
+// POST users/transfer transfers funds to account
 router.post('/transfer', async (req, res, next) => {
     try {
         const user = req.user;
@@ -84,6 +86,7 @@ router.post('/transfer', async (req, res, next) => {
     }
 });
 
+// POST users/update updates user profile
 router.post('/update', async (req, res, next) => {
     try {
         const user = req.user;
@@ -96,7 +99,7 @@ router.post('/update', async (req, res, next) => {
     }
 
 });
-
+// POST users/hide hides an NFT from the user's profile
 router.post('/hide', async (req, res, next) => {
     try {
         const user = req.user;
@@ -109,7 +112,7 @@ router.post('/hide', async (req, res, next) => {
     }
 
 });
-
+// GET users/list returns a list of users with given params
 router.get('/list', async (req, res, next) => {
     try {
         const body = req.body;
@@ -122,6 +125,7 @@ router.get('/list', async (req, res, next) => {
 
 });
 
+// POST users/like likes an NFT
 router.post('/like', async (req, res, next) => {
     try {
         const user = req.user;
@@ -135,6 +139,7 @@ router.post('/like', async (req, res, next) => {
 
 });
 
+// GET users/likeRecord gets the like record for a given NFT
 router.get('/likeRecord', async (req, res, next) => {
     try {
         const user = req.user;
@@ -147,7 +152,7 @@ router.get('/likeRecord', async (req, res, next) => {
     }
 
 });
-
+// GET users/likeCount returns the like count for a given NFT
 router.get('/likeCount', async (req, res, next) => {
     try {
         const body = req.body;
@@ -160,7 +165,7 @@ router.get('/likeCount', async (req, res, next) => {
 
 });
 
-// DELETE: /nft/id
+// DELETE: users/nft/id deletes the nft
 router.delete('/nft/id/:id', async (req, res, next) => {
   try {
       const result1 = await req.models.nft.getOwnerId;
@@ -177,6 +182,7 @@ router.delete('/nft/id/:id', async (req, res, next) => {
   next()
 }) 
 
+// POST users/updateNFT updates nFT information
 router.post('/updateNFT', async (req, res, next) => {
   try {
       const result1 = await NFT.getOwnerId;

@@ -7,13 +7,13 @@ const router = express.Router();
 const Followers = require('../controllers/followers');
 const Comments = require('../controllers/comments');
 
-  // GET /
+  // GET ub/
   router.get('/', (req, res) => {
     res.status(200).send('Go to 0.0.0.0:3000.');
   });
 
   // for messages
-// Post: create a message /message 
+// Post: create a message ub/message 
 router.post('/message', async (req, res, next) => {
   try {
       const body = req.body;
@@ -28,7 +28,7 @@ router.post('/message', async (req, res, next) => {
   } 
 }) 
 
-// DELETE: /message/id
+// DELETE: ub/message/id
 router.delete('/message/:id', async (req, res, next) => {
   try {
 
@@ -44,7 +44,7 @@ router.delete('/message/:id', async (req, res, next) => {
   next()
 })
 
-// Get: /message/id
+// Get: ub/message/id
 router.get('/message/:send_id', async (req, res, next) => {
   try {
 
@@ -60,7 +60,7 @@ router.get('/message/:send_id', async (req, res, next) => {
   next()
 })
 
-// GET: /message
+// GET: ub/message
 router.get('/message', async (req, res, next) => {
   try {
 
@@ -76,6 +76,7 @@ router.get('/message', async (req, res, next) => {
   next()
 }) 
 
+// GET ub/followers returns list of user's followers
 router.get('/followers', async (req, res, next) => {
   try {
     const user = req.user;
@@ -89,6 +90,7 @@ router.get('/followers', async (req, res, next) => {
   next()
 }) 
 
+// GET ub/following returns list of who user is following
 router.get('/following', async (req, res, next) => {
   try {
     const user = req.user;
@@ -102,6 +104,7 @@ router.get('/following', async (req, res, next) => {
   next()
 }) 
 
+// POST ub/follow user follows given user
 router.post('/follow', async (req, res, next) => {
   try {
     const user = req.user;
@@ -116,6 +119,7 @@ router.post('/follow', async (req, res, next) => {
   next()
 }) 
 
+// POST /ub/unfollow unfollows a user
 router.post('/unfollow', async (req, res, next) => {
   try {
     const user = req.user;
@@ -130,6 +134,7 @@ router.post('/unfollow', async (req, res, next) => {
   next()
 }) 
 
+// POST ub/comment leaves a comment
 router.post('/comment', async (req, res, next) => {
   try {
     const user = req.user;
@@ -144,6 +149,7 @@ router.post('/comment', async (req, res, next) => {
   next()
 }) 
 
+// GET ub/comments returns all comments on an NFT
 router.get('/comments', async (req, res, next) => {
   try {
     const body = req.body;
@@ -157,6 +163,7 @@ router.get('/comments', async (req, res, next) => {
   next()
 }) 
 
+// 
 router.get('/numComments', async (req, res, next) => {
   try {
     const body = req.body;
@@ -173,11 +180,11 @@ router.get('/numComments', async (req, res, next) => {
 // POST/nft
 router.post('/nft', async (req, res, next) => {
   try {
+      const user = req.user;
       const body = req.body;
       console.log(body);
 
-      const result = await req.models.nft.createNFT(body.name, body.image_url, body.price, body.description
-        , body.creator_id, body.seller_id, body.owner_id, body.for_sale);
+      const result = await req.models.nft.createNFT(body.name, body.image_url, body.price, body.description, user.id, user.id, user.id, body.for_sale);
       res.status(201).json(result);
 
   } catch (err) {
