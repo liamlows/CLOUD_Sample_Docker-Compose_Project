@@ -194,6 +194,20 @@ app.get('/userLB', async(req, res) => {
     res.status(400).json({ message: err.toString() });
   }
 })
+ 
+app.get('/like/:nft_id', async (req, res, next) => {
+  try {
+
+    const result = await req.models.like.getLikeRecord(req.params.nft_id); 
+    res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to get a like record with nft id: ", err);
+      // res.status(500).
+  }
+
+  next()
+}) 
 
 }
 
