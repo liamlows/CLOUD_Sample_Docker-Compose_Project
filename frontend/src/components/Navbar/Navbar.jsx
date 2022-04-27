@@ -7,7 +7,6 @@ export const Navbar = () => {
     <>
       <div className= "nav">
 
-
       <div className="title"> <h1 className="setColor"> 
       <Link to='/home' className="nftLink">NFTShop</Link>
       </h1> </div>
@@ -27,6 +26,9 @@ export const Navbar = () => {
           <div className="navLink">
             <Link to='/notifications'>Notifications</Link>
           </div>
+          <h5 className="navBalance">
+            Balance: $$
+          </h5>
         </div>
             <Link to='/' className="navBtnLink">
               <button type="button" className="navBtn">

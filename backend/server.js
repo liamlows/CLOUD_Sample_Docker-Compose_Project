@@ -23,9 +23,11 @@ const { createModelsMiddleware } = require('./middleware/model-middleware');
 
 // Importing route handlers
 const usersRoutes = require('./routes/users');
+const unblockedRoutes = require('./routes/unblocked');
 const sessionRoutes = require('./routes/session');
 const accountRoutes = require('./routes/account');
 const adminRoutes = require('./routes/admin');
+const ubRoutes = require('./routes/messages');
 
 // create a logger object.  Using logger is preferable to simply writing to the console.
 const logger = log({ console: true, file: false, label: config.name });
@@ -43,8 +45,10 @@ const { authenticateJWT, authenticateWithClaims } = require('./middleware/auth')
 app.use('/session', sessionRoutes);
 app.use('/account', accountRoutes);
 
+
 app.use('/users', authenticateWithClaims(['user']), usersRoutes);
 app.use('/admin', authenticateWithClaims(['admin']), adminRoutes);
+app.use('/ub', authenticateWithClaims(['unblocked']), ubRoutes);
 
 
 app.get('/health', (request, response, next) => {
@@ -56,7 +60,7 @@ app.get('/health', (request, response, next) => {
 
 
 //include routes
-routes(app, logger);
+// routes(app, logger);
 
 // connecting the express object to listen on a particular port as defined in the config object.
 app.listen(config.port, config.host, (e) => {

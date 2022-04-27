@@ -1,16 +1,17 @@
+const express = require('express');
+const { query } = require('../db');
+const pool = require('../db')
 
-const { query } = require('./db');
-const pool = require('./db')
+const router = express.Router();
 
-module.exports = function routes(app, logger) {
 
   // GET /
-  app.get('/', (req, res) => {
+  router.get('/', (req, res) => {
     res.status(200).send('Go to 0.0.0.0:3000.');
   });
 
 // POST/nft
-app.post('/nft', async (req, res, next) => {
+router.post('/nft', async (req, res, next) => {
   try {
       const body = req.body;
       console.log(body);
@@ -26,7 +27,7 @@ app.post('/nft', async (req, res, next) => {
 })
 
 // POST: /nft/id
-app.post('/nft/:id', async (req, res, next) => {
+router.post('/nft/:id', async (req, res, next) => {
   try {
     const params = req.params;
     const body = req.body;
@@ -68,7 +69,7 @@ app.post('/nft/:id', async (req, res, next) => {
 })
 
 // GET: /nft/id
-app.get('/nft/:id', async (req, res, next) => {
+router.get('/nft/:id', async (req, res, next) => {
   try {
 
     const result = await req.models.nft.getNFT(req.params.id); 
@@ -82,7 +83,7 @@ app.get('/nft/:id', async (req, res, next) => {
   next()
 })
 
-app.get('/nft', async (req, res, next) => {
+router.get('/nft', async (req, res, next) => {
   try {
 
     const result = await req.models.nft.fetchNFT(); 
@@ -97,7 +98,7 @@ app.get('/nft', async (req, res, next) => {
 })
 
 // DELETE: /nft/id
-app.delete('/nft/:id', async (req, res, next) => {
+router.delete('/nft/:id', async (req, res, next) => {
   try {
 
     const result = await req.models.nft.deleteNFT(req.params.id); 
@@ -113,7 +114,7 @@ app.delete('/nft/:id', async (req, res, next) => {
 
   // for messages
 // Post: create a message /message 
-app.post('/message', async (req, res, next) => {
+router.post('/message', async (req, res, next) => {
   try {
       const body = req.body;
       console.log(body);
@@ -128,7 +129,7 @@ app.post('/message', async (req, res, next) => {
 }) 
 
 // DELETE: /message/id
-app.delete('/message/:id', async (req, res, next) => {
+router.delete('/message/:id', async (req, res, next) => {
   try {
 
     const result = await req.models.messages.deleteMessage(req.params.id);
@@ -144,7 +145,7 @@ app.delete('/message/:id', async (req, res, next) => {
 })
 
 // Get: /message/id
-app.get('/message/:send_id', async (req, res, next) => {
+router.get('/message/:send_id', async (req, res, next) => {
   try {
 
     const result = await req.models.messages.getMessage(req.params.send_id);
@@ -160,7 +161,7 @@ app.get('/message/:send_id', async (req, res, next) => {
 })
 
 // GET: /message
-app.get('/message', async (req, res, next) => {
+router.get('/message', async (req, res, next) => {
   try {
 
     const result = await req.models.messages.fetchMessage();
@@ -176,7 +177,7 @@ app.get('/message', async (req, res, next) => {
 })  
 
 
-app.get('/nft/:min/:max/:how', async (req, res) => {
+router.get('/nft/:min/:max/:how', async (req, res) => {
   try {
     const params = req.params;
 
@@ -192,7 +193,7 @@ app.get('/nft/:min/:max/:how', async (req, res) => {
   }
 })
 
-app.get('/nft/search/:term', async (req, res) => {
+router.get('/nft/search/:term', async (req, res) => {
   try {
     const term = req.params.term;
 
@@ -205,4 +206,4 @@ app.get('/nft/search/:term', async (req, res) => {
 })
 
 
-}
+module.exports = router;
