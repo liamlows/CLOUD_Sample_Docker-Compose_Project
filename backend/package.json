@@ -15,7 +15,10 @@
     "express-mysql-session": "^2.1.7",
     "express-session": "^1.17.2",
     "knex": "^1.0.7",
-    "mysql2": "^2.3.3"
+    "mysql2": "^2.3.3",
+    "query-string": "^7.1.1",
+    "redis": "^4.0.6",
+    "ws": "^8.5.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
