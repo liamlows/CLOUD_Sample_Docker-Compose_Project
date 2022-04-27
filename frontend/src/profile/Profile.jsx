@@ -6,9 +6,21 @@ import { Link } from 'react-router-dom';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import { Posts } from './Posts';
-
+import{ useState,useEffect } from 'react';
+import{getUserInfo} from '../api/AuthenAPI';
 
 export const Profile = () => {
+  const [user, setUser]=useState(undefined);
+
+  useEffect(()=>{
+      getUserInfo().then(x => setUser(x));
+
+  },[ ]);
+  if(!user){
+    return<>lOADING</>
+  }
+
+
     function stringToColor(string) {
         let hash = 0;
         let i;
@@ -38,9 +50,10 @@ export const Profile = () => {
       }
 
     return(<div className="profileContainer">
+
         <br/>
         <h2 className="userHead">
-            username!!
+            {user[0].name}
         </h2>
         <br/>
         <Grid container spacing={2}>
@@ -58,14 +71,12 @@ export const Profile = () => {
             </Grid>
         </Grid>
         <br/>
-        <h4 className="bioName">Bio Name</h4>
+        <h4 className="bioName">{user[0].name}</h4>
         <br/>
         <div className="bio"> Bioooo </div>
         <br></br><br></br>
         <Button variant="outlined"><Link to='/edit-profile' className="createLink">Edit Profile</Link></Button>
 
-        {/* in lab, ask how to make card pop up on click without changing link and while keeping profile in background*/}
-        {/* possible option of making it dialog instead of card but still figure out how to make it appear */}
         <br/><br/>
         <Posts/>
 
