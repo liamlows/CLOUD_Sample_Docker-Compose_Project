@@ -73,8 +73,8 @@ export const ClassProfile = (props) => {
                 setProfessor("none")
             }
             else if (loaded.professors.length !== 0) {
-                let prof = await getAccountbyId(course.professors[0])
-                setProfessor(prof);
+                // let prof = await getAccountbyId(course.professors[0])
+                setProfessor(loaded.professors[0]);
             }
             setTAs(loaded.tas);
             console.log(tas);
@@ -82,20 +82,18 @@ export const ClassProfile = (props) => {
 
             setCourse(loaded)
 
-            let status
-            try {
-                status = await getEnrollmentStatus(loaded.course_id)
-            } catch {
-                status = 0
-            }
-            console.log("Adding status to course", status);
-            setCourse({ ...course, status: status });
+
 
 
         })
     }, [editMode, reload]);
 
-
+    if (course !== undefined && course.status === undefined) {
+        getEnrollmentStatus(course.course_id).then(status => {
+            console.log("Adding status to course", status);
+            setCourse({ ...course, status: status.status });
+        })
+    }
     // Conditions
     if (JSON.stringify(account) === "{}") {
         let account_id = Cookies.get("account_id");
@@ -150,7 +148,7 @@ export const ClassProfile = (props) => {
     }
 
     const sendEnrollmentRequestFunc = () => {
-        sendEnrollmentRequest()
+        sendEnrollmentRequest(course.course_id, account.account_id)
         setReload(!reload)
     }
 
@@ -180,6 +178,17 @@ export const ClassProfile = (props) => {
     }
 
     const changeCourse = delta => setCourse({ ...account, ...delta });
+
+    const enrollable = () =>
+    {
+        console.log(course)
+        if(account.role.role_type === "student" || account.role.role_type === "ta"){
+            console.log("Enrollable")
+            return true;
+        }
+            console.log("Not Enrollable")
+            return false;
+    }
 
     // Basically check if user is the same user as the loaded profile.
     // If so then allow them to edit with the edit button at the end (this edit button will update the database once done)
@@ -376,22 +385,19 @@ export const ClassProfile = (props) => {
                                     <thead>
                                         <th className="float-start col-11 fs-3 mt-2 text-start">{course.course_name} ({course.department})</th>
                                         {/* Student is not in class or waitlist */}
-                                        {(account.role.role_type === "student" || account.role.role_type === "ta") && account.status === 0 && <th className="col-2 pb-2">
+                                        {enrollable() && course.status === 0 && <th className="col-2 pb-2">
                                             <Button variant="contained" className="bg-success" onClick={() => sendEnrollmentRequestFunc()} endIcon={<Add />}>Enroll</Button>
                                         </th>}
                                         {/* Student is on the waitlist */}
 
-                                        {(account.role.role_type === "student" || account.role.role_type === "ta") && account.status === -1 && <th className="col-2 pb-2">
+                                        {enrollable() && course.status === -1 && <th className="col-2 pb-2">
                                             <Button variant="contained" className="col-1 bg-warning" disabled endIcon={<Add color='disabled' />}>On Waitlist</Button>
                                             <Button variant="contained" className="col-1 bg-danger" onClick={() => dropCourse(account.account_id, course.course_id)}><ClearIcon /></Button>
                                         </th>}
                                         {/* Student is in class */}
-                                        {(account.role.role_type === "student" || account.role.role_type === "ta") && account.status === 1 && <div className="float-end col-2 mb-1 mt-2">
-                                            <div className="clearfix p-0"></div>
-                                            <th className="col-1 rounded bg-success border-0 p-1">
-                                                <div className="bg-success text-white">
-                                                    Enrolled <Check className='mb-1 m-1 mt-0' />
-                                                </div>
+                                        {enrollable() && course.status === 1 && <div className="float-end col-2 mb-1 mt-2">
+                                            <th className="col-1 rounded border-0 p-1">
+                                            <Button variant="contained" className="col-11 bg-warning" disabled endIcon={<Add color='disabled' />}>Enrolled</Button>
                                                 <Button variant="contained" className="col-1 bg-danger" onClick={() => dropCourse(account.account_id, course.course_id)}><ClearIcon /></Button>
                                             </th>
                                         </div>}

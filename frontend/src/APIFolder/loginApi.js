@@ -187,8 +187,8 @@ export const uploadPP = async (pp) => {
     // return res.data;
 }
 
-export const sendEnrollmentRequest = async (targetId) => {
-    const res = await axios.post(`${BACKEND_ENDPOINT}/api/enrollments/`, { targetId: targetId });
+export const sendEnrollmentRequest = async (course_id, account_id)  => {
+    const res = await axios.post(`${BACKEND_ENDPOINT}/api/enrollments/`, { accountId: Number(account_id), courseId: Number(course_id)});
     return res.data;
 }
 
@@ -228,7 +228,7 @@ export const getProfessorReviews = async (teacher_id) => {
 }
 
 
-//need poster id, message, rating
+//need poster id, message, rating these don't work.
 export const postCourseReview = async (review) => {
     await axios.post(`${BACKEND_ENDPOINT}/api/reviews/course_reviews`, review);
 
