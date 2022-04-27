@@ -13,22 +13,23 @@ export const LoginPage = () => {
     const [email, setEmail]=useState('');
     const [password, setPassword]=useState('');
 
-    const checkAccount = () =>{
-        axios.post(baseEndpoint+'/session',{email:email, password:password})
-                .then(function(response){
-                    if(response.status===201){
-                        window.alert("Successfully logged in!");
-                        localStorage.token=response.data.token;
-                        <Link to='/home' className="createLink">Submit</Link>
-                    }
-                    else{
-                        window.alert("Logged with error");
-                    }
-                })
-                .catch(function(error){
-                    window.alert(error);
-            });
-    }
+    
+ const checkAccount = () =>{
+    axios.post(baseEndpoint+'/session',{email:email, password:password})
+            .then(function(response){
+                if(response.status===201){
+                    window.alert("Successfully logged in!");
+                    localStorage.token=response.data.token;
+                    <Link to='/home' className="createLink">Submit</Link>
+                }
+                else{
+                    window.alert("Logged with error");
+                }
+            })
+            .catch(function(error){
+                window.alert(error);
+        });
+}
 
     const handleChangeEmail=(e)=>{
         setEmail(e.target.value);
