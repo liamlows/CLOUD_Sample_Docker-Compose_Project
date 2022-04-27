@@ -139,6 +139,7 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
         if (profile.account_id === account.account_id) {
             return false;
         }
+        console.log(profile)
         return true;
 
     }

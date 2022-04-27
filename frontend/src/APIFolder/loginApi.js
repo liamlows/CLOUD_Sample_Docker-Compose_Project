@@ -166,7 +166,10 @@ export const getFriendsClasses = async (id) => {
 
     return res.data;
 }
-
+export const getCurrUserClasses = async (id) => {
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/enrollments/${id}`);
+    return res.data;
+}
 // api/users/professors/
 
 export const getClasses = async () => {
@@ -187,8 +190,8 @@ export const uploadPP = async (pp) => {
     // return res.data;
 }
 
-export const sendEnrollmentRequest = async (targetId) => {
-    const res = await axios.post(`${BACKEND_ENDPOINT}/api/enrollments/`, { targetId: targetId });
+export const sendEnrollmentRequest = async (course_id, account_id)  => {
+    const res = await axios.post(`${BACKEND_ENDPOINT}/api/enrollments/`, { accountId: Number(account_id), courseId: Number(course_id)});
     return res.data;
 }
 
@@ -219,16 +222,15 @@ export const dropCourse = async (account_id, id) => {
 }
 
 export const getCourseReviews = async (course_id) => {
-    await axios.get(`${BACKEND_ENDPOINT}/api/d/course_reviews/course_id/${course_id}`);
-    return;
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/d/course_reviews/course_id/${course_id}`);
+    return res.data;
 }
 export const getProfessorReviews = async (teacher_id) => {
-    await axios.get(`${BACKEND_ENDPOINT}/api/d/teacher_reviews/teacher_id/${teacher_id}`);
-    return;
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/d/teacher_reviews/teacher_id/${teacher_id}`);
+    return res.data;
 }
 
-
-//need poster id, message, rating
+//need poster id, message, rating these don't work.
 export const postCourseReview = async (review) => {
     await axios.post(`${BACKEND_ENDPOINT}/api/reviews/course_reviews`, review);
 
@@ -238,4 +240,9 @@ export const postProfessorReview = async (teacher_id, review) => {
     let res = await axios.post(`${BACKEND_ENDPOINT}/api/d/teacher_reviews/teacher_id/${teacher_id}`, review);
     console.log(res);
     return ;
+}
+
+export const fetchSchools = async () => {
+    let res = await axios.get(`${BACKEND_ENDPOINT}/api/schools/`);
+    return res.data;
 }

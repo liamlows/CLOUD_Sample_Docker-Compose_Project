@@ -135,4 +135,48 @@ router.get("/average/:course_id", async (req, res, next) => {
 
 });
 
+/*
+GET /api/enrollments/status/:course_id
+    Gets the enrollment status of the current user.
+ */
+
+router.get("/status/:course_id", async (req, res, next) => {
+   let accountId = req.session.accountId;
+   let courseId = req.params.course_id;
+
+   courseId = parseInt(courseId);
+
+   if(isNaN(courseId)){
+       res.status(400).json("Invalid course ID");
+       return;
+   }
+
+   let enrollment;
+   let waitlist;
+   let unused;
+   let status = 0;
+   try{
+       [enrollment, unused] = await pool.execute(
+           'SELECT * FROM `enrollments` WHERE account_id = ? AND course_id = ?', [accountId, courseId]);
+
+       if(enrollment.length){
+           status = 1;
+       }
+       else {
+           [waitlist, unused] = await pool.execute(
+               'SELECT * FROM `waitlists` WHERE account_id = ? AND course_id = ?', [accountId, courseId]
+           );
+
+           if(waitlist.length){
+               status = -1;
+           }
+       }
+
+   } catch(error) {
+       return next(error);
+   }
+
+   res.status(200).json({courseId: courseId, status: status});
+});
+
 module.exports = router;

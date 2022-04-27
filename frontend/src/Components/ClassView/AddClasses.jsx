@@ -130,12 +130,12 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
                             })}{course.professors.length === 0 && `No Professor`}</td>
 
                             <td className="col-3 pb-2">
-                                <Button variant="contained"
+                                {JSON.parse(localStorage.getItem("currUser")).role.role_type === "admin" && <Button variant="contained"
                                     className="btn bg-warning"
                                     endIcon={<ArrowForwardIcon />}
                                     onClick={() => goToWaitlist(course)}>
                                     View waitlist
-                                </Button>
+                                </Button>}
                             </td>
                             <td className="col-3">
                                 <Button variant="contained"
