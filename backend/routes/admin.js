@@ -92,5 +92,17 @@ router.post('/update', async (req, res, next) => {
 
 });
 
+router.post('/delete', async (req, res, next) => {
+    try {
+        const body = req.body;
+        const result = await AdminController.deleteComment(body.id);
+        res.status(200).json(result);
+    } catch (err){
+        console.error("Could not delete comment: ", err);
+        res.sendStatus(401).json({ message: err.toString() });e
+    }
+
+});
+
 
 module.exports = router;

@@ -65,14 +65,20 @@ const purchaseNFT = async(id, nftID) => {
     // Check for valid payment
     if(valid === 0){
         console.log("No payment information provided.");
-        return res.sendStatus(404);
+        throw new Error("No payment information provided.");
+    }
+
+    const valid1 = await NFT.getForSale(nftID);
+    if(valid[0] === 0){
+        console.log("NFT not for sale.");
+        throw new Error("NFT not for sale.");
     }
     const balance = User.balance(id);
     const cost = NFT.getNFTCost(nftID);
     // Check for sufficient funds
     if(balance < cost){
         console.log("Insufficient funds.");
-        return res.sendStatus(403);
+        throw new Error("Insufficient funds.");
     }
 
     // Transfer funds from buyer to seller
@@ -96,7 +102,7 @@ const paymentInfo = async(id, cardType, cardNum, name, cvv, exp) => {
 const transfer = async(id, amount) => {
     const result = await User.validatePurchase(id);
     if(result === 0){
-        return res.sendStatus(404);
+        throw new Error("No payment info found.");
     }
     const result1 = await User.transferFunds(id, amount);
     return result1;
@@ -130,6 +136,17 @@ const userSearch = async(username, id, email) => {
 const hideNFT = async(id, nft) => {
     const result = await User.hideNFT(id, nft);
     return result;
+}
+
+const deleteComment = async (id, nftid, commentID) => {
+    const valid = NFT.getOwnerId(nftid);
+    const valid1 = Comments.getCommenter(commentID);
+    if(valid[0] === id || valid1[0] === id){
+        const result = await Comments.delComments(commentID);
+        return result;
+    }
+    
+    throw new Error("Cannot delete comment.");
 }
 
 module.exports = {

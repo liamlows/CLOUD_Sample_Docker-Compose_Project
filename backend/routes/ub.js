@@ -5,6 +5,7 @@ const pool = require('../db')
 const router = express.Router();
 
 const Followers = require('../controllers/followers');
+const Comments = require('../controllers/comments');
 
   // GET /
   router.get('/', (req, res) => {
@@ -139,6 +140,46 @@ router.post('/unfollow', async (req, res, next) => {
 
   } catch (err) {
       console.error("Failed to unfollow user: ", err);
+  }
+
+  next()
+}) 
+
+router.post('/comment', async (req, res, next) => {
+  try {
+    const user = req.user;
+    const body = req.body;
+    const result = await Comments.postComment(user.id, body.nftID, body.comment);
+    res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to leave comment: ", err);
+  }
+
+  next()
+}) 
+
+router.get('/comments', async (req, res, next) => {
+  try {
+    const body = req.body;
+    const result = await Comments.getComments(body.nftID);
+    res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to get comments: ", err);
+  }
+
+  next()
+}) 
+
+router.get('/numComments', async (req, res, next) => {
+  try {
+    const body = req.body;
+    const result = await Comments.getAmntComments(body.nftID);
+    res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to get comments: ", err);
   }
 
   next()

@@ -10,6 +10,12 @@ const createLikeRecord = async (liked_nft, liked_user_id) => {
 }
 
 const getLikeRecord = async (liked_nft) => { 
+    const query = knex('likeRecord').where({ liked_nft }).join('user', 'likeRecord.liked_user_id', '=', 'user.id');
+    const result = await query; 
+    return result; 
+}
+
+const getLikeCount = async (liked_nft) => { 
     const query = knex(MESSAGES_TABLE).where({ liked_nft }).count();
     const result = await query; 
     return result; 
@@ -18,4 +24,5 @@ const getLikeRecord = async (liked_nft) => {
 module.exports = { 
     createLikeRecord, 
     getLikeRecord,
+    getLikeCount
 }

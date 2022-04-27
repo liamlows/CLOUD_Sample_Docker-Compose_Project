@@ -214,6 +214,11 @@ const hideNFT = async (userID, id) => {
     return result;
 }
 
+const hidden = async (id) => {
+    const query = knex(NFT_TABLE).select('visible').where({ id });
+    const result = await query;
+    return result;
+}
 
 module.exports = {
     createNewUser,

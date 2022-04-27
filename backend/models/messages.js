@@ -14,14 +14,6 @@ const getMessage = async (send_id) => {
     return result;
 }
 
-const searchMessage = async (message, id) => {
-    const query = knex(MESSAGES_TABLE).whereRaw('send_id = ' + id + 'OR receive_id = ' + id);
-    if(message){
-        query.whereRaw('message LIKE "%' + message + '%"');
-    }
-
-}
-
 const fetchMessage = async () => {
     const query = knex(MESSAGES_TABLE); 
     const result = await query; 
@@ -38,6 +30,5 @@ module.exports = {
     createMessage,
     getMessage,
     fetchMessage,
-    deleteMessage,
-    searchMessage
+    deleteMessage
 }

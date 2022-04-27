@@ -1,5 +1,6 @@
 const Admin = require('../models/admin');
 const User = require('./users');
+const Comments = require('../models/comments')
 
 // Change user's status to blocked
 const blockUser = async (email) => {
@@ -62,10 +63,16 @@ const updateInfo = async(admin_id, id, name, photo) => {
     }
 }
 
+const deleteComment = async (id) => {
+    const result = await Comments.delComments(id);
+    return result;
+}
+
 module.exports = {
     blockUser,
     disableUser,
     promoteUser,
     enableUser,
-    updateInfo
+    updateInfo,
+    deleteComment
 };
