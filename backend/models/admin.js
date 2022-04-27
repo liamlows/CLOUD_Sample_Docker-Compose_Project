@@ -21,6 +21,7 @@ const changeStatus = async (email, privileges) => {
     return result;
 }
 
+
 module.exports = {
     findUserByEmail,
     findUserByID,
