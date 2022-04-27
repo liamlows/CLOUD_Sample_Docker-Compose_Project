@@ -83,9 +83,9 @@ export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, account_id,
               {pages.map((page) => {
                 return (
                 <div key={page.label}>
-                  {(account_type === "professor" || account_type === "admin") && <MenuItem key={page.label} component={Link} to={`/users`} onClick={handleCloseNavMenu}>
+                  {(account_type === "professor" || account_type === "admin") && page.route === '/users/:account_id/friends' && <MenuItem key={page.label} component={Link} to={`/users`} onClick={handleCloseNavMenu}>
                     <PeopleTwoToneIcon />
-                    <Typography className="m-1" textAlign="center">{page.label}</Typography>
+                    <Typography className="m-1" textAlign="center">People</Typography>
                   </MenuItem>}
                   {(account_type === "student" || account_type === "ta") && page.route === '/users/:account_id/friends' && <MenuItem key={page.label} component={Link} to={`/users/${account_id}/friends`} onClick={handleCloseNavMenu}>
                     <PeopleTwoToneIcon />
