@@ -1,6 +1,7 @@
 
 const { query } = require('./db');
 const pool = require('./db')
+const User = require('./controllers/users')
 
 module.exports = function routes(app, logger) {
 
@@ -111,16 +112,15 @@ app.delete('/nft/id/:id', async (req, res, next) => {
   next()
 }) 
 
-
-app.get('/nft/:min/:max/:how', async (req, res) => {
+// get NFTs with a price above min and/or below max in ascending order
+app.get('/nft/sort/:min/:max', async (req, res) => {
   try {
     const params = req.params;
 
     if (params.min === undefined) params.min = 0
     if (params.max === undefined) params.max = Infinity
-    if (params.how === undefined) params.how = true
 
-    const result = await req.models.nft.getAllByPrice(params.min, params.max, params.how);
+    const result = await req.models.nft.getAllByPrice(params.min, params.max);
     res.status(201).json(result);
 
   } catch (err) {
@@ -144,6 +144,7 @@ app.get('/user/id/:id', async (req, res, next) => {
 
 })
 
+// search for NFTs with matching term in description
 app.get('/nft/search/:term', async (req, res) => {
   try {
     const term = req.params.term;
@@ -173,6 +174,18 @@ app.get('/nft/Leaderboard', async(req, res) => {
 app.get('/user/Leaderboard', async(req, res) => {
   try{
     const result = await req.models.nft.userLeaderboard();
+    res.status(201).json(result);
+  } catch (err){
+    console.error("Failed to display NFT leaderboard");
+    res.status(400).json({ message: err.toString() });
+  }
+})
+
+app.get('/user/list', async(req, res) => {
+  try{
+    const body = req.body;
+
+    const result = await req.models.user.findUser(body.username, body.id, body.email);
     res.status(201).json(result);
   } catch (err){
     console.error("Failed to display NFT leaderboard");

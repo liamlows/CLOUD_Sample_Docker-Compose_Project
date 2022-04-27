@@ -108,9 +108,9 @@ const deleteNFT = async (id) => {
 }
 
 const getAllByPrice = async (min, max, how) => {
-    var query;
-    if (how) query = knex(NFT_TABLE).where( 'price', '>', min ).andWhere( 'price', '<', max ).orderBy( 'price' )
-    else query = knex(NFT_TABLE).where( 'price', '>', min ).andWhere( 'price', '<', max ).orderBy( 'price', 'desc' )
+    const query = knex(NFT_TABLE).where( 'price', '>', min ).andWhere( 'price', '<', max ).orderBy( 'price' );
+    const result = await query;
+    return result;
 }
 
 const userLeaderboard = async () => {
