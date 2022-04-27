@@ -9,7 +9,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 
 // Component Imports
 import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
-import { TextField } from "../common";
+import {doSignOut, TextField} from "../common";
 
 // Method Imports
 import { getAllCourses, getCoursebyId, logout, getAccountbyId } from "../../APIFolder/loginApi"
@@ -78,13 +78,7 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
     }
 
 
-    const signOut = () => {
-        console.log("Logging out");
-        logout().then(() => {
-            localStorage.setItem("currUser", "{}");
-            navigate('/');
-        });
-    }
+    const signOut = () => { doSignOut().then(() => navigate('/')) };
 
     // HTML
     if(!!courses && courses.length !== 0) {

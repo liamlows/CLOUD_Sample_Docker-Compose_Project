@@ -10,6 +10,7 @@ import LoggedInResponsiveAppBar from '../common/LoggedInResponsiveAppBar';
 
 // Method Imports
 import { getAccountbyId, getFriends, logout } from '../../APIFolder/loginApi';
+import {doSignOut} from "../common";
 
 export const FriendsList = (props) => {
     // Navigate Object
@@ -62,13 +63,7 @@ export const FriendsList = (props) => {
         navigate(`/users/${friend.account_id}`);
     }
 
-    const signOut = () => {
-        console.log("Logging out");
-        logout().then(() => {
-            localStorage.setItem("currUser", "{}")
-            navigate('/');
-        });
-    }
+    const signOut = () => { doSignOut().then(() => navigate('/')) };
 
     // HTML
     return <div>

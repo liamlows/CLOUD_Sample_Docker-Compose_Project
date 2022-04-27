@@ -13,7 +13,7 @@ import "./ClassProfile.css";
 
 
 // Component Imports
-import { TextField } from "../common";
+import {doSignOut, TextField} from "../common";
 import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 
 
@@ -138,13 +138,7 @@ export const ClassProfile = (props) => {
         setEditMode(false);
     }
 
-    const signOut = () => {
-        console.log("Logging out");
-        logout().then(() => {
-            localStorage.setItem("currUser", "{}")
-            navigate('/');
-        });
-    }
+    const signOut = () => { doSignOut().then(() => navigate('/')) };
 
     const sendEnrollmentRequestFunc = () => {
         sendEnrollmentRequest()

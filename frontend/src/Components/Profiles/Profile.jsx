@@ -14,7 +14,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 
 // Component Imports
-import { TextField } from "../common";
+import {doSignOut, TextField} from "../common";
 import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 
 
@@ -22,6 +22,8 @@ import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 import { getFriendRequests, getStatusById, handleFriendRequest, logout, sendFriendRequest, updateAccountbyId, getFriendRequest, getFriendsClasses, uploadPP, getAccountbyId, updateAccount } from "../../APIFolder/loginApi";
 import { TextAreaField } from "../common/TextAreaField";
 import { ReviewList } from "../common/ReviewList";
+
+import { websocket } from "../../client-websocket";
 
 
 
@@ -49,7 +51,7 @@ export const Profile = (props) => {
 
 
         getAccountbyId(params.account_id).then(async loaded => {
-            getStatusById(loaded.account_id).then((status) => setOnline(!!status.logged_in));
+            getStatusById(loaded.account_id).then((status) => setOnline(!!status.status));
 
 
             // get the table of friend requests
@@ -126,7 +128,7 @@ export const Profile = (props) => {
         let status = 0;
 
         getAccountbyId(params.account_id).then(async loaded => {
-            getStatusById(loaded.account_id).then((status) => setOnline(!!status.logged_in));
+            getStatusById(loaded.account_id).then((status) => setOnline(!!status.status));
 
             // get the table of friend requests
             if (loaded.username !== JSON.parse(localStorage.getItem("currUser")).username) {
@@ -247,13 +249,7 @@ export const Profile = (props) => {
         setEditMode(false);
     }
 
-    const signOut = () => {
-        console.log("Logging out");
-        logout().then(() => {
-            localStorage.setItem("currUser", "{}")
-            navigate('/');
-        });
-    }
+    const signOut = () => { doSignOut().then(() => navigate('/')) };
 
     const profileNav = () => {
         // setAccount(JSON.parse(localStorage.getItem("currUser")));
