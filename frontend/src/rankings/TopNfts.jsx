@@ -43,7 +43,7 @@ export const TopNfts = () => {
                       </Link>
                     </div>
                     <div class="col-3">
-                        <Link to='/theirUser' className='createLink'>Creator: {getUserById(NFT.creator_id).username}</Link>
+                        <Link to='/theirUser' className='createLink'>Creator: {NFT.creator_id}</Link>
                     </div>
                     <div class="col-3">
                         <Link to='/theirUser' className='createLink'>Owner: {NFT.owner_id}</Link>
