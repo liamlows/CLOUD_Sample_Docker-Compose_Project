@@ -85,6 +85,13 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
             navigate('/');
         });
     }
+    const find = (course) => {
+        if(course.course_name.indexOf(cName) !== -1)
+        {
+            return true;
+        }
+        return false
+    }
 
     // HTML
     if(!!courses && courses.length !== 0) {
@@ -99,7 +106,7 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
             <div className="container border-0 mt-3">
                 <button type="button" className="float-end btn btn-success mt-3" onClick={() => goToSchedule()}>Schedule</button>
                 <div className="container border-0 col-3 float-start">
-                    <TextField label="Search by Username" value={cName} setValue={setCName} />
+                    <TextField label="Search by Course Name (Case Sensitive)" value={cName} setValue={setCName} />
                 </div>
                 <div className="clearfix"></div>
             </div>
@@ -115,7 +122,7 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
                 </thead>
                 <tbody>
                     {courses.map((course, idx) => {
-                        return (<tr key={idx} className="container">
+                        return (find(course) &&<tr key={idx} className="container">
                             <td>{course.course_name}{console.log(course)}</td>
                             <td>{course.department}</td>
                             <td>{course.professors.length !== 0 && course.professors.map((professor) => {
