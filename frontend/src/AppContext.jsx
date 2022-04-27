@@ -3,12 +3,12 @@ import { createContext, useState, useMemo, useEffect } from "react";
 export const AppContext = createContext(null);
 
 export const AppProvider = ({ children }) => {
-    const [ email, setEmail ] = useState(null);
+    const [ userName, setUsername ] = useState(null);
 
     const context = useMemo(()=> ({
-        email,
-        setEmail
-    }), [email]);
+        userName,
+        setUsername
+    }), [userName]);
 
     // useEffect(() => {
     //     if (userName) {
