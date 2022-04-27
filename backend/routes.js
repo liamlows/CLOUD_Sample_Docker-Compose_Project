@@ -208,8 +208,6 @@ app.get('/user/list', async(req, res) => {
   }
 })
 
-}
-
 app.post('/transaction', async (req, res) => {
   try {
     const body = req.body;
@@ -257,3 +255,5 @@ app.get('/transaction/seller/:seller', async (req, res) => {
     console.error("Failed to get transaction by NFT id: ", err);
   }
 })
+
+}

@@ -15,7 +15,7 @@ const createModelsMiddleware = async (req, res, next) => {
     req.models = {
         nft: NFT,
         messages: MESSAGES,
-        transaction: TRANSACTION
+        transaction: TRANSACTION,
         user: USER
     }
     next();
