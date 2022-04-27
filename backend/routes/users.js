@@ -117,7 +117,6 @@ router.get('/list', async (req, res, next) => {
         console.error("Could not get users: ", err);
         res.sendStatus(404).json({ message: err.toString() });e
     }
-
 });
 
 
