@@ -1,29 +1,23 @@
 // Libary Imports
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import CircleIcon from '@mui/icons-material/Circle';
+import { useNavigate, useParams } from "react-router-dom";
 import Cookies from "js-cookie";
 import { Button } from "@mui/material";
-import Check from "@mui/icons-material/Check";
-import Add from "@mui/icons-material/Add";
-import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
-import ClearIcon from '@mui/icons-material/Clear';
+import SendIcon from '@mui/icons-material/Send';
 
-import "./Profile.css";
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import "./Chat.css";
+
 
 
 // Component Imports
-import { TextField } from "../common";
+
 import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
 
 
 // Method Imports
-import { getFriendRequests, getStatusById, handleFriendRequest, logout, sendFriendRequest, updateAccountbyId, getFriendRequest, getFriendsClasses, uploadPP, getAccountbyId, updateAccount, getCoursebyId, getFriends } from "../../APIFolder/loginApi";
+import { logout, getAccountbyId, getFriends } from "../../APIFolder/loginApi";
 import { TextAreaField } from "../common/TextAreaField";
-import { ReviewList } from "../common/ReviewList";
-
-
+import Send from "@mui/icons-material/Send";
 
 export const Chat = (props) => {
     // Navigate Object
@@ -37,8 +31,16 @@ export const Chat = (props) => {
     const [friends, setFriends] = useState(undefined);
 
     const [selectedFriend, setSelectedFriend] = useState(undefined);
-    const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState([
+        { senderId: 1, content: "Hello" },
+        { senderId: 2, content: "Hello, Wes" },
+        { senderId: 1, content: "How are you Dummy Thicc?" },
+        { senderId: 2, content: "Doing well, yourself?" },
+    ]);
+    const [message, setMessage] = useState('')
     const [ready, setReady] = useState(false);
+
+    const changeMessage = delta => setMessage({ ...message, ...delta })
 
 
     const params = useParams();
@@ -70,31 +72,30 @@ export const Chat = (props) => {
             })
         }
     }, []); //lol the useEffect is just here now.
-    if(friends === undefined){
+    if (friends === undefined) {
         let temp_friends = []
-        getFriends().then( async res => { 
+        getFriends().then(async res => {
             console.log(res);
-            for(const i in res){
-            console.log(res[i].friend_a,res[i].friend_b)
-                
-                if(res[i].friend_a === account.account_id)
-                {
+            for (const i in res) {
+                console.log(res[i].friend_a, res[i].friend_b)
+
+                if (res[i].friend_a == Cookies.get("account_id")) {
                     console.log("getting friend b")
                     await getAccountbyId(res[i].friend_b).then(frRes => {
                         // console.log(frRes);
                         temp_friends.push(frRes);
-                        
+
                     })
                 }
                 else {
                     console.log("getting friend a")
-                     await getAccountbyId(res[i].friend_a).then(frRes => {
+                    await getAccountbyId(res[i].friend_a).then(frRes => {
                         temp_friends.push(frRes);
-                        
+
                     })
                 }
             }
-            
+
         }).then(() => {
             console.log("Temp Friends", temp_friends)
             setFriends([...temp_friends]);
@@ -110,19 +111,24 @@ export const Chat = (props) => {
         });
     }
 
-    const readyToDisplay = () => 
-    {
-        if(JSON.stringify(account) === "{}")
-        {
+    const sendMessage = () => {
+        //do stuff
+        let temp_message = { ...message, senderId: account.account_id }
+        console.log("temp_message", temp_message);
+        setMessages([...messages, temp_message])
+        setMessage('')
+    }
+
+    const readyToDisplay = () => {
+        if (JSON.stringify(account) === "{}") {
             return false
         }
-        if(!ready)
-        {
+        if (!ready) {
             return false
         }
-        console.log("Displaying, account",account)
-        console.log("Displaying, friends",friends)
-        
+        console.log("Displaying, account", account)
+        console.log("Displaying, friends", friends)
+
         return true;
     }
     // Basically check if user is the same user as the loaded profile.
@@ -139,14 +145,15 @@ export const Chat = (props) => {
                 account_id={JSON.parse(localStorage.getItem("currUser")).account_id}
                 account_type={JSON.parse(localStorage.getItem("currUser")).role.role_type} />
             {
-                friends.length === 0 && <p>
+                friends.length === 0 && <p className="mt-5">
                     You must have friends to chat.
                 </p>
             }
             {
-                friends.length > 0 && <div className="col-12 mt-5 row">
-                    <div className="FriendsList col-3">
-                        
+                friends.length > 0 && <div className="col-12 mt-5">
+                    <div className="row col-12">
+                        <div className="FriendsList col-3">
+
                             {
                                 friends.map((friend, idx) => {
                                     console.log("selectedFriend", selectedFriend)
@@ -154,33 +161,53 @@ export const Chat = (props) => {
                                     if (selectedFriend && friend.account_id === selectedFriend.account_id) {
                                         selected = " bg-primary "
                                     }
-                                    return (<Button key={idx} className={`friendProfile ${selected} `} variant="contained" onClick={() => {setSelectedFriend(friend)}}>
+                                    return (<Button key={idx} className={`friendProfile ${selected} `} variant="contained" onClick={() => { setSelectedFriend(friend) }}>
                                         {friend.pfp_url !== null && <img className="col-1 pfp float-start" src={`${friend.pfp_url}`} alt="" />}
                                         {friend.pfp_url === null && <img className="col-1 pfp float-start" src="https://via.placeholder.com/300x300" alt="" />}
                                         <p className="col-9 pt-3">{friend.username}</p>
                                     </Button>)
                                 })
                             }
-                        
-                    </div>
-                    <div className="ChatBox col-9 p-3">
-                        {selectedFriend === undefined && <p>Please select friend to chat with</p>}
-                        {selectedFriend !== '' && <ul>
-                            {messages.map((message, idx) => {
-                                let sent_recieve = ''
-                                if (message.senderId === account.account_id) {
-                                    sent_recieve = "sent"
-                                }
-                                else {
-                                    sent_recieve = "recieve";
-                                }
 
-                                return (<li className={`${sent_recieve} pt-1`}>
-                                    <p>{message.content}</p>
-                                </li>)
-                            })}
-                        </ul>}
+                        </div>
+                        <div className="ChatBox col-9 p-3">
+                            {selectedFriend === undefined && <p>Please select friend to chat with</p>}
+                            {selectedFriend !== undefined && <div>
+                                {messages.map((message, idx) => {
+                                    let sent_recieve = ''
+                                    if (message.senderId === account.account_id) {
+                                        sent_recieve = "sent"
+                                    }
+                                    else {
+                                        sent_recieve = "recieve";
+                                    }
+
+                                    return (<div key={idx}>
+                                        <p className={`${sent_recieve} col-7`}>{message.content}</p>
+                                    </div>)
+                                })}
+                            </div>}
+                        </div>
                     </div>
+
+
+                    {selectedFriend !== undefined && <div className="row col-12">
+                        <div className="col-3">
+
+                        </div>
+                        <div className="col-9 border-top ">
+                            <div className="col-1 float-end pt-3 pb-3 sent hovered special" onClick={() => sendMessage()}>
+                                <div className="clear-fix"></div>
+                                <Send className="p-1"/>
+                            </div>
+                            <div className="col-11 text-start mt-3">
+                                <TextAreaField value={message.content} setValue={content => changeMessage({ content })} />
+                            </div>
+
+
+                        </div>
+
+                    </div>}
                 </div>
             }
         </section>
