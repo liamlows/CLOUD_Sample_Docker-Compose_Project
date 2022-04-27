@@ -125,6 +125,23 @@ const deleteUser = async (id) => {
     return result;
 }
 
+const updateEmail = async(id, email) => {
+    const query = knex(USER_TABLE).update({eamil: email} ).where({ id });
+    const result = await query;
+    return result;
+}
+
+const updateUsername = async(id, username) => {
+    const query = knex(USER_TABLE).update({username: username} ).where({ id });
+    const result = await query;
+    return result;
+}
+const updatePassword = async(id, password) => {
+    const query = knex(USER_TABLE).update({password: password} ).where({ id });
+    const result = await query;
+    return result;
+}
+
 const updateName = async (id, name) => {
     const query = knex(USER_TABLE).update({name: name} ).where({ id });
     const result = await query;
@@ -195,5 +212,8 @@ module.exports = {
     transferFunds,
     adjustFunds,
     findUserByUsername,
-    findUser
+    findUser,
+    updateEmail,
+    updateUsername,
+    updatePassword
 };
