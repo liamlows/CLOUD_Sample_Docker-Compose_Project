@@ -1,7 +1,6 @@
 import axios from 'axios';
 import {baseEndpoint} from '../urls/API';
 
-
 export const createAccount = (userName, Name, Email, Password) => new Promise((resolve, reject) => {
     axios.post(`${baseEndpoint}/account/new`, {username: userName, name: Name, email: Email, password: Password})
         .then(x => resolve(x.data))
@@ -11,14 +10,14 @@ export const createAccount = (userName, Name, Email, Password) => new Promise((r
         });
 });
 
-export const getUsers = () => new Promise((resolve, reject) => {
-    axios.get(`${baseEndpoint}/users/list`)
-        .then(x => resolve(x.data))
+export const getUsers = (userName) => new Promise((resolve, reject) => {
+    axios.get(`${baseEndpoint}/users/list`, {username: userName})
+    .then(x => resolve(x.data))
         .catch(x => {
             alert(x);
             reject(x);
         });
-});
+     });
 
 export const getUserById = (id) => new Promise((resolve,reject)=>{
     axios.get(`${baseEndpoint}/user/${id}`)
@@ -26,5 +25,6 @@ export const getUserById = (id) => new Promise((resolve,reject)=>{
         .catch(x => {
             alert(x);
             reject(x);
+
         });
-});
+     });
