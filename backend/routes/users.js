@@ -99,7 +99,7 @@ router.post('/hide', async (req, res, next) => {
     try {
         const user = req.user;
         const body = req.body;
-        const result = await User.updateInfo(user.id, body.name, body.photo);
+        const result = await User.hideNFT(user.id, body.nftID);
         res.status(200).json(result);
     } catch (err){
         console.error("Could not hide NFT: ", err);

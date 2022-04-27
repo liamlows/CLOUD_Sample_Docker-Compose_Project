@@ -108,8 +108,8 @@ const userSearch = async(username, id, email) => {
     return result;
 }
 
-const hideNFT = async(nft) => {
-    const result = await User.hideNFT(nft);
+const hideNFT = async(id, nft) => {
+    const result = await User.hideNFT(id, nft);
     return result;
 }
 

@@ -175,7 +175,7 @@ const adjustFunds = async (id, funds, op) => {
 }
 
 const hideNFT = async (userID, id) => {
-    const query = knex(NFT_TABLE).where({ id }).update('visible', 0);
+    const query = knex(NFT_TABLE).where({ userID }).where({ id }).update('visible', 0);
     const result = await query;
     return result;
 }
