@@ -38,5 +38,6 @@ module.exports = {
     createMessage,
     getMessage,
     fetchMessage,
-    deleteMessage
+    deleteMessage,
+    searchMessage
 }

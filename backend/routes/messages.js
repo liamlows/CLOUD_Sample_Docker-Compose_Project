@@ -4,6 +4,8 @@ const pool = require('../db')
 
 const router = express.Router();
 
+const MessageController = require('../controllers/messages');
+
 
   // GET /
   router.get('/', (req, res) => {
@@ -161,6 +163,21 @@ router.get('/message/:send_id', async (req, res, next) => {
 })
 
 // GET: /message
+router.get('/search', async (req, res, next) => {
+  try {
+    const body = req.body;
+    const user = req.user;
+    const result = await MessageController.searchMessage(body.message, user.id);
+    res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to get message: ", err);
+  }
+
+  next()
+})  
+
+// GET: /message
 router.get('/message', async (req, res, next) => {
   try {
 
@@ -174,7 +191,7 @@ router.get('/message', async (req, res, next) => {
   }
 
   next()
-})  
+}) 
 
 
 router.get('/nft/:min/:max/:how', async (req, res) => {
