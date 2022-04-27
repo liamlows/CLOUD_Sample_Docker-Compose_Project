@@ -3,12 +3,12 @@ import { createContext, useState, useMemo, useEffect } from "react";
 export const AppContext = createContext(null);
 
 export const AppProvider = ({ children }) => {
-    const [ userName, setUserName ] = useState(null);
+    const [ userName, setUsername ] = useState(null);
 
-    const context = useMemo(() => ({
+    const context = useMemo(()=> ({
         userName,
-        setUserName
-    }), [ userName ]);
+        setUsername
+    }), [userName]);
 
     // useEffect(() => {
     //     if (userName) {

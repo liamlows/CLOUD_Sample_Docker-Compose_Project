@@ -1,5 +1,6 @@
 const User = require('../models/users');
 const NFT = require('../models/nft');
+const Purchase = require('../models/purchase');
 
 
 // Create new user if email and password are provided
@@ -91,7 +92,16 @@ const transfer = async(id, amount) => {
     return result1;
 }
 
-const updateInfo = async(id, name, photo) => {
+const updateInfo = async(id, email, username, password, name, photo) => {
+    if(email) {
+        const result = await User.updateEmail(id, email);
+    }
+    if(username){
+        const result = await User.updateUsername(id, username);
+    }
+    if(password){
+        const result = await User.updatePassword(id, password);
+    }
     if(name){
         const result = await User.updateName(id, name);
     }
@@ -100,6 +110,16 @@ const updateInfo = async(id, name, photo) => {
     }
     const rez = await User.findUserByID(id);
     return rez;
+}
+
+const userSearch = async(username, id, email) => {
+    const result = await User.findUser(username, id, email);
+    return result;
+}
+
+const hideNFT = async(id, nft) => {
+    const result = await User.hideNFT(id, nft);
+    return result;
 }
 
 module.exports = {
@@ -113,5 +133,7 @@ module.exports = {
     purchaseNFT,
     paymentInfo,
     transfer,
-    updateInfo
+    updateInfo,
+    userSearch,
+    hideNFT
 };

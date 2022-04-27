@@ -7,10 +7,10 @@ import { createAccount } from "../api/UsersAPI";
 
 export const CreateAccount = () => {
 
-    const [username, setUsername]=useState('');
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+  const [username, setUsername]=useState('');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
  
   // States for checking the errors
   const [submitted, setSubmitted] = useState(false);
@@ -21,7 +21,6 @@ export const CreateAccount = () => {
     setUsername(e.target.value);
     setSubmitted(false);
   };
-
  
   // Handling the name change
   const handleName = (e) => {
@@ -60,7 +59,7 @@ export const CreateAccount = () => {
         style={{
           display: submitted ? '' : 'none',
         }}>
-        <h1>User {name} successfully registered!!</h1>
+        <h4>User {name} successfully registered!!</h4>
       </div>
     );
   };
@@ -73,7 +72,7 @@ export const CreateAccount = () => {
         style={{
           display: error ? '' : 'none',
         }}>
-        <h1>Please enter all the fields</h1>
+        <h4>Please enter all the fields</h4>
       </div>
     );
   };
@@ -109,6 +108,7 @@ export const CreateAccount = () => {
     <br/>
 
     <TextField helperText="Please choose a password" id="demo-helper-text-misaligned" label="Password"
+     type='password'
      value={password}
      onChange={ handlePassword }
      />

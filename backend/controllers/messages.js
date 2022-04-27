@@ -1,7 +1,7 @@
 const Message = require('../models/messages');
 
 
-const searchMessage = async(message, pasidsword) => {
+const searchMessage = async(message, id) => {
     const result = await Message.searchMessage(message, id);
     return result;
 }

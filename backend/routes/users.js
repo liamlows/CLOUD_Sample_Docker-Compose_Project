@@ -86,7 +86,7 @@ router.post('/update', async (req, res, next) => {
     try {
         const user = req.user;
         const body = req.body;
-        const result = await User.updateInfo(user.id, body.name, body.photo);
+        const result = await User.updateInfo(user.id, body.email, body.username, body.password, body.name, body.photo);
         res.status(200).json(result);
     } catch (err){
         console.error("Could not update info: ", err);
@@ -95,6 +95,30 @@ router.post('/update', async (req, res, next) => {
 
 });
 
+router.post('/hide', async (req, res, next) => {
+    try {
+        const user = req.user;
+        const body = req.body;
+        const result = await User.hideNFT(user.id, body.nftID);
+        res.status(200).json(result);
+    } catch (err){
+        console.error("Could not hide NFT: ", err);
+        res.sendStatus(401).json({ message: err.toString() });e
+    }
+
+});
+
+router.get('/list', async (req, res, next) => {
+    try {
+        const body = req.body;
+        const result = await User.userSearch(body.username, body.id, body.email);
+        res.status(200).json(result);
+    } catch (err){
+        console.error("Could not get users: ", err);
+        res.sendStatus(404).json({ message: err.toString() });e
+    }
+
+});
+
 
 module.exports = router;
-

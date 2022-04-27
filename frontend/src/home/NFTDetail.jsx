@@ -5,33 +5,39 @@ import { Link } from 'react-router-dom';
 import { getNFTById } from '../api/NFTApi';
 import { blue } from '@mui/material/colors';
 import './NFTDetail.css';
+import{React} from 'react';
+import {useParams } from 'react-router-dom';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 
-
-export const NFTDetail = ({ }) => {
+export const NFTDetail = () => {
     
     const [NFT, setNFT]=useState(undefined);
-
-    const id=4;
+    const params =useParams();
 
     useEffect(()=>{
-        getNFTById(id).then(x => setNFT(x));
-    },[id]);
+        if(params.id){
+        getNFTById(params.id).then(x => setNFT(x));
+        }
+    },[ ]);
 
     if(!NFT){
-        return<>Loading...</>
+        return<><Box sx={{ mx:"auto"}}>
+        <CircularProgress color="secondary" />
+        </Box></>
     }
-    
     return<>
-        <div className="container">
-            <div className="image_url">
-                <img className="rounded float-start" src="	https://5.imimg.com/data5/GV/NJ/MY-20565232/modern-art-paintings-250x250.jpg" alt="Card cap"></img>
+        <div className="container-nft">
+            <div className="nft_image_url">
+                <img className="rounded float-start" src={NFT[0].image_url} alt="Card cap"></img>
             </div>
             <div className="NFTInfo">
                 <div className="NFT"><h3>ID: {NFT[0].id}</h3></div>
                 <div className="NFT"><h3>Name: {NFT[0].name}</h3></div>
-                <div className="price">Price:$ {NFT[0].price}</div>
+                <div className="price"><AttachMoneyIcon/> {NFT[0].price}</div>
                 <div className="description">Description: {NFT[0].description}</div>
-                <div className="creator_id">Creator_id: {NFT[0].createor_id}</div>
+                <div className="creator_id">Creator_id: {NFT[0].creator_id}</div>
                 <div className="seller_id">Seller: {NFT[0].seller_id}</div>
                 <div className="owner_id">Owner_id: {NFT[0].owner_id}</div>
                 <br></br>
@@ -44,7 +50,5 @@ export const NFTDetail = ({ }) => {
         </div>
     
     </>
-
-
 
 }

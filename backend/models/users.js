@@ -36,6 +36,29 @@ const findUserByID = async (id) => {
     return result;
 }
 
+const findUserByUsername = async (username) => {
+    const query = knex(USER_TABLE).whereRaw('username LIKE "%' + username + '%"');
+    const result = await query;
+    return result;
+}
+
+const findUser = async (username, id, email) => {
+
+    const query = knex(USER_TABLE)
+    if(username){
+        query.whereRaw('username LIKE "%' + username + '%"');
+    }
+    if(id){
+        query.where({ id });
+    }
+    if(email){
+        query.where({ email });
+    }
+
+    const result = await query;
+    return result;
+}
+
 const getAdmin = async (email) => {
     const query = knex(USER_TABLE).where({ email }).whereRaw('privileges = 2');
     const result = await query;
@@ -102,6 +125,23 @@ const deleteUser = async (id) => {
     return result;
 }
 
+const updateEmail = async(id, email) => {
+    const query = knex(USER_TABLE).update({eamil: email} ).where({ id });
+    const result = await query;
+    return result;
+}
+
+const updateUsername = async(id, username) => {
+    const query = knex(USER_TABLE).update({username: username} ).where({ id });
+    const result = await query;
+    return result;
+}
+const updatePassword = async(id, password) => {
+    const query = knex(USER_TABLE).update({password: password} ).where({ id });
+    const result = await query;
+    return result;
+}
+
 const updateName = async (id, name) => {
     const query = knex(USER_TABLE).update({name: name} ).where({ id });
     const result = await query;
@@ -152,7 +192,7 @@ const adjustFunds = async (id, funds, op) => {
 }
 
 const hideNFT = async (userID, id) => {
-    const query = knex(NFT_TABLE).where({ id }).update('visible', 0);
+    const query = knex(NFT_TABLE).where({ userID }).where({ id }).update('visible', 0);
     const result = await query;
     return result;
 }
@@ -170,5 +210,10 @@ module.exports = {
     validatePurchase,
     addInfo,
     transferFunds,
-    adjustFunds
+    adjustFunds,
+    findUserByUsername,
+    findUser,
+    updateEmail,
+    updateUsername,
+    updatePassword
 };
