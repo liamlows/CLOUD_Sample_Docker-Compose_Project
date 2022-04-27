@@ -11,7 +11,7 @@ export const createAccount = (userName, Name, Email, Password) => new Promise((r
 });
 
 export const getUsers = (userName) => new Promise((resolve, reject) => {
-    axios.get(`${baseEndpoint}/users/list`, {username: userName})
+    axios.get(`${baseEndpoint}/user/list`, {username: userName})
     .then(x => resolve(x.data))
         .catch(x => {
             alert(x);
