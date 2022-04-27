@@ -103,20 +103,9 @@ const updateInfo = async(id, name, photo) => {
     return rez;
 }
 
-const userSearch = async(email, id, username) => {
-    if(email){
-        const result = await User.findUserByEmail(email);
-    }
-    if(id){
-        const result = await User.findUserByID(id);
-    }
-    if(username){
-        const result = await User.findUserByUsername(username);
-    }
-    const rez = await User.findUserByID(id);
-    return rez;
-
-
+const userSearch = async(username) => {
+    const result = await User.findUserByUsername(username);
+    return result;
 }
 
 module.exports = {

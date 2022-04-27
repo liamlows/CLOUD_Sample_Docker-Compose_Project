@@ -37,7 +37,7 @@ const findUserByID = async (id) => {
 }
 
 const findUserByUsername = async (username) => {
-    const query = knex(USER_TABLE).where({ username });
+    const query = knex(USER_TABLE).whereRaw('username LIKE "%' + username + '%"');
     const result = await query;
     return result;
 }
