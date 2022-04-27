@@ -37,21 +37,20 @@ export const getUserInfo = () =>new Promise((resolve,reject)=>{
     });
 });
 
-export const updateUserById = (id,username,email,password) =>new Promise((resolve,reject)=>{
-    // var myToken=localStorage.getItem('token');
-    //window.alert(localStorage.token);
-    // let config;
-    //     if( localStorage.token!=null){
-    //     // console.log(localStorage.token)
-    //     config={
-    //         headers:{
-    //             Authorization: 'Bearer '+ localStorage.getItem('token')
-    //         }
-    //     }
-    // }
+export const updateUserById = (username,email,password) =>new Promise((resolve,reject)=>{
+    let config;
+        if( localStorage.token!=null){
+        // console.log(localStorage.token)
+        config={
+            headers:{
+                Authorization: 'Bearer '+ localStorage.getItem('token')
+            }
+        }
+    }
     // axios.get(`${baseEndpoint}/nft/${id}`, apiConfig)
-    axios.post(`${baseEndpoint}/account/${id}`, {username: username, email: email, password: password})
-        .then(x => resolve(x.data))
+    axios.post(`${baseEndpoint}/users/update`, {username: username, email: email, password: password},config)
+        .then(x => resolve(x.data),
+        window.alert("Successfully changed!!"))
         .catch(x => {
             alert(x);
             reject(x);
