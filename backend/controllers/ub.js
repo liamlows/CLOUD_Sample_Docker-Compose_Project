@@ -1,0 +1,1 @@
+const Purchase = require('../models/purchase');
