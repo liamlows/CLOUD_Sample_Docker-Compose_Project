@@ -6,14 +6,24 @@ const Purchase = require('../models/purchase');
 // Create new user if email and password are provided
 const createUser = async (username, name, email, password, privileges, photo) => {
     if(!email){
-        res.status(400).json("No email provided");
+        console.error("No email provided");
     }
     if(!password){
-        res.status(400).json("No password provided");     
+        console.error("No password provided");     
     }
-    const user = await User.createNewUser(username, name, email, password, privileges, photo);
 
-    return user;
+    const exists = await User.findUserByEmail(email);
+    const exists1 = await User.findUserByUsername(username);
+
+    if(exists.length != 0){
+        console.error("Email already in use.");
+    } else if(exists1.length != 0){
+        console.error("Username already in use.");
+    } else {
+        const user = await User.createNewUser(username, name, email, password, privileges, photo);
+        return user;
+    }
+    throw new Error("Could not create user.");
 }
 
 // Authenticate user

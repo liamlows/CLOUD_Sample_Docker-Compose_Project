@@ -16,19 +16,11 @@ const createNewUser = async (username, name, email, password, privileges, photo)
     const hashedPassword = await bcrypt.hash(password, salt);
     console.log('Hashed password', hashedPassword);
 
-    const exists = await findUserByEmail(email);
-    const exists1 = await findUserByUsername(username);
-
-    if(exists.length === 0 && exists1.length === 0){
-        // Inserts into user table
-        const query = knex(USER_TABLE).insert({ username, name, email, password: hashedPassword, privileges, photo });
-        const result = await query;
-        return result;
-    } else {
-        console.log("Username or email already exists.");
-        return res.sendStatus(401);
-    }
-
+    
+    // Inserts into user table
+    const query = knex(USER_TABLE).insert({ username, name, email, password: hashedPassword, privileges, photo });
+    const result = await query;
+    return result;
    
 };
 
