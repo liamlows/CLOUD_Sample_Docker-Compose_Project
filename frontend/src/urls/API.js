@@ -1,1 +1,1 @@
-export const baseEndpoint = 'http://localhost:8000';
+export const baseEndpoint = 'ec2-44-200-60-221.compute-1.amazonaws.com:8000';
