@@ -167,6 +167,16 @@ export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, account_id,
                 >
                   {page.label}
                 </Button>}
+                {(account_type === "student" || account_type === "ta") && page.route === '/chat' && <Button
+                  key={page.label}
+                  component={Link}
+                  to={`/chat`}
+                  onClick={handleCloseNavMenu}
+                  className="btn"
+                  sx={{ my: 2, color: 'white', display: 'block' }}
+                >
+                  {page.label}
+                </Button>}
 
               </div>
 
