@@ -20,10 +20,8 @@ export const getUsers = () => new Promise((resolve, reject) => {
         });
      });
 
-
 export const getUserById = (id) => new Promise((resolve,reject)=>{
     axios.get(`${baseEndpoint}/user/${id}`)
-
         .then(x => resolve(x.data))
         .catch(x => {
             alert(x);
