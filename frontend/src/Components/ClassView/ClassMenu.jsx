@@ -1,4 +1,4 @@
-import { getAccountbyId, getAllCourses, getClasses, getCurrUserClasses, getFriendsClasses, logout } from "../../APIFolder/loginApi";
+import { getAccountbyId, getCoursebyId, getCourseById, getCurrUserClasses, getFriendsClasses, logout } from "../../APIFolder/loginApi";
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
@@ -35,10 +35,18 @@ export const ClassMenu = ({ pages, settings, setNavigated }) => {
         navigate('/');
       }
     }
-    // enrollable() && getCurrUserClasses(Cookies.get("account_id")).then(res => {
-    //   console.log(res)
-    //   setCourses([...res])
-    // })
+    // console.log(Cookies.get("account_id"))
+    enrollable() && getCurrUserClasses(Cookies.get("account_id")).then(res => {
+      let temp_courses = []
+      for(const i in res)
+      {
+        getCoursebyId(res[i].course_id).then(course => {
+          temp_courses.push(course)
+          setCourses([...temp_courses])
+        }) 
+      }
+      
+    })
   }, []);
   const goToCourseAdd = () => {
     navigate('/classes/enrollment');

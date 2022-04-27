@@ -39,7 +39,7 @@ GET /enrollments/:student-id
     Gets all enrollments by student id.
  */
 router.get("/:student_id", async (req, res, next) => {
-    let accountId = req.params.accountId;
+    let accountId = req.params.student_id;
 
     let enrollments;
     try{
