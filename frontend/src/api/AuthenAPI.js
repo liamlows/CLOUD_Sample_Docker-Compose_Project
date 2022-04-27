@@ -79,7 +79,7 @@ export const postNFT = (name,price,image_url) =>new Promise((resolve,reject)=>{
     // axios.get(`${baseEndpoint}/nft/${id}`, apiConfig)
     axios.post(`${baseEndpoint}/ub/nft`, {name: name, price: price,image_url:image_url},config)
         .then(x => resolve(x.data),
-        window.alert("Successfully changed!!"))
+        window.alert("Successully Post"))
         .catch(x => {
             alert(x);
             reject(x);
