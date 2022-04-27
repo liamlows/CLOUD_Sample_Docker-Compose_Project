@@ -35,6 +35,7 @@ const authenticateWithClaims = (claims) => (req, res, next) => {
 
   jwt.verify(token, accessTokenSecret, (err, user) => {
     if (err) {
+      console.log(err);
       return res.sendStatus(403);
     }
     for (let claim of claims) {
