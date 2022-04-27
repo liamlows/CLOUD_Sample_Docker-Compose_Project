@@ -63,13 +63,15 @@ const sessionStore = new MySQLStore({}, pool);
 // 1 day in milliseconds
 const oneDay = 1000 * 60 * 60 * 24;
 
-app.use(session({
+const sessionParser = session({
   secret: "llama-llama-llama",
   store: sessionStore,
   resave: false,
   saveUninitialized: false,
   cookie: { maxAge: oneDay },
-}));
+});
+
+app.use(sessionParser);
 
 
 //include routes
@@ -96,9 +98,14 @@ app.use('/api/reviews', reviews);
 app.use('/', routes);
 
 // connecting the express object to listen on a particular port as defined in the config object.
-app.listen(config.port, config.host, (e) => {
+const server = app.listen(config.port, config.host, (e) => {
   if (e) {
     throw new Error('Internal Server Error');
   }
   logger.info(`${config.name} running on ${config.host}:${config.port}`);
 });
+
+const {websockets} = require("./websockets");
+console.log("testttt");
+websockets(server, sessionParser);
+

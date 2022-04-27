@@ -14,6 +14,7 @@ import { LoggedInResponsiveAppBar } from "../common/LoggedInResponsiveAppBar";
 import { deleteNotification, getAccountbyId, getNotifications, logout } from "../../APIFolder/loginApi";
 
 import ClearIcon from '@mui/icons-material/Clear';
+import {doSignOut} from "../common";
 
 export const HomeView = (props) => {
     // Navigate Object
@@ -64,13 +65,7 @@ export const HomeView = (props) => {
 
 
     // Component Methods
-    const signOut = () => {
-        console.log("Logging out");
-        logout().then(() => {
-            localStorage.setItem("currUser", "{}")
-            navigate('/');
-        });
-    }
+    const signOut = () => { doSignOut().then(() => navigate('/')) };
 
     const removeNotification = (id) => {
         console.log("splicing and deleting")

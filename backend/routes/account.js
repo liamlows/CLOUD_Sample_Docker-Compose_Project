@@ -6,6 +6,7 @@ const crypto = require('crypto');
 const util = require('../util');
 const {getUsernameFromId, isUserAuthenticated, getRoleById, validateBody} = require("../util");
 const {uploadImage} = require("../s3");
+const {isUserOnline} = require('../websockets');
 
 /* TODO
 
@@ -227,6 +228,7 @@ router.get("/api/account/logout", isUserAuthenticated, async (req, res, next) =>
     let username = req.session.username;
 
     res.cookie('username', "");
+    res.cookie('account_id', "");
 
     try {
         await setStatusOffline(username);
@@ -237,6 +239,9 @@ router.get("/api/account/logout", isUserAuthenticated, async (req, res, next) =>
 
     req.session.destroy((err) => {
         if(err) return next(err);
+        res.clearCookie('connect.sid', {
+            path : "/"
+        });
         res.sendStatus(200);
     });
 });
@@ -363,21 +368,21 @@ router.put("/api/account", async(req, res, next) => {
 
 router.get("/api/users/:account_id/status/", async (req, res, next) => {
     // Query DB for user
-    let rows, fields;
-    try{
-        [rows, fields] = await pool.execute(
-            'SELECT username, last_logged_in, logged_in FROM `accounts` WHERE `account_id` = ?',
-            [req.params.account_id]);
-    } catch(error){
-        return next(error);
+    let accountId = req.params.account_id;
+    accountId = parseInt(accountId);
+    if(isNaN(accountId)){
+        res.status(400).json("Invalid account ID");
+        return;
     }
 
-    if(rows.length === 0){
-        return res.sendStatus(404);
-    }
+    let online = await isUserOnline(accountId);
 
-    let user = rows[0];
-    res.status(200).json(user);
+    if(online){
+        res.status(200).json({status: 1});
+    }
+    else {
+        res.status(200).json({status: 0});
+    }
 });
 
 

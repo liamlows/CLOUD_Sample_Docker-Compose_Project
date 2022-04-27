@@ -10,6 +10,8 @@ import LoggedInResponsiveAppBar from '../common/LoggedInResponsiveAppBar';
 
 // Method Imports
 import { getAccountbyId, getWaitlist, logout } from '../../APIFolder/loginApi';
+import Cookies from "js-cookie";
+import {doSignOut} from "../common";
 
 export const Waitlist = (props) => {
     // Navigate Object
@@ -42,13 +44,7 @@ export const Waitlist = (props) => {
     }
 
     // Component Methods
-    const signOut = () => {
-        console.log("Logging out");
-        logout().then(() => {
-            localStorage.setItem("currUser", "{}")
-            navigate('/');
-        });
-    }
+    const signOut = () => { doSignOut().then(() => navigate('/')) };
     const goToProfile = profile => {
         navigate(`users/${profile.account_id}`);
     }
