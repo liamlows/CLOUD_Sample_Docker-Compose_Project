@@ -145,7 +145,7 @@ app.get('/nft/cd/:creator_id', async (req, res, next) => {
 })
 
 // Display top NFTS
-app.get('/nftLeaderboard', async(req, res) => {
+app.get('/nft/Leaderboard', async(req, res) => {
   try {
     const result = await req.models.nft.nftLeaderboard();
     console.log(result);
