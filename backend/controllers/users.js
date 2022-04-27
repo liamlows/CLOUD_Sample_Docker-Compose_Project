@@ -103,8 +103,8 @@ const updateInfo = async(id, name, photo) => {
     return rez;
 }
 
-const userSearch = async(username) => {
-    const result = await User.findUserByUsername(username);
+const userSearch = async(username, id, email) => {
+    const result = await User.findUser(username, id, email);
     return result;
 }
 

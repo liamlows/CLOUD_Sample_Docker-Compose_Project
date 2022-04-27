@@ -42,6 +42,23 @@ const findUserByUsername = async (username) => {
     return result;
 }
 
+const findUser = async (username, id, email) => {
+
+    const query = knex(USER_TABLE)
+    if(username){
+        query.whereRaw('username LIKE "%' + username + '%"');
+    }
+    if(id){
+        query.where({ id });
+    }
+    if(email){
+        query.where({ email });
+    }
+
+    const result = await query;
+    return result;
+}
+
 const getAdmin = async (email) => {
     const query = knex(USER_TABLE).where({ email }).whereRaw('privileges = 2');
     const result = await query;
@@ -177,5 +194,6 @@ module.exports = {
     addInfo,
     transferFunds,
     adjustFunds,
-    findUserByUsername
+    findUserByUsername,
+    findUser
 };

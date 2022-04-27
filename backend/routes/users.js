@@ -98,7 +98,7 @@ router.post('/update', async (req, res, next) => {
 router.get('/list', async (req, res, next) => {
     try {
         const body = req.body;
-        const result = await User.userSearch(body.username);
+        const result = await User.userSearch(body.username, body.id, body.email);
         res.status(200).json(result);
     } catch (err){
         console.error("Could not get users: ", err);
