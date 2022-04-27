@@ -10,7 +10,12 @@ router.post('/new', async (req, res, next) => {
         console.log(body);
         const result = await UserController.createUser(body.username, body.name, body.email, 
             body.password, 1, body.photo);
-        res.status(201).json(result);
+        if(result.size === 0){
+            console.error('Failed to create new user:', err);
+            res.status(400).json({ message: err.toString() });
+        } else {
+            res.status(201).json(result);
+        }
     } catch (err) {
         console.error('Failed to create new user:', err);
         res.status(400).json({ message: err.toString() });
