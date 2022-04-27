@@ -16,10 +16,12 @@ const createNewUser = async (username, name, email, password, privileges, photo)
     const hashedPassword = await bcrypt.hash(password, salt);
     console.log('Hashed password', hashedPassword);
 
+    
     // Inserts into user table
     const query = knex(USER_TABLE).insert({ username, name, email, password: hashedPassword, privileges, photo });
     const result = await query;
     return result;
+   
 };
 
 // Locates a user record by email

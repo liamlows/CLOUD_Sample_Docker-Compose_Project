@@ -4,6 +4,7 @@ const pool = require('../db')
 
 const router = express.Router();
 
+const Followers = require('../controllers/followers');
 
   // GET /
   router.get('/', (req, res) => {
@@ -87,6 +88,60 @@ router.post('/like', async (req, res) => {
   } catch (err) {
       console.error("Failed to create new like record: ", err); 
   }
+}) 
+
+router.get('/followers', async (req, res, next) => {
+  try {
+    const user = req.user;
+    const result = await Followers.getFollowers(user.id);
+    res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to get followers: ", err);
+  }
+
+  next()
+}) 
+
+router.get('/following', async (req, res, next) => {
+  try {
+    const user = req.user;
+    const result = await Followers.getFollowing(user.id);
+    res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to get following: ", err);
+  }
+
+  next()
+}) 
+
+router.post('/follow', async (req, res, next) => {
+  try {
+    const user = req.user;
+    const body = req.body;
+    const result = await Followers.follow(body.id, user.id);
+    res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to follow user: ", err);
+  }
+
+  next()
+}) 
+
+router.post('/unfollow', async (req, res, next) => {
+  try {
+    const user = req.user;
+    const body = req.body;
+    const result = await Followers.unfollow(body.id, user.id);
+    res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to unfollow user: ", err);
+  }
+
+  next()
 }) 
 
 module.exports = router;
