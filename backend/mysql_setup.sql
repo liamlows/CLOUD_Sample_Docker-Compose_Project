@@ -36,8 +36,10 @@ CREATE TABLE `db`.`courses` (
     `week_flags` SMALLINT NOT NULL,
     `start_time` TIME NOT NULL,
     `end_time` TIME NOT NULL,
+    `professor` BIGINT UNSIGNED,
     PRIMARY KEY (`course_id`),
-    FOREIGN KEY (`course_meta_id`) REFERENCES course_metadata(`course_meta_id`)
+    FOREIGN KEY (`course_meta_id`) REFERENCES course_metadata(`course_meta_id`),
+    FOREIGN KEY (`professor`) REFERENCES accounts(`account_id`)
 );
 
 -- ROLES TABLE
