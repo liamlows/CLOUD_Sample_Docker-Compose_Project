@@ -157,5 +157,28 @@ app.get('/nft/search/:term', async (req, res) => {
 
 })
 
+// Display top NFTS
+app.get('/nftLB', async(req, res) => {
+  try {
+    const result = await req.models.nft.nftLeaderboard();
+    console.log(result);
+    res.status(201).json(result);
+  } catch (err){
+    console.error("Failed to display NFT leaderboard");
+    res.status(400).json({ message: err.toString() });
+  }
+})
+
+// Display top users
+app.get('/userLB', async(req, res) => {
+  try{
+    const result = await req.models.nft.userLeaderboard();
+    res.status(201).json(result);
+  } catch (err){
+    console.error("Failed to display NFT leaderboard");
+    res.status(400).json({ message: err.toString() });
+  }
+})
 
 }
+
