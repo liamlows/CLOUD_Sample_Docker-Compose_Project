@@ -189,6 +189,11 @@ export const ClassProfile = (props) => {
             console.log("Not Enrollable")
             return false;
     }
+    const drop = () =>
+    {
+        dropCourse(account.account_id, course.course_id)
+        setReload(!reload)
+    }
 
     // Basically check if user is the same user as the loaded profile.
     // If so then allow them to edit with the edit button at the end (this edit button will update the database once done)
@@ -398,7 +403,7 @@ export const ClassProfile = (props) => {
                                         {enrollable() && course.status === 1 && <div className="float-end col-2 mb-1 mt-2">
                                             <th className="col-1 rounded border-0 p-1">
                                             <Button variant="contained" className="col-11 bg-warning" disabled endIcon={<Add color='disabled' />}>Enrolled</Button>
-                                                <Button variant="contained" className="col-1 bg-danger" onClick={() => dropCourse(account.account_id, course.course_id)}><ClearIcon /></Button>
+                                                <Button variant="contained" className="col-1 bg-danger" onClick={() => drop()}><ClearIcon /></Button>
                                             </th>
                                         </div>}
 
