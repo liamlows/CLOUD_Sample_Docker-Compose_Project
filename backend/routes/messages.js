@@ -1,17 +1,19 @@
+const express = require('express');
+const { query } = require('../db');
+const pool = require('../db')
 
-const { query } = require('./db');
-const pool = require('./db')
-const User = require('./controllers/users')
+const router = express.Router();
 
-module.exports = function routes(app, logger) {
+const MessageController = require('../controllers/messages');
+
 
   // GET /
-  app.get('/', (req, res) => {
+  router.get('/', (req, res) => {
     res.status(200).send('Go to 0.0.0.0:3000.');
   });
 
 // POST/nft
-app.post('/nft', async (req, res, next) => {
+router.post('/nft', async (req, res, next) => {
   try {
       const body = req.body;
       console.log(body);
@@ -27,7 +29,7 @@ app.post('/nft', async (req, res, next) => {
 })
 
 // POST: /nft/id
-app.post('/nft/:id', async (req, res, next) => {
+router.post('/nft/:id', async (req, res, next) => {
   try {
     const params = req.params;
     const body = req.body;
@@ -69,7 +71,7 @@ app.post('/nft/:id', async (req, res, next) => {
 })
 
 // GET: /nft/id
-app.get('/nft/id/:id', async (req, res, next) => {
+router.get('/nft/:id', async (req, res, next) => {
   try {
 
     const result = await req.models.nft.getNFT(req.params.id); 
@@ -83,7 +85,7 @@ app.get('/nft/id/:id', async (req, res, next) => {
   next()
 })
 
-app.get('/nft', async (req, res, next) => {
+router.get('/nft', async (req, res, next) => {
   try {
 
     const result = await req.models.nft.fetchNFT(); 
@@ -98,7 +100,7 @@ app.get('/nft', async (req, res, next) => {
 })
 
 // DELETE: /nft/id
-app.delete('/nft/id/:id', async (req, res, next) => {
+router.delete('/nft/:id', async (req, res, next) => {
   try {
 
     const result = await req.models.nft.deleteNFT(req.params.id); 
@@ -112,40 +114,103 @@ app.delete('/nft/id/:id', async (req, res, next) => {
   next()
 }) 
 
-// get NFTs with a price above min and/or below max in ascending order
-app.get('/nft/sort/:min/:max', async (req, res) => {
+  // for messages
+// Post: create a message /message 
+router.post('/message', async (req, res, next) => {
+  try {
+      const body = req.body;
+      console.log(body);
+      const result = await req.models.messages.createMessage(body.message,body.send_id,body.recieve_id);
+      //const result = await req.models.message.createMessage(body.message, body.send_id, body.recieve_id);
+      res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to create new message: ", err);
+      // res.status(500).
+  } 
+}) 
+
+// DELETE: /message/id
+router.delete('/message/:id', async (req, res, next) => {
+  try {
+
+    const result = await req.models.messages.deleteMessage(req.params.id);
+    res.status(201).json(result);
+    //res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to delete message by id: ", err);
+      // res.status(500).
+  }
+
+  next()
+})
+
+// Get: /message/id
+router.get('/message/:send_id', async (req, res, next) => {
+  try {
+
+    const result = await req.models.messages.getMessage(req.params.send_id);
+    res.status(201).json(result);
+    //res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to get message by send id: ", err);
+      // res.status(500).
+  }
+
+  next()
+})
+
+// GET: /message
+router.get('/search', async (req, res, next) => {
+  try {
+    const body = req.body;
+    const user = req.user;
+    const result = await MessageController.searchMessage(body.message, user.id);
+    res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to get message: ", err);
+  }
+
+  next()
+})  
+
+// GET: /message
+router.get('/message', async (req, res, next) => {
+  try {
+
+    const result = await req.models.messages.fetchMessage();
+    res.status(201).json(result);
+    //res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to get message: ", err);
+      // res.status(500).
+  }
+
+  next()
+}) 
+
+
+router.get('/nft/:min/:max/:how', async (req, res) => {
   try {
     const params = req.params;
 
     if (params.min === undefined) params.min = 0
     if (params.max === undefined) params.max = Infinity
+    if (params.how === undefined) params.how = true
 
-    const result = await req.models.nft.getAllByPrice(params.min, params.max);
+    const result = await req.models.nft.getAllByPrice(params.min, params.max, params.how);
     res.status(201).json(result);
 
   } catch (err) {
       console.error("Failed to get NFTs by price: ", err);
   }
-  next();
 })
 
-// Get: /user/:id
-app.get('/user/id/:id', async (req, res, next) => {
-  try {
-    const result = await req.models.user.findUserByID(req.params.id);
-    res.status(201).json(result);
-    //res.status(201).json(result);
-
-  } catch (err) {
-      console.error("Failed to get user by id: ", err);
-      // res.status(500).
-  }
-  next();
-
-})
-
-// search for NFTs with matching term in description
-app.get('/nft/search/:term', async (req, res) => {
+router.get('/nft/search/:term', async (req, res) => {
   try {
     const term = req.params.term;
 
@@ -155,58 +220,7 @@ app.get('/nft/search/:term', async (req, res) => {
   } catch (err) {
       console.error("Failed to get NFTs by description: ", err);
   }
-
-})
-
-app.get('/nft/cd/:creator_id', async (req, res, next) => {
-  try {
-
-    const result = await req.models.nft.getNFTbyCreatorId(req.params.creator_id); 
-    res.status(201).json(result);
-
-  } catch (err) {
-      console.error("Failed to create get NFT by creator id: ", err);
-      // res.status(500).
-  }
-
-  next()
-})
-
-// Display top NFTS
-app.get('/nft/Leaderboard', async(req, res) => {
-  try {
-    const result = await req.models.nft.nftLeaderboard();
-    console.log(result);
-    res.status(201).json(result);
-  } catch (err){
-    console.error("Failed to display NFT leaderboard");
-    res.status(400).json({ message: err.toString() });
-  }
-})
-
-// Display top users
-app.get('/user/Leaderboard', async(req, res) => {
-  try{
-    const result = await req.models.nft.userLeaderboard();
-    res.status(201).json(result);
-  } catch (err){
-    console.error("Failed to display NFT leaderboard");
-    res.status(400).json({ message: err.toString() });
-  }
 })
 
 
-app.get('/user/list', async(req, res) => {
-  try{
-    const body = req.body;
-
-    const result = await req.models.user.findUser(body.username, body.id, body.email);
-    res.status(201).json(result);
-  } catch (err){
-    console.error("Failed to display NFT leaderboard");
-    res.status(400).json({ message: err.toString() });
-  }
-})
-
-}
-
+module.exports = router;

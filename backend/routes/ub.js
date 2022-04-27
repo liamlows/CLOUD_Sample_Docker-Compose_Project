@@ -72,6 +72,6 @@ router.get('/message', async (req, res, next) => {
   }
 
   next()
-})  
+}) 
 
 module.exports = router;
