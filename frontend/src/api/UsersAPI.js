@@ -28,3 +28,12 @@ export const getUserById = (id) => new Promise((resolve,reject)=>{
 
         });
      });
+
+    export const getUserLB = (userName) => new Promise((resolve, reject) => {
+    axios.get(`${baseEndpoint}/user/Leaderboard`, {username: userName})
+    .then(x => resolve(x.data))
+        .catch(x => {
+            alert(x);
+            reject(x);
+        });
+        });

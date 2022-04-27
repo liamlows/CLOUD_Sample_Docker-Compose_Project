@@ -3,10 +3,10 @@ import * as React from 'react';
 import { Stack } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from "react";
-import { getAllNFTsByPrice, getNFTs, } from '../api/NFTApi';
+import { getNFTLB } from '../api/NFTApi';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
-import { getUserById } from '../api/UsersAPI';
+import Button from '@mui/material/Button';
 
 export const TopNfts = () => {
 
@@ -15,7 +15,7 @@ export const TopNfts = () => {
    // var lbuserID;
 
     useEffect(() => {
-        getNFTs().then(x => setNFTs(x));
+        getNFTLB().then(x => setNFTs(x[0]));
     }, [ ]);
 
     // useEffect(() => {
@@ -43,20 +43,19 @@ export const TopNfts = () => {
                       </Link>
                     </div>
                     <div class="col-3">
-                        <Link to='/theirUser' className='createLink'>Creator: {NFT.creator_id}</Link>
-                    </div>
-                    <div class="col-3">
-                        <Link to='/theirUser' className='createLink'>Owner: {NFT.owner_id}</Link>
+                        <Link to='/theirUser' className='createLink'>Owned by: {NFT.username}</Link>
                     </div>
                     <div class="col-3">
                         ${NFT.price}
                     </div>
-                        <Link to={`/NFT-details/${NFT.id}`} className="NFT">
+                    <div class="col-3">
+                        <Link to={`/NFT-details/${NFT.id}`} className="createLink">
+                            <Button color="secondary" variant="contained">
+                                View
+                            </Button>
                         </Link>
-                        {/* history.push(pathname:`/NFT-details/${NFT.id}`); */}
-                        <Link to={`/NFT-details/${NFT.id}`} className="NFT">
-                        </Link>
-                    </div>)
+                    </div>
+                </div>)
             }
 
             {/* <div class="row">
