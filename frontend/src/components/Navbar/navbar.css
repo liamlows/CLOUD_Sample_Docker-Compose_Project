@@ -28,7 +28,6 @@
   text-decoration: none;
   padding: 0 1rem;
   height: 100%;
-  cursor: pointer;
 }
 
 
@@ -44,7 +43,7 @@
   text-decoration: none;
   margin-right: 2rem;
   margin-top: .4rem;
-  margin-left: 10rem;
+  margin-left: 12rem;
 }
 
 .navBtnLink {

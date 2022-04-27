@@ -6,15 +6,15 @@ import{ useState,useEffect } from 'react';
       
 export const Navbar = () => {
 
-  const [user, setUser]=useState(undefined);
+  // const [user, setUser]=useState(undefined);
 
-  useEffect(()=>{
-      getUserInfo().then(x => setUser(x));
+  // useEffect(()=>{
+  //     getUserInfo().then(x => setUser(x));
 
-  },[ ]);
-  if(!user){
-    return<>lOADING</>
-  }
+  // },[ ]);
+  // if(!user){
+  //   return<>lOADING</>
+  // }
 
   return (
     <>
@@ -22,7 +22,7 @@ export const Navbar = () => {
 
       <div className="title"> <h1 className="setColor"> 
       <Link to='/home' className="nftLink">NFTShop</Link>
-      </h1> </div>
+      </h1>  </div>
         <div className="menu">
           <div className="navLink">
             <Link to='/profile'>My Account</Link>
@@ -40,14 +40,14 @@ export const Navbar = () => {
             <Link to='/notifications'>Notifications</Link>
           </div>
           <h5 className="navBalance">
-            Balance: ${user[0].balance}
+            {/* Balance: ${user[0].balance} */}
           </h5>
-        </div>
-            <Link to='/' className="navBtnLink">
+          <Link to='/' className="navBtnLink">
               <button type="button" className="navBtn">
                 Sign In
               </button>
             </Link>
+        </div>
       </div>
     </>
   );
