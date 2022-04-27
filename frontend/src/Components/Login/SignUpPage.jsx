@@ -20,7 +20,7 @@ export const SignUpPage = (props) => {
     const [firstName, setFirstName] = useState(undefined);
     const [lastName, setLastName] = useState(undefined);
     const [school, setSchool] = useState(undefined);
-
+    const [schoolNames, setSchoolNames] = useState([]);
     const [schools, setSchools] = useState([]);
 
     // Initial Load
@@ -34,7 +34,8 @@ export const SignUpPage = (props) => {
             for(const i in res){
                 temp_schools.push(res[i].school_name)
             }
-            setSchools(temp_schools)
+            setSchoolNames(temp_schools);
+            setSchools(res);
         })
     }, []);
 
@@ -48,7 +49,7 @@ export const SignUpPage = (props) => {
                 "password": password,
                 "firstName": firstName,
                 "lastName": lastName,
-                "school": school
+                "schoolId": schools[schoolNames.indexOf(school)].school_id
             };
             registerAccount(temp)
                 .then(res => {
@@ -90,7 +91,7 @@ export const SignUpPage = (props) => {
                 value={password}
                 setValue={x => setPassword(x)} />
             <SelectField label="School"
-                options={schools}
+                options={schoolNames}
                 value={school}
                 setValue={setSchool} />
             <button
