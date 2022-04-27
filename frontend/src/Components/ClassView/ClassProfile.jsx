@@ -66,7 +66,7 @@ export const ClassProfile = (props) => {
         console.log(params.course_id)
         getCoursebyId(params.course_id).then(async loaded => {
             console.log(loaded)
-            console.log(loaded.professors.length === 0);
+            // console.log(loaded.professors.length === 0);
 
 
             if (loaded.professors.length === 0) {
@@ -78,15 +78,20 @@ export const ClassProfile = (props) => {
             }
             setTAs(loaded.tas);
             console.log(tas);
-                
-            
+
+
             setCourse(loaded)
-            
-           
-            let status = await getEnrollmentStatus(loaded.course_id)
+
+            let status
+            try {
+                status = await getEnrollmentStatus(loaded.course_id)
+            } catch {
+                status = 0
+            }
             console.log("Adding status to course", status);
-            changeCourse(status);
-                
+            setCourse({ ...course, status: status });
+
+
         })
     }, [editMode, reload]);
 
@@ -301,14 +306,6 @@ export const ClassProfile = (props) => {
                                 <thead>
 
                                     <th className="float-start col-11 fs-4 mt-2 text-start">Professor</th>
-                                    <th className="col-1">
-                                        <Button variant="contained"
-                                            className="btn btn-secondary"
-                                            endIcon={<ArrowForwardIcon />}
-                                            onClick={() => navigate(`/users/${professor.account_id}`)}>
-                                            View Profile
-                                        </Button>
-                                    </th>
                                     {professor !== "none" &&
                                         <th className="col-1">
                                             <Button variant="contained"
@@ -379,17 +376,17 @@ export const ClassProfile = (props) => {
                                     <thead>
                                         <th className="float-start col-11 fs-3 mt-2 text-start">{course.course_name} ({course.department})</th>
                                         {/* Student is not in class or waitlist */}
-                                        {account.role.role_type === "student" || account.role.role_type === "ta" && account.status === 0 && <th className="col-2 pb-2">
+                                        {(account.role.role_type === "student" || account.role.role_type === "ta") && account.status === 0 && <th className="col-2 pb-2">
                                             <Button variant="contained" className="bg-success" onClick={() => sendEnrollmentRequestFunc()} endIcon={<Add />}>Enroll</Button>
                                         </th>}
                                         {/* Student is on the waitlist */}
 
-                                        {account.role.role_type === "student" || account.role.role_type === "ta" && account.status === -1 && <th className="col-2 pb-2">
+                                        {(account.role.role_type === "student" || account.role.role_type === "ta") && account.status === -1 && <th className="col-2 pb-2">
                                             <Button variant="contained" className="col-1 bg-warning" disabled endIcon={<Add color='disabled' />}>On Waitlist</Button>
                                             <Button variant="contained" className="col-1 bg-danger" onClick={() => dropCourse(account.account_id, course.course_id)}><ClearIcon /></Button>
                                         </th>}
                                         {/* Student is in class */}
-                                        {account.status === 1 || account.role.role_type === "ta" && <div className="float-end col-2 mb-1 mt-2">
+                                        {(account.role.role_type === "student" || account.role.role_type === "ta") && account.status === 1 && <div className="float-end col-2 mb-1 mt-2">
                                             <div className="clearfix p-0"></div>
                                             <th className="col-1 rounded bg-success border-0 p-1">
                                                 <div className="bg-success text-white">
@@ -431,14 +428,6 @@ export const ClassProfile = (props) => {
                                     <thead>
 
                                         <th className="float-start col-11 fs-4 mt-2 text-start">Professor</th>
-                                        <th className="col-1">
-                                            <Button variant="contained"
-                                                className="btn bg-success"
-                                                endIcon={<ArrowForwardIcon />}
-                                                onClick={() => navigate(`/users/${professor.account_id}`)}>
-                                                View Profile
-                                            </Button>
-                                        </th>
                                         {professor !== "none" &&
                                             <th className="col-1">
                                                 <Button variant="contained"

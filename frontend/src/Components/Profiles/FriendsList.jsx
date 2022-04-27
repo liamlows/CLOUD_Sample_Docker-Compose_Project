@@ -73,10 +73,11 @@ export const FriendsList = (props) => {
     // HTML
     return <div>
         <LoggedInResponsiveAppBar
-            pages={props.pages}
-            settings={props.settings}
-            signOut={() => signOut()}
-            account_id={account.account_id} />
+                pages={props.loggedInPages}
+                settings={props.settings}
+                signOut={() => signOut()}
+                account_id={JSON.parse(localStorage.getItem("currUser")).account_id}
+                account_type={JSON.parse(localStorage.getItem("currUser")).role.role_type} />
 
         <div className='container border-0 mb-3'>
             <h1 className='mt-3 col-6 float-start '>Friends List <span className='text-secondary'>({friends.length})</span></h1>
