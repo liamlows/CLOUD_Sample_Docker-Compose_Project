@@ -6,9 +6,22 @@ import { Link } from 'react-router-dom';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import { Posts } from './Posts';
+import{ useState,useEffect } from 'react';
+import{getUserInfo} from '../api/AuthenAPI';
 
 
 export const Profile = () => {
+  const [user, setUser]=useState(undefined);
+
+  useEffect(()=>{
+      getUserInfo().then(x => setUser(x));
+
+  },[ ]);
+  if(!user){
+    return<>lOADING</>
+  }
+
+
     function stringToColor(string) {
         let hash = 0;
         let i;
@@ -38,6 +51,7 @@ export const Profile = () => {
       }
 
     return(<div className="profileContainer">
+
         <br/>
         <h2 className="userHead">
             username!!
