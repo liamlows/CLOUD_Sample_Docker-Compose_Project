@@ -40,6 +40,7 @@ function App() {
     { label: 'Dashboard', route: `/` },
     { label: 'Classes', route: `/classes` },
     { label: 'Friends', route: `/users/:account_id/friends` },
+    { label: 'Chat', route: `/chat` }
   ]);
   const [basePages] = useState([
     { label: 'Info', route: `/info` },
@@ -120,6 +121,11 @@ function App() {
 
 
           <Route path="/users/:account_id/friends" element={<FriendsList
+            pages={loggedInPages}
+            settings={settings}
+            setNavigated={x => setNavigated(x)} />} />
+
+          <Route path="/chat" element={<FriendsList
             pages={loggedInPages}
             settings={settings}
             setNavigated={x => setNavigated(x)} />} />
