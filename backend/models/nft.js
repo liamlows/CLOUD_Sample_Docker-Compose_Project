@@ -119,7 +119,7 @@ const userLeaderboard = async () => {
     return result;
 }
 
-const nftLeaderboard= async () => {
+const nftLeaderboard= async () => {    
     const query = knex.raw("SELECT * FROM nft WHERE owner_id NOT IN (SELECT id FROM user WHERE privileges < 1) AND for_sale = 1 ORDER BY price DESC LIMIT 10;");
     const result = await query;
     return result;

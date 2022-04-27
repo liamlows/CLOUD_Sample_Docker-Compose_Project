@@ -68,7 +68,7 @@ app.post('/nft/:id', async (req, res, next) => {
 })
 
 // GET: /nft/id
-app.get('/nft/:id', async (req, res, next) => {
+app.get('/nft/id/:id', async (req, res, next) => {
   try {
 
     const result = await req.models.nft.getNFT(req.params.id); 
@@ -97,7 +97,7 @@ app.get('/nft', async (req, res, next) => {
 })
 
 // DELETE: /nft/id
-app.delete('/nft/:id', async (req, res, next) => {
+app.delete('/nft/id/:id', async (req, res, next) => {
   try {
 
     const result = await req.models.nft.deleteNFT(req.params.id); 
@@ -130,9 +130,9 @@ app.get('/nft/:min/:max/:how', async (req, res) => {
 })
 
 // Get: /user/:id
-app.get('/user/:id', async (req, res, next) => {
+app.get('/user/id/:id', async (req, res, next) => {
   try {
-    const result = await req.models.users.findUserByID(req.params.id);
+    const result = await req.models.user.findUserByID(req.params.id);
     res.status(201).json(result);
     //res.status(201).json(result);
 
@@ -155,6 +155,29 @@ app.get('/nft/search/:term', async (req, res) => {
       console.error("Failed to get NFTs by description: ", err);
   }
 
+})
+
+// Display top NFTS
+app.get('/nft/Leaderboard', async(req, res) => {
+  try {
+    const result = await req.models.nft.nftLeaderboard();
+    console.log(result);
+    res.status(201).json(result);
+  } catch (err){
+    console.error("Failed to display NFT leaderboard");
+    res.status(400).json({ message: err.toString() });
+  }
+})
+
+// Display top users
+app.get('/user/Leaderboard', async(req, res) => {
+  try{
+    const result = await req.models.nft.userLeaderboard();
+    res.status(201).json(result);
+  } catch (err){
+    console.error("Failed to display NFT leaderboard");
+    res.status(400).json({ message: err.toString() });
+  }
 })
 
 
