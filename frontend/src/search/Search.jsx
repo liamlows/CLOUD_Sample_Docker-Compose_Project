@@ -12,7 +12,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 export const Search = () => {
 
-    const [alignment, setAlignment] = useState('web');
     const[ users, setUsers ] = useState([]);
     const [username, setUsername] = useState(undefined);
 
@@ -27,34 +26,14 @@ export const Search = () => {
         return user.username.match(inputText);
     });
 
-    const handleChange = (event, newAlignment) => {
-        setAlignment(newAlignment);
-    };
 
     useEffect(() => {
         getUsers({username}).then(x => setUsers(x));
     }, [username]);
 
-    if(!users){
-        return<><Box sx={{ mx:"auto"}}>
-        <CircularProgress color="secondary" />
-        </Box></>
-    }
-
     return(<div className="searchContainer">
-        <h4 className="searchHead">Search for your favorite Users or NFTs!</h4>
-        <Box textAlign='center'>
-        <ToggleButtonGroup
-            className="toggle"
-            color="primary"
-            value={alignment}
-            exclusive
-            onChange={handleChange}
-            >
-            <ToggleButton value="User">User</ToggleButton>
-            <ToggleButton value="NFT">NFT</ToggleButton>
-        </ToggleButtonGroup>
-        </Box>
+        <h4 className="searchHead">Search for your favorite Users!</h4>
+       
         <TextField id="outlined-basic" label="Begin Typing" variant="outlined" fullWidth
         value={inputText} onChange={inputHandler}/>
         <br/>
