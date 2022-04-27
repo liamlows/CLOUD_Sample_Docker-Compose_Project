@@ -219,14 +219,13 @@ export const dropCourse = async (account_id, id) => {
 }
 
 export const getCourseReviews = async (course_id) => {
-    await axios.get(`${BACKEND_ENDPOINT}/api/d/course_reviews/course_id/${course_id}`);
-    return;
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/d/course_reviews/course_id/${course_id}`);
+    return res.data;
 }
 export const getProfessorReviews = async (teacher_id) => {
-    await axios.get(`${BACKEND_ENDPOINT}/api/d/teacher_reviews/teacher_id/${teacher_id}`);
-    return;
+    const res = await axios.get(`${BACKEND_ENDPOINT}/api/d/teacher_reviews/teacher_id/${teacher_id}`);
+    return res.data;
 }
-
 
 //need poster id, message, rating these don't work.
 export const postCourseReview = async (review) => {
@@ -238,4 +237,9 @@ export const postProfessorReview = async (teacher_id, review) => {
     let res = await axios.post(`${BACKEND_ENDPOINT}/api/d/teacher_reviews/teacher_id/${teacher_id}`, review);
     console.log(res);
     return ;
+}
+
+export const fetchSchools = async () => {
+    let res = await axios.get(`${BACKEND_ENDPOINT}/api/schools/`);
+    return res.data;
 }
