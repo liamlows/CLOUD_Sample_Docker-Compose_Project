@@ -19,3 +19,8 @@
 .special{
     margin-top: 2.7rem;
 }
+
+.height{
+    max-height: 20rem;
+    overflow-y: scroll;
+}

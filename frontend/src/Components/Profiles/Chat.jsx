@@ -179,7 +179,7 @@ export const Chat = (props) => {
                             }
 
                         </div>
-                        <div className="ChatBox col-9 p-3 overflow-auto">
+                        <div className="ChatBox col-9 p-3 height">
                             {selectedFriend === undefined && <p>Please select friend to chat with</p>}
                             {selectedFriend !== undefined && <div>
                                 {console.log(selectedFriend.account_id)}
@@ -193,7 +193,7 @@ export const Chat = (props) => {
                                         sent_recieve = "recieve";
                                     }
 
-                                    return (<div key={idx}>
+                                    return (<div className="overflow-auto" key={idx}>
                                         <p className={`${sent_recieve} col-7`}>{message.content}</p>
                                     </div>)
                                 })}
@@ -206,11 +206,15 @@ export const Chat = (props) => {
                         <div className="col-3">
 
                         </div>
-                        <div className="col-9 border-top ">
-                            <div className="col-1 float-end pt-3 pb-3 sent hovered special" onClick={() => sendMessage()}>
+                        <div className="col-9 border-top">
+                            {message.length === 0 && <div className="col-1 float-end pt-3 pb-3 sent special">
                                 <div className="clear-fix"></div>
                                 <Send className="p-1" />
-                            </div>
+                            </div>}
+                            {message.length > 0 && <div className="col-1 float-end pt-3 pb-3 sent hovered special" onClick={() => sendMessage()}>
+                                <div className="clear-fix"></div>
+                                <Send className="p-1" />
+                            </div>}
                             <div className="col-11 text-start mt-3">
                                 <TextAreaField value={message} setValue={content => setMessage(content)} />
                             </div>
