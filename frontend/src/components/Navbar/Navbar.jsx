@@ -6,15 +6,15 @@ import{ useState,useEffect } from 'react';
       
 export const Navbar = () => {
 
-  const [user, setUser]=useState(undefined);
+  // const [user, setUser]=useState(undefined);
 
-  useEffect(()=>{
-      getUserInfo().then(x => setUser(x));
+  // useEffect(()=>{
+  //     getUserInfo().then(x => setUser(x));
 
-  },[ ]);
-  if(!user){
-    return<>lOADING</>
-  }
+  // },[ ]);
+  // if(!user){
+  //   return<>lOADING</>
+  // }
 
   return (
     <>
@@ -41,11 +41,11 @@ export const Navbar = () => {
             <Link to='/notifications'>Notifications</Link>
           </div>
           <h5 className="navBalance">
-            Balance: ${user[0].balance}
+            {/* Balance: ${user[0].balance} */}
           </h5>
           <Link to='/' className="navBtnLink">
               <button type="button" className="navBtn">
-                Sign In/Log Out
+                Sign In
               </button>
             </Link>
         </div>

@@ -42,8 +42,9 @@ export const Profile = () => {
     return(<div className="profileContainer">
         <br/>
         <h2 className="userHead">
-            Hello!
+            Hello!! {user[0].name}
         </h2>
+        <h5>Your Balance is: ${user[0].balance}</h5>
         <br/>
         <Grid container spacing={2}>
             <Grid item xs={3}>
@@ -60,7 +61,7 @@ export const Profile = () => {
             </Grid>
         </Grid>
         <br/>
-        <h4 className="bioName">{user[0].name}</h4>
+        <h4 className="bioName">{user[0].username}</h4>
         <br/>
         <div className="bio"> Bioooo </div>
         <br></br><br></br>
