@@ -3,13 +3,13 @@ import * as React from 'react';
 import { Stack } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from "react";
-import { getNFTs } from '../api/NFTApi';
+import { getAllNFTsByPrice, getNFTs } from '../api/NFTApi';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 
 export const TopNfts = () => {
 
-    const[ NFTs, setNFTs ]=useState([]);
+    const[ NFTs, setNFTs ] = useState([]);
     
     useEffect(() => {
         getNFTs().then(x => setNFTs(x));
@@ -32,7 +32,7 @@ export const TopNfts = () => {
                     <div class="col-3">
                       {place++}. 
                       <Link to={`/NFT-details/${NFT.id}`} className="NFT">
-                        <img src={NFT.image_url} width="60" height="60" />
+                        <img src={NFT.image_url} width="60" height="60" alt=""/>
                       </Link>
                     </div>
                     <div class="col-3">
