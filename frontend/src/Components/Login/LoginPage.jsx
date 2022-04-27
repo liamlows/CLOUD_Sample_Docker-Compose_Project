@@ -8,6 +8,7 @@ import { GenericButton } from "../common/GenericButton"
 
 // Method Imports
 import { getAccountbyId, logIntoAccount } from "../../APIFolder/loginApi";
+import {reconnectWS} from "../../client-websocket";
 
 export const LoginPage = (props) => {
     // Navigate Object
@@ -46,6 +47,8 @@ export const LoginPage = (props) => {
             console.log("logging in now...");
             getAccountbyId(res.account_id)
                 .then(x => {
+                    reconnectWS();
+
                     localStorage.setItem("currUser", JSON.stringify(x));
                     props.setNavigated(0);
                     navigate('/');

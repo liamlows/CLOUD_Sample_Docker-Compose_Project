@@ -9,7 +9,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 
 // Component Imports
 import LoggedInResponsiveAppBar from "../common/LoggedInResponsiveAppBar";
-import { TextField } from "../common";
+import {doSignOut, TextField} from "../common";
 
 // Method Imports
 
@@ -123,13 +123,7 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
     }
 
 
-    const signOut = () => {
-        console.log("Logging out");
-        logout().then(() => {
-            localStorage.setItem("currUser", "{}");
-            navigate('/');
-        });
-    }
+    const signOut = () => { doSignOut().then(() => navigate('/')) };
 
     const displayUser = (profile) => {
         if (profile.status === 3) {
