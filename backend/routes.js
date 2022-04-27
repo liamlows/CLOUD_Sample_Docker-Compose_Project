@@ -162,7 +162,7 @@ app.get('/user/Leaderboard', async(req, res) => {
     const result = await req.models.nft.userLeaderboard();
     res.status(201).json(result);
   } catch (err){
-    console.error("Failed to display NFT leaderboard");
+    console.error("Failed to display NFT lJeaderboard");
     res.status(400).json({ message: err.toString() });
   }
 })
