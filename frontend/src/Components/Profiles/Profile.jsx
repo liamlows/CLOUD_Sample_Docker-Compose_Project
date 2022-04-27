@@ -112,15 +112,14 @@ export const Profile = (props) => {
                 if (status === 3) {
                     getFriendsClasses(loaded.account_id).then(res => {
                         let temp_courses = []
-                        for(const i in res)
-                        {
-                          getCoursebyId(res[i].course_id).then(course => {
-                            temp_courses.push(course)
-                            setClasses([...temp_courses])
-                          }) 
+                        for (const i in res) {
+                            getCoursebyId(res[i].course_id).then(course => {
+                                temp_courses.push(course)
+                                setClasses([...temp_courses])
+                            })
                         }
-                      })
-                    
+                    })
+
 
                 }
 
@@ -130,16 +129,15 @@ export const Profile = (props) => {
                 setAccount({ ...loaded, status: 3 });
                 getFriendsClasses(loaded.account_id).then(res => {
                     let temp_courses = []
-                    for(const i in res)
-                    {
-                      getCoursebyId(res[i].course_id).then(course => {
-                        temp_courses.push(course)
-                        setClasses([...temp_courses])
-                      }) 
+                    for (const i in res) {
+                        getCoursebyId(res[i].course_id).then(course => {
+                            temp_courses.push(course)
+                            setClasses([...temp_courses])
+                        })
                     }
-                    
-                  })
-                    
+
+                })
+
             }
         })
     }, [editMode, reload]); //lol the useEffect is just here now.
@@ -439,113 +437,117 @@ export const Profile = (props) => {
                             <div className="col-7 float-start mt-5">
                                 <table className='table float-start'>
                                     <thead className="col-12">
+                                        <tr>
+                                            {online === true && <th className="float-start mt-3 mb-1 online"><CircleIcon className="online col-1" color='success' /></th>}
+                                            {online === false && <th className="float-start mt-3 mb-1 online"><CircleIcon className="online col-1" sx={{ color: 'red' }} /></th>}
+                                            <th className="float-start col-11 fs-3 mt-2 text-start">{account.username}
+                                                {friendable() && account.status === 2 && <div className="col-3 p-0 pb-2 float-end">
+                                                    <Button variant="contained" className="bg-primary" onClick={() => { handleFriendRequestFunc(1) }} endIcon={<Add />}>Accept Request</Button>
+                                                    <Button variant="contained" className="bg-danger col-2" onClick={() => { handleFriendRequest(0) }}><ClearIcon /></Button>
+                                                </div>}
+                                                {friendable() && account.status === 1 && <div className="col-3 p-0 pb-2 float-end">
+                                                    <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Request Sent</Button>
+                                                </div>}
+                                                {friendable() && account.status === 4 && <div className="col-3 p-0 pb-2 float-end">
+                                                    <Button variant="contained" disabled endIcon={<ClearIcon color='disabled' />}>Redacted</Button>
+                                                </div>}
+                                                {friendable() && account.status === 0 && <div className="col-3 p-0  pb-2 float-end">
+                                                    <Button variant="contained" className="bg-success" onClick={() => sendFriendRequestFunc()} endIcon={<Add />}>Add Friend </Button>
+                                                </div>}
+                                                {friendable() && account.status === 3 && <div className="col-3 p-0  pb-2 float-end">
+                                                    <div className="col-8 float-start">
+                                                        <Button variant="contained" className="bg-warning" disabled endIcon={<Check color='disabled' />}>Friends</Button>
+                                                    </div>
+                                                    <div className="col-1 float-end">
+                                                        <Button variant="contained" className="bg-danger" onClick={() => handleFriendRequest(0)}><ClearIcon /></Button>
+                                                    </div>
+                                                </div>}
+                                            </th>
+                                        </tr>
+                                    </thead>
                                     <tr>
-                                    {online === true && <th className="float-start mt-3 mb-1 online"><CircleIcon className="online col-1" color='success' /></th>}
-                                    {online === false && <th className="float-start mt-3 mb-1 online"><CircleIcon className="online col-1" sx={{ color: 'red' }} /></th>}
-                                    <th className="float-start col-11 fs-3 mt-2 text-start">{account.username}
-                                        {friendable() && account.status === 2 && <div className="col-3 p-0 pb-2 float-end">
-                                            <Button variant="contained" className="bg-primary" onClick={() => { handleFriendRequestFunc(1) }} endIcon={<Add />}>Accept Request</Button>
-                                            <Button variant="contained" className="bg-danger col-2" onClick={() => { handleFriendRequest(0) }}><ClearIcon /></Button>
-                                        </div>}
-                                        {friendable() && account.status === 1 && <div className="col-3 p-0 pb-2 float-end">
-                                            <Button variant="contained" disabled endIcon={<Add color='disabled' />}>Request Sent</Button>
-                                        </div>}
-                                        {friendable() && account.status === 4 && <div className="col-3 p-0 pb-2 float-end">
-                                            <Button variant="contained" disabled endIcon={<ClearIcon color='disabled' />}>Redacted</Button>
-                                        </div>}
-                                        {friendable() && account.status === 0 && <div className="col-3 p-0  pb-2 float-end">
-                                            <Button variant="contained" className="bg-success" onClick={() => sendFriendRequestFunc()} endIcon={<Add />}>Add Friend </Button>
-                                        </div>}
-                                        {friendable() && account.status === 3 && <div className="col-3 p-0  pb-2 float-end">
-                                            <Button variant="contained" className="col-8 bg-warning float-start" disabled endIcon={<Check color='disabled' />}>Friends</Button>
-                                            <Button variant="contained" className="col-1 bg-danger" onClick={() => handleFriendRequest(0)}><ClearIcon /></Button>
-                                        </div>}
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tr>
-                                <td className="col-3 fs-6 text-start">
-                                    <span className="p-0 text-capitalize">{account.first_name} </span><span className="p-0 text-capitalize" >{account.last_name}</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="text-start">Bio:
-                                    <p>{account.bio}</p>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
+                                        <td className="col-3 fs-6 text-start">
+                                            <span className="p-0 text-capitalize">{account.first_name} </span><span className="p-0 text-capitalize" >{account.last_name}</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="text-start">Bio:
+                                            <p>{account.bio}</p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div >}
 
-{
-    account.role.role_type === "student" &&
-    classes.length === 0 && (account.status === 3 || account.account_id === JSON.parse(localStorage.getItem("currUser")).account_id) && <div>
-        <h1>Classes</h1>
-        <p>{account.username} is not enrolled in any classes</p>
-    </div>
-}
-{
-    account.role.role_type === "student" &&
-    classes.length === 0 && account.status !== 3 && account.account_id !== JSON.parse(localStorage.getItem("currUser")).account_id && <div>
-        <h1>Classes</h1>
-        <p>You must be friends with {account.username} to view their classes</p>
-    </div>
-}
-{
-    account.role.role_type === "student" && classes.length !== 0 && <div>
-        <h1>Classes</h1>
-        <table className="table">
-        <thead>
-          <tr>
-            <th className="col-3">Name</th>
-            <th className="col-3">Department</th>
-            <th className="col-3">Professor</th>
-            <th className="col-3"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {classes.map((course, idx) => {
-            return (<tr key={idx} className="container">
-              <td>{course.course_name}{console.log(course)}</td>
-              <td>{course.department}</td>
-              <td>{course.professors.length !== 0 && course.professors.map((professor) => {
-                return `${professor.last_name}, ${professor.last_name}\n`;
-              })}{course.professors.length === 0 && `No Professor`}</td>
+            {
+                account.role.role_type === "student" &&
+                classes.length === 0 && (account.status === 3 || account.account_id === JSON.parse(localStorage.getItem("currUser")).account_id) && <div>
+                    <h1>Classes</h1>
+                    <p>{account.username} is not enrolled in any classes</p>
+                </div>
+            }
+            {
+                account.role.role_type === "student" &&
+                classes.length === 0 && account.status !== 3 && account.account_id !== JSON.parse(localStorage.getItem("currUser")).account_id && <div>
+                    <h1>Classes</h1>
+                    <p>You must be friends with {account.username} to view their classes</p>
+                </div>
+            }
+            {
+                account.role.role_type === "student" && classes.length !== 0 && <div>
+                    <h1>Classes</h1>
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th className="col-3">Name</th>
+                                <th className="col-3">Department</th>
+                                <th className="col-3">Professor</th>
+                                <th className="col-3"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {classes.map((course, idx) => {
+                                return (<tr key={idx} className="container">
+                                    <td>{course.course_name}{console.log(course)}</td>
+                                    <td>{course.department}</td>
+                                    <td>{course.professors.length !== 0 && course.professors.map((professor) => {
+                                        return `${professor.last_name}, ${professor.last_name}\n`;
+                                    })}{course.professors.length === 0 && `No Professor`}</td>
 
-              <td className="col-3 pb-2">
-              </td>
-              <td className="col-3">
-                <Button variant="contained"
-                  className="btn bg-secondary"
-                  endIcon={<ArrowForwardIcon />}
-                  onClick={() => goToCourse(course)}>
-                  View course
-                </Button>
-              </td>
+                                    <td className="col-3 pb-2">
+                                    </td>
+                                    <td className="col-3">
+                                        <Button variant="contained"
+                                            className="btn bg-secondary"
+                                            endIcon={<ArrowForwardIcon />}
+                                            onClick={() => goToCourse(course)}>
+                                            View course
+                                        </Button>
+                                    </td>
 
-            </tr>)
-          })}
-        </tbody>
-      </table>
-    </div>
-}
+                                </tr>)
+                            })}
+                        </tbody>
+                    </table>
+                </div>
+            }
 
 
 
-{
-    //satisfying the review professor
-    //honestly we may be able to get away with doing the flagging be a note saying "flagged reviews are seen as false or overly critical by professor"
-    account.role.role_type === "professor" &&
+            {
+                //satisfying the review professor
+                //honestly we may be able to get away with doing the flagging be a note saying "flagged reviews are seen as false or overly critical by professor"
+                account.role.role_type === "professor" &&
 
-        <ReviewList
-            type="Professor"
-            account_id={localStorage.getItem("currUser").account_id}
-            search_id={account.account_id} />
+                <ReviewList
+                    type="Professor"
+                    account_id={localStorage.getItem("currUser").account_id}
+                    search_id={account.account_id} />
 
-}
+            }
         </section >
     }
-return <></>;
+    return <></>;
 }
