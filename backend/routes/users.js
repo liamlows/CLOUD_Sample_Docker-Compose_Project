@@ -125,7 +125,7 @@ router.post('/like', async (req, res, next) => {
     try {
         const user = req.user;
         const body = req.body;
-        const result = await Like.likeNFT(body.nftID, user.id);
+        const result = await Likes.likeNFT(body.nftID, user.id);
         res.status(200).json(result);
     } catch (err){
         console.error("Could not like NFT; ", err);
@@ -138,7 +138,7 @@ router.get('/likeRecord', async (req, res, next) => {
     try {
         const user = req.user;
         const body = req.body;
-        const result = await Like.gerLikeRecord(body.nftID, user.id);
+        const result = await Likes.gerLikeRecord(body.nftID, user.id);
         res.status(200).json(result);
     } catch (err){
         console.error("Could not view like record; ", err);
@@ -150,7 +150,7 @@ router.get('/likeRecord', async (req, res, next) => {
 router.get('/likeCount', async (req, res, next) => {
     try {
         const body = req.body;
-        const result = await Like.getLikeNum(body.nftID);
+        const result = await Likes.getLikeNum(body.nftID);
         res.status(200).json(result);
     } catch (err){
         console.error("Could not view like num; ", err);
@@ -158,6 +158,24 @@ router.get('/likeCount', async (req, res, next) => {
     }
 
 });
+
+// DELETE: /nft/id
+router.delete('/nft/id/:id', async (req, res, next) => {
+  try {
+      const result1 = await req.models.nft.getOwnerId;
+      if(result1 === req.user.id){
+            const result = await req.models.nft.deleteNFT(req.params.id); 
+            res.status(201).json(result);
+      }
+
+  } catch (err) {
+      console.error("Failed to delete NFT by id: ", err);
+      // res.status(500).
+  }
+
+  next()
+}) 
+
 
 
 module.exports = router;
