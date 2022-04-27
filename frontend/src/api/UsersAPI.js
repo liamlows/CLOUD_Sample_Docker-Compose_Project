@@ -10,13 +10,12 @@ export const createAccount = (userName, Name, Email, Password) => new Promise((r
         });
 });
 
-export const getUsers = () => new Promise((resolve, reject) => {
-    axios.get(`${baseEndpoint}/users/list`)
+export const getUsers = (userName) => new Promise((resolve, reject) => {
+    axios.get(`${baseEndpoint}/users/list`, {username: userName})
     .then(x => resolve(x.data))
         .catch(x => {
             alert(x);
             reject(x);
-
         });
      });
 
