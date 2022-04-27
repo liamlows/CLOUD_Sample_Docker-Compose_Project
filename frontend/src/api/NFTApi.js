@@ -6,7 +6,7 @@ import {baseEndpoint} from '../urls/API';
 
 export const getNFTById = (id) =>new Promise((resolve,reject)=>{
     // axios.get(`${baseEndpoint}/nft/${id}`, apiConfig)
-    axios.get(`${baseEndpoint}/nft/${id}`)
+    axios.get(`${baseEndpoint}/nft/id/${id}`)
         .then(x => resolve(x.data))
         .catch(x => {
             alert(x);

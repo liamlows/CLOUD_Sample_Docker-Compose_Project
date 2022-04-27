@@ -42,7 +42,7 @@ export const Profile = () => {
     return(<div className="profileContainer">
         <br/>
         <h2 className="userHead">
-            Hello!! {user[0].name}
+            {user[0].name}
         </h2>
         <h5>Your Balance is: ${user[0].balance}</h5>
         <br/>
