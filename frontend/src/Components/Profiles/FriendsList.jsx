@@ -101,6 +101,14 @@ export const FriendsList = (props) => {
         return true
     }
 
+    // const display = friend => {
+    //     if(friend.account_id === account.account_id)
+    //     {
+    //         return false;
+    //     }
+    //     return true;
+    // }
+
     // HTML
     if(readyToDisplay()){
     return <div>
@@ -133,22 +141,29 @@ export const FriendsList = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {friends.map(friend => 
-                        <tr key={friend.username} className="container">
-                            <td>{friend.username}</td>
-                            <td>{friend.first_name}</td>
-                            <td>{friend.last_name}</td>
+                    {friends.map(friend => {
+                    
+                    if(friend.account_id !== account.account_id){
+                        return <tr key={friend.username} className="container">
+                        <td>{friend.username}</td>
+                        <td>{friend.first_name}</td>
+                        <td>{friend.last_name}</td>
 
-                            <td>
-                                <Button variant="contained"
-                                    className="btn btn-warning"
-                                    endIcon={<ArrowForwardIcon />}
-                                    onClick={() => goToProfile(friend)}>
-                                    View Profile
-                                </Button>
-                            </td>
-                        </tr>
-                    )}
+                        <td>
+                            <Button variant="contained"
+                                className="btn btn-warning"
+                                endIcon={<ArrowForwardIcon />}
+                                onClick={() => goToProfile(friend)}>
+                                View Profile
+                            </Button>
+                        </td>
+                    </tr>
+                    }
+                    else{
+                        return <div></div>
+                    }
+                        
+    })}
 
                 </tbody>
             </table>}
