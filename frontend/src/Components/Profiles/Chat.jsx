@@ -31,16 +31,23 @@ export const Chat = (props) => {
     const [friends, setFriends] = useState(undefined);
 
     const [selectedFriend, setSelectedFriend] = useState(undefined);
-    const [messages, setMessages] = useState([
-        { senderId: 1, content: "Hello" },
-        { senderId: 2, content: "Hello, Wes" },
-        { senderId: 1, content: "How are you Dummy Thicc?" },
-        { senderId: 2, content: "Doing well, yourself?" },
-    ]);
+    const [messages, setMessages] = useState({
+        13: [
+            { senderId: 1, content: "Hello" },
+            { senderId: 13, content: "Hello, Wes" },
+            { senderId: 1, content: "How are you Dummy Thicc?" },
+            { senderId: 13, content: "Doing well, yourself?" }
+        ],
+        2: [
+            { senderId: 1, content: "PP" },
+            { senderId: 2, content: "PP, Wes" },
+            { senderId: 1, content: "How Do PP" },
+            { senderId: 2, content: "Doing PP, yourself?" }
+        ]
+    });
     const [message, setMessage] = useState('')
     const [ready, setReady] = useState(false);
 
-    const changeMessage = delta => setMessage({ ...message, ...delta })
 
 
     const params = useParams();
@@ -113,10 +120,10 @@ export const Chat = (props) => {
 
     const sendMessage = () => {
         //do stuff
-        let temp_message = { ...message, senderId: account.account_id }
+        let temp_message = { content: message, senderId: account.account_id }
         console.log("temp_message", temp_message);
         setMessages([...messages, temp_message])
-        setMessage('')
+        setMessage()
     }
 
     const readyToDisplay = () => {
@@ -170,10 +177,12 @@ export const Chat = (props) => {
                             }
 
                         </div>
-                        <div className="ChatBox col-9 p-3">
+                        <div className="ChatBox col-9 p-3 overflow-auto">
                             {selectedFriend === undefined && <p>Please select friend to chat with</p>}
                             {selectedFriend !== undefined && <div>
-                                {messages.map((message, idx) => {
+                                {console.log(selectedFriend.account_id)}
+                                {console.log(messages)}
+                                {messages[selectedFriend.account_id] && messages[selectedFriend.account_id].map((message, idx) => {
                                     let sent_recieve = ''
                                     if (message.senderId === account.account_id) {
                                         sent_recieve = "sent"
@@ -198,10 +207,10 @@ export const Chat = (props) => {
                         <div className="col-9 border-top ">
                             <div className="col-1 float-end pt-3 pb-3 sent hovered special" onClick={() => sendMessage()}>
                                 <div className="clear-fix"></div>
-                                <Send className="p-1"/>
+                                <Send className="p-1" />
                             </div>
                             <div className="col-11 text-start mt-3">
-                                <TextAreaField value={message.content} setValue={content => changeMessage({ content })} />
+                                <TextAreaField value={message} setValue={content => setMessage(content)} />
                             </div>
 
 
