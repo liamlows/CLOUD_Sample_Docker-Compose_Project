@@ -22,6 +22,40 @@ const createNFT = async (name, image_url, price, description, creator_id,
     return result;
 }
 
+// Update all NFT fields
+const updateNFT  = async (id, name, image_url, price, description, creator_id, seller_id, owner_id, for_sale) => {
+    const query = knex(NFT_TABLE).where({ id });
+    if(name){
+        query.update({ name });
+    }
+    if(image_url){
+        query.update({ image_url });
+    }
+    if(price){
+        query.update({ price });
+    }
+    if(description){
+        query.update({ description });
+    }
+    if(creator_id){
+        query.update({ creator_id });
+    }
+    if(seller_id){
+        query.update({ seller_id });
+    }
+
+    if(owner_id){
+        query.update({ owner_id });
+    }
+    if(for_sale){
+        query.update({ for_sale });
+    }
+
+    const result = await query;
+
+    return result;
+}
+
 const updateName = async (id, name) => {
     const query = knex(NFT_TABLE).update({ name: name} ).where({ id });
     const result = await query;
@@ -157,6 +191,7 @@ const getForSale = async (id) => {
 module.exports = {
     createNFT, 
     getNFT,
+    updateNFT,
     fetchNFT,
     deleteNFT,
     updateName,
