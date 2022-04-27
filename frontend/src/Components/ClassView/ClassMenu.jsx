@@ -26,7 +26,6 @@ export const ClassMenu = ({ pages, settings, setNavigated }) => {
       signOut={() => signOut()}
       account_id={account.account_id}
       account_type={account.role.role_type} /> */}
-    <Button variant="contained" className="bg-success" onClick={() => goToCourseAdd()} endIcon={<Add />}>Add Class</Button>
-
+    <Button variant="contained" className="bg-success mt-5" onClick={() => goToCourseAdd()} endIcon={<Add />}>Add Class</Button>
   </section>
 };

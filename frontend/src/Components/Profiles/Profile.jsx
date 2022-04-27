@@ -397,7 +397,7 @@ export const Profile = (props) => {
                 <div>
                     <div className="row">
                         <div className="col-3 float-end">
-                            <Button variant="contained" className="m-3" onClick={() => navigate('/users')} startIcon={<KeyboardBackspaceIcon />}>Return to Search</Button>
+                            <Button variant="contained" className="m-3 bg-warning" onClick={() => navigate('/users')} startIcon={<KeyboardBackspaceIcon />}>Return to Search</Button>
                         </div>
                     </div>
                     <div className="clearfix p-0"></div>

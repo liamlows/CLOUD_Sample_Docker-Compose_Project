@@ -39,7 +39,7 @@ export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, account_id,
   };
   console.log(account_type);
   return (
-    <AppBar position="static" sx={{ background: 'black' }}>
+    <AppBar position="static" sx={{ background: 'green' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -48,7 +48,7 @@ export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, account_id,
             component="div"
             sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
           >
-            Website Name Here
+            Course Pickle
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -120,6 +120,7 @@ export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, account_id,
                   component={Link}
                   to={`/users/${account_id}/friends`}
                   onClick={handleCloseNavMenu}
+                  className="btn"
                   sx={{ my: 2, color: 'white', display: 'block' }}
                 >
                   {page.label}
@@ -136,6 +137,7 @@ export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, account_id,
 
                 {page.route === '/classes' && <Button
                   key={page.label}
+                  className="btn"
                   component={Link}
                   to={`/classes`}
                   onClick={handleCloseNavMenu}
@@ -149,6 +151,7 @@ export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, account_id,
                   component={Link}
                   to={'/'}
                   onClick={handleCloseNavMenu}
+                  className="btn"
                   sx={{ my: 2, color: 'white', display: 'block' }}
                 >
                   {page.label}

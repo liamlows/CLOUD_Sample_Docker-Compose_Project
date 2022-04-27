@@ -108,7 +108,7 @@ export const FriendsList = (props) => {
 
                             <td>
                                 <Button variant="contained"
-                                    className="btn btn-secondary"
+                                    className="btn btn-warning"
                                     endIcon={<ArrowForwardIcon />}
                                     onClick={() => goToProfile(friend)}>
                                     View Profile

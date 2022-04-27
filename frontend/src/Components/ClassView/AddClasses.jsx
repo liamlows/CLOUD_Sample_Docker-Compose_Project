@@ -124,7 +124,7 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
 
                             <td className="col-3 pb-2">
                                 <Button variant="contained"
-                                    className="btn bg-secondary"
+                                    className="btn bg-warning"
                                     endIcon={<ArrowForwardIcon />}
                                     onClick={() => goToWaitlist(course)}>
                                     View waitlist
