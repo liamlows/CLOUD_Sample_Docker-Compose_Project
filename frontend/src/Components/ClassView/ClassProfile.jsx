@@ -179,18 +179,16 @@ export const ClassProfile = (props) => {
 
     const changeCourse = delta => setCourse({ ...account, ...delta });
 
-    const enrollable = () =>
-    {
+    const enrollable = () => {
         console.log(course)
-        if(account.role.role_type === "student" || account.role.role_type === "ta"){
+        if (account.role.role_type === "student" || account.role.role_type === "ta") {
             console.log("Enrollable")
             return true;
         }
-            console.log("Not Enrollable")
-            return false;
+        console.log("Not Enrollable")
+        return false;
     }
-    const drop = () =>
-    {
+    const drop = () => {
         dropCourse(account.account_id, course.course_id)
         setReload(!reload)
     }
@@ -217,11 +215,13 @@ export const ClassProfile = (props) => {
                         <div className="col-7 float-start mt-1">
                             <table className='table float-start'>
                                 <thead>
-                                    <th className="float-start col-11 fs-3 mt-2 text-start"><span className="text-start p-0">{course.course_name} ({course.department})</span></th>
+                                    <tr>
+                                        <th className="float-start col-11 fs-3 mt-2 text-start"><span className="text-start p-0">{course.course_name} ({course.department})</span></th>
 
-                                    <th className="col-1">
-                                        <button type="button" className="btn btn-light" onClick={() => startEditing()}>Edit Course</button>
-                                    </th>
+                                        <th className="col-1">
+                                            <button type="button" className="btn btn-light" onClick={() => startEditing()}>Edit Course</button>
+                                        </th>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                     <tr className="border-0">
@@ -318,17 +318,18 @@ export const ClassProfile = (props) => {
                         <div className="ProfessorProfile col-5 mt-1 bg-light2">
                             <table className='table float-start'>
                                 <thead>
-
-                                    <th className="float-start col-11 fs-4 mt-2 text-start">Professor</th>
-                                    {professor !== "none" &&
-                                        <th className="col-1">
-                                            <Button variant="contained"
-                                                className="btn btn-secondary"
-                                                endIcon={<ArrowForwardIcon />}
-                                                onClick={() => navigate(`/users/${professor.account_id}`)}>
-                                                View Profile
-                                            </Button>
-                                        </th>}
+                                    <tr>
+                                        <th className="float-start col-11 fs-4 mt-2 text-start">Professor</th>
+                                        {professor !== "none" &&
+                                            <th className="col-1">
+                                                <Button variant="contained"
+                                                    className="btn btn-secondary"
+                                                    endIcon={<ArrowForwardIcon />}
+                                                    onClick={() => navigate(`/users/${professor.account_id}`)}>
+                                                    View Profile
+                                                </Button>
+                                            </th>}
+                                    </tr>
                                 </thead>
                                 <tbody>
                                     {professor !== "none" &&
@@ -388,25 +389,27 @@ export const ClassProfile = (props) => {
                             <div className="col-7 float-start mt-1">
                                 <table className='table float-start'>
                                     <thead>
-                                        <th className="float-start col-11 fs-3 mt-2 text-start">{course.course_name} ({course.department})</th>
-                                        {/* Student is not in class or waitlist */}
-                                        {enrollable() && course.status === 0 && <th className="col-2 pb-2">
-                                            <Button variant="contained" className="bg-success" onClick={() => sendEnrollmentRequestFunc()} endIcon={<Add />}>Enroll</Button>
-                                        </th>}
-                                        {/* Student is on the waitlist */}
+                                        <tr>
+                                            <th className="float-start col-11 fs-3 mt-2 text-start">{course.course_name} ({course.department})</th>
+                                            {/* Student is not in class or waitlist */}
+                                            {enrollable() && course.status === 0 && <th className="col-2 pb-2">
+                                                <Button variant="contained" className="bg-success" onClick={() => sendEnrollmentRequestFunc()} endIcon={<Add />}>Enroll</Button>
+                                            </th>}
+                                            {/* Student is on the waitlist */}
 
-                                        {enrollable() && course.status === -1 && <th className="col-2 pb-2">
-                                            <Button variant="contained" className="col-1 bg-warning" disabled endIcon={<Add color='disabled' />}>On Waitlist</Button>
-                                            <Button variant="contained" className="col-1 bg-danger" onClick={() => dropCourse(account.account_id, course.course_id)}><ClearIcon /></Button>
-                                        </th>}
-                                        {/* Student is in class */}
-                                        {enrollable() && course.status === 1 && <div className="float-end col-2 mb-1 mt-2">
-                                            <th className="col-1 rounded border-0 p-1">
-                                            <Button variant="contained" className="col-11 bg-warning" disabled endIcon={<Add color='disabled' />}>Enrolled</Button>
-                                                <Button variant="contained" className="col-1 bg-danger" onClick={() => drop()}><ClearIcon /></Button>
-                                            </th>
-                                        </div>}
-
+                                            {enrollable() && course.status === -1 && <th className="col-2 pb-2">
+                                                <Button variant="contained" className="col-1 bg-warning" disabled endIcon={<Add color='disabled' />}>On Waitlist</Button>
+                                                <Button variant="contained" className="col-1 bg-danger" onClick={() => dropCourse(account.account_id, course.course_id)}><ClearIcon /></Button>
+                                            </th>}
+                                            {/* Student is in class */}
+                                            {enrollable() && course.status === 1 &&
+                                                <th className="col-1 rounded border-0 p-1">
+                                                    
+                                                    <Button variant="contained" className="col-8 bg-warning float-start" disabled endIcon={<Add color='disabled' />}>Enrolled</Button>
+                                                    <Button variant="contained" className="col-1 bg-danger float-end" onClick={() => drop()}><ClearIcon /></Button>
+                                                    
+                                                </th>}
+                                        </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
@@ -437,17 +440,18 @@ export const ClassProfile = (props) => {
                             <div className="ProfessorProfile col-5 mt-1 bg-light2">
                                 <table className='table float-start'>
                                     <thead>
-
-                                        <th className="float-start col-11 fs-4 mt-2 text-start">Professor</th>
-                                        {professor !== "none" &&
-                                            <th className="col-1">
-                                                <Button variant="contained"
-                                                    className="btn bg-success"
-                                                    endIcon={<ArrowForwardIcon />}
-                                                    onClick={() => navigate(`/users/${professor.account_id}`)}>
-                                                    View Profile
-                                                </Button>
-                                            </th>}
+                                        <tr>
+                                            <th className="float-start col-11 fs-4 mt-2 text-start">Professor</th>
+                                            {professor !== "none" &&
+                                                <th className="col-1">
+                                                    <Button variant="contained"
+                                                        className="btn bg-success"
+                                                        endIcon={<ArrowForwardIcon />}
+                                                        onClick={() => navigate(`/users/${professor.account_id}`)}>
+                                                        View Profile
+                                                    </Button>
+                                                </th>}
+                                        </tr>
                                     </thead>
                                     <tbody>
                                         {professor !== "none" &&
