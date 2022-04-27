@@ -42,7 +42,7 @@ export const Profile = () => {
     return(<div className="profileContainer">
         <br/>
         <h2 className="userHead">
-            Hello!
+            {user[0].username}
         </h2>
         <br/>
         <Grid container spacing={2}>
