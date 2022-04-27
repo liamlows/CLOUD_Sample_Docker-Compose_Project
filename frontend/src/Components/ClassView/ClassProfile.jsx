@@ -153,7 +153,9 @@ export const ClassProfile = (props) => {
     }
 
     const sendMessage = () => {
-        sendNotification(message)
+        console.log(message);
+        setMessage({});
+        sendNotification({ ...message, course: course.course_id })
         setMessageMode(false)
         setReload(!reload)
     }
@@ -343,9 +345,10 @@ export const ClassProfile = (props) => {
                             <div className="col-6">
                                 <button type="button" className="btn btn-secondary col-4 contained m-1 float-end" onClick={() => { setMessage({}); setMessageMode(false); setReload(!reload) }}>Cancel</button>
                             </div>
-                        </div>
-                        <div className="col-6">
-                            <button type="button" className="btn btn-success col-4 contained m-1 float-start" onClick={() => sendMessage()}>Save</button>
+
+                            <div className="col-6">
+                                <button type="button" className="btn btn-success col-4 contained m-1 float-start" onClick={() => sendMessage()}>Send</button>
+                            </div>
                         </div>
                     </div>}
 
@@ -383,10 +386,10 @@ export const ClassProfile = (props) => {
                                             {/* Student is in class */}
                                             {enrollable() && course.status === 1 &&
                                                 <th className="col-1 rounded border-0 p-1">
-                                                    
+
                                                     <Button variant="contained" className="col-8 bg-warning float-start" disabled endIcon={<Add color='disabled' />}>Enrolled</Button>
                                                     <Button variant="contained" className="col-1 bg-danger float-end" onClick={() => drop()}><ClearIcon /></Button>
-                                                    
+
                                                 </th>}
                                         </tr>
                                     </thead>
