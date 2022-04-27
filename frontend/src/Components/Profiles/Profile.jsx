@@ -300,7 +300,8 @@ export const Profile = (props) => {
                 pages={props.pages}
                 settings={props.settings}
                 signOut={() => signOut()}
-                account_id={JSON.parse(localStorage.getItem("currUser")).account_id} />
+                account_id={JSON.parse(localStorage.getItem("currUser")).account_id}
+                account_type={JSON.parse(localStorage.getItem("currUser")).role.role_type} />
 
             {/* Viewing own profile (EDITING) */}
             {JSON.parse(localStorage.getItem("currUser")).username === account.username && editMode === true &&

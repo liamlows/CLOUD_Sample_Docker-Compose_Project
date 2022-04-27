@@ -61,8 +61,8 @@ export const ClassProfile = (props) => {
     useEffect(() => {
         let status = 0;
 
-        // if (JSON.stringify(account) === "{}")
-        //     setAccount(JSON.parse(localStorage.getItem("currUser")));
+        if (JSON.stringify(account) === "{}")
+            setAccount(JSON.parse(localStorage.getItem("currUser")));
         console.log(params.course_id)
         getCoursebyId(params.course_id).then(async loaded => {
             console.log(loaded)
@@ -81,14 +81,12 @@ export const ClassProfile = (props) => {
                 
             
             setCourse(loaded)
-            // get the table of friend requests
-            if (account.role.role_type === "student") {
-                let status = await getEnrollmentStatus(course.course_id)
-                console.log("Adding status to course", status);
-                changeCourse(status);
-                console.log("YUH")
-                console.log(course);
-            }
+            
+           
+            let status = await getEnrollmentStatus(loaded.course_id)
+            console.log("Adding status to course", status);
+            changeCourse(status);
+                
         })
     }, [editMode, reload]);
 
@@ -190,7 +188,8 @@ export const ClassProfile = (props) => {
                 pages={props.pages}
                 settings={props.settings}
                 signOut={() => signOut()}
-                account_id={account.account_id} />
+                account_id={JSON.parse(localStorage.getItem("currUser")).account_id}
+                account_type={JSON.parse(localStorage.getItem("currUser")).role.role_type} />
 
             {/* Viewing editable class (EDITING) */}
             {canEdit() === true && editMode === true &&
@@ -372,16 +371,16 @@ export const ClassProfile = (props) => {
                                     <thead>
                                         <th className="float-start col-11 fs-3 mt-2 text-start">{course.course_name} ({course.department})</th>
                                         {/* Student is not in class or waitlist */}
-                                        {account.role.role_type === "student" && account.status === 0 && <th className="col-2 pb-2">
+                                        {account.role.role_type === "student" || account.role.role_type === "ta" && account.status === 0 && <th className="col-2 pb-2">
                                             <Button variant="contained" className="bg-success" onClick={() => sendEnrollmentRequestFunc()} endIcon={<Add />}>Enroll</Button>
                                         </th>}
                                         {/* Student is on the waitlist */}
-                                        {account.role.role_type === "student" && account.status === -1 && <th className="col-2 pb-2">
+                                        {account.role.role_type === "student" || account.role.role_type === "ta" && account.status === -1 && <th className="col-2 pb-2">
                                             <Button variant="contained" disabled endIcon={<Add color='disabled' />}>On Waitlist</Button>
                                             <Button variant="contained" className="col-1 bg-danger" onClick={() => dropCourse(account.account_id, course.course_id)}><ClearIcon /></Button>
                                         </th>}
                                         {/* Student is in class */}
-                                        {account.status === 1 && <div className="float-end col-2 mb-1 mt-2">
+                                        {account.status === 1 || account.role.role_type === "ta" && <div className="float-end col-2 mb-1 mt-2">
                                             <div className="clearfix p-0"></div>
                                             <th className="col-1 rounded bg-success border-0 p-1">
                                                 <div className="bg-success text-white">
