@@ -21,6 +21,7 @@ import { Waitlist } from './Components/AdminView/Waitlist';
 
 // Method Imports
 import { getAccountbyId } from './APIFolder/loginApi';
+import { Chat } from "./Components/Profiles/Chat";
 
 // React functional component
 function App() {
@@ -125,7 +126,7 @@ function App() {
             settings={settings}
             setNavigated={x => setNavigated(x)} />} />
 
-          <Route path="/chat" element={<FriendsList
+          <Route path="/chat" element={<Chat
             pages={loggedInPages}
             settings={settings}
             setNavigated={x => setNavigated(x)} />} />
@@ -143,18 +144,17 @@ function App() {
             settings={settings}
             setNavigated={x => setNavigated(x)} />} />
 
-
-
-
           {/* Classes loading */}
           <Route path="/classes" element={<ClassMenu
             pages={loggedInPages}
             settings={settings}
             setNavigated={x => setNavigated(x)} />} />
+
           <Route path="/classes/enrollment" element={<AddClasses
             pages={loggedInPages}
             settings={settings}
             setNavigated={x => setNavigated(x)} />} />
+
           <Route path="/classes/:course_id" element={<ClassProfile
             pages={loggedInPages}
             settings={settings}
@@ -167,7 +167,6 @@ function App() {
             setNavigated={x => setNavigated(x)} />} />
 
           <Route path="*" element={<NoPages />} />
-
 
         </Routes>
       </BrowserRouter>

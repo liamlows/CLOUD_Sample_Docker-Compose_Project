@@ -94,7 +94,7 @@ export const getAllCourses = async() => {
 
 export const getFriends = async () => {
     const res = await axios.get(`${BACKEND_ENDPOINT}/api/friends`);
-    console.log(res)
+    console.log(res.data)
     return res.data;
 }
 
