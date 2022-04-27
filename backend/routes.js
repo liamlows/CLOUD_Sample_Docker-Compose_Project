@@ -111,70 +111,6 @@ app.delete('/nft/:id', async (req, res, next) => {
   next()
 }) 
 
-  // for messages
-// Post: create a message /message 
-app.post('/message', async (req, res, next) => {
-  try {
-      const body = req.body;
-      console.log(body);
-      const result = await req.models.messages.createMessage(body.message,body.send_id,body.recieve_id);
-      //const result = await req.models.message.createMessage(body.message, body.send_id, body.recieve_id);
-      res.status(201).json(result);
-
-  } catch (err) {
-      console.error("Failed to create new message: ", err);
-      // res.status(500).
-  } 
-}) 
-
-// DELETE: /message/id
-app.delete('/message/:id', async (req, res, next) => {
-  try {
-
-    const result = await req.models.messages.deleteMessage(req.params.id);
-    res.status(201).json(result);
-    //res.status(201).json(result);
-
-  } catch (err) {
-      console.error("Failed to delete message by id: ", err);
-      // res.status(500).
-  }
-
-  next()
-})
-
-// Get: /message/id
-app.get('/message/:send_id', async (req, res, next) => {
-  try {
-
-    const result = await req.models.messages.getMessage(req.params.send_id);
-    res.status(201).json(result);
-    //res.status(201).json(result);
-
-  } catch (err) {
-      console.error("Failed to get message by send id: ", err);
-      // res.status(500).
-  }
-
-  next()
-})
-
-// GET: /message
-app.get('/message', async (req, res, next) => {
-  try {
-
-    const result = await req.models.messages.fetchMessage();
-    res.status(201).json(result);
-    //res.status(201).json(result);
-
-  } catch (err) {
-      console.error("Failed to get message: ", err);
-      // res.status(500).
-  }
-
-  next()
-})  
-
 
 app.get('/nft/:min/:max/:how', async (req, res) => {
   try {
@@ -190,6 +126,22 @@ app.get('/nft/:min/:max/:how', async (req, res) => {
   } catch (err) {
       console.error("Failed to get NFTs by price: ", err);
   }
+  next();
+})
+
+// Get: /user/:id
+app.get('/user/:id', async (req, res, next) => {
+  try {
+    const result = await req.models.users.findUserByID(req.params.id);
+    res.status(201).json(result);
+    //res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to get user by id: ", err);
+      // res.status(500).
+  }
+  next();
+
 })
 
 app.get('/nft/search/:term', async (req, res) => {
@@ -202,6 +154,7 @@ app.get('/nft/search/:term', async (req, res) => {
   } catch (err) {
       console.error("Failed to get NFTs by description: ", err);
   }
+
 })
 
 

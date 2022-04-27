@@ -29,20 +29,19 @@ router.get('/session', async (req, res, next) => {
     }
 }); 
 
+// Check for payment info
+router.get('/purchase', async (req, res, next) => {
+    try {
+        const user = req.user;
+        const boyd = req.body;
+        const result = await User.purchaseNFT(user.id, body.nft);
+        res.status(200).json(result);
+    } catch(err){
+        console.error('No payment info available: ', err);
+        res.sendStatus(404).json({ message: err.toString() });
+    }
 
-// // Check for payment info
-// router.get('/purchase', async (req, res, next) => {
-//     try {
-//         const user = req.user;
-//         const boyd = req.body;
-//         const result = await User.purchaseNFT(user.id, body.nft);
-//         res.status(200).json(result);
-//     } catch(err){
-//         console.error('No payment info available: ', err);
-//         res.sendStatus(404).json({ message: err.toString() });
-//     }
-
-// });
+});
 
 // Add payment info
 router.post('/paymentInfo', async (req, res, next) => {
@@ -96,15 +95,31 @@ router.post('/update', async (req, res, next) => {
 
 });
 
+router.post('/hide', async (req, res, next) => {
+    try {
+        const user = req.user;
+        const body = req.body;
+        const result = await User.hideNFT(user.id, body.nftID);
+        res.status(200).json(result);
+    } catch (err){
+        console.error("Could not hide NFT: ", err);
+        res.sendStatus(401).json({ message: err.toString() });e
+    }
+
+});
+
 router.get('/list', async (req, res, next) => {
     try {
         const body = req.body;
-        const result = await User.userSearch(body.username);
+        const result = await User.userSearch(body.username, body.id, body.email);
         res.status(200).json(result);
     } catch (err){
         console.error("Could not get users: ", err);
-        res.sendStatus(401).json({ message: err.toString() });e
+        res.sendStatus(404).json({ message: err.toString() });e
     }
+
+});
+
 
 });
 
