@@ -92,7 +92,16 @@ const transfer = async(id, amount) => {
     return result1;
 }
 
-const updateInfo = async(id, name, photo) => {
+const updateInfo = async(id, email, username, password, name, photo) => {
+    if(email) {
+        const result = await User.updateEmail(id, email);
+    }
+    if(username){
+        const result = await User.updateUsername(id, username);
+    }
+    if(password){
+        const result = await User.updatePassword(id, password);
+    }
     if(name){
         const result = await User.updateName(id, name);
     }
