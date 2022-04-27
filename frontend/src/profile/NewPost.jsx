@@ -39,6 +39,7 @@ export const NewPost = () => {
       };
     
     const handleSubmit = () => {
+        window.alert("YES");
         //e.preventDefault();
         if (name === '' || price === '' || image_url=== '') {
           setError(true);
@@ -79,8 +80,9 @@ export const NewPost = () => {
             <h5>For Sale?</h5>
             <Switch color="secondary" {...label} />
             <br></br>
-            <Button variant="contained" color="secondary" onChange={handleSubmit}><Link to='/profile' className="postLink">Post</Link></Button>
+            <Button variant="contained" color="secondary" onClick={handleSubmit}>Post</Button>
             {/* during functionality, show price setter only if toggle is set to true*/}
+            {/* <Link to='/profile' className="postLink">Post</Link> */}
         </div>
     );
 }
