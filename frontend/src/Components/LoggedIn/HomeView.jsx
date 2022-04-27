@@ -88,7 +88,7 @@ export const HomeView = (props) => {
             settings={props.settings}
             signOut={() => signOut()}
             account_id={account.account_id} />
-        <div className="col-6 p-0"><div className="col-1 p-0"></div><h1 className="col-6 mt-4 fs-2">Welcome {account.firstName}</h1></div>
+        <div className="col-6 p-0"><div className="col-1 p-0"></div><h1 className="col-6 mt-4 fs-2 text-success">Lets get out of this pickle: {account.firstName}</h1></div>
         <div className="clearfix p-0"></div>
         <div className="row mt-5 m-3">
             <div className="col-6 border p-5">

@@ -20,7 +20,7 @@ export const ClassMenu = () => {
 
   //TODO: put nav bar in, data intergration
   return <section className="ClassesMenu">
-    <Button variant="contained" className="bg-success" onClick={() => goToCourseAdd()} endIcon={<Add />}>Add Class</Button>
+    <Button variant="contained" className="bg-success mt-5" onClick={() => goToCourseAdd()} endIcon={<Add />}>Add Class</Button>
     
   </section>
 };

@@ -226,7 +226,7 @@ export const ClassProfile = (props) => {
                                                 </td>
                                                 <td>
                                                     <Button variant="contained"
-                                                        className="btn bg-secondary"
+                                                        className="btn bg-success"
                                                         endIcon={<ArrowForwardIcon />}
                                                         onClick={() => goToProfile(profile)}>
                                                         View Profile
@@ -302,7 +302,7 @@ export const ClassProfile = (props) => {
                                     <th className="float-start col-11 fs-4 mt-2 text-start">Professor</th>
                                     <th className="col-1">
                                         <Button variant="contained"
-                                            className="btn bg-secondary"
+                                            className="btn btn-secondary"
                                             endIcon={<ArrowForwardIcon />}
                                             onClick={() => navigate(`/users/${professor.account_id}`)}>
                                             View Profile
@@ -327,7 +327,7 @@ export const ClassProfile = (props) => {
                         </p>
                     </div>
 
-                    {!messageMode && <Button onClick={() => { setMessageMode(true); setReload(!reload) }}>Send Annoucement</Button>}
+                    {!messageMode && <Button className="text-success" onClick={() => { setMessageMode(true); setReload(!reload) }}>Send Annoucement</Button>}
                     {messageMode && <div>
                         <TextField label="Message Title :" value={message.title} setValue={title => setMessage({ ...message, title: title })} />
                         <TextAreaField label="Message Body :" value={message.body} setValue={body => setMessage({ ...message, body: body })} />
@@ -352,7 +352,7 @@ export const ClassProfile = (props) => {
                 <div>
                     <div className="row">
                         <div className="col-3 float-end">
-                            <Button variant="contained" className="m-3" onClick={() => navigate('/classes/enrollment')} startIcon={<KeyboardBackspaceIcon />}>Return to Class Search</Button>
+                            <Button variant="contained" className="m-3 btn btn-secondary" onClick={() => navigate('/classes/enrollment')} startIcon={<KeyboardBackspaceIcon />}>Return to Class Search</Button>
                         </div>
                     </div>
                     <div className="clearfix p-0"></div>
@@ -368,7 +368,7 @@ export const ClassProfile = (props) => {
                                         </th>}
                                         {/* Student is on the waitlist */}
                                         {account.account_type === "student" && account.status === -1 && <th className="col-2 pb-2">
-                                            <Button variant="contained" disabled endIcon={<Add color='disabled' />}>On Waitlist</Button>
+                                            <Button variant="contained"  className="col-1 bg-warning" disabled endIcon={<Add color='disabled' />}>On Waitlist</Button>
                                             <Button variant="contained" className="col-1 bg-danger" onClick={() => dropCourse(account.account_id, course.course_id)}><ClearIcon/></Button>
                                         </th>}
                                         {/* Student is in class */}
@@ -397,7 +397,7 @@ export const ClassProfile = (props) => {
                                                     </td>
                                                     <td>
                                                         <Button variant="contained"
-                                                            className="btn bg-secondary"
+                                                            className="btn bg-success"
                                                             endIcon={<ArrowForwardIcon />}
                                                             onClick={() => goToProfile(profile)}>
                                                             View Profile
@@ -416,7 +416,7 @@ export const ClassProfile = (props) => {
                                         <th className="float-start col-11 fs-4 mt-2 text-start">Professor</th>
                                         <th className="col-1">
                                             <Button variant="contained"
-                                                className="btn bg-secondary"
+                                                className="btn bg-success"
                                                 endIcon={<ArrowForwardIcon />}
                                                 onClick={() => navigate(`/users/${professor.account_id}`)}>
                                                 View Profile

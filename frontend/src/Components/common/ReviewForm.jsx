@@ -51,10 +51,10 @@ export const ReviewForm = (props) => {
             </div>
 
 
-            <button className="btn btn-secondary rounded border-0  col-1" onClick={() => {
+            <button className="btn btn-secondary rounded border-0  col-1 ml-2" onClick={() => {
                 clear()
             }}>Cancel</button>
-            <button className="btn btn-primary rounded border-0  col-1" onClick={() => {
+            <button className="btn btn-success rounded border-0  col-1" onClick={() => {
                 addReview()
             }}>
                 Submit
