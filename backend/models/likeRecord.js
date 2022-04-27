@@ -16,7 +16,7 @@ const getLikeRecord = async (liked_nft) => {
 }
 
 const getLikeCount = async (liked_nft) => { 
-    const query = knex(MESSAGES_TABLE).where({ liked_nft }).count();
+    const query = knex(LIKERECORD_TABLE).where({ liked_nft }).count();
     const result = await query; 
     return result; 
 }

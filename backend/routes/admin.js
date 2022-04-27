@@ -104,5 +104,33 @@ router.post('/delete', async (req, res, next) => {
 
 });
 
+// DELETE: /admin/nft/id
+router.delete('/nft/id/:id', async (req, res, next) => {
+  try {
+        const result = await req.models.nft.deleteNFT(req.params.id); 
+        res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to delete NFT by id: ", err);
+      // res.status(500).
+  }
+
+  next()
+}) 
+
+router.post('/updateNFT', async (req, res, next) => {
+  try {
+        const result = await NFT.modifyNFT(body.id, body.name, body.image_url, body.price, body.description, body.creator_id, body.seller_id, body.owner_id, body.for_sale);
+        res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to delete NFT by id: ", err);
+      // res.status(500).
+  }
+
+  next()
+}) 
+
+
 
 module.exports = router;
