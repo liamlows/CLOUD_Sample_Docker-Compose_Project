@@ -73,24 +73,9 @@ export const HomeView = (props) => {
     }
 
     const removeNotification = (id) => {
-        console.log(id)
+        console.log("splicing and deleting")
         deleteNotification(id);
         setReload(!reload);
-        // if (notifications.length === 0) {
-        //     setNotifications([]);
-        //     // deleteNotification(id);
-        // }
-        // else {
-        //     let notifications2 = notifications
-
-        //     for (const idx in notifications2) {
-        //         if (notifications2[idx].notification_id === id) {
-        //             notifications2.splice(idx, 1);
-        //             setNotifications({ ...notifications2 });
-        //             // deleteNotification(id);
-        //         }
-        //     }
-        // }
     }
     const removeAllNotification = () => {
         for (const i in notifications) {
@@ -129,7 +114,7 @@ export const HomeView = (props) => {
                                 <th className="text-start fs-2">Notifications{notifications.length !== 0 && <div className="float-end">
                                     <Button onClick={() => { removeAllNotification() }}>Clear All</Button>
                                 </div>}</th>
-                                
+
                             </tr>
                         </thead>
                         <tbody>
