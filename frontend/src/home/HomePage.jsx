@@ -28,7 +28,7 @@ export const HomePage = () => {
     // }
 
     return (<div className="container my-4">
-        <h1 className="header-align">Discover, collect, and sell extra ordinary NFTs</h1>
+        <h1 className="header-align">Discover, collect, and sell extraordinary NFTs</h1>
         <br></br>
             <div className="nft-container">
                 <ImageList sx={{ width: 1000, height: 1000 }} cols={3} gap={20}>
