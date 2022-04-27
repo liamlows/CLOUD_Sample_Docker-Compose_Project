@@ -9,6 +9,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { Posts } from './Posts';
 import{ useState,useEffect } from 'react';
 import{getUserInfo} from '../api/AuthenAPI';
+import { getNFTByUser } from '../api/AuthenAPI';
 
 export const Profile = () => {
 
@@ -31,12 +32,13 @@ export const Profile = () => {
   const classes = useStyles();
   const [user, setUser]=useState(undefined);
 
-  useEffect(()=>{
-      getUserInfo().then(x => setUser(x));
 
+  useEffect(()=>{
+      getUserInfo().then(x => setUser(x))
   },[ ]);
+
   if(!user){
-    return<>Loading</>
+     return<>Please log in first</>
   }
 
     return(<div className="profileContainer">
@@ -61,10 +63,10 @@ export const Profile = () => {
             </Grid>
         </Grid>
         <br/>
-        <h4 className="bioName">{user[0].username}</h4>
+        <h5 className="bioName">UserName: {user[0].username}</h5>
         <br/>
-        <div className="bio"> Bioooo </div>
-        <br></br><br></br>
+        {/* <div className="bio"> Bioooo </div> */}
+        <br></br>
 
         <Button variant="outlined"><Link to={`/edit-profile/${user[0].id}`} className="createLink">Edit Profile</Link></Button>
         {/* in lab, ask how to make card pop up on click without changing link and while keeping profile in background*/}

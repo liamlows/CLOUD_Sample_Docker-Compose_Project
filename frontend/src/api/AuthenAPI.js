@@ -56,3 +56,32 @@ export const updateUserById = (username,email,password) =>new Promise((resolve,r
             reject(x);
     });
 });
+
+// export const getNFTByUser = (id) =>new Promise((resolve,reject)=>{
+//     axios.post(`${baseEndpoint}/nft/cd/${id}`, {creator_id:id})
+//         .then(x => resolve(x.data))
+//         .catch(x => {
+//             alert(x);
+//             reject(x);
+//     });
+// });
+
+export const postNFT = (name,price,image_url) =>new Promise((resolve,reject)=>{
+    let config;
+        if( localStorage.token!=null){
+        // console.log(localStorage.token)
+        config={
+            headers:{
+                Authorization: 'Bearer '+ localStorage.getItem('token')
+            }
+        }
+    }
+    // axios.get(`${baseEndpoint}/nft/${id}`, apiConfig)
+    axios.post(`${baseEndpoint}/ub/nft`, {name: name, price: price,image_url:image_url},config)
+        .then(x => resolve(x.data),
+        window.alert("Successfully changed!!"))
+        .catch(x => {
+            alert(x);
+            reject(x);
+    });
+});
