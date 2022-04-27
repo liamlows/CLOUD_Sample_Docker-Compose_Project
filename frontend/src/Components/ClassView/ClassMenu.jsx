@@ -65,8 +65,8 @@ export const ClassMenu = ({ pages, settings, setNavigated }) => {
     }
     return true;
   }
-  const goToCourse = (friend) => {
-    navigate(`/users/${friend.account_id}`);
+  const goToCourse = (course) => {
+    navigate(`/classes/${course.course_id}`);
   }
   const signOut = () => {
     console.log("Logging out");
