@@ -14,6 +14,7 @@ export const Search = () => {
     // const [usersChosen, setUsersChosen] = useState(true);
     // const [NFTsChosen, setNFTsChosen] = useState(false);
     const[ users, setUsers ] = useState([]);
+    const [username, setUsername] = useState(undefined);
 
 
     const handleChange = (event, newAlignment) => {
@@ -27,9 +28,9 @@ export const Search = () => {
         // }
     };
 
-    // useEffect(() => {
-    //     getUsers().then(x => setUsers(x));
-    // }, []);
+    useEffect(() => {
+        getUsers({username}).then(x => setUsers(x));
+    }, [username]);
 
     if(!users){
         return<><Box sx={{ mx:"auto"}}>
@@ -38,7 +39,7 @@ export const Search = () => {
     }
 
     const handleChangeSearch=(e)=>{
-        setUsers(e.target.value);
+        setUsername(e.target.value);
     }
 
     return(<div className="searchContainer">
@@ -56,13 +57,13 @@ export const Search = () => {
         </ToggleButtonGroup>
         </Box>
         <TextField id="outlined-basic" label="Begin Typing" variant="outlined" fullWidth
-        value={users} onChange={handleChangeSearch}/>
+        value={username} onChange={handleChangeSearch}/>
         <br/>
         <br/>
         <Divider/>
         <br/><br/>
-        {
-                users.map(user => <div key={user.id} class="row">
+        
+        {  users.map(user => <div key={user.username} class="row">
                     <div class="col-4">
                       <Link to={'/theirUser'} className="createLink">
                           Username
@@ -75,7 +76,7 @@ export const Search = () => {
                         Short Description
                     </div>
                     </div>)
-            }
+        }
 
         {/* <Stack justifyContent="center" alignItems="center" spacing={2}>
             <div className="item">

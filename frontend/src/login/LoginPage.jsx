@@ -17,7 +17,7 @@ export const LoginPage = () => {
         axios.post(baseEndpoint+'/session',{email:email, password:password})
                 .then(function(response){
                     if(response.status===201){
-                        window.alert("Successfully log in!!");
+                        // window.alert("Successfully log in!!");
                         localStorage.setItem('token',response.data);
 
                     }
