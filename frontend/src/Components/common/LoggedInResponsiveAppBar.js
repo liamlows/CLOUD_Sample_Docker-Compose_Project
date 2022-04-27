@@ -91,7 +91,7 @@ export const LoggedInResponsiveAppBar = ({ pages, settings, signOut, account_id,
                     <PeopleTwoToneIcon />
                     <Typography className="m-1" textAlign="center">{page.label}</Typography>
                   </MenuItem>}
-                  {page.route === '/classes' && <MenuItem key={page.label} component={Link} to={`users/${account_id}/classes`} onClick={handleCloseNavMenu}>
+                  {page.route === '/classes' && <MenuItem key={page.label} component={Link} to={`/classes`} onClick={handleCloseNavMenu}>
                     <ShoppingCartIcon />
                     <Typography className="m-1" textAlign="center">{page.label}</Typography>
                   </MenuItem>}

@@ -387,7 +387,7 @@ export const ClassProfile = (props) => {
                                             {enrollable() && course.status === 1 &&
                                                 <th className="col-1 rounded border-0 p-1">
 
-                                                    <Button variant="contained" className="col-8 bg-warning float-start" disabled endIcon={<Add color='disabled' />}>Enrolled</Button>
+                                                    <Button variant="contained" className="col-8 bg-warning float-start" disabled endIcon={<Check color='disabled' />}>Enrolled</Button>
                                                     <Button variant="contained" className="col-1 bg-danger float-end" onClick={() => drop()}><ClearIcon /></Button>
 
                                                 </th>}
