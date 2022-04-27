@@ -1,3 +1,5 @@
+import {BACKEND_ENDPOINT} from "./APIFolder/loginApi";
+
 class EventEmitter {
     constructor() {
         this._events = {};
@@ -64,7 +66,7 @@ function onMessage(event) {
 }
 
 function createSocket(){
-    websocket = new WebSocket('ws://localhost:8000');
+    websocket = new WebSocket(`ws://${BACKEND_ENDPOINT}`);
     websocket.onopen = onOpen;
     websocket.onmessage = onMessage;
     websocket.onclose = onClose;
