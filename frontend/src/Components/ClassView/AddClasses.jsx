@@ -92,6 +92,14 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
         }
         return false
     }
+    const enrollable = () => {
+        if (account.role.role_type === "student" || account.role.role_type === "ta") {
+            console.log("Enrollable")
+            return true;
+        }
+        console.log("Not Enrollable")
+        return false;
+    }
 
     // HTML
     if(!!courses && courses.length !== 0) {
@@ -104,9 +112,9 @@ export const AddClasses = ({ pages, settings, setNavigated }) => {
                 account_type={JSON.parse(localStorage.getItem("currUser")).role.role_type} />
 
             <div className="container border-0 mt-3">
-                <button type="button" className="float-end btn btn-success mt-3" onClick={() => goToSchedule()}>Schedule</button>
+                {enrollable() && <button type="button" className="float-end btn btn-success mt-3" onClick={() => goToSchedule()}>Schedule</button>}
                 <div className="container border-0 col-3 float-start">
-                    <TextField label="Search by Course Name (Case Sensitive)" value={cName} setValue={setCName} />
+                    <TextField label="Course Name" value={cName} setValue={setCName} />
                 </div>
                 <div className="clearfix"></div>
             </div>

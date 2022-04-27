@@ -179,9 +179,9 @@ export const UserSearch = ({ pages, settings, setNavigated }) => {
                 account_type={JSON.parse(localStorage.getItem("currUser")).role.role_type} />
 
             <div className="container border-0 mt-3">
-                <button type="button" className="float-end btn btn-success mt-3" onClick={goToFriendsList}>Friends List</button>
+                {enrollable() && <button type="button" className="float-end btn btn-success mt-3" onClick={goToFriendsList}>Friends List</button>}
                 <div className="container border-0 col-3 float-start">
-                    <TextField label="Search by Username (Case Sensitive)" value={username} setValue={setUsername} />
+                    <TextField label="Username" value={username} setValue={setUsername} />
                 </div>
                 <div className="clearfix"></div>
             </div>
