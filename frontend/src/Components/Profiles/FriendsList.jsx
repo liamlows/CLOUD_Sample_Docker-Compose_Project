@@ -89,6 +89,20 @@ export const FriendsList = (props) => {
         });
     }
 
+    const readyToDisplay = () => {
+        console.log("Friends", friends)
+        if(JSON.stringify(account) === "{}")
+        {
+            //god I hate that the problem was loading too fast
+            return false;
+        }
+        if(friends === undefined)
+        {
+            return false
+        }
+        return true
+    }
+
     // HTML
     if(readyToDisplay()){
     return <div>

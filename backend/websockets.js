@@ -9,7 +9,7 @@ const websockets = (server, sessionParser) => {
     logger.info("Doing ws setup");
     server.on('upgrade', function (request, socket, head) {
         sessionParser(request, {}, () => {
-            if (!request.session.accountId) {
+            if (!request.session || !request.session.accountId) {
                 socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
                 socket.destroy();
                 return;
