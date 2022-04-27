@@ -66,7 +66,7 @@ export const updateUserById = (username,email,password) =>new Promise((resolve,r
 //     });
 // });
 
-export const postNFT = (name,price,image_url) =>new Promise((resolve,reject)=>{
+export const postNFT = (name,price,image_url,description) =>new Promise((resolve,reject)=>{
     let config;
         if( localStorage.token!=null){
         // console.log(localStorage.token)
@@ -77,7 +77,7 @@ export const postNFT = (name,price,image_url) =>new Promise((resolve,reject)=>{
         }
     }
     // axios.get(`${baseEndpoint}/nft/${id}`, apiConfig)
-    axios.post(`${baseEndpoint}/ub/nft`, {name: name, price: price,image_url:image_url},config)
+    axios.post(`${baseEndpoint}/ub/nft`, {name: name, price: price,image_url:image_url,description:description},config)
         .then(x => resolve(x.data),
         window.alert("Successully Post"))
         .catch(x => {

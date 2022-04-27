@@ -18,6 +18,7 @@ export const NewPost = () => {
     const [name,setName]=useState(undefined);
     const [price,setPrice]=useState(undefined);
     const [image_url, setImage]=useState(undefined);
+    const [description,setDescription]=useState(undefined);
     const [submit,setSubmitted]=useState(false);
     const [error, setError] = useState(false);
     
@@ -37,16 +38,20 @@ export const NewPost = () => {
         setImage(e.target.value);
         setSubmitted(false);
       };
+    const handleDescription = (e) => {
+      setDescription(e.target.value);
+        setSubmitted(false);
+    };
     
     const handleSubmit = () => {
         //e.preventDefault();
-        if (name === '' || price === '' || image_url=== '') {
+        if (name === '' || price === '' || image_url=== ''|| description === '')  {
           setError(true);
           window.alert("Fail to post");
         } else {
             setSubmitted(true);
             setError(false);
-            postNFT(name, price, image_url);
+            postNFT(name, price, image_url,description);
         }
     };
 
@@ -55,9 +60,15 @@ export const NewPost = () => {
             <br></br>
             {/* <Button variant="outlined" color="secondary">Upload Image (optional)</Button> */}
             <TextField id="demo-helper-text-misaligned" label="NFT Name" value={name} onChange={handleName}/>
+            {/* <TextField id="demo-helper-text-misaligned" label="NFT Price" value={price} onChange={handlePrice}/> */}
             <br/>
+            <br></br>
+            <TextField id="demo-helper-text-misaligned" label="NFT url" value={image_url} onChange={handleImage}/>
             <br/>
-
+            <br></br>
+            <TextField id="demo-helper-text-misaligned" label="Description" value={description} onChange={handleDescription}/>
+            <br></br>
+            <br></br>
             <FormControl sx={{ m: 0 }}>
                 <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
                 <OutlinedInput
@@ -68,14 +79,10 @@ export const NewPost = () => {
                     onChange={handlePrice}
                 />
             </FormControl>
-
-            {/* <TextField id="demo-helper-text-misaligned" label="NFT Price" value={price} onChange={handlePrice}/> */}
-            <br/>
             <br>
             </br>
-            <TextField id="demo-helper-text-misaligned" label="NFT url" value={image_url} onChange={handleImage}/>
-            <br/>
             <br></br>
+            
             <h5>For Sale?</h5>
             <Switch color="secondary" {...label} />
             <br></br>
