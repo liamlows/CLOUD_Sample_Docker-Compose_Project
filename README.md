@@ -54,3 +54,8 @@ ___
 Hope this helps!
 
 Liam
+
+
+### Infrastructure model
+
+![Infrastructure model](.infragenie/infrastructure_model.png)
