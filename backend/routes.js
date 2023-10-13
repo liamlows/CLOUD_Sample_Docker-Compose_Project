@@ -1,98 +1,254 @@
+
+const { query } = require('./db');
 const pool = require('./db')
+const User = require('./controllers/users')
 
 module.exports = function routes(app, logger) {
+
   // GET /
   app.get('/', (req, res) => {
     res.status(200).send('Go to 0.0.0.0:3000.');
   });
 
-  // POST /reset
-  app.post('/reset', (req, res) => {
-    // obtain a connection from our pool of connections
-    pool.getConnection(function (err, connection){
-      if (err){
-        console.log(connection);
-        // if there is an issue obtaining a connection, release the connection instance and log the error
-        logger.error('Problem obtaining MySQL connection', err)
-        res.status(400).send('Problem obtaining MySQL connection'); 
-      } else {
-        // if there is no issue obtaining a connection, execute query
-        connection.query('drop table if exists test_table', function (err, rows, fields) {
-          if (err) { 
-            // if there is an error with the query, release the connection instance and log the error
-            connection.release()
-            logger.error("Problem dropping the table test_table: ", err); 
-            res.status(400).send('Problem dropping the table'); 
-          } else {
-            // if there is no error with the query, execute the next query and do not release the connection yet
-            connection.query('CREATE TABLE `db`.`test_table` (`id` INT NOT NULL AUTO_INCREMENT, `value` VARCHAR(45), PRIMARY KEY (`id`), UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE);', function (err, rows, fields) {
-              if (err) { 
-                // if there is an error with the query, release the connection instance and log the error
-                connection.release()
-                logger.error("Problem creating the table test_table: ", err);
-                res.status(400).send('Problem creating the table'); 
-              } else { 
-                // if there is no error with the query, release the connection instance
-                connection.release()
-                res.status(200).send('created the table'); 
-              }
-            });
-          }
-        });
-      }
-    });
-  });
 
-  // POST /multplynumber
-  app.post('/multplynumber', (req, res) => {
-    console.log(req.body.product);
-    // obtain a connection from our pool of connections
-    pool.getConnection(function (err, connection){
-      if(err){
-        // if there is an issue obtaining a connection, release the connection instance and log the error
-        logger.error('Problem obtaining MySQL connection',err)
-        res.status(400).send('Problem obtaining MySQL connection'); 
-      } else {
-        // if there is no issue obtaining a connection, execute query and release connection
-        connection.query('INSERT INTO `db`.`test_table` (`value`) VALUES(\'' + req.body.product + '\')', function (err, rows, fields) {
-          connection.release();
-          if (err) {
-            // if there is an error with the query, log the error
-            logger.error("Problem inserting into test table: \n", err);
-            res.status(400).send('Problem inserting into table'); 
-          } else {
-            res.status(200).send(`added ${req.body.product} to the table!`);
-          }
-        });
-      }
-    });
-  });
 
-  // GET /checkdb
-  app.get('/values', (req, res) => {
-    // obtain a connection from our pool of connections
-    pool.getConnection(function (err, connection){
-      if(err){
-        // if there is an issue obtaining a connection, release the connection instance and log the error
-        logger.error('Problem obtaining MySQL connection',err)
-        res.status(400).send('Problem obtaining MySQL connection'); 
-      } else {
-        // if there is no issue obtaining a connection, execute query and release connection
-        connection.query('SELECT value FROM `db`.`test_table`', function (err, rows, fields) {
-          connection.release();
-          if (err) {
-            logger.error("Error while fetching values: \n", err);
-            res.status(400).json({
-              "data": [],
-              "error": "Error obtaining values"
-            })
-          } else {
-            res.status(200).json({
-              "data": rows
-            });
-          }
-        });
-      }
-    });
-  });
+// POST: /nft/id
+app.post('/nft/:id', async (req, res, next) => {
+  try {
+    const params = req.params;
+    const body = req.body;
+
+    var result;
+    
+    if (body.name != undefined) {
+      result = await req.models.nft.updateName(params.id, body.name);
+    }
+    if (body.price != undefined) {
+      result = await req.models.nft.updatePrice(params.id, body.price);
+    }
+    if (body.description != undefined) {
+      result = await req.models.nft.updateDescription(params.id, body.description);
+    }
+    if (body.image_url != undefined) {
+      result = await req.models.nft.updateImageUrl(params.id, body.image_url);
+    }
+    if (body.creator_id != undefined) {
+      result = await req.models.nft.updateCreatorId(params.id, body.creator_id);
+    } 
+    if (body.seller_id != undefined) {
+      result = await req.models.nft.updateSellerId(params.id, body.seller_id);
+    } 
+    if (body.owner_id != undefined) {
+      result = await req.models.nft.updateOwnerId(params.id, body.owner_id);
+    } 
+    if (body.for_sale != undefined) {
+      result = await req.models.nft.updateForSale(params.id, body.for_sale);
+    }
+
+    res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to create new NFT: ", err);
+  }
+
+  next()
+})
+
+// GET: /nft/id
+app.get('/nft/id/:id', async (req, res, next) => {
+  try {
+
+    const result = await req.models.nft.getNFT(req.params.id); 
+    res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to create get NFT by name: ", err);
+      // res.status(500).
+  }
+
+  next()
+})
+
+app.get('/nft', async (req, res, next) => {
+  try {
+
+    const result = await req.models.nft.fetchNFT(); 
+    res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to get NFT: ", err);
+      // res.status(500).
+  }
+
+  next()
+})
+
+
+// get NFTs with a price above min and/or below max in ascending order
+app.get('/nft/sort/:min/:max', async (req, res) => {
+  try {
+    const params = req.params;
+
+    if (params.min === undefined) params.min = 0
+    if (params.max === undefined) params.max = Infinity
+
+    const result = await req.models.nft.getAllByPrice(params.min, params.max);
+    res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to get NFTs by price: ", err);
+  }
+  next();
+})
+
+// Get: /user/:id
+app.get('/user/id/:id', async (req, res, next) => {
+  try {
+    const result = await req.models.user.findUserByID(req.params.id);
+    res.status(201).json(result);
+    //res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to get user by id: ", err);
+      // res.status(500).
+  }
+  next();
+
+})
+
+// search for NFTs with matching term in description
+app.get('/nft/search/:term', async (req, res) => {
+  try {
+    const term = req.params.term;
+
+    const result = await req.models.nft.searchByTerm(term);
+    res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to get NFTs by description: ", err);
+  }
+
+})
+
+app.get('/nft/cd/:creator_id', async (req, res, next) => {
+  try {
+
+    const result = await req.models.nft.getNFTbyCreatorId(req.params.creator_id); 
+    res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to create get NFT by creator id: ", err);
+      // res.status(500).
+  }
+
+  next()
+})
+
+// Display top NFTS
+app.get('/nft/Leaderboard', async(req, res) => {
+  try {
+    const result = await req.models.nft.nftLeaderboard();
+    console.log(result);
+    res.status(201).json(result);
+  } catch (err){
+    console.error("Failed to display NFT leaderboard");
+    res.status(400).json({ message: err.toString() });
+  }
+})
+
+// Display top users
+app.get('/user/Leaderboard', async(req, res) => {
+  try{
+    const result = await req.models.nft.userLeaderboard();
+    res.status(201).json(result);
+  } catch (err){
+    console.error("Failed to display NFT lJeaderboard");
+    res.status(400).json({ message: err.toString() });
+  }
+})
+ 
+app.get('/like/:nft_id', async (req, res, next) => {
+  try {
+
+    const result = await req.models.like.getLikeRecord(req.params.nft_id); 
+    res.status(201).json(result);
+
+  } catch (err) {
+      console.error("Failed to get a like record with nft id: ", err);
+      // res.status(500).
+  }
+
+  next()
+}) 
+
+
+app.get('/user/list', async(req, res) => {
+  try{
+    const body = req.body;
+
+    const result = await req.models.user.findUser(body.username, body.id, body.email);
+    res.status(201).json(result);
+  } catch (err){
+    console.error("Failed to display NFT leaderboard");
+    res.status(400).json({ message: err.toString() });
+  }
+})
+
+app.get('/user/list/:term', async (req, res, next) => {
+  try {
+      const result = await req.models.user.findUser2(req.params.term);
+      res.status(200).json(result);
+  } catch (err){
+      console.error("Could not get users: ", err);
+      res.sendStatus(404).json({ message: err.toString() });e
+  }
+})
+
+app.post('/transaction', async (req, res) => {
+  try {
+    const body = req.body;
+
+    const result = await req.models.transaction.createTransaction(body.nft, body.buyer, body.seller, body.amount);
+    res.status(201).json(result);
+
+  } catch (err) {
+    console.error("Failed to create transaction: ", err);
+  }
+})
+
+app.get('/transaction/nft/:nft', async (req, res) => {
+  try {
+    const params = req.params;
+
+    const result = await req.models.transaction.getTransaction1(params.nft);
+    res.status(201).json(result);
+
+  } catch (err) {
+    console.error("Failed to get transaction by NFT id: ", err);
+  }
+})
+
+app.get('/transaction/buyer/:buyer', async (req, res) => {
+  try {
+    const params = req.params;
+
+    const result = await req.models.transaction.getTransaction2(params.buyer);
+    res.status(201).json(result);
+
+  } catch (err) {
+    console.error("Failed to get transaction by NFT id: ", err);
+  }
+})
+
+app.get('/transaction/seller/:seller', async (req, res) => {
+  try {
+    const params = req.params;
+
+    const result = await req.models.transaction.getTransaction3(params.seller);
+    res.status(201).json(result);
+
+  } catch (err) {
+    console.error("Failed to get transaction by NFT id: ", err);
+  }
+})
 }

@@ -1,0 +1,47 @@
+.messageHead {
+    padding-top: 2rem;
+    padding-left: 1rem;
+    font-weight: bold;
+    color: rgb(112, 5, 126);
+    text-align: left;
+}
+
+.userMessage {
+    font-weight: bold;
+    color: gray;
+}
+.compose {
+    padding-left: .5rem;
+}
+
+.messageLink{
+    text-decoration: none;
+}
+
+.returnLink {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    padding-left: 1rem;
+}
+
+.messageContainer {
+    padding: .5rem 2rem;
+}
+
+.theirMessage {
+    margin: 1rem .5rem;
+    padding: 0rem 1rem;
+    background-color: rgb(87, 237, 248);
+}
+
+.yourMessage {
+    margin: 1rem .5rem;
+    padding: 0rem 1rem;
+    background-color: rgb(214, 178, 247);
+}
+
+.composeTo {
+    color: darkgray;
+    font-weight: bold;
+}

@@ -1,0 +1,30 @@
+.container-nft{
+    padding-top: 2rem;
+    display:flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+    justify-content: center;
+ }
+ .NFTInfo{
+     margin-left: 2rem;
+     padding-top: 2rem;
+     display:flex;
+     flex-direction:column;
+ }
+ .buttonRow{
+    justify-content:space-around;
+ }
+ p {
+    text-align: left;
+}
+.NFT{
+    word-break: break-all;
+}
+.nft_image_url{
+    width:400px;
+    height:400px;
+}
+.nft_image_url img{
+    width:100%;
+    height:100%;
+}
